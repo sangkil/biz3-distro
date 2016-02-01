@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "971c3333fca6eb93251f717cb4aad91e",
-    "content-hash": "39b15e7351bf631e24ead6c7ddd3d37e",
+    "hash": "69d07772acce9cb22b7e660171c4e60f",
+    "content-hash": "4220fa0bf50d4f147361c02f7c8f82fc",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -637,6 +637,54 @@
             "extra": {
                 "bower-asset-main": "dist/typeahead.bundle.js"
             }
+        },
+        {
+            "name": "deesoft/yii2-console",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deesoft/yii2-console.git",
+                "reference": "b48ffe70b183e23d665b0166ed70a2dafb9b0e2b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deesoft/yii2-console/zipball/b48ffe70b183e23d665b0166ed70a2dafb9b0e2b",
+                "reference": "b48ffe70b183e23d665b0166ed70a2dafb9b0e2b",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": ">=2.0.4"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bootstrap": "dee\\console\\Bootstrap",
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "dee\\console\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Misbahul Munir",
+                    "email": "misbahuldmunir@gmail.com"
+                }
+            ],
+            "description": "Yii2 console command",
+            "keywords": [
+                "Sample Data",
+                "command",
+                "migration",
+                "yii2"
+            ],
+            "time": "2015-07-24 09:07:00"
         },
         {
             "name": "fzaninotto/faker",
