@@ -13,6 +13,10 @@ body {
 .content-wrapper{
     min-height: 680px;
 }
+.content-header{
+    border-bottom: 1px solid whitesmoke;
+    padding-bottom: 10px;
+}
 .main-sidebar {
     padding-top: 0px; 
     margin-top: 0px;
