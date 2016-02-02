@@ -21,10 +21,10 @@ class AdminLteAsset extends AssetBundle {
         'fontawesome/css/font-awesome.css.map',
     ];
     public $js = [
-//        'bootstrap/dist/js/bootstrap.min.js',
-//        'bootstrap/js/tooltip.js',        
-//        'adminlte/plugins/slimScroll/jquery.slimscroll.min.js',
-//        'adminlte/dist/js/app.min.js',       
+        'bootstrap/dist/js/bootstrap.min.js',
+        'bootstrap/js/tooltip.js',        
+        'adminlte/plugins/slimScroll/jquery.slimscroll.min.js',
+        'adminlte/dist/js/app.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset'

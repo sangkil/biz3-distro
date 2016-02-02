@@ -1,0 +1,92 @@
+<?php
+
+namespace backend\models\master;
+
+use Yii;
+use yii\helpers\ArrayHelper;
+
+/**
+ * This is the model class for table "branch".
+ *
+ * @property integer $id
+ * @property integer $orgn_id
+ * @property string $code
+ * @property string $name
+ * @property integer $created_at
+ * @property integer $created_by
+ * @property integer $updated_at
+ * @property integer $updated_by
+ *
+ * @property Orgn $orgn
+ * @property UserToBranch[] $userToBranches
+ * @property Warehouse[] $warehouses
+ */
+class Branch extends \yii\db\ActiveRecord
+{
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'branch';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['orgn_id', 'code', 'name'], 'required'],
+            [['orgn_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['code'], 'string', 'max' => 4],
+            [['name'], 'string', 'max' => 32],
+            [['orgn_id'], 'exist', 'skipOnError' => true, 'targetClass' => Orgn::className(), 'targetAttribute' => ['orgn_id' => 'id']],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'orgn_id' => 'Orgn ID',
+            'code' => 'Code',
+            'name' => 'Name',
+            'created_at' => 'Created At',
+            'created_by' => 'Created By',
+            'updated_at' => 'Updated At',
+            'updated_by' => 'Updated By',
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrgn()
+    {
+        return $this->hasOne(Orgn::className(), ['id' => 'orgn_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserToBranches()
+    {
+        return $this->hasMany(UserToBranch::className(), ['branch_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouses()
+    {
+        return $this->hasMany(Warehouse::className(), ['branch_id' => 'id']);
+    }
+    
+    public static function selectOptions() {
+        return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
+    }
+}

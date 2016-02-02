@@ -3,12 +3,10 @@
 /* @var $content string */
 
 use backend\assets\AppAsset;
-use app\assets\AdminLteAsset;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 
-AdminLteAsset::register($this);
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -22,17 +20,18 @@ AppAsset::register($this);
         <?php $this->head() ?>
     </head>
 
-    <body class="skin-yellow sidebar-mini sidebar-collapse fixed">
+    <body class="skin-yellow sidebar-mini sidebar-collapse">
         <?php $this->beginBody() ?>
         <div class="wrapper"> 
             <?php
             require 'left_menu.php';
             ?>
             <div class="content-wrapper" style="padding-top: 0px; background-color: white">
-                <section class="content-header">
-                    <h1>
+                <section class="content-header" >
+                    <h1 data-toggle="offcanvas" role="button"> 
+                        <i class="fa fa-angle-left"></i>
+                        &nbsp;
                         <?= $this->title ?>
-                        <small><?= ''//$this->subtitle ?></small>
                     </h1>
                     <?=
                     Breadcrumbs::widget([
