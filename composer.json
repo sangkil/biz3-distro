@@ -20,7 +20,12 @@
         "yiisoft/yii2-swiftmailer": "*",
         "bower-asset/adminlte": "*",
         "bower-asset/fontawesome": "*",
-        "deesoft/yii2-console": "*"
+        "deesoft/yii2-console": "~1.0",
+        "mdmsoft/yii2-autonumber": "~1.0",
+        "mdmsoft/yii2-format-converter": "~1.0",
+        "mdmsoft/yii2-widgets": "~1.0",
+        "mdmsoft/yii2-ar-behaviors": "~1.0",
+        "yiisoft/yii2-jui": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
