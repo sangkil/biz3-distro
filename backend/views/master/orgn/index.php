@@ -10,22 +10,24 @@ use yii\grid\GridView;
 $this->title = 'Orgns';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<p class='pull-right'>
+    <?= Html::a('Create Orgn', ['create'], ['class' => 'btn btn-success']) ?>
+</p>
+<br>
+
 <div class="orgn-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    
 
-    <p>
-        <?= Html::a('Create Orgn', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?= GridView::widget([
+            <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => ['class' => 'table table-hover'],
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+                    'id',
             'code',
             'name',
             'created_at',
@@ -33,8 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'updated_at',
             // 'updated_by',
 
-            ['class' => 'yii\grid\ActionColumn'],
+        ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
-
+        ]); ?>
+    
 </div>
