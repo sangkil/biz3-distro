@@ -22,6 +22,8 @@ class GrManualController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'confirm' => ['post'],
+                    'rollback' => ['post'],
                 ],
             ],
         ];
@@ -125,6 +127,39 @@ class GrManualController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Deletes an existing GoodsMovement model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionConfirm($id)
+    {
+        $model = $this->findModel($id);
+
+        $model->status = 2;
+        $model->save();
+        return $this->render('view', [
+                'model' => $model,
+        ]);
+    }
+
+    /**
+     * Deletes an existing GoodsMovement model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionRollback($id)
+    {
+        $model = $this->findModel($id);
+
+        $model->status = 1;
+        $model->save();
+        return $this->render('view', [
+                'model' => $model,
+        ]);
+    }
     /**
      * Finds the GoodsMovement model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
