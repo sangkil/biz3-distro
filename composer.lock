@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "69d07772acce9cb22b7e660171c4e60f",
-    "content-hash": "4220fa0bf50d4f147361c02f7c8f82fc",
+    "hash": "1d322d3f76380d3ad56cc074fbb4ffee",
+    "content-hash": "3fed6d2509de23ae9fced19c55b0aeca",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -612,6 +612,89 @@
     ],
     "packages-dev": [
         {
+            "name": "bower-asset/adminlte",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/almasaeed2010/AdminLTE.git",
+                "reference": "93e99de603bd4b8185b7778be8aeae35c3650c22"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/almasaeed2010/AdminLTE/zipball/93e99de603bd4b8185b7778be8aeae35c3650c22",
+                "reference": "93e99de603bd4b8185b7778be8aeae35c3650c22",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "index2.html",
+                    "dist/css/AdminLTE.css",
+                    "dist/js/app.js",
+                    "build/less/AdminLTE.less"
+                ],
+                "bower-asset-ignore": [
+                    "/.*",
+                    "node_modules",
+                    "bower_components",
+                    "composer.json",
+                    "documentation"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Admin dashboard and control panel template",
+            "keywords": [
+                "admin",
+                "backend",
+                "bootstrap",
+                "css",
+                "html",
+                "js",
+                "responsive",
+                "template",
+                "theme"
+            ]
+        },
+        {
+            "name": "bower-asset/fontawesome",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FortAwesome/Font-Awesome.git",
+                "reference": "d41173050a8cf547a4dfb4c214740a9a38a4073b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/d41173050a8cf547a4dfb4c214740a9a38a4073b",
+                "reference": "d41173050a8cf547a4dfb4c214740a9a38a4073b",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "less/font-awesome.less",
+                    "scss/font-awesome.scss"
+                ],
+                "bower-asset-ignore": [
+                    "*/.*",
+                    "*.json",
+                    "src",
+                    "*.yml",
+                    "Gemfile",
+                    "Gemfile.lock",
+                    "*.md"
+                ]
+            },
+            "license": [
+                "OFL-1.1",
+                "MIT",
+                "CC-BY-3.0"
+            ],
+            "description": "Font Awesome"
+        },
+        {
             "name": "bower-asset/typeahead.js",
             "version": "v0.11.1",
             "source": {
@@ -687,17 +770,63 @@
             "time": "2015-07-24 09:07:00"
         },
         {
+            "name": "deesoft/yii2-gii",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deesoft/yii2-gii.git",
+                "reference": "82b47113bbc58094bff44aa1f906d3df1a0a8b8d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deesoft/yii2-gii/zipball/82b47113bbc58094bff44aa1f906d3df1a0a8b8d",
+                "reference": "82b47113bbc58094bff44aa1f906d3df1a0a8b8d",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": ">=2.0.6",
+                "yiisoft/yii2-gii": "~2.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "dee\\gii\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Misbahul Munir",
+                    "email": "misbahuldmunir@gmail.com"
+                }
+            ],
+            "description": "Yii2 custom generator for gii",
+            "keywords": [
+                "gii",
+                "yii2"
+            ],
+            "time": "2015-09-05 07:05:06"
+        },
+        {
             "name": "fzaninotto/faker",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "7abdb59318447db23ee77ba2d576c20e7718e27f"
+                "reference": "b312ab9d0c446971069e22a524fec01c7cddc75e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/7abdb59318447db23ee77ba2d576c20e7718e27f",
-                "reference": "7abdb59318447db23ee77ba2d576c20e7718e27f",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/b312ab9d0c446971069e22a524fec01c7cddc75e",
+                "reference": "b312ab9d0c446971069e22a524fec01c7cddc75e",
                 "shasum": ""
             },
             "require": {
@@ -734,7 +863,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2016-01-31 22:12:33"
+            "time": "2016-02-01 17:08:46"
         },
         {
             "name": "phpspec/php-diff",
