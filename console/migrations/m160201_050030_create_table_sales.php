@@ -7,7 +7,7 @@ use yii\db\Schema;
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>  
  * @since 3.0
  */
-class m140624_050114_create_table_sales extends \yii\db\Migration
+class m160201_050030_create_table_sales extends \yii\db\Migration
 {
 
     public function safeUp()

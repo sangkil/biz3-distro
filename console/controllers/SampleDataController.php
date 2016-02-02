@@ -1,34 +1,47 @@
 <?php
 
-use yii\db\Migration;
+namespace console\controllers;
+
+use Yii;
+use yii\console\Controller;
 use yii\helpers\Console;
 
-class m150906_201442_sample_data extends Migration
+/**
+ * Description of SampleDataController
+ *
+ * @author Misbahul D Munir <misbahuldmunir@gmail.com>
+ * @since 1.0
+ */
+class SampleDataController extends Controller
 {
-
-    protected function toAssoc($array, $fields)
+    /**
+     * @var string the default command action.
+     */
+    public $defaultAction = 'create';
+    
+    /**
+     * Create sample data
+     */
+    public function actionCreate()
     {
-        $result = [];
-        foreach ($fields as $i => $field) {
-            $result[$field] = $array[$i];
+        if(!Console::confirm('Are you sure you want to create sample data. Old data will be lose')){
+            return self::EXIT_CODE_NORMAL;
         }
-        return $result;
-    }
-
-    public function up()
-    {
+        
         $tableOptions = null;
-        if ($this->db->driverName === 'mysql') {
+        if (Yii::$app->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $command = $this->db->createCommand();
+        $command = Yii::$app->db->createCommand();
+        $sampleDir = Yii::getAlias('@console/migrations/samples');
+
         // orgn
-        $this->truncateTable('{{%orgn}}');
-        $rows = require __DIR__ . '/orgn.php';
+        $command->truncateTable('{{%orgn}}');
+        $rows = require $sampleDir . '/orgn.php';
         $total = count($rows);
-        echo "insert table {{%orgn}}\n";
+        echo "\ninsert table {{%orgn}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
             $command->insert('{{%orgn}}', $this->toAssoc($row, ['id', 'code', 'name']))->execute();
@@ -37,10 +50,10 @@ class m150906_201442_sample_data extends Migration
         Console::endProgress();
 
         // branch
-        $this->truncateTable('{{%branch}}');
-        $rows = require __DIR__ . '/branch.php';
+        $command->truncateTable('{{%branch}}');
+        $rows = require $sampleDir . '/branch.php';
         $total = count($rows);
-        echo "insert table {{%branch}}\n";
+        echo "\ninsert table {{%branch}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
             $command->insert('{{%branch}}', $this->toAssoc($row, ['id', 'orgn_id', 'code', 'name']))->execute();
@@ -49,10 +62,10 @@ class m150906_201442_sample_data extends Migration
         Console::endProgress();
 
         // warehouse
-        $this->truncateTable('{{%warehouse}}');
-        $rows = require __DIR__ . '/warehouse.php';
+        $command->truncateTable('{{%warehouse}}');
+        $rows = require $sampleDir . '/warehouse.php';
         $total = count($rows);
-        echo "insert table {{%warehouse}}\n";
+        echo "\ninsert table {{%warehouse}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
             $command->insert('{{%warehouse}}', $this->toAssoc($row, ['id', 'branch_id', 'code', 'name']))->execute();
@@ -61,10 +74,10 @@ class m150906_201442_sample_data extends Migration
         Console::endProgress();
 
         // supplier
-        $this->truncateTable('{{%supplier}}');
-        $rows = require __DIR__ . '/supplier.php';
+        $command->truncateTable('{{%supplier}}');
+        $rows = require $sampleDir . '/supplier.php';
         $total = count($rows);
-        echo "insert table {{%supplier}}\n";
+        echo "\ninsert table {{%supplier}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
             $command->insert('{{%supplier}}', $this->toAssoc($row, ['id', 'code', 'name']))->execute();
@@ -73,10 +86,10 @@ class m150906_201442_sample_data extends Migration
         Console::endProgress();
 
         // customer
-        $this->truncateTable('{{%customer}}');
-        $rows = require __DIR__ . '/customer.php';
+        $command->truncateTable('{{%customer}}');
+        $rows = require $sampleDir . '/customer.php';
         $total = count($rows);
-        echo "insert table {{%customer}}\n";
+        echo "\ninsert table {{%customer}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
             $command->insert('{{%customer}}', $this->toAssoc($row, ['id', 'code', 'name', 'contact_name',
@@ -86,10 +99,10 @@ class m150906_201442_sample_data extends Migration
         Console::endProgress();
 
         // product category
-        $this->truncateTable('{{%category}}');
-        $rows = require __DIR__ . '/category.php';
+        $command->truncateTable('{{%category}}');
+        $rows = require $sampleDir . '/category.php';
         $total = count($rows);
-        echo "insert table {{%category}}\n";
+        echo "\ninsert table {{%category}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
             $command->insert('{{%category}}', $this->toAssoc($row, ['id', 'code', 'name']))->execute();
@@ -98,10 +111,10 @@ class m150906_201442_sample_data extends Migration
         Console::endProgress();
 
         // product group
-        $this->truncateTable('{{%product_group}}');
-        $rows = require __DIR__ . '/product_group.php';
+        $command->truncateTable('{{%product_group}}');
+        $rows = require $sampleDir . '/product_group.php';
         $total = count($rows);
-        echo "insert table {{%product_group}}\n";
+        echo "\ninsert table {{%product_group}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
             $command->insert('{{%product_group}}', $this->toAssoc($row, ['id', 'code', 'name']))->execute();
@@ -110,11 +123,11 @@ class m150906_201442_sample_data extends Migration
         Console::endProgress();
 
         // product
-        $this->truncateTable('{{%product_child}}');
-        $this->truncateTable('{{%product}}');
-        $rows = require __DIR__ . '/product.php';
+        $command->truncateTable('{{%product_child}}');
+        $command->truncateTable('{{%product}}');
+        $rows = require $sampleDir . '/product.php';
         $total = count($rows);
-        echo "insert table {{%product}}\n";
+        echo "\ninsert table {{%product}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
             $row = $this->toAssoc($row, ['id', 'group_id', 'category_id', 'code', 'name', 'status']);
@@ -135,11 +148,11 @@ class m150906_201442_sample_data extends Migration
         Console::endProgress();
 
         // uom
-        $this->truncateTable('{{%product_uom}}');
-        $this->truncateTable('{{%uom}}');
-        $rows = require __DIR__ . '/uom.php';
+        $command->truncateTable('{{%product_uom}}');
+        $command->truncateTable('{{%uom}}');
+        $rows = require $sampleDir . '/uom.php';
         $total = count($rows);
-        echo "insert table {{%uom}}\n";
+        echo "\ninsert table {{%uom}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
             $command->insert('{{%uom}}', $this->toAssoc($row, ['id', 'code', 'name']))->execute();
@@ -153,10 +166,10 @@ class m150906_201442_sample_data extends Migration
         Console::endProgress();
 
         // coa
-        $this->truncateTable('{{%coa}}');
-        $rows = require __DIR__ . '/coa.php';
+        $command->truncateTable('{{%coa}}');
+        $rows = require $sampleDir . '/coa.php';
         $total = count($rows);
-        echo "insert table {{%coa}}\n";
+        echo "\ninsert table {{%coa}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
             $command->insert('{{%coa}}', $this->toAssoc($row, ['id', 'parent_id', 'code',
@@ -166,8 +179,14 @@ class m150906_201442_sample_data extends Migration
         Console::endProgress();
     }
 
-    public function down()
+    protected function toAssoc($array, $fields)
     {
-        
+        $result = [];
+        foreach ($fields as $i => $field) {
+            $result[$field] = $array[$i];
+        }
+        return $result;
     }
+
+    
 }
