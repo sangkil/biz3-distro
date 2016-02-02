@@ -17,16 +17,16 @@
         "php": ">=5.4.0",
         "yiisoft/yii2": ">=2.0.6",
         "yiisoft/yii2-bootstrap": "*",
-        "yiisoft/yii2-swiftmailer": "*"
+        "yiisoft/yii2-swiftmailer": "*",
+        "bower-asset/adminlte": "*",
+        "bower-asset/fontawesome": "*",
+        "deesoft/yii2-console": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*",
         "yiisoft/yii2-faker": "*",
-        "bower-asset/adminlte": "*",
-        "bower-asset/fontawesome": "*",
-        "deesoft/yii2-console": "*",
         "deesoft/yii2-gii": "~1.0"
     },
     "config": {
