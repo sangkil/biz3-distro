@@ -22,7 +22,7 @@ AppAsset::register($this);
         <?php $this->head() ?>
     </head>
 
-    <body class="skin-yellow sidebar-mini sidebar-collapse fixed">
+    <body class="skin-yellow sidebar-mini sidebar-collapse">
         <?php $this->beginBody() ?>
         <div class="wrapper"> 
             <?php

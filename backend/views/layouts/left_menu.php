@@ -35,19 +35,8 @@ use yii\helpers\Url;
 
         <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
-            <li><a href="<?= Url::to(['/site/index']); ?>"><i class="fa fa-dashboard active"></i> <span>Dashboard</span></a></li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-wrench"></i>
-                    <span>Tools</span>         
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu" >
-                    <li><a href="<?= Url::to(['/organizations/index']); ?>"><i class="fa fa-check"></i> Manage Orgn</a></li>
-                    <li><a href="<?= Url::to(['/branch/index']); ?>"><i class="fa fa-check"></i> Manage Divisi</a></li>
-                    <li style="<?php echo (\Yii::$app->user->can('/admin/assignment/index')) ? '' : 'display:none;'; ?>"><a href="<?= Url::to(['/admin/assignment']); ?>"><i class="fa fa-check"></i> Manage Users</a></li>
-                    <li style="<?php echo (\Yii::$app->user->can('/admin/assignment/index')) ? '' : 'display:none;'; ?>"><a href="#"><i class="fa fa-check"></i> App Configuration</a></li>
-                </ul>
+            <li>
+                <a href="<?= Url::to(['/site/index']); ?>"><i class="fa fa-dashboard active"></i> <span>Dashboard</span></a>
             </li>
             <li class="treeview">
                 <a href="#">
@@ -56,13 +45,19 @@ use yii\helpers\Url;
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="<?= Url::to(['/master/product/index']); ?>"><i class="fa fa-check"></i> Product</a></li>
-                    <li><a href="<?= Url::to(['/master/customers/index']); ?>"><i class="fa fa-check"></i> Outlet</a></li>
-                    <li><a href="<?= Url::to(['/master/groups/index']); ?>"><i class="fa fa-check"></i> Prinsipal</a></li>
-                    <li><a href="<?= Url::to(['/master/vehicles/index']); ?>"><i class="fa fa-check"></i> Vehicles</a></li>                    
-                    <li>
-                        <a href="<?= Url::to(['/master/warehouse/index']); ?>"><i class="fa fa-check"></i> Warehouse</a>
+                    <li><a href="<?= Url::to(['/master/orgn']); ?>"><i class="fa fa-check"></i> Orgn</a></li>
+                    <li><a href="<?= Url::to(['/master/branch']); ?>"><i class="fa fa-check"></i> Branch</a></li>               
+                    <li><a href="<?= Url::to(['/master/warehouse/index']); ?>"><i class="fa fa-check"></i> Warehouse</a></li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-check"></i> Item Master</a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?= Url::to(['/master/product']); ?>"><i class="fa fa-check"></i> Product</a></li>
+                            <li><a href="<?= Url::to(['/master/uom']); ?>"><i class="fa fa-check"></i> Uom</a></li>
+                            <li><a href="<?= Url::to(['/master/groups']); ?>"><i class="fa fa-check"></i> Group</a></li>
+                            <li><a href="<?= Url::to(['/master/category']); ?>"><i class="fa fa-check"></i> Category</a></li>
+                        </ul>
                     </li>
+                   <li><a href="<?= Url::to(['/master/customers/index']); ?>"><i class="fa fa-check"></i> Customers</a></li>
                 </ul>
             </li>
             <li class="treeview">
