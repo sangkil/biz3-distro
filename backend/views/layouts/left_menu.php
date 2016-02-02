@@ -58,7 +58,7 @@ use yii\helpers\Url;
                             <li><a href="<?= Url::to(['/master/category']); ?>"><i class="fa fa-check"></i> Category</a></li>
                         </ul>
                     </li>
-                   <li><a href="<?= Url::to(['/master/customers/index']); ?>"><i class="fa fa-check"></i> Customers</a></li>
+                   <li><a href="<?= Url::to(['/master/customer']); ?>"><i class="fa fa-check"></i> Customers</a></li>
                 </ul>
             </li>
             <li class="treeview">
