@@ -11,13 +11,13 @@ use yii\helpers\Url;
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-        <!-- Sidebar user panel -->
+ <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <?php echo Html::img('@web/../../vendor/bower/adminlte/dist/img/user1-128x128.jpg', ['class' => 'img-circle', 'alt' => 'User Image']); ?>
+                <?php echo Html::img('@web/../../vendor/bower/adminlte/dist/img/user2-160x160.jpg', ['class' => 'img-circle', 'alt' => 'User Image']); ?>
             </div>
             <div class="pull-left info">
-                <p>User Login</p>
+                <p>User Name</p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
@@ -32,6 +32,7 @@ use yii\helpers\Url;
         </form>
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
+
 
         <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
@@ -49,7 +50,7 @@ use yii\helpers\Url;
                     <li><a href="<?= Url::to(['/master/branch']); ?>"><i class="fa fa-check"></i> Branch</a></li>               
                     <li><a href="<?= Url::to(['/master/warehouse/index']); ?>"><i class="fa fa-check"></i> Warehouse</a></li>
                     <li class="treeview">
-                        <a href="#"><i class="fa fa-check"></i> Item Master</a>
+                        <a href="#"><i class="fa fa-check"></i> Item Master<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
                             <li><a href="<?= Url::to(['/master/product']); ?>"><i class="fa fa-check"></i> Product</a></li>
                             <li><a href="<?= Url::to(['/master/uom']); ?>"><i class="fa fa-check"></i> Uom</a></li>
