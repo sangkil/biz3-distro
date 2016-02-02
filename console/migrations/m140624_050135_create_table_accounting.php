@@ -107,8 +107,11 @@ class m140624_050135_create_table_accounting extends \yii\db\Migration
             'vendor_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'reff_type' => Schema::TYPE_INTEGER,
             'reff_id' => Schema::TYPE_INTEGER,
-            'value' => Schema::TYPE_FLOAT . ' NOT NULL',
             'status' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'description' => Schema::TYPE_STRING . '(64) NULL',
+            'value' => Schema::TYPE_FLOAT . ' NOT NULL',
+            'tax_type' => Schema::TYPE_STRING . '(64)',
+            'tax_value' => Schema::TYPE_FLOAT,
             // history column
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,
@@ -118,11 +121,13 @@ class m140624_050135_create_table_accounting extends \yii\db\Migration
 
         $this->createTable('{{%invoice_dtl}}', [
             'id' => Schema::TYPE_PK,
-            'reff_type' => Schema::TYPE_INTEGER,
-            'reff_id' => Schema::TYPE_INTEGER,
             'invoice_id' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'description' => Schema::TYPE_STRING . '(64) NULL',
-            'value' => Schema::TYPE_FLOAT . ' NOT NULL',
+            'item_type' => Schema::TYPE_INTEGER,
+            'item_id' => Schema::TYPE_INTEGER,
+            'qty' => Schema::TYPE_FLOAT . ' NOT NULL',
+            'item_value' => Schema::TYPE_FLOAT . ' NOT NULL',
+            'tax_type' => Schema::TYPE_STRING . '(64)',
+            'tax_value' => Schema::TYPE_FLOAT,
             // constrain
             'FOREIGN KEY ([[invoice_id]]) REFERENCES {{%invoice}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
             ], $tableOptions);
@@ -132,6 +137,7 @@ class m140624_050135_create_table_accounting extends \yii\db\Migration
             'number' => Schema::TYPE_STRING . '(16) NOT NULL',
             'date' => Schema::TYPE_DATE . ' NOT NULL',
             'type' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'payment_type' => Schema::TYPE_INTEGER . ' NOT NULL',
             // history column
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,

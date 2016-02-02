@@ -102,10 +102,9 @@ class m140624_050056_create_table_inventory extends \yii\db\Migration
             'type' => Schema::TYPE_INTEGER . ' NOT NULL',
             'reff_type' => Schema::TYPE_INTEGER,
             'reff_id' => Schema::TYPE_INTEGER,
+            'vendor_id' => Schema::TYPE_INTEGER,
             'description' => Schema::TYPE_STRING,
             'status' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'trans_value' => Schema::TYPE_FLOAT,
-            'total_invoiced' => Schema::TYPE_FLOAT,
             // history column
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,
