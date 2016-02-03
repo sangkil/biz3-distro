@@ -18,7 +18,7 @@
                 <?= \yii\helpers\Html::textInput('barcode', '', ['class' => 'form-control']) ?>
             </td>
             <td>
-                <?= \yii\helpers\Html::a('<i class="fa fa-plus"></i>','#',['class'=>'btn btn-default text-green']) ?>
+                <?= \yii\helpers\Html::a('<i class="fa fa-plus"></i>','#',['id'=>'bcode_add', 'class'=>'btn btn-default text-green']) ?>
             </td>
         </tr>
     </thead>
@@ -30,8 +30,8 @@
             $row .= '<tr>';
             $row .= '<td>' . $i . '</td>';
             $row .= '<td>' . $bcode->barcode . '</td>';
-             $row .= '<td>' .
-                    \yii\helpers\Html::a('<i class="fa fa-minus"></i>', '#', ['class' => 'btn btn-default text-orange'])
+            $row .= '<td>' .
+                    \yii\helpers\Html::a('<i class="fa fa-minus"></i>', '#', ['class' => 'btn btn-default text-orange bcode_remove'])
                     . '</td>';
             
             $row .= '</tr>';
