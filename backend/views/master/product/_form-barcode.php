@@ -31,7 +31,7 @@
             $row .= '<td>' . $i . '</td>';
             $row .= '<td>' . $bcode->barcode . '</td>';
              $row .= '<td>' .
-                    \yii\helpers\Html::a('<i class="fa fa-minus"></i>', '#', ['class' => 'tn btn-default text-orange'])
+                    \yii\helpers\Html::a('<i class="fa fa-minus"></i>', '#', ['class' => 'btn btn-default text-orange'])
                     . '</td>';
             
             $row .= '</tr>';
