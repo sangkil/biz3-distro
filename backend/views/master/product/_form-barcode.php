@@ -4,7 +4,8 @@
  * Create at {date('now')}
  */
 ?>
-<table class="table table-hover" style="width: 60%;">
+<div id="bcode_record" class="pull-right" style="width: 40%; padding: 10px;">Record:</div>
+<table class="table table-hover" style="width: 40%;">
     <thead>
         <tr>
             <th style="width: 10%;">No</th>
@@ -17,7 +18,7 @@
                 <?= \yii\helpers\Html::textInput('barcode', '', ['class' => 'form-control']) ?>
             </td>
             <td>
-                <?= \yii\helpers\Html::a('<i class="fa fa-plus"></i>','#',['class'=>'btn btn-default']) ?>
+                <?= \yii\helpers\Html::a('<i class="fa fa-plus"></i>','#',['class'=>'btn btn-default text-green']) ?>
             </td>
         </tr>
     </thead>
@@ -29,7 +30,10 @@
             $row .= '<tr>';
             $row .= '<td>' . $i . '</td>';
             $row .= '<td>' . $bcode->barcode . '</td>';
-            $row .= '<td></td>';
+             $row .= '<td>' .
+                    \yii\helpers\Html::a('<i class="fa fa-minus"></i>', '#', ['class' => 'tn btn-default text-orange'])
+                    . '</td>';
+            
             $row .= '</tr>';
             $i++;
         }
