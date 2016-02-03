@@ -8,11 +8,12 @@ use backend\models\inventory\search\GoodsMovement as GoodsMovementSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\models\master\Product;
 
 /**
- * GrManualController implements the CRUD actions for GoodsMovement model.
+ * GmManualController implements the CRUD actions for GoodsMovement model.
  */
-class GrManualController extends Controller
+class GmManualController extends Controller
 {
 
     public function behaviors()
@@ -37,6 +38,9 @@ class GrManualController extends Controller
     {
         $searchModel = new GoodsMovementSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        $query = $dataProvider->query;
+        $query->with('warehouse');
 
         return $this->render('index', [
                 'searchModel' => $searchModel,
@@ -65,7 +69,7 @@ class GrManualController extends Controller
     {
         $model = new GoodsMovement();
 
-        $model->type = 1;
+        $model->status = GoodsMovement::STATUS_DRAFT;
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
@@ -137,7 +141,7 @@ class GrManualController extends Controller
     {
         $model = $this->findModel($id);
 
-        $model->status = 2;
+        $model->status = GoodsMovement::STATUS_APPLIED;
         $model->save();
         return $this->render('view', [
                 'model' => $model,
@@ -154,12 +158,20 @@ class GrManualController extends Controller
     {
         $model = $this->findModel($id);
 
-        $model->status = 1;
+        $model->status = GoodsMovement::STATUS_DRAFT;
         $model->save();
         return $this->render('view', [
                 'model' => $model,
         ]);
     }
+
+    public function actionListProduct($term = '', \yii\web\Response $response)
+    {
+        $response->format = 'json';
+        return Product::find()->filterWhere(['like', 'name', $term])
+                ->asArray()->limit(10)->all();
+    }
+
     /**
      * Finds the GoodsMovement model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

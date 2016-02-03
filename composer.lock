@@ -477,12 +477,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mdmsoft/yii2-ar-behaviors.git",
-                "reference": "2f5b195c38d33e88974e93c2eb71935a4c9296c3"
+                "reference": "7841be0be05ff0695d79c8f3c4e2bdb22180cfcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mdmsoft/yii2-ar-behaviors/zipball/2f5b195c38d33e88974e93c2eb71935a4c9296c3",
-                "reference": "2f5b195c38d33e88974e93c2eb71935a4c9296c3",
+                "url": "https://api.github.com/repos/mdmsoft/yii2-ar-behaviors/zipball/7841be0be05ff0695d79c8f3c4e2bdb22180cfcf",
+                "reference": "7841be0be05ff0695d79c8f3c4e2bdb22180cfcf",
                 "shasum": ""
             },
             "require": {
@@ -517,7 +517,7 @@
                 "query scope",
                 "yii2"
             ],
-            "time": "2015-07-26 02:59:34"
+            "time": "2016-02-03 04:58:36"
         },
         {
             "name": "mdmsoft/yii2-autonumber",
@@ -573,12 +573,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mdmsoft/yii2-format-converter.git",
-                "reference": "832cb0c7cfa8ba4eb8f69fcf43e0a4a95a0d285c"
+                "reference": "92ada64518b843a88751c3e3cece108ab5ab0f6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mdmsoft/yii2-format-converter/zipball/832cb0c7cfa8ba4eb8f69fcf43e0a4a95a0d285c",
-                "reference": "832cb0c7cfa8ba4eb8f69fcf43e0a4a95a0d285c",
+                "url": "https://api.github.com/repos/mdmsoft/yii2-format-converter/zipball/92ada64518b843a88751c3e3cece108ab5ab0f6e",
+                "reference": "92ada64518b843a88751c3e3cece108ab5ab0f6e",
                 "shasum": ""
             },
             "require": {
@@ -610,7 +610,7 @@
                 "extension",
                 "yii2"
             ],
-            "time": "2016-02-02 04:43:12"
+            "time": "2016-02-03 07:23:23"
         },
         {
             "name": "mdmsoft/yii2-widgets",

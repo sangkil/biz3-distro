@@ -3,6 +3,8 @@
 namespace backend\models\inventory;
 
 use Yii;
+use backend\models\master\Warehouse;
+
 
 /**
  * This is the model class for table "goods_movement".
@@ -23,9 +25,28 @@ use Yii;
  * @property integer $updated_by
  *
  * @property GoodsMovementDtl[] $items
+ * @property Warehouse $warehouse
  */
 class GoodsMovement extends \yii\db\ActiveRecord
 {
+
+    use \mdm\converter\EnumTrait;
+    // status movement
+    const STATUS_DRAFT = 10;
+    const STATUS_APPLIED = 20;
+    const STATUS_CLOSE = 90;
+    // type movement
+    const TYPE_RECEIVE = 10;
+    const TYPE_ISSUE = 20;
+
+    /**
+     *
+     * @var type 
+     */
+    protected $enumAttributes = [
+        'nmStatus' => ['status', 'STATUS_'],
+        'nmType' => ['type', 'TYPE_'],
+    ];
 
     /**
      * @inheritdoc
@@ -45,6 +66,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
             [['number'], 'nextValue', 'format' => 'GM' . date('Ymd') . '.?', 'digit' => 4],
             [['warehouse_id', 'type', 'reff_type', 'reff_id', 'vendor_id', 'status'], 'integer'],
             [['items'], 'required'],
+            [['items'], 'relationUnique', 'targetAttributes' => 'product_id'],
             [['description'], 'string', 'max' => 255],
         ];
     }
@@ -78,6 +100,14 @@ class GoodsMovement extends \yii\db\ActiveRecord
     public function getItems()
     {
         return $this->hasMany(GoodsMovementDtl::className(), ['movement_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouse()
+    {
+        return $this->hasOne(Warehouse::className(), ['id' => 'warehouse_id']);
     }
 
     public function behaviors()

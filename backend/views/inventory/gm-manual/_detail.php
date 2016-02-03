@@ -4,15 +4,25 @@ use yii\web\View;
 use mdm\widgets\TabularInput;
 use backend\models\inventory\GoodsMovement;
 use backend\models\inventory\GoodsMovementDtl;
+use yii\jui\AutoComplete;
 
 /* @var $this View */
 /* @var $model GoodsMovement */
 
+$this->registerJs($this->render('_script.js'));
 ?>
-<a id="add-row" title="Add" href="#"><span class="glyphicon glyphicon-plus"></span></a>
+
+<?= AutoComplete::widget([
+    'clientOptions'=>[
+        'source' => yii\helpers\Url::to(['list-product']),
+    ],
+    'options'=>[
+        'id'=>'input-product'
+    ]
+]); ?>
 <div class="col-lg-12">
     <div class="panel panel-info">        
-        <table id="detail-grid" class="table table-striped">            
+        <table id="detail-grid" class="table table-striped">
             <?=
             TabularInput::widget([
                 'id' => 'detail-grid',
@@ -22,7 +32,7 @@ use backend\models\inventory\GoodsMovementDtl;
                 'itemOptions' => ['tag' => 'tr'],
                 'itemView' => '_item_detail',
                 'clientOptions' => [
-                    'btnAddSelector' =>'#add-row'
+                    
                 ]
             ])
             ?>

@@ -2,12 +2,14 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use backend\models\inventory\GoodsMovement;
+use backend\models\master\Warehouse;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\inventory\search\GoodsMovement */
+/* @var $searchModel GoodsMovement */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'GR';
+$this->title = 'Movement';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="goods-movement-index">
@@ -15,19 +17,32 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create GR', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Movement', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'number',
-            'warehouse_id',
+            [
+                'attribute' => 'type',
+                'value' => 'nmType',
+                'filter' => GoodsMovement::enums('TYPE_')
+            ],
+            [
+                'attribute' => 'warehouse_id',
+                'value' => 'warehouse.name',
+                'filter' => Warehouse::selectOptions(),
+            ],
             'date',
-            'type',
+            [
+                'attribute' => 'status',
+                'value' => 'nmStatus',
+                'filter' => GoodsMovement::enums('STATUS_')
+            ],
             // 'reff_type',
             // 'reff_id',
             // 'vendor_id',
@@ -37,9 +52,9 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'created_by',
             // 'updated_at',
             // 'updated_by',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]);
+    ?>
 
 </div>

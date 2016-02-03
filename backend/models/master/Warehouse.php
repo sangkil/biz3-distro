@@ -21,19 +21,22 @@ use yii\helpers\ArrayHelper;
  * @property Product[] $products
  * @property Branch $branch
  */
-class Warehouse extends \yii\db\ActiveRecord {
+class Warehouse extends \yii\db\ActiveRecord
+{
 
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'warehouse';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['branch_id', 'code', 'name'], 'required'],
             [['branch_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
@@ -46,7 +49,8 @@ class Warehouse extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'branch_id' => 'Branch ID',
@@ -62,26 +66,29 @@ class Warehouse extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProductStocks() {
+    public function getProductStocks()
+    {
         return $this->hasMany(ProductStock::className(), ['warehouse_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProducts() {
+    public function getProducts()
+    {
         return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('product_stock', ['warehouse_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBranch() {
+    public function getBranch()
+    {
         return $this->hasOne(Branch::className(), ['id' => 'branch_id']);
     }
 
-    public static function selectOptions() {
+    public static function selectOptions()
+    {
         return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
     }
-
 }

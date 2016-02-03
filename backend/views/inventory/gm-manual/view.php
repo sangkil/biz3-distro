@@ -3,9 +3,10 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use backend\models\inventory\GoodsMovement;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\inventory\GoodsMovement */
+/* @var $model GoodsMovement */
 
 $this->title = $model->number;
 $this->params['breadcrumbs'][] = ['label' => 'Goods Movements', 'url' => ['index']];
@@ -14,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="goods-movement-view">
 
     <p>
-        <?php if ($model->status == 1): ?>
+        <?php if ($model->status == GoodsMovement::STATUS_DRAFT): ?>
             <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?=
             Html::a('Delete', ['delete', 'id' => $model->id], [
@@ -54,14 +55,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'number',
-            'warehouse_id',
+            'nmType',
+            'warehouse.name',
             'Date',
-            'type',
             'reff_type',
             'reff_id',
             'vendor_id',
             'description',
-            'status',
+            'nmStatus',
         ],
     ])
     ?>
