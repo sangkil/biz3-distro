@@ -4,7 +4,7 @@
  * Create at {date('now')}
  */
 ?>
-<div id="uom_record" class="pull-right" style="width: 40%; padding: 10px;">Record:</div>
+<div id="uom_record" class="pull-right" style="width: 40%; min-height: 180px; margin: 10px; padding: 10px; background-color: whitesmoke;">Update Logs:</div>
 <table class="table table-hover no-padding" style="width: 50%;">
     <thead>
         <tr>
