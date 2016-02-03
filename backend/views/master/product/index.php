@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <p class="pull-right">
-    <?= Html::a('Create Product', ['create'], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Create', ['create'], ['class' => 'btn btn-default']) ?>
 </p><br>
 <div class="product-index">
 

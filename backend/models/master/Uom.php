@@ -3,6 +3,9 @@
 namespace backend\models\master;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "uom".
@@ -18,21 +21,19 @@ use Yii;
  * @property ProductUom[] $productUoms
  * @property Product[] $products
  */
-class Uom extends \yii\db\ActiveRecord
-{
+class Uom extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'uom';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['code', 'name'], 'required'],
             [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
@@ -44,8 +45,7 @@ class Uom extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'code' => 'Code',
@@ -60,16 +60,26 @@ class Uom extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProductUoms()
-    {
+    public function getProductUoms() {
         return $this->hasMany(ProductUom::className(), ['uom_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProducts()
-    {
+    public function getProducts() {
         return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('product_uom', ['uom_id' => 'id']);
     }
+
+    public static function selectOptions() {
+        return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
+    }
+
+    public function behaviors() {
+        return [
+            ['class' => TimestampBehavior::className()],
+            ['class' => BlameableBehavior::className()]
+        ];
+    }
+
 }

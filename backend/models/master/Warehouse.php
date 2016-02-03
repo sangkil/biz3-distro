@@ -4,6 +4,8 @@ namespace backend\models\master;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "warehouse".
@@ -91,4 +93,12 @@ class Warehouse extends \yii\db\ActiveRecord
     {
         return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
     }
+
+    public function behaviors() {
+        return [
+            ['class' => TimestampBehavior::className()],
+            ['class' => BlameableBehavior::className()]
+        ];
+    }
+
 }

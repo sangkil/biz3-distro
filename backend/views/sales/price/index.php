@@ -4,18 +4,18 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\master\search\Orgn */
+/* @var $searchModel backend\models\sales\search\Price */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Orgns';
+$this->title = 'Prices';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>
-    <?= Html::a('Create Orgn', ['create'], ['class' => 'btn btn-default']) ?>
+    <?= Html::a('Create Price', ['create'], ['class' => 'btn btn-success']) ?>
 </p>
 <br>
 
-<div class="orgn-index">
+<div class="price-index">
 
                 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     
@@ -27,9 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
 
-                    'id',
-            'code',
-            'name',
+                    'product_id',
+            'price_category_id',
+            'price',
             'created_at',
             'created_by',
             // 'updated_at',

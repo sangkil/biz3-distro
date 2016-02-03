@@ -4,6 +4,8 @@ namespace backend\models\master;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "branch".
@@ -21,21 +23,19 @@ use yii\helpers\ArrayHelper;
  * @property UserToBranch[] $userToBranches
  * @property Warehouse[] $warehouses
  */
-class Branch extends \yii\db\ActiveRecord
-{
+class Branch extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'branch';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['orgn_id', 'code', 'name'], 'required'],
             [['orgn_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
@@ -48,8 +48,7 @@ class Branch extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'orgn_id' => 'Orgn ID',
@@ -65,28 +64,33 @@ class Branch extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrgn()
-    {
+    public function getOrgn() {
         return $this->hasOne(Orgn::className(), ['id' => 'orgn_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserToBranches()
-    {
+    public function getUserToBranches() {
         return $this->hasMany(UserToBranch::className(), ['branch_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getWarehouses()
-    {
+    public function getWarehouses() {
         return $this->hasMany(Warehouse::className(), ['branch_id' => 'id']);
     }
-    
+
     public static function selectOptions() {
         return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
     }
+
+    public function behaviors() {
+        return [
+            ['class' => TimestampBehavior::className()],
+            ['class' => BlameableBehavior::className()]
+        ];
+    }
+
 }

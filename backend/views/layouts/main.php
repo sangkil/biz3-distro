@@ -28,8 +28,11 @@ AppAsset::register($this);
             ?>
             <div class="content-wrapper" style="padding-top: 0px; background-color: white">
                 <section class="content-header" >
-                    <h1 data-toggle="offcanvas" role="button"> 
-                        <i class="fa fa-angle-left"></i>
+                    <h1> 
+                        <a href="#" data-toggle="offcanvas" role="button">
+                            <i class="fa fa-angle-left"></i>
+                            <i class="fa fa-angle-right"></i>
+                        </a>
                         &nbsp;
                         <?= $this->title ?>
                     </h1>
