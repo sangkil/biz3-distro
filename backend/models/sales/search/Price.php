@@ -1,16 +1,16 @@
 <?php
 
-namespace backend\models\master\search;
+namespace backend\models\sales\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\master\Branch as BranchModel;
+use backend\models\sales\Price as PriceModel;
 
 /**
- * Branch represents the model behind the search form about `backend\models\master\Branch`.
+ * Price represents the model behind the search form about `backend\models\sales\Price`.
  */
-class Branch extends BranchModel
+class Price extends PriceModel
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class Branch extends BranchModel
     public function rules()
     {
         return [
-            [['id', 'orgn_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['code', 'name'], 'safe'],
+            [['product_id', 'price_category_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['price'], 'number'],
         ];
     }
 
@@ -41,9 +41,7 @@ class Branch extends BranchModel
      */
     public function search($params)
     {
-        $query = BranchModel::find();
-        
-        $query->with(['orgn']);
+        $query = PriceModel::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,16 +54,14 @@ class Branch extends BranchModel
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
-            'orgn_id' => $this->orgn_id,
+            'product_id' => $this->product_id,
+            'price_category_id' => $this->price_category_id,
+            'price' => $this->price,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,
             'updated_at' => $this->updated_at,
             'updated_by' => $this->updated_by,
         ]);
-
-        $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

@@ -32,7 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             [
                 'header'=>'Orgn',
-                'attribute'=>'orgn.name'
+                'attribute'=>'orgn_id',
+                'value'=>'orgn.name',
+                'filter'=>  \backend\models\master\Orgn::selectOptions()
             ],
             //'created_at',
             // 'created_by',

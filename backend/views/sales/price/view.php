@@ -4,17 +4,17 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\master\Orgn */
+/* @var $model backend\models\sales\Price */
 
-$this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Orgns', 'url' => ['index']];
+$this->title = $model->product_id;
+$this->params['breadcrumbs'][] = ['label' => 'Prices', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="orgn-view">
+<div class="price-view">
 
-    <p class="pull-right">
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+    <p>
+        <?= Html::a('Update', ['update', 'product_id' => $model->product_id, 'price_category_id' => $model->price_category_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'product_id' => $model->product_id, 'price_category_id' => $model->price_category_id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -26,9 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'code',
-            'name',
+            'product_id',
+            'price_category_id',
+            'price',
             'created_at',
             'created_by',
             'updated_at',

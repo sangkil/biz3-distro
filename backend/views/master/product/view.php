@@ -10,33 +10,120 @@ $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<p class="pull-right">
+    <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
+    <?=
+    Html::a('Delete', ['delete', 'id' => $model->id], [
+        'class' => 'btn btn-danger',
+        'data' => [
+            'confirm' => 'Are you sure you want to delete this item?',
+            'method' => 'post',
+        ],
+    ])
+    ?>
+</p>
 <div class="product-view">
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
+    <?=
+    DetailView::widget([
         'model' => $model,
+        'options' => ['class' => 'table table-hover'],
+        'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
         'attributes' => [
             'id',
-            'group_id',
-            'category_id',
             'code',
             'name',
             'status',
-            'created_at',
-            'created_by',
-            'updated_at',
-            'updated_by',
+//            'group_id',
+//            'category_id',
+//            'created_at:datetime',
+//            'created_by',
+//            'updated_at:datetime',
+//            'updated_by',
         ],
-    ]) ?>
+    ])
+    ?>
+    <div class="nav-tabs-justified">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#uom" data-toggle="tab" aria-expanded="false">Uoms</a></li>
+            <li><a href="#bcode" data-toggle="tab" aria-expanded="false">Barcodes Alias</a></li>    
+            <li><a href="#dprice" data-toggle="tab" aria-expanded="false">Sales Price</a></li>             
+        </ul> 
+        <div class="tab-content" >
+            <div class="tab-pane active" id="uom">
+                <table class="table table-hover no-padding" style="width: 60%;">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">No</th>
+                            <th style="width: 40%;">Uom Code</th>
+                            <th>Isi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $row = '';$i=1;
+                        foreach ($model->productUoms as $roums) {
+                            $row .= '<tr>';
+                            $row .= '<td>'.$i.'</td>';
+                            $row .= '<td>'.$roums->uom->code.'</td>';
+                            $row .= '<td>'.$roums->isi.'</td>';
+                            $row .= '</tr>';
+                            $i++;
+                        }
+                        echo $row;
+                        ?> 
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="bcode">
+                <table class="table table-hover" style="width: 60%;">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">No</th>
+                            <th>Barcodes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $row = '';$i=1;
+                        foreach ($model->productChildren as $bcode) {
+                            $row .= '<tr>';
+                            $row .= '<td>'.$i.'</td>';
+                            $row .= '<td>'.$bcode->barcode.'</td>';
+                            $row .= '</tr>';
+                            $i++;
+                        }
+                        echo $row;
+                        ?> 
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="dprice">
+                <table class="table table-hover" style="width: 60%;">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">No</th>
+                            <th>Price Category</th>
+                            <th>Sales Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $row = '';$i=1;
+                        foreach ($model->prices as $dprc) {
+                            $row .= '<tr>';$row .= '<td>'.$i.'</td>';
+                            $row .= '<td>'.$dprc->priceCategory->name.'</td>';
+                            $row .= '<td>'.$dprc->price.'</td>';
+                            $row .= '</tr>';
+                            $i++;
+                        }
+                        echo $row;
+                        ?> 
+                    </tbody>
+                </table>
+            </div>
+        </div> 
+    </div>    
+
+
 
 </div>
