@@ -21,8 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ])
     ?>
-</p>
-<div class="product-view">
+</p><div class="col-lg-12"></div>
+<div class="product-view col-lg-6">
     <?=
     DetailView::widget([
         'model' => $model,
@@ -33,15 +33,34 @@ $this->params['breadcrumbs'][] = $this->title;
             'code',
             'name',
             'status',
-//            'group_id',
-//            'category_id',
-//            'created_at:datetime',
-//            'created_by',
-//            'updated_at:datetime',
-//            'updated_by',
+            [
+                'label' => 'Product Group',
+                'value' => $model->group->name
+            ],
+            [
+                'label' => 'Category',
+                'value' => $model->category->name
+            ]
         ],
     ])
     ?>
+</div>
+<div class="product-view col-lg-6">
+    <?=
+    DetailView::widget([
+        'model' => $model,
+        'options' => ['class' => 'table table-hover'],
+        'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
+        'attributes' => [
+            'created_at:datetime',
+            'created_by',
+            'updated_at:datetime',
+            'updated_by',
+        ],
+    ])
+    ?>
+</div>
+<div class="col-lg-12">
     <div class="nav-tabs-justified">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#uom" data-toggle="tab" aria-expanded="false">Uoms</a></li>
@@ -60,12 +79,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     </thead>
                     <tbody>
                         <?php
-                        $row = '';$i=1;
+                        $row = '';
+                        $i = 1;
                         foreach ($model->productUoms as $roums) {
                             $row .= '<tr>';
-                            $row .= '<td>'.$i.'</td>';
-                            $row .= '<td>'.$roums->uom->code.'</td>';
-                            $row .= '<td>'.$roums->isi.'</td>';
+                            $row .= '<td>' . $i . '</td>';
+                            $row .= '<td>' . $roums->uom->code . '</td>';
+                            $row .= '<td>' . $roums->isi . '</td>';
                             $row .= '</tr>';
                             $i++;
                         }
@@ -84,11 +104,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     </thead>
                     <tbody>
                         <?php
-                        $row = '';$i=1;
+                        $row = '';
+                        $i = 1;
                         foreach ($model->productChildren as $bcode) {
                             $row .= '<tr>';
-                            $row .= '<td>'.$i.'</td>';
-                            $row .= '<td>'.$bcode->barcode.'</td>';
+                            $row .= '<td>' . $i . '</td>';
+                            $row .= '<td>' . $bcode->barcode . '</td>';
                             $row .= '</tr>';
                             $i++;
                         }
@@ -108,11 +129,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     </thead>
                     <tbody>
                         <?php
-                        $row = '';$i=1;
+                        $row = '';
+                        $i = 1;
                         foreach ($model->prices as $dprc) {
-                            $row .= '<tr>';$row .= '<td>'.$i.'</td>';
-                            $row .= '<td>'.$dprc->priceCategory->name.'</td>';
-                            $row .= '<td>'.$dprc->price.'</td>';
+                            $row .= '<tr>';
+                            $row .= '<td>' . $i . '</td>';
+                            $row .= '<td>' . $dprc->priceCategory->name . '</td>';
+                            $row .= '<td>' . $dprc->price . '</td>';
                             $row .= '</tr>';
                             $i++;
                         }
@@ -123,7 +146,5 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div> 
     </div>    
-
-
-
 </div>
+
