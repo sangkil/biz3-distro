@@ -1,51 +1,53 @@
 <?php
 
-namespace backend\models\inventory;
+namespace backend\models\accounting;
 
 use Yii;
-use backend\models\master\Warehouse;
 
 /**
- * This is the model class for table "goods_movement".
+ * This is the model class for table "invoice".
  *
  * @property integer $id
  * @property string $number
- * @property integer $warehouse_id
  * @property string $date
+ * @property string $due_date
  * @property integer $type
+ * @property integer $vendor_id
  * @property integer $reff_type
  * @property integer $reff_id
- * @property integer $vendor_id
- * @property string $description
  * @property integer $status
+ * @property string $description
+ * @property double $value
+ * @property string $tax_type
+ * @property double $tax_value
  * @property integer $created_at
  * @property integer $created_by
  * @property integer $updated_at
  * @property integer $updated_by
  *
- * @property GoodsMovementDtl[] $items
- * @property Warehouse $warehouse
+ * @property InvoiceDtl[] $items
+ * @property PaymentDtl[] $paymentDtls
+ * @property Payment[] $payments
  */
-class GoodsMovement extends \yii\db\ActiveRecord
+class Invoice extends \yii\db\ActiveRecord
 {
 
     use \mdm\converter\EnumTrait,
         \mdm\behaviors\ar\RelationTrait;
-    
-    // status movement
+    // status invoice
     const STATUS_DRAFT = 10;
     const STATUS_APPLIED = 20;
     const STATUS_CLOSE = 90;
-    // type movement
-    const TYPE_RECEIVE = 10;
-    const TYPE_ISSUE = 20;
+    // type invoice
+    const TYPE_IN = 10;
+    const TYPE_OUT = 20;
 
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'goods_movement';
+        return 'invoice';
     }
 
     /**
@@ -54,12 +56,13 @@ class GoodsMovement extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['warehouse_id', 'Date', 'type', 'status'], 'required'],
-            [['number'], 'autonumber', 'format' => 'GM' . date('Ymd') . '.?', 'digit' => 4],
-            [['warehouse_id', 'type', 'reff_type', 'reff_id', 'vendor_id', 'status'], 'integer'],
+            [['Date', 'DueDate', 'type', 'vendor_id', 'status', 'value'], 'required'],
+            [['type', 'vendor_id', 'reff_type', 'reff_id', 'status'], 'integer'],
+            [['value', 'tax_value'], 'number'],
+            [['number'], 'autonumber', 'format' => 'IV' . date('Ymd') . '.?', 'digit' => 4],
             [['items'], 'required'],
-            [['items'], 'relationUnique', 'targetAttributes' => 'product_id'],
-            [['description'], 'string', 'max' => 255],
+            [['items'], 'relationUnique', 'targetAttributes' => ['item_type', 'item_id']],
+            [['description', 'tax_type'], 'string', 'max' => 64],
         ];
     }
 
@@ -71,14 +74,17 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'number' => 'Number',
-            'warehouse_id' => 'Warehouse ID',
             'date' => 'Date',
+            'due_date' => 'Due Date',
             'type' => 'Type',
+            'vendor_id' => 'Vendor ID',
             'reff_type' => 'Reff Type',
             'reff_id' => 'Reff ID',
-            'vendor_id' => 'Vendor ID',
-            'description' => 'Description',
             'status' => 'Status',
+            'description' => 'Description',
+            'value' => 'Value',
+            'tax_type' => 'Tax Type',
+            'tax_value' => 'Tax Value',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
@@ -91,7 +97,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
      */
     public function getItems()
     {
-        return $this->hasMany(GoodsMovementDtl::className(), ['movement_id' => 'id']);
+        return $this->hasMany(InvoiceDtl::className(), ['invoice_id' => 'id']);
     }
 
     /**
@@ -101,14 +107,6 @@ class GoodsMovement extends \yii\db\ActiveRecord
     public function setItems($value)
     {
         $this->loadRelated('items', $value);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getWarehouse()
-    {
-        return $this->hasOne(Warehouse::className(), ['id' => 'warehouse_id']);
     }
 
     public function getNmType()
@@ -121,6 +119,22 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return $this->getLogical('status', 'STATUS_');
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPaymentDtls()
+    {
+        return $this->hasMany(PaymentDtl::className(), ['invoice_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPayments()
+    {
+        return $this->hasMany(Payment::className(), ['id' => 'payment_id'])->viaTable('payment_dtl', ['invoice_id' => 'id']);
+    }
+
     public function behaviors()
     {
         return[
@@ -130,6 +144,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
                 'logicalFormat' => 'php:d-m-Y',
                 'attributes' => [
                     'Date' => 'date', // date is original attribute
+                    'DueDate' => 'due_date'
                 ]
             ],
             'yii\behaviors\BlameableBehavior',

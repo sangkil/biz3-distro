@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\models\master\Product;
+use backend\models\master\ProductStock;
+use backend\models\master\ProductUom;
 
 /**
  * GmManualController implements the CRUD actions for GoodsMovement model.
@@ -147,6 +149,20 @@ class GmManualController extends Controller
             if ($model->save()) {
                 // update stock
                 // ....
+                $factor = $model->type == GoodsMovement::TYPE_RECEIVE ? 1 : -1;
+                $wh_id = $model->warehouse_id;
+                foreach ($model->items as $item) {
+                    $product_id = $item->product_id;
+                    $pu = ProductUom::findOne(['product_id' => $product_id, 'uom_id' => $item->uom_id]);
+                    $qty = $factor * $item->qty * ($pu ? $pu->isi : 1);
+                    $ps = ProductStock::findOne(['product_id' => $product_id, 'warehouse_id' => $wh_id]);
+                    if ($ps) {
+                        $ps->qty = new \yii\db\Expression('[[qty]]+:added', [':added' => $qty]);
+                    } else {
+                        $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
+                    }
+                    $ps->save(false);
+                }
 
                 $transaction->commit();
                 return $this->redirect(['view', 'id' => $model->id]);

@@ -1,8 +1,10 @@
 <?php
 
-namespace backend\models\inventory;
+namespace backend\models\master;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "product_stock".
@@ -71,5 +73,12 @@ class ProductStock extends \yii\db\ActiveRecord
     public function getWarehouse()
     {
         return $this->hasOne(Warehouse::className(), ['id' => 'warehouse_id']);
+    }
+
+    public function behaviors() {
+        return [
+            ['class' => TimestampBehavior::className()],
+            ['class' => BlameableBehavior::className()]
+        ];
     }
 }

@@ -477,12 +477,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mdmsoft/yii2-ar-behaviors.git",
-                "reference": "7841be0be05ff0695d79c8f3c4e2bdb22180cfcf"
+                "reference": "14ac297d5ac18594dcf09cd5b3bb20ff3d786ff2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mdmsoft/yii2-ar-behaviors/zipball/7841be0be05ff0695d79c8f3c4e2bdb22180cfcf",
-                "reference": "7841be0be05ff0695d79c8f3c4e2bdb22180cfcf",
+                "url": "https://api.github.com/repos/mdmsoft/yii2-ar-behaviors/zipball/14ac297d5ac18594dcf09cd5b3bb20ff3d786ff2",
+                "reference": "14ac297d5ac18594dcf09cd5b3bb20ff3d786ff2",
                 "shasum": ""
             },
             "require": {
@@ -517,7 +517,7 @@
                 "query scope",
                 "yii2"
             ],
-            "time": "2016-02-03 04:58:36"
+            "time": "2016-02-04 11:34:09"
         },
         {
             "name": "mdmsoft/yii2-autonumber",
@@ -525,12 +525,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mdmsoft/yii2-autonumber.git",
-                "reference": "9df6f2e7eff4b8d2d3ab108a7346f84d21fc6f0d"
+                "reference": "e9f8761aae3c7ff5f3b15d0d872bb06269e31a4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mdmsoft/yii2-autonumber/zipball/9df6f2e7eff4b8d2d3ab108a7346f84d21fc6f0d",
-                "reference": "9df6f2e7eff4b8d2d3ab108a7346f84d21fc6f0d",
+                "url": "https://api.github.com/repos/mdmsoft/yii2-autonumber/zipball/e9f8761aae3c7ff5f3b15d0d872bb06269e31a4c",
+                "reference": "e9f8761aae3c7ff5f3b15d0d872bb06269e31a4c",
                 "shasum": ""
             },
             "require": {
@@ -565,7 +565,7 @@
                 " extension",
                 "yii2"
             ],
-            "time": "2016-02-02 07:23:25"
+            "time": "2016-02-04 13:25:02"
         },
         {
             "name": "mdmsoft/yii2-format-converter",
@@ -573,12 +573,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mdmsoft/yii2-format-converter.git",
-                "reference": "92ada64518b843a88751c3e3cece108ab5ab0f6e"
+                "reference": "c2f674c1116442a193112b20f59326fc317eda85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mdmsoft/yii2-format-converter/zipball/92ada64518b843a88751c3e3cece108ab5ab0f6e",
-                "reference": "92ada64518b843a88751c3e3cece108ab5ab0f6e",
+                "url": "https://api.github.com/repos/mdmsoft/yii2-format-converter/zipball/c2f674c1116442a193112b20f59326fc317eda85",
+                "reference": "c2f674c1116442a193112b20f59326fc317eda85",
                 "shasum": ""
             },
             "require": {
@@ -610,7 +610,7 @@
                 "extension",
                 "yii2"
             ],
-            "time": "2016-02-03 07:23:23"
+            "time": "2016-02-04 11:14:58"
         },
         {
             "name": "mdmsoft/yii2-widgets",
