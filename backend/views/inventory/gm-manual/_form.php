@@ -16,8 +16,16 @@ use backend\models\master\Warehouse;
 
     <?= Html::errorSummary($model); ?>
     <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <?=
+                Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success'
+                            : 'btn btn-primary'])
+                ?>
+            </div>
+        </div>
         <div class="col-md-6">
-            <div class="box box-primary">
+            <div class="box">
                 <div class="box-body">
                     <?= $form->field($model, 'number')->staticControl() ?>
                     <?=
@@ -30,7 +38,7 @@ use backend\models\master\Warehouse;
             </div>
         </div>
         <div class="col-md-6">
-            <div class="box box-primary">
+            <div class="box">
                 <div class="box-body">
                     <?=
                     $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
@@ -44,16 +52,10 @@ use backend\models\master\Warehouse;
                 </div>
             </div>
         </div>
+        <div class="col-md-12">
+            <?= $this->render('_detail', ['model' => $model]) ?>
+        </div>
     </div>
-    <div class="form-group">
-        <?=
-        Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success'
-                    : 'btn btn-primary'])
-        ?>
-    </div>
-
-    <?= $this->render('_detail', ['model' => $model]) ?>
-
-<?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); ?>
 
 </div>
