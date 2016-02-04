@@ -4,25 +4,27 @@ use yii\web\View;
 use mdm\widgets\TabularInput;
 use backend\models\inventory\GoodsMovement;
 use backend\models\inventory\GoodsMovementDtl;
-use yii\jui\AutoComplete;
+use yii\jui\JuiAsset;
+use yii\helpers\Url;
 
 /* @var $this View */
 /* @var $model GoodsMovement */
 
+JuiAsset::register($this);
+$opts = json_encode([
+    'product_url' => Url::to(['list-product']),
+    ]);
+
+$this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
 ?>
 
-<?= AutoComplete::widget([
-    'clientOptions'=>[
-        'source' => yii\helpers\Url::to(['list-product']),
-    ],
-    'options'=>[
-        'id'=>'input-product'
-    ]
-]); ?>
 <div class="col-lg-12">
-    <div class="panel panel-info">        
-        <table id="detail-grid" class="table table-striped">
+    <input id="input-product">
+</div>
+<div class="col-lg-12">
+    <div class="panel panel-info">
+        <table class="table table-striped">
             <?=
             TabularInput::widget([
                 'id' => 'detail-grid',
@@ -32,7 +34,6 @@ $this->registerJs($this->render('_script.js'));
                 'itemOptions' => ['tag' => 'tr'],
                 'itemView' => '_item_detail',
                 'clientOptions' => [
-                    
                 ]
             ])
             ?>

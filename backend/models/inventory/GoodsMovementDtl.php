@@ -3,6 +3,8 @@
 namespace backend\models\inventory;
 
 use Yii;
+use backend\models\master\Product;
+use backend\models\master\Uom;
 
 /**
  * This is the model class for table "goods_movement_dtl".
@@ -15,6 +17,7 @@ use Yii;
  * @property double $trans_value
  *
  * @property GoodsMovement $movement
+ * @property Product $product
  */
 class GoodsMovementDtl extends \yii\db\ActiveRecord
 {
@@ -60,5 +63,21 @@ class GoodsMovementDtl extends \yii\db\ActiveRecord
     public function getMovement()
     {
         return $this->hasOne(GoodsMovement::className(), ['id' => 'movement_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduct()
+    {
+        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUom()
+    {
+        return $this->hasOne(Uom::className(), ['id' => 'uom_id']);
     }
 }

@@ -168,7 +168,7 @@ class GmManualController extends Controller
     public function actionListProduct($term = '', \yii\web\Response $response)
     {
         $response->format = 'json';
-        return Product::find()->filterWhere(['like', 'name', $term])
+        return Product::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
                 ->asArray()->limit(10)->all();
     }
 

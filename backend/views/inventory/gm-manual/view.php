@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ])
             ?>
         <?php else: ?>
-        <?=
+            <?=
             Html::a('Rollback', ['rollback', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
                 'data' => [
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ])
             ?>
-    <?php endif; ?>
+        <?php endif; ?>
 
 
     </p>
@@ -67,13 +67,27 @@ $this->params['breadcrumbs'][] = $this->title;
     ])
     ?>
 
-<?=
-GridView::widget([
-    'dataProvider' => new yii\data\ActiveDataProvider([
-        'query' => $model->getItems(),
-        'pagination' => false,
-        ])
-])
-?>
+    <?=
+    GridView::widget([
+        'dataProvider' => new yii\data\ActiveDataProvider([
+            'query' => $model->getItems()->with(['product', 'uom']),
+            'pagination' => false,
+            'sort' => false,
+            ]),
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'product.name',
+                'header' => 'Product'
+            ],
+            'product.name',
+            'qty',
+            [
+                'attribute' => 'uom.name',
+                'header' => 'Uom'
+            ],
+        ]
+    ])
+    ?>
 
 </div>
