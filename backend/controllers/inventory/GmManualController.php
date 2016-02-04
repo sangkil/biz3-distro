@@ -38,7 +38,7 @@ class GmManualController extends Controller
     {
         $searchModel = new GoodsMovementSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
+
         $query = $dataProvider->query;
         $query->with('warehouse');
 
@@ -142,10 +142,20 @@ class GmManualController extends Controller
         $model = $this->findModel($id);
 
         $model->status = GoodsMovement::STATUS_APPLIED;
-        $model->save();
-        return $this->render('view', [
-                'model' => $model,
-        ]);
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->save()) {
+                // update stock
+                // ....
+
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            $transaction->rollBack();
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            throw $exc;
+        }
     }
 
     /**
@@ -159,10 +169,20 @@ class GmManualController extends Controller
         $model = $this->findModel($id);
 
         $model->status = GoodsMovement::STATUS_DRAFT;
-        $model->save();
-        return $this->render('view', [
-                'model' => $model,
-        ]);
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->save()) {
+                // update stock
+                // ....
+
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            $transaction->rollBack();
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            throw $exc;
+        }
     }
 
     public function actionListProduct($term = '', \yii\web\Response $response)
