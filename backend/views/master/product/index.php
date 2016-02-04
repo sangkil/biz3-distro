@@ -30,10 +30,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             [
                 'header' => 'Product Group',
-                'attribute' => 'group.name'
+                'attribute' => 'group_id',
+                'value' => 'group.name',
+                'format'=>'raw',
+                'filter' => backend\models\master\ProductGroup::selectOptions()
             ],
             [
                 'header' => 'Product Category',
+                'attribute' => 'category_id',
+                'value' => 'category.name',
+                'format'=>'raw',
+                'filter' => \backend\models\master\Category::selectOptions()
+            ],
+            [
+                
                 'attribute' => 'category.name'
             ],
             //'id',

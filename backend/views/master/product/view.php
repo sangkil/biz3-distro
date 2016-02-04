@@ -11,6 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class="pull-right">
+    <?= Html::a('Create New', ['create'], ['class' => 'btn btn-default']) ?>
     <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
     <?=
     Html::a('Delete', ['delete', 'id' => $model->id], [
@@ -21,7 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ])
     ?>
-</p><div class="col-lg-12"></div>
+</p>
+<div class="col-lg-12"></div>
 <div class="product-view col-lg-6">
     <?=
     DetailView::widget([

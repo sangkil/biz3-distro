@@ -4,14 +4,14 @@
  * Create at {date('now')}
  */
 ?>
-<div id="uom_record" class="pull-right" style="width: 40%; min-height: 180px; margin: 10px; padding: 10px; background-color: whitesmoke;">Update Logs:</div>
+<div id="uom_record" class="pull-right" style="width: 40%; height: 180px; margin: 10px; padding: 10px; background-color: whitesmoke; overflow-y: scroll;">Update Logs:</div>
 <table id="uomTable" class="table table-hover no-padding" style="width: 50%;">
     <thead>
         <tr>
             <th style="width: 10%;">No</th>
             <th style="width: 30%;">Uom Code</th>
             <th>Isi</th>
-            <th>Action</th>
+            <th style="text-align:center;">Action</th>
         </tr>
         <tr>
             <td>#</td>
@@ -29,12 +29,16 @@
     <tbody>
         <?php
         $row = '';
-        $i = 1;
+        $i = 0;
         foreach ($product_uom as $roums) {
             $row .= '<tr class="rowUom">';
-            $row .= '<td>' . $i . '</td>';
+            $row .= '<td>' . ($i + 1) . '</td>';
             $row .= '<td>' . $roums->uom->name . '</td>';
-            $row .= '<td>' . $roums->isi . '</td>';
+            $row .= '<td>';
+            $row .= $roums->isi;
+            $row .= \yii\helpers\Html::input('hidden', 'prodUom['. $i .'][id_uom]', $roums->uom_id,['class'=>'id_uom']);
+            $row .= \yii\helpers\Html::input('hidden', 'prodUom['. $i .'][isi]', $roums->isi,['class'=>'isi']);
+            $row .= '</td>';
             $row .= '<td style="text-align:center;">' .
                     \yii\helpers\Html::a('<i class="fa fa-minus"></i>', '#', ['class' => 'btn btn-default text-orange uom_remove'])
                     . '</td>';
@@ -49,7 +53,7 @@
                 \yii\helpers\Html::a('<i class="fa fa-minus"></i>', '#', ['class' => 'btn btn-default text-orange uom_remove'])
                 . '</td>';
         $row_template .= '</tr>';
-        echo $row.$row_template;
+        echo $row . $row_template;
         ?> 
     </tbody>
 </table>
