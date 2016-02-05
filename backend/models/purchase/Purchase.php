@@ -1,51 +1,46 @@
 <?php
 
-namespace backend\models\inventory;
+namespace backend\models\purchase;
 
 use Yii;
-use backend\models\master\Warehouse;
+use backend\models\master\Branch;
+use backend\models\master\Supplier;
 
 /**
- * This is the model class for table "goods_movement".
+ * This is the model class for table "purchase".
  *
  * @property integer $id
  * @property string $number
- * @property integer $warehouse_id
+ * @property integer $supplier_id
+ * @property integer $branch_id
  * @property string $date
- * @property integer $type
- * @property integer $reff_type
- * @property integer $reff_id
- * @property integer $vendor_id
- * @property string $description
+ * @property double $value
+ * @property double $discount
  * @property integer $status
  * @property integer $created_at
  * @property integer $created_by
  * @property integer $updated_at
  * @property integer $updated_by
  *
- * @property GoodsMovementDtl[] $items
- * @property Warehouse $warehouse
+ * @property PurchaseDtl[] $items
+ * @property Branch $branch 
+ * @property Supplier $supplier
  */
-class GoodsMovement extends \yii\db\ActiveRecord
+class Purchase extends \yii\db\ActiveRecord
 {
-
     use \mdm\converter\EnumTrait,
         \mdm\behaviors\ar\RelationTrait;
-    
+
     // status movement
     const STATUS_DRAFT = 10;
     const STATUS_APPLIED = 20;
     const STATUS_CLOSE = 90;
-    // type movement
-    const TYPE_RECEIVE = 10;
-    const TYPE_ISSUE = 20;
-
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%goods_movement}}';
+        return '{{%purchase}}';
     }
 
     /**
@@ -54,12 +49,13 @@ class GoodsMovement extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['warehouse_id', 'Date', 'type', 'status'], 'required'],
-            [['number'], 'autonumber', 'format' => 'GM' . date('Ymd') . '.?', 'digit' => 4],
-            [['warehouse_id', 'type', 'reff_type', 'reff_id', 'vendor_id', 'status'], 'integer'],
+            [['supplier_id', 'branch_id', 'Date', 'value', 'status'], 'required'],
+            [['supplier_id', 'branch_id', 'status'], 'integer'],
+            [['number'], 'autonumber', 'format' => 'PU' . date('Ymd') . '.?', 'digit' => 4],
             [['items'], 'required'],
             [['items'], 'relationUnique', 'targetAttributes' => 'product_id'],
-            [['description'], 'string', 'max' => 255],
+            [['value', 'discount'], 'number'],
+            [['number'], 'string', 'max' => 16],
         ];
     }
 
@@ -71,13 +67,11 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'number' => 'Number',
-            'warehouse_id' => 'Warehouse ID',
+            'supplier_id' => 'Supplier ID',
+            'branch_id' => 'Branch ID',
             'date' => 'Date',
-            'type' => 'Type',
-            'reff_type' => 'Reff Type',
-            'reff_id' => 'Reff ID',
-            'vendor_id' => 'Vendor ID',
-            'description' => 'Description',
+            'value' => 'Value',
+            'discount' => 'Discount',
             'status' => 'Status',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
@@ -91,7 +85,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
      */
     public function getItems()
     {
-        return $this->hasMany(GoodsMovementDtl::className(), ['movement_id' => 'id']);
+        return $this->hasMany(PurchaseDtl::className(), ['purchase_id' => 'id']);
     }
 
     /**
@@ -106,14 +100,17 @@ class GoodsMovement extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getWarehouse()
+    public function getBranch()
     {
-        return $this->hasOne(Warehouse::className(), ['id' => 'warehouse_id']);
+        return $this->hasOne(Branch::className(), ['id' => 'branch_id']);
     }
 
-    public function getNmType()
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
     {
-        return $this->getLogical('type', 'TYPE_');
+        return $this->hasOne(Supplier::className(), ['id' => 'branch_id']);
     }
 
     public function getNmStatus()

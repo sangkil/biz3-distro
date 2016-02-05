@@ -1,32 +1,32 @@
 <?php
 
-namespace backend\models\inventory;
+namespace backend\models\purchase;
 
 use Yii;
 use backend\models\master\Product;
 use backend\models\master\Uom;
 
 /**
- * This is the model class for table "goods_movement_dtl".
+ * This is the model class for table "purchase_dtl".
  *
- * @property integer $movement_id
+ * @property integer $purchase_id
  * @property integer $product_id
  * @property integer $uom_id
  * @property double $qty
- * @property double $item_value
- * @property double $trans_value
+ * @property double $price
+ * @property double $discount
+ * @property double $total_receive
  *
- * @property GoodsMovement $movement
- * @property Product $product
+ * @property Purchase $purchase
  */
-class GoodsMovementDtl extends \yii\db\ActiveRecord
+class PurchaseDtl extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%goods_movement_dtl}}';
+        return '{{%purchase_dtl}}';
     }
 
     /**
@@ -35,9 +35,9 @@ class GoodsMovementDtl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'uom_id', 'qty'], 'required'],
-            [['movement_id', 'product_id', 'uom_id'], 'integer'],
-            [['qty', 'item_value', 'trans_value'], 'number'],
+            [['product_id', 'uom_id', 'qty', 'price'], 'required'],
+            [['purchase_id', 'product_id', 'uom_id'], 'integer'],
+            [['qty', 'price', 'discount', 'total_receive'], 'number'],
         ];
     }
 
@@ -47,21 +47,22 @@ class GoodsMovementDtl extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'movement_id' => 'Movement ID',
+            'purchase_id' => 'Purchase ID',
             'product_id' => 'Product ID',
             'uom_id' => 'Uom ID',
             'qty' => 'Qty',
-            'item_value' => 'Item Value',
-            'trans_value' => 'Trans Value',
+            'price' => 'Price',
+            'discount' => 'Discount',
+            'total_receive' => 'Total Receive',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMovement()
+    public function getPurchase()
     {
-        return $this->hasOne(GoodsMovement::className(), ['id' => 'movement_id']);
+        return $this->hasOne(Purchase::className(), ['id' => 'purchase_id']);
     }
 
     /**

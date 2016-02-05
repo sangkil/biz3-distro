@@ -180,8 +180,9 @@ class InvoiceController extends Controller
         }
     }
 
-    public function actionListProduct($term = '', \yii\web\Response $response)
+    public function actionListProduct($term = '')
     {
+        $response = Yii::$app->response;
         $response->format = 'json';
         return Product::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
                 ->asArray()->limit(10)->all();
