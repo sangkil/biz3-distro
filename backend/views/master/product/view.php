@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'code',
             'name',
-            'status',
+            'nmStatus',
             [
                 'label' => 'Product Group',
                 'value' => $model->group->name

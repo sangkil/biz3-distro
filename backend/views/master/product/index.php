@@ -43,11 +43,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => \backend\models\master\Category::selectOptions()
             ],
             [
-                
-                'attribute' => 'category.name'
+                'attribute'=>'status',
+                'value'=>'nmStatus',
+                'filter' =>$searchModel::enums('STATUS_')
             ],
             //'id',
-            // 'status',
             // 'created_at',
             // 'created_by',
             // 'updated_at',
