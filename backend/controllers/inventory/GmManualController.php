@@ -142,7 +142,9 @@ class GmManualController extends Controller
     public function actionConfirm($id)
     {
         $model = $this->findModel($id);
-
+        if($model->status != GoodsMovement::STATUS_DRAFT){
+            throw new \yii\base\UserException('Tidak bisa diconfirm');
+        }
         $model->status = GoodsMovement::STATUS_APPLIED;
         $transaction = Yii::$app->db->beginTransaction();
         try {
@@ -183,13 +185,29 @@ class GmManualController extends Controller
     public function actionRollback($id)
     {
         $model = $this->findModel($id);
-
+        if($model->status != GoodsMovement::STATUS_APPLIED){
+            throw new \yii\base\UserException('Tidak bisa dirollback');
+        }
         $model->status = GoodsMovement::STATUS_DRAFT;
         $transaction = Yii::$app->db->beginTransaction();
         try {
             if ($model->save()) {
                 // update stock
                 // ....
+                $factor = $model->type == GoodsMovement::TYPE_RECEIVE ? -1 : 1;
+                $wh_id = $model->warehouse_id;
+                foreach ($model->items as $item) {
+                    $product_id = $item->product_id;
+                    $pu = ProductUom::findOne(['product_id' => $product_id, 'uom_id' => $item->uom_id]);
+                    $qty = $factor * $item->qty * ($pu ? $pu->isi : 1);
+                    $ps = ProductStock::findOne(['product_id' => $product_id, 'warehouse_id' => $wh_id]);
+                    if ($ps) {
+                        $ps->qty = new \yii\db\Expression('[[qty]]+:added', [':added' => $qty]);
+                    } else {
+                        $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
+                    }
+                    $ps->save(false);
+                }
 
                 $transaction->commit();
                 return $this->redirect(['view', 'id' => $model->id]);
