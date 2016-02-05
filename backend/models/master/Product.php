@@ -36,8 +36,10 @@ use backend\models\sales\Price;
  */
 class Product extends \yii\db\ActiveRecord {
 
-    const STATUS_ACTIVE = 10;
-    const STATUS_INACTIVE = 0;
+    use \mdm\converter\EnumTrait;
+
+    const STATUS_Active = 10;
+    const STATUS_Inactive = 0;
 
     /**
      * @inheritdoc
@@ -162,18 +164,15 @@ class Product extends \yii\db\ActiveRecord {
         return $this->hasMany(Uom::className(), ['id' => 'uom_id'])->viaTable('product_uom', ['product_id' => 'id']);
     }
 
+    public function getNmStatus() {
+        return $this->getLogical('status', 'STATUS_');
+    }
+
     public function behaviors() {
         return [
             ['class' => TimestampBehavior::className()],
             ['class' => BlameableBehavior::className()]
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getStatuses() {
-        return [self::STATUS_INACTIVE => 'Inactive', self::STATUS_ACTIVE => 'Active'];
     }
 
 }

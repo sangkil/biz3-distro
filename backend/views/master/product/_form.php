@@ -20,8 +20,8 @@ use yii\bootstrap\ActiveForm;
         <?= $form->field($model, 'group_id')->dropDownList(backend\models\master\ProductGroup::selectOptions(), ['prompt'=>'-- select --','style' => 'width:60%']) ?>
         <?= $form->field($model, 'category_id')->dropDownList(\backend\models\master\Category::selectOptions(), ['prompt'=>'-- select --','style' => 'width:60%']) ?>
     </div>
-    <div  class="col-lg-4">    
-        <?= $form->field($model, 'status')->dropDownList($model->getStatuses(), ['prompt'=>'-- select --', 'style' => 'width:40%']) ?> 
+    <div  class="col-lg-4">   
+        <?= $form->field($model, 'status')->dropDownList($model::enums('STATUS_'),['prompt'=>'-- select status--', 'style' => 'width:40%']) ?>
     </div>
     <div class="col-lg-12" style="margin-top: 20px;">
         <div class="nav-tabs-justified">
