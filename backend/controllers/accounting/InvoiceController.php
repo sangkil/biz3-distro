@@ -8,6 +8,7 @@ use backend\models\accounting\search\Invoice as InvoiceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\models\master\Product;
 
 /**
  * InvoiceFromGmController implements the CRUD actions for Invoice model.
@@ -21,6 +22,8 @@ class InvoiceController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'confirm' => ['post'],
+                    'rollback' => ['post'],
                 ],
             ],
         ];
@@ -62,13 +65,24 @@ class InvoiceController extends Controller
     {
         $model = new Invoice();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        $model->status = Invoice::STATUS_DRAFT;
+        if ($model->load(Yii::$app->request->post())) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->items = Yii::$app->request->post('InvoiceDtl', []);
+                if ($model->save()) {
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } catch (\Exception $exc) {
+                $transaction->rollBack();
+                throw $exc;
+            }
+            $transaction->rollBack();
         }
+        return $this->render('create', [
+                'model' => $model,
+        ]);
     }
 
     /**
@@ -81,13 +95,23 @@ class InvoiceController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->items = Yii::$app->request->post('InvoiceDtl', []);
+                if ($model->save()) {
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } catch (\Exception $exc) {
+                $transaction->rollBack();
+                throw $exc;
+            }
+            $transaction->rollBack();
         }
+        return $this->render('create', [
+                'model' => $model,
+        ]);
     }
 
     /**
@@ -101,6 +125,66 @@ class InvoiceController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Deletes an existing GoodsMovement model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionConfirm($id)
+    {
+        $model = $this->findModel($id);
+
+        $model->status = Invoice::STATUS_APPLIED;
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->save()) {
+                // ....
+
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            $transaction->rollBack();
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            throw $exc;
+        }
+    }
+
+    /**
+     * Deletes an existing GoodsMovement model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionRollback($id)
+    {
+        $model = $this->findModel($id);
+
+        $model->status = Invoice::STATUS_DRAFT;
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->save()) {
+                //
+                // ....
+
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            $transaction->rollBack();
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            throw $exc;
+        }
+    }
+
+    public function actionListProduct($term = '', \yii\web\Response $response)
+    {
+        $response->format = 'json';
+        return Product::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->asArray()->limit(10)->all();
     }
 
     /**
