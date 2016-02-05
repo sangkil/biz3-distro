@@ -34,8 +34,9 @@ class AccPeriodeController extends Controller
     {
         $dparms = Yii::$app->request->queryParams;
         $searchModel = new AccPeriodeSearch();
+
         $searchModel->DateFrom = (isset($dparms['AccPeriode']['DateFrom']))? $dparms['AccPeriode']['DateFrom'] : date('01-m-Y');
-        $searchModel->DateTo = (isset($dparms['AccPeriode']['DateTo']))? $dparms['AccPeriode']['DateTo'] : date('t-m-Y');
+        $searchModel->DateTo = (isset($dparms['AccPeriode']['DateTo']))? $dparms['AccPeriode']['DateTo'] : date('t-12-Y', strtotime(date('Y-01-01')));
         $dataProvider = $searchModel->search($dparms);
 
         return $this->render('index', [
