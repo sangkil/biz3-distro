@@ -37,8 +37,27 @@ class SampleDataController extends Controller
         $command = Yii::$app->db->createCommand();
         $sampleDir = Yii::getAlias('@console/migrations/samples');
 
+        // TRUNCATE TABLE
+        $command->delete('{{%product_stock}}')->execute();
+
+        $command->delete('{{%warehouse}}')->execute();
+        $command->delete('{{%branch}}')->execute();
+        $command->delete('{{%orgn}}')->execute();
+
+        $command->delete('{{%supplier}}')->execute();
+        $command->delete('{{%customer}}')->execute();
+
+        $command->delete('{{%product_uom}}')->execute();
+        $command->delete('{{%product_child}}')->execute();
+        $command->delete('{{%product}}')->execute();
+        $command->delete('{{%product_group}}')->execute();
+        $command->delete('{{%category}}')->execute();
+
+        $command->delete('{{%uom}}')->execute();
+
+        $command->delete('{{%coa}}')->execute();
+
         // orgn
-        $command->truncateTable('{{%orgn}}');
         $rows = require $sampleDir . '/orgn.php';
         $total = count($rows);
         echo "\ninsert table {{%orgn}}\n";
@@ -47,10 +66,10 @@ class SampleDataController extends Controller
             $command->insert('{{%orgn}}', $this->toAssoc($row, ['id', 'code', 'name']))->execute();
             Console::updateProgress($i + 1, $total);
         }
+        $command->resetSequence('{{%orgn}}')->execute();
         Console::endProgress();
 
         // branch
-        $command->truncateTable('{{%branch}}');
         $rows = require $sampleDir . '/branch.php';
         $total = count($rows);
         echo "\ninsert table {{%branch}}\n";
@@ -59,10 +78,10 @@ class SampleDataController extends Controller
             $command->insert('{{%branch}}', $this->toAssoc($row, ['id', 'orgn_id', 'code', 'name']))->execute();
             Console::updateProgress($i + 1, $total);
         }
+        $command->resetSequence('{{%branch}}')->execute();
         Console::endProgress();
 
         // warehouse
-        $command->truncateTable('{{%warehouse}}');
         $rows = require $sampleDir . '/warehouse.php';
         $total = count($rows);
         echo "\ninsert table {{%warehouse}}\n";
@@ -71,10 +90,10 @@ class SampleDataController extends Controller
             $command->insert('{{%warehouse}}', $this->toAssoc($row, ['id', 'branch_id', 'code', 'name']))->execute();
             Console::updateProgress($i + 1, $total);
         }
+        $command->resetSequence('{{%warehouse}}')->execute();
         Console::endProgress();
 
         // supplier
-        $command->truncateTable('{{%supplier}}');
         $rows = require $sampleDir . '/supplier.php';
         $total = count($rows);
         echo "\ninsert table {{%supplier}}\n";
@@ -83,10 +102,10 @@ class SampleDataController extends Controller
             $command->insert('{{%supplier}}', $this->toAssoc($row, ['id', 'code', 'name']))->execute();
             Console::updateProgress($i + 1, $total);
         }
+        $command->resetSequence('{{%supplier}}')->execute();
         Console::endProgress();
 
         // customer
-        $command->truncateTable('{{%customer}}');
         $rows = require $sampleDir . '/customer.php';
         $total = count($rows);
         echo "\ninsert table {{%customer}}\n";
@@ -96,10 +115,10 @@ class SampleDataController extends Controller
                     'contact_number', 'status']))->execute();
             Console::updateProgress($i + 1, $total);
         }
+        $command->resetSequence('{{%customer}}')->execute();
         Console::endProgress();
 
         // product category
-        $command->truncateTable('{{%category}}');
         $rows = require $sampleDir . '/category.php';
         $total = count($rows);
         echo "\ninsert table {{%category}}\n";
@@ -108,10 +127,10 @@ class SampleDataController extends Controller
             $command->insert('{{%category}}', $this->toAssoc($row, ['id', 'code', 'name']))->execute();
             Console::updateProgress($i + 1, $total);
         }
+        $command->resetSequence('{{%category}}')->execute();
         Console::endProgress();
 
         // product group
-        $command->truncateTable('{{%product_group}}');
         $rows = require $sampleDir . '/product_group.php';
         $total = count($rows);
         echo "\ninsert table {{%product_group}}\n";
@@ -120,11 +139,10 @@ class SampleDataController extends Controller
             $command->insert('{{%product_group}}', $this->toAssoc($row, ['id', 'code', 'name']))->execute();
             Console::updateProgress($i + 1, $total);
         }
+        $command->resetSequence('{{%product_group}}')->execute();
         Console::endProgress();
 
         // product
-        $command->truncateTable('{{%product_child}}');
-        $command->truncateTable('{{%product}}');
         $rows = require $sampleDir . '/product.php';
         $total = count($rows);
         echo "\ninsert table {{%product}}\n";
@@ -145,11 +163,10 @@ class SampleDataController extends Controller
             }
             Console::updateProgress($i + 1, $total);
         }
+        $command->resetSequence('{{%product}}')->execute();
         Console::endProgress();
 
         // uom
-        $command->truncateTable('{{%product_uom}}');
-        $command->truncateTable('{{%uom}}');
         $rows = require $sampleDir . '/uom.php';
         $total = count($rows);
         echo "\ninsert table {{%uom}}\n";
@@ -163,10 +180,10 @@ class SampleDataController extends Controller
             $command->setSql($sql)->execute();
             Console::updateProgress($i + 1, $total);
         }
+        $command->resetSequence('{{%uom}}')->execute();
         Console::endProgress();
 
         // coa
-        $command->truncateTable('{{%coa}}');
         $rows = require $sampleDir . '/coa.php';
         $total = count($rows);
         echo "\ninsert table {{%coa}}\n";
@@ -176,6 +193,7 @@ class SampleDataController extends Controller
                     'name', 'type', 'normal_balance']))->execute();
             Console::updateProgress($i + 1, $total);
         }
+        $command->resetSequence('{{%coa}}')->execute();
         Console::endProgress();
     }
 

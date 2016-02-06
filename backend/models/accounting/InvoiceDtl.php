@@ -25,7 +25,7 @@ class InvoiceDtl extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'invoice_dtl';
+        return '{{%invoice_dtl}}';
     }
 
     /**
@@ -34,11 +34,10 @@ class InvoiceDtl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['invoice_id', 'qty', 'item_value'], 'required'],
+            [['qty', 'item_value'], 'required'],
             [['invoice_id', 'item_type', 'item_id'], 'integer'],
             [['qty', 'item_value', 'tax_value'], 'number'],
             [['tax_type'], 'string', 'max' => 64],
-            [['invoice_id'], 'exist', 'skipOnError' => true, 'targetClass' => Invoice::className(), 'targetAttribute' => ['invoice_id' => 'id']],
         ];
     }
 
