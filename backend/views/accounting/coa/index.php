@@ -17,29 +17,52 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="coa-index">
 
-                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-            <?= GridView::widget([
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => ['class' => 'table table-hover'],
         'filterModel' => $searchModel,
         'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-
-                    'id',
-            'parent_id',
-            'code',
-            'name',
-            'type',
-            // 'normal_balance',
+            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'code',
+                'contentOptions' => ['style' => 'width:10%;'],
+            ],
+            [
+                'header' => 'Name',
+                'attribute' => 'name',
+                'format' => 'raw',
+                'value' => function($model) {
+                    $lvl = $i = $plus = 0;
+                    $first_nol = false;
+                    foreach (str_split($model->code) as $val) {
+                        if ($val == '0' && !$first_nol) {
+                            $lvl = $i;
+                            $first_nol = true;
+                        }
+                        $plus = ($val !== '0' && $first_nol) ? 5 : 0;
+                        $i+=5;
+                    }
+                    return str_repeat("&nbsp;", $lvl + $plus - 1) . $model->name;
+                }
+            ],
+            //'type',
+            //'id',
+            //'parent_id',
+            [
+                'attribute' => 'normal_balance',
+                'contentOptions' => ['style' => 'width:10%;'],
+                'filter'=>['D'=>'Debit','K'=>'Kredit']
+            ],
             // 'created_at',
             // 'created_by',
             // 'updated_at',
             // 'updated_by',
-
-        ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn'],
         ],
-        ]); ?>
-    
+    ]);
+    ?>
+
 </div>

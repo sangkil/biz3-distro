@@ -3,6 +3,7 @@
 namespace backend\models\accounting;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 
@@ -79,6 +80,10 @@ class AccPeriode extends \yii\db\ActiveRecord {
         return new AccPeriodeQuery(get_called_class());
     }
 
+    public static function selectOptions() {
+        return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
+    }
+    
     public function behaviors() {
         return [
             [
