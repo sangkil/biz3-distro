@@ -5,12 +5,12 @@ namespace backend\models\accounting\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\accounting\coa as coaModel;
+use backend\models\accounting\Coa as CoaModel;
 
 /**
  * coa represents the model behind the search form about `backend\models\accounting\coa`.
  */
-class coa extends coaModel
+class Coa extends CoaModel
 {
     /**
      * @inheritdoc
@@ -41,7 +41,7 @@ class coa extends coaModel
      */
     public function search($params)
     {
-        $query = coaModel::find();
+        $query = CoaModel::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

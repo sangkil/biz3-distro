@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\models\master\Product;
+use yii\base\UserException;
 
 /**
  * PurchaseController implements the CRUD actions for Purchase model.
@@ -63,13 +64,24 @@ class PurchaseController extends Controller
     {
         $model = new Purchase();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        $model->status = Purchase::STATUS_DRAFT;
+        if ($model->load(Yii::$app->request->post())) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->items = Yii::$app->request->post('PurchaseDtl', []);
+                if ($model->save()) {
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } catch (\Exception $exc) {
+                $transaction->rollBack();
+                throw $exc;
+            }
+            $transaction->rollBack();
         }
+        return $this->render('create', [
+                'model' => $model,
+        ]);
     }
 
     /**
@@ -81,14 +93,27 @@ class PurchaseController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if($model->status != Purchase::STATUS_DRAFT){
+            throw new UserException('Tidak bisa diupdate');
         }
+
+        if ($model->load(Yii::$app->request->post())) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->items = Yii::$app->request->post('PurchaseDtl', []);
+                if ($model->save()) {
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } catch (\Exception $exc) {
+                $transaction->rollBack();
+                throw $exc;
+            }
+            $transaction->rollBack();
+        }
+        return $this->render('update', [
+                'model' => $model,
+        ]);
     }
 
     /**
@@ -99,7 +124,11 @@ class PurchaseController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if($model->status != Purchase::STATUS_DRAFT){
+            throw new UserException('Tidak bisa didelete');
+        }
+        $model->delete();
 
         return $this->redirect(['index']);
     }
