@@ -3,6 +3,7 @@
 namespace backend\models\accounting;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 
@@ -40,7 +41,7 @@ class AccPeriode extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['name', 'date_from', 'date_to','DateFrom', 'DateTo', 'status'], 'required'],
+            [['name', 'date_from', 'date_to', 'DateFrom', 'DateTo', 'status'], 'required'],
             [['date_from', 'date_to'], 'safe'],
             [['status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name'], 'string', 'max' => 32],
@@ -75,6 +76,14 @@ class AccPeriode extends \yii\db\ActiveRecord {
         return $this->getLogical('status', 'STATUS_');
     }
 
+    public static function find() {
+        return new AccPeriodeQuery(get_called_class());
+    }
+
+    public static function selectOptions() {
+        return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
+    }
+    
     public function behaviors() {
         return [
             [

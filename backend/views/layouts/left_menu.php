@@ -96,9 +96,9 @@ use yii\helpers\Url;
                     <li>
                         <a href="#"><i class="fa fa-check"></i> Goods Receipt<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-check"></i> DN</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> Mutasi Dari Gdg</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> Return</a></li>                           
+                            <li><a href="<?= Url::to(['/inventory/gm-manual']); ?>"><i class="fa fa-check"></i> From Supplier</a></li>
+                            <li><a href="#"><i class="fa fa-check"></i> Transfer</a></li>
+                            <li><a href="#"><i class="fa fa-check"></i> Purchase Return</a></li>                           
                         </ul>
                     </li>
                     <li>
@@ -108,9 +108,6 @@ use yii\helpers\Url;
                             <li><a href="#"><i class="fa fa-check"></i> Mutasi Ke Gdg</a></li>
                             <li><a href="#"><i class="fa fa-check"></i> Cancel Issue</a></li>                            
                         </ul>
-                    </li>
-                    <li>
-                        <a href="<?= Url::to(['/inventory/do-kanvas']); ?>"><i class="fa fa-check text-success"></i> DO Kanvas</a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-check"></i> Stock Management <i class="fa fa-angle-left pull-right"></i></a>
@@ -129,12 +126,16 @@ use yii\helpers\Url;
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="<?= Url::to(['/account/index']); ?>"><i class="fa fa-check"></i> COA</a>
+                        <a href="<?= Url::to(['/accounting/coa']); ?>"><i class="fa fa-check"></i> COA</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-check"></i> General Journal</a>
+                        <a href="<?= Url::to(['/accounting/acc-periode']); ?>"><i class="fa fa-check"></i> Periodes</a>
                     </li>
+                    
                     <li>
+                        <a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> Journals</a>
+                    </li>
+<!--                    <li>
                         <a href="#"><i class="fa fa-check"></i> Cash In<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
                             <li><a href="#"><i class="fa fa-check"></i> Penerimaan SO</a></li>
@@ -168,7 +169,7 @@ use yii\helpers\Url;
                             <li><a href="#"><i class="fa fa-check"></i> ...</a></li>  
                             <li><a href="#"><i class="fa fa-check"></i> ...</a></li>                          
                         </ul>
-                    </li>
+                    </li>-->
                 </ul>
             </li> 
             <li class="treeview">

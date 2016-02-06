@@ -94,6 +94,10 @@ class Coa extends \yii\db\ActiveRecord {
         return $this->hasMany(GlDetail::className(), ['coa_id' => 'id']);
     }
 
+    public static function find() {
+        return new CoaQuery(get_called_class());
+    }
+    
     public function behaviors() {
         return [
             ['class' => TimestampBehavior::className()],

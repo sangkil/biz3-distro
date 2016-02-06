@@ -7,11 +7,11 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\accounting\search\GlHeader */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Gl Headers';
+$this->title = 'General Ledger';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>
-    <?= Html::a('Create Gl Header', ['create'], ['class' => 'btn btn-default']) ?>
+    <?= Html::a('New Journal', ['create'], ['class' => 'btn btn-default']) ?>
 </p>
 <br>
 

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use backend\models\master\Branch;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\accounting\GlHeader */
@@ -11,32 +12,23 @@ use yii\widgets\ActiveForm;
 <div class="gl-header-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <div class="col-lg-4">
+        <?= $form->field($model, 'number')->textInput(['maxlength' => true, 'style' => 'width:30%;']) ?>
+        <?= $form->field($model, 'branch_id')->dropDownList(Branch::selectOptions(), ['style' => 'width:40%;']) ?>
+        <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-lg-8">      
+        <?=
+        $form->field($model, 'GlDate')->widget('yii\jui\DatePicker', [
+            'dateFormat' => 'dd-MM-yyyy',
+            'options' => ['class' => 'form-control', 'style' => 'width:30%;']
+        ])
+        ?>
+        <?= $form->field($model, 'periode_id')->dropDownList(backend\models\accounting\AccPeriode::selectOptions(), ['style' => 'width:40%;']) ?>
+        <?= $form->field($model, 'status')->textInput(['style' => 'width:60%;']) ?>
+    </div>
 
-    <?= $form->field($model, 'number')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'date')->textInput() ?>
-
-    <?= $form->field($model, 'periode_id')->textInput() ?>
-
-    <?= $form->field($model, 'branch_id')->textInput() ?>
-
-    <?= $form->field($model, 'reff_type')->textInput() ?>
-
-    <?= $form->field($model, 'reff_id')->textInput() ?>
-
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'created_by')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_by')->textInput() ?>
-
-    <div class="form-group">
+    <div class="col-lg-12 form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 

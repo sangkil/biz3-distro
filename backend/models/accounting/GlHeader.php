@@ -28,6 +28,9 @@ use yii\behaviors\TimestampBehavior;
  */
 class GlHeader extends \yii\db\ActiveRecord {
 
+    use \mdm\converter\EnumTrait,
+        \mdm\behaviors\ar\RelationTrait;
+    
     /**
      * @inheritdoc
      */
@@ -86,6 +89,14 @@ class GlHeader extends \yii\db\ActiveRecord {
 
     public function behaviors() {
         return [
+            [
+                'class' => 'mdm\converter\DateConverter',
+                'type' => 'date', // 'date', 'time', 'datetime'
+                'logicalFormat' => 'php:d-m-Y',
+                'attributes' => [
+                    'GlDate' => 'date',
+                ]
+            ],
             ['class' => TimestampBehavior::className()],
             ['class' => BlameableBehavior::className()]
         ];
