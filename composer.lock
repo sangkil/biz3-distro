@@ -525,12 +525,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mdmsoft/yii2-autonumber.git",
-                "reference": "e9f8761aae3c7ff5f3b15d0d872bb06269e31a4c"
+                "reference": "0a2d75907ef0fd465bc6115a2b90ec6ee0e39408"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mdmsoft/yii2-autonumber/zipball/e9f8761aae3c7ff5f3b15d0d872bb06269e31a4c",
-                "reference": "e9f8761aae3c7ff5f3b15d0d872bb06269e31a4c",
+                "url": "https://api.github.com/repos/mdmsoft/yii2-autonumber/zipball/0a2d75907ef0fd465bc6115a2b90ec6ee0e39408",
+                "reference": "0a2d75907ef0fd465bc6115a2b90ec6ee0e39408",
                 "shasum": ""
             },
             "require": {
@@ -565,7 +565,7 @@
                 " extension",
                 "yii2"
             ],
-            "time": "2016-02-04 13:25:02"
+            "time": "2016-02-06 03:48:58"
         },
         {
             "name": "mdmsoft/yii2-format-converter",
@@ -861,12 +861,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-composer.git",
-                "reference": "574dcb1d101ae55be230e0c00a2428af6ec4c5c1"
+                "reference": "d33d1046a5951f2f7823fe343f28ddc58b3421a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-composer/zipball/574dcb1d101ae55be230e0c00a2428af6ec4c5c1",
-                "reference": "574dcb1d101ae55be230e0c00a2428af6ec4c5c1",
+                "url": "https://api.github.com/repos/yiisoft/yii2-composer/zipball/d33d1046a5951f2f7823fe343f28ddc58b3421a4",
+                "reference": "d33d1046a5951f2f7823fe343f28ddc58b3421a4",
                 "shasum": ""
             },
             "require": {
@@ -900,7 +900,7 @@
                 "extension installer",
                 "yii2"
             ],
-            "time": "2015-12-01 20:06:03"
+            "time": "2016-02-06 01:03:32"
         },
         {
             "name": "yiisoft/yii2-jui",
@@ -1083,12 +1083,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "b312ab9d0c446971069e22a524fec01c7cddc75e"
+                "reference": "8d8e0e1a6151a46ea5cda344e2234b7225c61e7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/b312ab9d0c446971069e22a524fec01c7cddc75e",
-                "reference": "b312ab9d0c446971069e22a524fec01c7cddc75e",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/8d8e0e1a6151a46ea5cda344e2234b7225c61e7a",
+                "reference": "8d8e0e1a6151a46ea5cda344e2234b7225c61e7a",
                 "shasum": ""
             },
             "require": {
@@ -1125,7 +1125,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2016-02-01 17:08:46"
+            "time": "2016-02-04 15:55:27"
         },
         {
             "name": "phpspec/php-diff",
