@@ -3,8 +3,8 @@
 namespace backend\controllers\accounting;
 
 use Yii;
-use backend\models\accounting\coa;
-use backend\models\accounting\search\coa as coaSearch;
+use backend\models\accounting\Coa;
+use backend\models\accounting\search\Coa as CoaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -32,7 +32,7 @@ class CoaController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new coaSearch();
+        $searchModel = new CoaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -60,7 +60,7 @@ class CoaController extends Controller
      */
     public function actionCreate()
     {
-        $model = new coa();
+        $model = new Coa();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -112,7 +112,7 @@ class CoaController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = coa::findOne($id)) !== null) {
+        if (($model = Coa::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
