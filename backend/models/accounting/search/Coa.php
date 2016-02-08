@@ -64,7 +64,7 @@ class Coa extends CoaModel
         ]);
 
         $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'lower(name)', strtolower($this->name)])
             ->andFilterWhere(['like', 'normal_balance', $this->normal_balance]);
 
         return $dataProvider;
