@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use backend\models\master\Product;
 use backend\models\master\ProductStock;
 use backend\models\master\ProductUom;
+use yii\base\UserException;
 
 /**
  * GmManualController implements the CRUD actions for GoodsMovement model.
@@ -100,6 +101,9 @@ class GmManualController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if($model->status != GoodsMovement::STATUS_DRAFT){
+            throw new UserException('Tidak bisa diupdate');
+        }
 
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
@@ -128,7 +132,11 @@ class GmManualController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if($model->status != GoodsMovement::STATUS_DRAFT){
+            throw new UserException('Tidak bisa didelete');
+        }
+        $model->delete();
 
         return $this->redirect(['index']);
     }
@@ -143,7 +151,7 @@ class GmManualController extends Controller
     {
         $model = $this->findModel($id);
         if($model->status != GoodsMovement::STATUS_DRAFT){
-            throw new \yii\base\UserException('Tidak bisa diconfirm');
+            throw new UserException('Tidak bisa diconfirm');
         }
         $model->status = GoodsMovement::STATUS_APPLIED;
         $transaction = Yii::$app->db->beginTransaction();
@@ -186,7 +194,7 @@ class GmManualController extends Controller
     {
         $model = $this->findModel($id);
         if($model->status != GoodsMovement::STATUS_APPLIED){
-            throw new \yii\base\UserException('Tidak bisa dirollback');
+            throw new UserException('Tidak bisa dirollback');
         }
         $model->status = GoodsMovement::STATUS_DRAFT;
         $transaction = Yii::$app->db->beginTransaction();

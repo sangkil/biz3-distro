@@ -12,6 +12,7 @@ use yii\bootstrap\ActiveForm;
     <?php
     $form = ActiveForm::begin();
     ?>
+    <div class="row">
     <div class="col-lg-4">
         <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
@@ -45,6 +46,7 @@ use yii\bootstrap\ActiveForm;
                 </div>
             </div> 
         </div>
+    </div>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CoaController implements the CRUD actions for coa model.
+ * CoaController implements the CRUD actions for Coa model.
  */
 class CoaController extends Controller
 {
@@ -27,7 +27,7 @@ class CoaController extends Controller
     }
 
     /**
-     * Lists all coa models.
+     * Lists all Coa models.
      * @return mixed
      */
     public function actionIndex()
@@ -42,7 +42,7 @@ class CoaController extends Controller
     }
 
     /**
-     * Displays a single coa model.
+     * Displays a single Coa model.
      * @param integer $id
      * @return mixed
      */
@@ -54,7 +54,7 @@ class CoaController extends Controller
     }
 
     /**
-     * Creates a new coa model.
+     * Creates a new Coa model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -72,7 +72,7 @@ class CoaController extends Controller
     }
 
     /**
-     * Updates an existing coa model.
+     * Updates an existing Coa model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -91,7 +91,7 @@ class CoaController extends Controller
     }
 
     /**
-     * Deletes an existing coa model.
+     * Deletes an existing Coa model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -104,10 +104,10 @@ class CoaController extends Controller
     }
 
     /**
-     * Finds the coa model based on its primary key value.
+     * Finds the Coa model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return coa the loaded model
+     * @return Coa the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

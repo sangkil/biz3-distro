@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\accounting\coa */
+/* @var $model backend\models\accounting\Coa */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Coas', 'url' => ['index']];

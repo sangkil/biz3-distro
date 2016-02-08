@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\models\master\Product;
+use yii\base\UserException;
 
 /**
  * InvoiceFromGmController implements the CRUD actions for Invoice model.
@@ -94,6 +95,9 @@ class InvoiceController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if($model->status != Invoice::STATUS_DRAFT){
+            throw new UserException('Tidak bisa diupdate');
+        }
 
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
@@ -109,7 +113,7 @@ class InvoiceController extends Controller
             }
             $transaction->rollBack();
         }
-        return $this->render('create', [
+        return $this->render('update', [
                 'model' => $model,
         ]);
     }
@@ -122,7 +126,11 @@ class InvoiceController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if($model->status != Invoice::STATUS_DRAFT){
+            throw new UserException('Tidak bisa didelete');
+        }
+        $model->delete();
 
         return $this->redirect(['index']);
     }

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\accounting\coa */
+/* @var $model backend\models\accounting\Coa */
 
 $this->title = 'Update Coa: ' . ' ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Coas', 'url' => ['index']];

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\accounting\coa */
+/* @var $model backend\models\accounting\Coa */
 
 $this->title = 'Create Coa';
 $this->params['breadcrumbs'][] = ['label' => 'Coas', 'url' => ['index']];
