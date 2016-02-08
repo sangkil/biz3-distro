@@ -30,7 +30,7 @@ class GlHeader extends \yii\db\ActiveRecord {
 
     use \mdm\converter\EnumTrait,
         \mdm\behaviors\ar\RelationTrait;
-    
+
     /**
      * @inheritdoc
      */
@@ -43,7 +43,8 @@ class GlHeader extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['number', 'date', 'periode_id', 'branch_id', 'reff_type', 'description', 'status'], 'required'],
+            [['date', 'periode_id', 'branch_id', 'reff_type', 'description', 'status'], 'required'],
+            [['number'], 'autonumber', 'format' => 'GL' . date('Ym') . '.?', 'digit' => 4],
             [['date'], 'safe'],
             [['periode_id', 'branch_id', 'reff_type', 'reff_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['number'], 'string', 'max' => 16],

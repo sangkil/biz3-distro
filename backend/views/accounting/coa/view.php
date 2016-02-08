@@ -25,17 +25,22 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= DetailView::widget([
+        'options' => ['class' => 'table table-hover'],
+        'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
         'model' => $model,
         'attributes' => [
             'id',
-            'parent_id',
+            [
+              'label'=>'Parent Code',
+                'attribute'=>'parent.code'
+            ],
             'code',
             'name',
             'type',
-            'normal_balance',
-            'created_at',
+            'NmBalance',
+            'created_at:datetime',
             'created_by',
-            'updated_at',
+            'updated_at:datetime',
             'updated_by',
         ],
     ]) ?>
