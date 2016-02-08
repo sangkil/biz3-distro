@@ -42,9 +42,11 @@ class Coa extends CoaModel
     public function search($params)
     {
         $query = CoaModel::find();
+        $query->codeOrdered();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination'=>false
         ]);
 
         $this->load($params);
