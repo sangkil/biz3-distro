@@ -27,6 +27,11 @@ use yii\behaviors\TimestampBehavior;
  */
 class Coa extends \yii\db\ActiveRecord {
 
+    use \mdm\converter\EnumTrait;
+
+    const BALANCE_DEBIT = 'D';
+    const BALANCE_KREDIT = 'K';
+
     /**
      * @inheritdoc
      */
@@ -94,10 +99,14 @@ class Coa extends \yii\db\ActiveRecord {
         return $this->hasMany(GlDetail::className(), ['coa_id' => 'id']);
     }
 
+    public function getNmBalance() {
+        return $this->getLogical('normal_balance', 'BALANCE_');
+    }
+    
     public static function find() {
         return new CoaQuery(get_called_class());
     }
-    
+
     public function behaviors() {
         return [
             ['class' => TimestampBehavior::className()],
