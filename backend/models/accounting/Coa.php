@@ -3,6 +3,7 @@
 namespace backend\models\accounting;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 
@@ -102,9 +103,44 @@ class Coa extends \yii\db\ActiveRecord {
     public function getNmBalance() {
         return $this->getLogical('normal_balance', 'BALANCE_');
     }
-    
+
     public static function find() {
         return new CoaQuery(get_called_class());
+    }
+
+    public static function selectOptions() {
+//        return ArrayHelper::map(static::find()->with(['parent'])->codeOrdered()->asArray()->all(), 'id', 'name');
+        $options = [];
+        $coas = static::find()->codeOrdered()->asArray()->all();
+        foreach ($coas as $dmodel) {
+            $lvl = $i = $plus = 0;
+            $first_nol = false;
+            foreach (str_split($dmodel['code']) as $val) {
+                if ($val == '0' && !$first_nol) {
+                    $lvl = $i;
+                    $first_nol = true;
+                }
+                $plus = ($val !== '0' && $first_nol) ? 5 : 0;
+                $i+=1;
+            }
+            $options[$dmodel['id']] = \yii\helpers\Html::encode(str_repeat(".", $lvl + $plus -1) . $dmodel['name']);
+        }
+        return $options;
+    }
+
+    public static function getHierarchy() {
+        $options = [];
+
+        $parents = self::find()->where("parent_id is null")->all();
+        foreach ($parents as $id => $p) {
+            $children = self::find()->where("parent_id=:parent_id", [":parent_id" => $p->id])->all();
+            $child_options = [];
+            foreach ($children as $child) {
+                $child_options[$child->id] = $child->name;
+            }
+            $options[$p->name] = $child_options;
+        }
+        return $options;
     }
 
     public function behaviors() {

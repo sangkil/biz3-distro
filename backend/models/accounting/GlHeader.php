@@ -80,6 +80,13 @@ class GlHeader extends \yii\db\ActiveRecord {
     public function getGlDetails() {
         return $this->hasMany(GlDetail::className(), ['header_id' => 'id']);
     }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function setGlDetails($value) {
+         $this->loadRelated('glDetails', $value);
+    }
 
     /**
      * @return \yii\db\ActiveQuery

@@ -58,4 +58,5 @@
     </tbody>
 </table>
 <?php
-$this->registerJsFile('@web/../views/master/product/product_control.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$this->registerJs($this->render('_script.js'));
+//$this->registerJsFile('@web/../views/master/product/product_control.js', ['depends' => [\yii\web\JqueryAsset::className()]]);

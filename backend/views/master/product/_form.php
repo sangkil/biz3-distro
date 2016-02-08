@@ -13,19 +13,19 @@ use yii\bootstrap\ActiveForm;
     $form = ActiveForm::begin();
     ?>
     <div class="row">
-    <div class="col-lg-4">
-        <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-    </div>
-    <div  class="col-lg-4">
-        <?= $form->field($model, 'group_id')->dropDownList(backend\models\master\ProductGroup::selectOptions(), ['prompt'=>'-- select --','style' => 'width:60%']) ?>
-        <?= $form->field($model, 'category_id')->dropDownList(\backend\models\master\Category::selectOptions(), ['prompt'=>'-- select --','style' => 'width:60%']) ?>
-    </div>
-    <div  class="col-lg-4">   
-        <?= $form->field($model, 'status')->dropDownList($model::enums('STATUS_'),['prompt'=>'-- select status--', 'style' => 'width:40%']) ?>
-    </div>
-    <div class="col-lg-12" style="margin-top: 20px;">
-        <div class="nav-tabs-justified">
+        <div class="col-lg-4">
+            <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div  class="col-lg-4">
+            <?= $form->field($model, 'group_id')->dropDownList(backend\models\master\ProductGroup::selectOptions(), ['prompt' => '-- select --', 'style' => 'width:60%']) ?>
+            <?= $form->field($model, 'category_id')->dropDownList(\backend\models\master\Category::selectOptions(), ['prompt' => '-- select --', 'style' => 'width:60%']) ?>
+        </div>
+        <div  class="col-lg-4">   
+            <?= $form->field($model, 'status')->dropDownList($model::enums('STATUS_'), ['prompt' => '-- select status--', 'style' => 'width:40%']) ?>
+        </div>
+
+        <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#uom" data-toggle="tab" aria-expanded="false">Uoms</a></li>
                 <li><a href="#bcode" data-toggle="tab" aria-expanded="false">Barcodes Alias</a></li>    
@@ -46,7 +46,6 @@ use yii\bootstrap\ActiveForm;
                 </div>
             </div> 
         </div>
-    </div>
     </div>
     <?php ActiveForm::end(); ?>
 </div>
