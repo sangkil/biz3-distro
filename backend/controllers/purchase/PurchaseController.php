@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\models\master\Product;
+use backend\models\master\Vendor;
 use yii\base\UserException;
 
 /**
@@ -133,12 +134,20 @@ class PurchaseController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionListProduct($term = '')
+    public function actionProductList($term = '')
     {
         $response = Yii::$app->response;
         $response->format = 'json';
         return Product::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                ->asArray()->limit(10)->all();
+                ->limit(10)->asArray()->all();
+    }
+
+    public function actionVendorList($term = '')
+    {
+        $response = Yii::$app->response;
+        $response->format = 'json';
+        return Vendor::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->limit(10)->asArray()->all();
     }
 
     /**

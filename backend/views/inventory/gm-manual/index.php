@@ -37,6 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'warehouse.name',
                 'filter' => Warehouse::selectOptions(),
             ],
+            [
+                'attribute' => 'vendor_id',
+                'value' => 'vendor.name',
+            ],
             'date',
             [
                 'attribute' => 'status',

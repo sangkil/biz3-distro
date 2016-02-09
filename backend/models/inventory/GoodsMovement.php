@@ -4,6 +4,7 @@ namespace backend\models\inventory;
 
 use Yii;
 use backend\models\master\Warehouse;
+use backend\models\master\Vendor;
 
 /**
  * This is the model class for table "goods_movement".
@@ -25,6 +26,7 @@ use backend\models\master\Warehouse;
  *
  * @property GoodsMovementDtl[] $items
  * @property Warehouse $warehouse
+ * @property Vendor $vendor
  */
 class GoodsMovement extends \yii\db\ActiveRecord
 {
@@ -40,6 +42,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
     const TYPE_RECEIVE = 10;
     const TYPE_ISSUE = 20;
 
+    public $vendor_name;
     /**
      * @inheritdoc
      */
@@ -58,6 +61,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
             [['number'], 'autonumber', 'format' => 'GM' . date('Ymd') . '.?', 'digit' => 4],
             [['warehouse_id', 'type', 'reff_type', 'reff_id', 'vendor_id', 'status'], 'integer'],
             [['items'], 'required'],
+            [['vendor_name'], 'safe'],
             [['items'], 'relationUnique', 'targetAttributes' => 'product_id'],
             [['description'], 'string', 'max' => 255],
         ];
@@ -109,6 +113,14 @@ class GoodsMovement extends \yii\db\ActiveRecord
     public function getWarehouse()
     {
         return $this->hasOne(Warehouse::className(), ['id' => 'warehouse_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVendor()
+    {
+        return $this->hasOne(Vendor::className(), ['id' => 'vendor_id']);
     }
 
     public function getNmType()
