@@ -44,8 +44,7 @@ class SampleDataController extends Controller
         $command->delete('{{%branch}}')->execute();
         $command->delete('{{%orgn}}')->execute();
 
-        $command->delete('{{%supplier}}')->execute();
-        $command->delete('{{%customer}}')->execute();
+        $command->delete('{{%vendor}}')->execute();
 
         $command->delete('{{%product_uom}}')->execute();
         $command->delete('{{%product_child}}')->execute();
@@ -93,29 +92,17 @@ class SampleDataController extends Controller
         $command->resetSequence('{{%warehouse}}')->execute();
         Console::endProgress();
 
-        // supplier
-        $rows = require $sampleDir . '/supplier.php';
-        $total = count($rows);
-        echo "\ninsert table {{%supplier}}\n";
-        Console::startProgress(0, $total);
-        foreach ($rows as $i => $row) {
-            $command->insert('{{%supplier}}', $this->toAssoc($row, ['id', 'code', 'name']))->execute();
-            Console::updateProgress($i + 1, $total);
-        }
-        $command->resetSequence('{{%supplier}}')->execute();
-        Console::endProgress();
-
         // customer
-        $rows = require $sampleDir . '/customer.php';
+        $rows = require $sampleDir . '/vendor.php';
         $total = count($rows);
-        echo "\ninsert table {{%customer}}\n";
+        echo "\ninsert table {{%vendor}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
-            $command->insert('{{%customer}}', $this->toAssoc($row, ['id', 'code', 'name', 'contact_name',
+            $command->insert('{{%vendor}}', $this->toAssoc($row, ['id', 'type', 'code', 'name', 'contact_name',
                     'contact_number', 'status']))->execute();
             Console::updateProgress($i + 1, $total);
         }
-        $command->resetSequence('{{%customer}}')->execute();
+        $command->resetSequence('{{%vendor}}')->execute();
         Console::endProgress();
 
         // product category
