@@ -20,7 +20,7 @@ class m160201_050020_create_table_purchase extends \yii\db\Migration
         $this->createTable('{{%purchase}}', [
             'id' => Schema::TYPE_PK,
             'number' => Schema::TYPE_STRING . '(16) NOT NULL',
-            'supplier_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'vendor_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'branch_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'date' => Schema::TYPE_DATE . ' NOT NULL',
             'value' => Schema::TYPE_FLOAT . ' NOT NULL',
