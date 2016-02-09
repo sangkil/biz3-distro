@@ -31,6 +31,9 @@ class GlHeader extends \yii\db\ActiveRecord {
     use \mdm\converter\EnumTrait,
         \mdm\behaviors\ar\RelationTrait;
 
+    const STATUS_DRAFT = 10;
+    const STATUS_RELEASED = 20;
+
     /**
      * @inheritdoc
      */
@@ -45,7 +48,7 @@ class GlHeader extends \yii\db\ActiveRecord {
         return [
             [['date', 'periode_id', 'branch_id', 'reff_type', 'description', 'status'], 'required'],
             [['number'], 'autonumber', 'format' => 'GL' . date('Ym') . '.?', 'digit' => 4],
-            [['date'], 'safe'],
+            [['date','GlDate'], 'safe'],
             [['periode_id', 'branch_id', 'reff_type', 'reff_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['number'], 'string', 'max' => 16],
             [['description'], 'string', 'max' => 255],
@@ -80,12 +83,12 @@ class GlHeader extends \yii\db\ActiveRecord {
     public function getGlDetails() {
         return $this->hasMany(GlDetail::className(), ['header_id' => 'id']);
     }
-    
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function setGlDetails($value) {
-         $this->loadRelated('glDetails', $value);
+        $this->loadRelated('glDetails', $value);
     }
 
     /**
@@ -93,6 +96,17 @@ class GlHeader extends \yii\db\ActiveRecord {
      */
     public function getPeriode() {
         return $this->hasOne(AccPeriode::className(), ['id' => 'periode_id']);
+    }
+    
+        /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBranch() {
+        return $this->hasOne(\backend\models\master\Branch::className(), ['id' => 'branch_id']);
+    }
+
+    public function getNmStatus() {
+        return $this->getLogical('status', 'STATUS_');
     }
 
     public function behaviors() {

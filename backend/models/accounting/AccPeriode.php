@@ -80,8 +80,8 @@ class AccPeriode extends \yii\db\ActiveRecord {
         return new AccPeriodeQuery(get_called_class());
     }
 
-    public static function selectOptions() {
-        return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
+    public static function selectOptions($type = 'open') {
+        return ArrayHelper::map(static::find()->$type()->asArray()->all(), 'id', 'name');
     }
     
     public function behaviors() {

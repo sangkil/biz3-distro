@@ -17,32 +17,32 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="gl-header-index">
 
-                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-            <?= GridView::widget([
+
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => ['class' => 'table table-hover'],
         'filterModel' => $searchModel,
         'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-
-                    'id',
+            ['class' => 'yii\grid\SerialColumn'],
+//                    'id',
             'number',
-            'date',
-            'periode_id',
-            'branch_id',
+            'description',
+            'GlDate',
             // 'reff_type',
             // 'reff_id',
-            // 'description',
-            // 'status',
+            'nmStatus',
+            //'periode_id',
+            //'branch_id',
             // 'created_at',
             // 'created_by',
             // 'updated_at',
             // 'updated_by',
-
-        ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn'],
         ],
-        ]); ?>
-    
+    ]);
+    ?>
+
 </div>
