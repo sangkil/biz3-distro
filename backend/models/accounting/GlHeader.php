@@ -48,10 +48,11 @@ class GlHeader extends \yii\db\ActiveRecord {
         return [
             [['date', 'periode_id', 'branch_id', 'reff_type', 'description', 'status'], 'required'],
             [['number'], 'autonumber', 'format' => 'GL' . date('Ym') . '.?', 'digit' => 4],
-            [['date','GlDate'], 'safe'],
+            [['date', 'GlDate'], 'safe'],
             [['periode_id', 'branch_id', 'reff_type', 'reff_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['number'], 'string', 'max' => 16],
             [['description'], 'string', 'max' => 255],
+            [['glDetails'], 'validateDualEntri'],
             [['periode_id'], 'exist', 'skipOnError' => true, 'targetClass' => AccPeriode::className(), 'targetAttribute' => ['periode_id' => 'id']],
         ];
     }
@@ -97,8 +98,8 @@ class GlHeader extends \yii\db\ActiveRecord {
     public function getPeriode() {
         return $this->hasOne(AccPeriode::className(), ['id' => 'periode_id']);
     }
-    
-        /**
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getBranch() {
@@ -107,6 +108,20 @@ class GlHeader extends \yii\db\ActiveRecord {
 
     public function getNmStatus() {
         return $this->getLogical('status', 'STATUS_');
+    }
+
+    public function validateDualEntri($attribute) {
+        if ($this->$attribute != null) {
+            $totAmount = 0;
+            foreach ($this->$attribute as $valc) {
+                $totAmount += $valc->amount;
+            }
+            if ($totAmount != 0) {
+                $this->addError($attribute, "Total Debit must equal to Total Credit");
+            }
+        }else{
+            $this->addError($attribute, "Detail Journal can't be blank");
+        }
     }
 
     public function behaviors() {
