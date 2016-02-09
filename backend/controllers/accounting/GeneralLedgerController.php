@@ -14,10 +14,6 @@ use yii\filters\VerbFilter;
  */
 class GeneralLedgerController extends Controller {
 
-    const STATUS_DRAFT = 10;
-    const STATUS_APPLIED = 20;
-    const STATUS_CLOSE = 90;
-
     public function behaviors() {
         return [
             'verbs' => [
@@ -60,18 +56,44 @@ class GeneralLedgerController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
+        $dPost = Yii::$app->request->post();
         $model = new GlHeader();
         $model->reff_type = '0';
-        $model->status = self::STATUS_DRAFT;
-        $model->GlDate = date('d-m-Y');
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            print_r($model->getErrors());
-            return $this->render('create', [
-                        'model' => $model,
-            ]);
+        $model->status = $model::STATUS_DRAFT;
+        $model->GlDate = isset($dPost['GlHeader']['GlDate']) ? $dPost['GlHeader']['GlDate'] : date('d-m-Y');
+
+        if ($model->load(Yii::$app->request->post())) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->glDetails = Yii::$app->request->post('GlDetail', []);
+                $model->addError('id','Something error added');
+                if ($model->save()) {
+                    $transaction->commit();
+                    \Yii::$app->getSession()->setFlash('success', $model->number.' succesfully created');
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    foreach ($model->getErrors() as $dkey=>$vald) {
+                        if($vald[0]=='Related error'){
+                            foreach ($model->getRelatedErrors() as $dkey=>$valr) {
+                                foreach ($valr as $tkey => $valt) {
+                                    \Yii::$app->getSession()->setFlash('error', $valt);
+                                }
+                                break;
+                            }
+                        }else{
+                            \Yii::$app->getSession()->setFlash('error', $vald[0]);
+                            break;
+                        }   
+                    }
+                    $transaction->rollback();
+                }
+            } catch (Exception $e) {
+                $transaction->rollback();
+                throw $e;
+            }
         }
+
+        return $this->render('create', ['model' => $model]);
     }
 
     /**
@@ -83,13 +105,38 @@ class GeneralLedgerController extends Controller {
     public function actionUpdate($id) {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                        'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->glDetails = Yii::$app->request->post('GlDetail', []);
+                if ($model->save()) {
+                    $transaction->commit();
+                    \Yii::$app->getSession()->setFlash('success', $model->number.' succesfully updated');
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    foreach ($model->getErrors() as $dkey=>$vald) {
+                        if($vald[0]=='Related error'){
+                            foreach ($model->getRelatedErrors() as $dkey=>$valr) {
+                                foreach ($valr as $tkey => $valt) {
+                                    \Yii::$app->getSession()->setFlash('error', $valt);
+                                }
+                                break;
+                            }
+                        }else{
+                            \Yii::$app->getSession()->setFlash('error', $vald[0]);
+                            break;
+                        }   
+                    }
+                    $transaction->rollback();
+                }
+            } catch (Exception $e) {
+                $transaction->rollback();
+                throw $e;
+            }
         }
+        return $this->render('update', [
+                    'model' => $model,
+        ]);
     }
 
     /**
@@ -117,6 +164,13 @@ class GeneralLedgerController extends Controller {
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionListCoa($term = '') {
+        $response = Yii::$app->response;
+        $response->format = 'json';
+        return \backend\models\accounting\Coa::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])->codeOrdered()
+                        ->asArray()->limit(10)->all();
     }
 
 }
