@@ -2,21 +2,21 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use backend\models\purchase\Purchase;
+use backend\models\master\Vendor;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\purchase\search\Purchase */
+/* @var $searchModel backend\models\master\search\Vendor */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Purchases';
+$this->title = 'Vendors';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>
-    <?= Html::a('Create Purchase', ['create'], ['class' => 'btn btn-default']) ?>
+    <?= Html::a('Create Vendor', ['create'], ['class' => 'btn btn-success']) ?>
 </p>
 <br>
 
-<div class="purchase-index">
+<div class="vendor-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -28,23 +28,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'number',
             [
-                'attribute'=>'vendor_id',
-                'value'=>'vendor.name',
+                'attribute'=>'type',
+                'value'=>'nmType',
+                'filter'=>  Vendor::enums('TYPE_')
             ],
-            [
-                'attribute'=>'branch_id',
-                'value'=>'branch.name',
-            ],
-            [
-                'attribute'=>'Date',
-            ],
+            'code',
+            'name',
+            'contact_name',
+            'contact_number',
             [
                 'attribute'=>'status',
                 'value'=>'nmStatus',
-                'filter'=>  Purchase::enums('STATUS_')
+                'filter'=>  Vendor::enums('STATUS_')
             ],
+            // 'created_at',
+            // 'created_by',
+            // 'updated_at',
+            // 'updated_by',
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]);

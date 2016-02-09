@@ -4,14 +4,14 @@ namespace backend\models\sales;
 
 use Yii;
 use backend\models\master\Branch;
-use backend\models\master\Customer;
+use backend\models\master\Vendor;
 
 /**
  * This is the model class for table "sales".
  *
  * @property integer $id
  * @property string $number
- * @property integer $customer_id
+ * @property integer $vendor_id
  * @property integer $branch_id
  * @property string $date
  * @property double $value
@@ -24,7 +24,7 @@ use backend\models\master\Customer;
  *
  * @property SalesDtl[] $items
  * @property Branch $branch 
- * @property Customer $customer
+ * @property Vendor $vendor
  */
 class Sales extends \yii\db\ActiveRecord
 {
@@ -49,8 +49,8 @@ class Sales extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'branch_id', 'Date', 'value', 'status'], 'required'],
-            [['customer_id', 'branch_id', 'status'], 'integer'],
+            [['branch_id', 'Date', 'value', 'status'], 'required'],
+            [['vendor_id', 'branch_id', 'status'], 'integer'],
             [['number'], 'autonumber', 'format' => 'SA' . date('Ymd') . '.?', 'digit' => 4],
             [['items'], 'required'],
             [['items'], 'relationUnique', 'targetAttributes' => 'product_id'],
@@ -67,7 +67,7 @@ class Sales extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'number' => 'Number',
-            'customer_id' => 'Customer ID',
+            'vendor_id' => 'Vendor ID',
             'branch_id' => 'Branch ID',
             'date' => 'Date',
             'value' => 'Value',
@@ -108,9 +108,9 @@ class Sales extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCustomer()
+    public function getVendor()
     {
-        return $this->hasOne(Customer::className(), ['id' => 'branch_id']);
+        return $this->hasOne(Vendor::className(), ['id' => 'vendor_id']);
     }
 
     public function getNmStatus()

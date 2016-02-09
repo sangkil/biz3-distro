@@ -14,8 +14,9 @@ use backend\models\master\Uom;
  * @property integer $uom_id
  * @property double $qty
  * @property double $price
+ * @property double $cogs
  * @property double $discount
- * @property double $total_receive
+ * @property double $total_release
  *
  * @property Sales $sales
  */
@@ -35,9 +36,9 @@ class SalesDtl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'uom_id', 'qty', 'price'], 'required'],
+            [['product_id', 'uom_id', 'qty', 'price', 'cogs'], 'required'],
             [['sales_id', 'product_id', 'uom_id'], 'integer'],
-            [['qty', 'price', 'discount', 'total_receive'], 'number'],
+            [['qty', 'price', 'discount', 'total_release'], 'number'],
         ];
     }
 
@@ -53,7 +54,7 @@ class SalesDtl extends \yii\db\ActiveRecord
             'qty' => 'Qty',
             'price' => 'Price',
             'discount' => 'Discount',
-            'total_receive' => 'Total Receive',
+            'total_release' => 'Total Release',
         ];
     }
 

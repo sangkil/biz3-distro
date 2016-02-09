@@ -56,11 +56,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'number',
             'nmType',
+            'vendor.name',
             'warehouse.name',
             'Date',
             'reff_type',
             'reff_id',
-            'vendor_id',
             'description',
             'nmStatus',
         ],

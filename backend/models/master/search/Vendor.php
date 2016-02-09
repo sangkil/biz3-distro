@@ -5,12 +5,12 @@ namespace backend\models\master\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\master\Customer;
+use backend\models\master\Vendor as VendorModel;
 
 /**
- * CustomerGroup represents the model behind the search form about `backend\models\master\Customer`.
+ * VendorGroup represents the model behind the search form about `backend\models\master\Vendor`.
  */
-class CustomerGroup extends Customer
+class Vendor extends VendorModel
 {
     /**
      * @inheritdoc
@@ -18,7 +18,7 @@ class CustomerGroup extends Customer
     public function rules()
     {
         return [
-            [['id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['id', 'type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['code', 'name', 'contact_name', 'contact_number'], 'safe'],
         ];
     }
@@ -41,7 +41,7 @@ class CustomerGroup extends Customer
      */
     public function search($params)
     {
-        $query = Customer::find();
+        $query = Vendor::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -55,6 +55,7 @@ class CustomerGroup extends Customer
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'type' => $this->type,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,

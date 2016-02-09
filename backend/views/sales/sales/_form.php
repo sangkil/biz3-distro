@@ -28,7 +28,7 @@ use backend\models\master\Branch;
             <div class="box">
                 <div class="box-body">
                     <?= $form->field($model, 'number')->staticControl() ?>
-                    <?= $form->field($model, 'customer_id')->textInput() ?>
+                    <?= $form->field($model, 'vendor_id')->textInput() ?>
                     <?=
                     $form->field($model, 'branch_id')->dropDownList(Branch::selectOptions())
                     ?>

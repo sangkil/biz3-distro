@@ -1,6 +1,6 @@
 
 $('#input-product').autocomplete({
-    minLength: 0,
+    minLength: 1,
     source: biz.product_url,
     focus: function (event, ui) {
         $("#input-product").val(ui.item.name);
@@ -22,3 +22,24 @@ $('#input-product').autocomplete({
         .append("<a>" + item.code + "<br>" + item.name + "</a>")
         .appendTo(ul);
 };
+
+$('#goodsmovement-vendor_name')
+    .autocomplete({
+    minLength: 1,
+    source: biz.vendor_url,
+    focus: function (event, ui) {
+        $("#goodsmovement-vendor_name").val(ui.item.name);
+        return false;
+    },
+    select: function (event, ui) {
+        $("#goodsmovement-vendor_name").val(ui.item.name);
+        $('#hidden-vendor_id').val(ui.item.id);
+        return false;
+    }
+})
+    .autocomplete("instance")._renderItem = function (ul, item) {
+    return $("<li>")
+        .append("<a>" + item.code + "<br>" + item.name + "</a>")
+        .appendTo(ul);
+};
+

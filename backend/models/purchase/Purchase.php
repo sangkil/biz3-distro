@@ -4,14 +4,14 @@ namespace backend\models\purchase;
 
 use Yii;
 use backend\models\master\Branch;
-use backend\models\master\Supplier;
+use backend\models\master\Vendor;
 
 /**
  * This is the model class for table "purchase".
  *
  * @property integer $id
  * @property string $number
- * @property integer $supplier_id
+ * @property integer $vendor_id
  * @property integer $branch_id
  * @property string $date
  * @property double $value
@@ -24,7 +24,7 @@ use backend\models\master\Supplier;
  *
  * @property PurchaseDtl[] $items
  * @property Branch $branch 
- * @property Supplier $supplier
+ * @property Vendor $vendor
  */
 class Purchase extends \yii\db\ActiveRecord
 {
@@ -49,8 +49,8 @@ class Purchase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['supplier_id', 'branch_id', 'Date', 'value', 'status'], 'required'],
-            [['supplier_id', 'branch_id', 'status'], 'integer'],
+            [['vendor_id', 'branch_id', 'Date', 'value', 'status'], 'required'],
+            [['vendor_id', 'branch_id', 'status'], 'integer'],
             [['number'], 'autonumber', 'format' => 'PU' . date('Ymd') . '.?', 'digit' => 4],
             [['items'], 'required'],
             [['items'], 'relationUnique', 'targetAttributes' => 'product_id'],
@@ -67,7 +67,7 @@ class Purchase extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'number' => 'Number',
-            'supplier_id' => 'Supplier ID',
+            'vendor_id' => 'Vendor ID',
             'branch_id' => 'Branch ID',
             'date' => 'Date',
             'value' => 'Value',
@@ -108,9 +108,9 @@ class Purchase extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSupplier()
+    public function getVendor()
     {
-        return $this->hasOne(Supplier::className(), ['id' => 'branch_id']);
+        return $this->hasOne(Vendor::className(), ['id' => 'vendor_id']);
     }
 
     public function getNmStatus()

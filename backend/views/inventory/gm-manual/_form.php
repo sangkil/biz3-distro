@@ -4,10 +4,22 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use backend\models\inventory\GoodsMovement;
 use backend\models\master\Warehouse;
+use yii\jui\JuiAsset;
+use yii\helpers\Url;
+use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $model GoodsMovement */
 /* @var $form ActiveForm */
+
+JuiAsset::register($this);
+$opts = json_encode([
+    'product_url' => Url::to(['product-list']),
+    'vendor_url' => Url::to(['vendor-list']),
+    ]);
+
+$this->registerJs("var biz = $opts;", View::POS_HEAD);
+$this->registerJs($this->render('_script.js'));
 ?>
 
 <div class="goods-movement-form">
@@ -46,7 +58,8 @@ use backend\models\master\Warehouse;
                         'options' => ['class' => 'form-control']
                     ])
                     ?>
-                    <?= $form->field($model, 'vendor_id')->textInput() ?>
+                    <?= $form->field($model, 'vendor_name')->textInput() ?>
+                    <?= Html::activeHiddenInput($model, 'vendor_id', ['id' => 'hidden-vendor_id']) ?>
 
                     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
                 </div>

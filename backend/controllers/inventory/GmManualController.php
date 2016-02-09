@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use backend\models\master\Product;
 use backend\models\master\ProductStock;
 use backend\models\master\ProductUom;
+use backend\models\master\Vendor;
 use yii\base\UserException;
 
 /**
@@ -72,8 +73,8 @@ class GmManualController extends Controller
     {
         $model = new GoodsMovement();
 
-        $model->status = GoodsMovement::STATUS_DRAFT;
         if ($model->load(Yii::$app->request->post())) {
+            $model->status = GoodsMovement::STATUS_DRAFT;
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->items = Yii::$app->request->post('GoodsMovementDtl', []);
@@ -104,7 +105,9 @@ class GmManualController extends Controller
         if($model->status != GoodsMovement::STATUS_DRAFT){
             throw new UserException('Tidak bisa diupdate');
         }
-
+        if($model->vendor){
+            $model->vendor_name = $model->vendor->name;
+        }
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
@@ -227,12 +230,20 @@ class GmManualController extends Controller
         }
     }
 
-    public function actionListProduct($term = '')
+    public function actionProductList($term = '')
     {
         $response = Yii::$app->response;
         $response->format = 'json';
         return Product::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
                 ->asArray()->limit(10)->all();
+    }
+
+    public function actionVendorList($term = '')
+    {
+        $response = Yii::$app->response;
+        $response->format = 'json';
+        return Vendor::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->limit(10)->asArray()->all();
     }
 
     /**
