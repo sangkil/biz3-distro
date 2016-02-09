@@ -18,7 +18,7 @@ class Purchase extends PurchaseModel
     public function rules()
     {
         return [
-            [['id', 'supplier_id', 'branch_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['id', 'vendor_id', 'branch_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['number', 'date'], 'safe'],
             [['value', 'discount'], 'number'],
         ];
@@ -56,7 +56,7 @@ class Purchase extends PurchaseModel
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'supplier_id' => $this->supplier_id,
+            'vendor_id' => $this->vendor_id,
             'branch_id' => $this->branch_id,
             'date' => $this->date,
             'value' => $this->value,

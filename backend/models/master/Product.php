@@ -29,8 +29,8 @@ use backend\models\sales\Price;
  * @property ProductChild[] $productChildren
  * @property ProductStock[] $productStocks
  * @property Warehouse[] $warehouses
- * @property ProductSupplier[] $productSuppliers
- * @property Supplier[] $suppliers
+ * @property ProductVendor[] $productVendors
+ * @property Vendor[] $vendors
  * @property ProductUom[] $productUoms
  * @property Uom[] $uoms
  */
@@ -139,15 +139,15 @@ class Product extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProductSuppliers() {
-        return $this->hasMany(ProductSupplier::className(), ['product_id' => 'id']);
+    public function getProductVendors() {
+        return $this->hasMany(ProductVendor::className(), ['product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSuppliers() {
-        return $this->hasMany(Supplier::className(), ['id' => 'supplier_id'])->viaTable('product_supplier', ['product_id' => 'id']);
+    public function getVendors() {
+        return $this->hasMany(Vendor::className(), ['id' => 'vendor_id'])->viaTable('product_vendor', ['product_id' => 'id']);
     }
 
     /**

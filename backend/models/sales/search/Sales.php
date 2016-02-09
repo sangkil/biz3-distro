@@ -18,7 +18,7 @@ class Sales extends SalesModel
     public function rules()
     {
         return [
-            [['id', 'customer_id', 'branch_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['id', 'vendor_id', 'branch_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['number', 'date'], 'safe'],
             [['value', 'discount'], 'number'],
         ];
@@ -56,7 +56,7 @@ class Sales extends SalesModel
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'customer_id' => $this->customer_id,
+            'vendor_id' => $this->vendor_id,
             'branch_id' => $this->branch_id,
             'date' => $this->date,
             'value' => $this->value,

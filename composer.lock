@@ -325,12 +325,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cebe/markdown.git",
-                "reference": "d7b6f46cd423174c8a86c7f816dea45008dbf454"
+                "reference": "35d47fe727a453a8aa5c6be7e627caad8f16d586"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cebe/markdown/zipball/d7b6f46cd423174c8a86c7f816dea45008dbf454",
-                "reference": "d7b6f46cd423174c8a86c7f816dea45008dbf454",
+                "url": "https://api.github.com/repos/cebe/markdown/zipball/35d47fe727a453a8aa5c6be7e627caad8f16d586",
+                "reference": "35d47fe727a453a8aa5c6be7e627caad8f16d586",
                 "shasum": ""
             },
             "require": {
@@ -377,7 +377,7 @@
                 "markdown",
                 "markdown-extra"
             ],
-            "time": "2016-01-21 11:46:58"
+            "time": "2016-02-06 17:31:49"
         },
         {
             "name": "deesoft/yii2-console",
@@ -477,12 +477,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mdmsoft/yii2-ar-behaviors.git",
-                "reference": "14ac297d5ac18594dcf09cd5b3bb20ff3d786ff2"
+                "reference": "95231384359f0018347d0cce715260f50e7d95e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mdmsoft/yii2-ar-behaviors/zipball/14ac297d5ac18594dcf09cd5b3bb20ff3d786ff2",
-                "reference": "14ac297d5ac18594dcf09cd5b3bb20ff3d786ff2",
+                "url": "https://api.github.com/repos/mdmsoft/yii2-ar-behaviors/zipball/95231384359f0018347d0cce715260f50e7d95e4",
+                "reference": "95231384359f0018347d0cce715260f50e7d95e4",
                 "shasum": ""
             },
             "require": {
@@ -517,7 +517,7 @@
                 "query scope",
                 "yii2"
             ],
-            "time": "2016-02-04 11:34:09"
+            "time": "2016-02-09 00:58:47"
         },
         {
             "name": "mdmsoft/yii2-autonumber",

@@ -3,16 +3,16 @@
 namespace backend\controllers\master;
 
 use Yii;
-use backend\models\master\Customer;
-use backend\models\master\search\CustomerGroup;
+use backend\models\master\Vendor;
+use backend\models\master\search\Vendor as VendorSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CustomerController implements the CRUD actions for Customer model.
+ * VendorController implements the CRUD actions for Vendor model.
  */
-class CustomerController extends Controller
+class VendorController extends Controller
 {
     public function behaviors()
     {
@@ -27,12 +27,12 @@ class CustomerController extends Controller
     }
 
     /**
-     * Lists all Customer models.
+     * Lists all Vendor models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CustomerGroup();
+        $searchModel = new VendorSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -42,7 +42,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * Displays a single Customer model.
+     * Displays a single Vendor model.
      * @param integer $id
      * @return mixed
      */
@@ -54,13 +54,13 @@ class CustomerController extends Controller
     }
 
     /**
-     * Creates a new Customer model.
+     * Creates a new Vendor model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Customer();
+        $model = new Vendor();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -72,7 +72,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * Updates an existing Customer model.
+     * Updates an existing Vendor model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -91,7 +91,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * Deletes an existing Customer model.
+     * Deletes an existing Vendor model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -104,15 +104,15 @@ class CustomerController extends Controller
     }
 
     /**
-     * Finds the Customer model based on its primary key value.
+     * Finds the Vendor model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Customer the loaded model
+     * @return Vendor the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Customer::findOne($id)) !== null) {
+        if (($model = Vendor::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
