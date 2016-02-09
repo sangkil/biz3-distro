@@ -148,34 +148,10 @@ class m160201_050010_create_table_master extends \yii\db\Migration
             'FOREIGN KEY ([[product_id]]) REFERENCES {{%product}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
             ], $tableOptions);
 
-        $this->createTable('{{%supplier}}', [
+        $this->createTable('{{%vendor}}', [
             'id' => Schema::TYPE_PK,
-            'code' => Schema::TYPE_STRING . '(4) NOT NULL',
-            'name' => Schema::TYPE_STRING . '(64) NOT NULL',
-            // history column
-            'created_at' => Schema::TYPE_INTEGER,
-            'created_by' => Schema::TYPE_INTEGER,
-            'updated_at' => Schema::TYPE_INTEGER,
-            'updated_by' => Schema::TYPE_INTEGER,
-            ], $tableOptions);
-
-        $this->createTable('{{%product_supplier}}', [
-            'product_id' => Schema::TYPE_INTEGER,
-            'supplier_id' => Schema::TYPE_INTEGER,
-            // history column
-            'created_at' => Schema::TYPE_INTEGER,
-            'created_by' => Schema::TYPE_INTEGER,
-            'updated_at' => Schema::TYPE_INTEGER,
-            'updated_by' => Schema::TYPE_INTEGER,
-            // constrain
-            'PRIMARY KEY ([[product_id]], [[supplier_id]])',
-            'FOREIGN KEY ([[product_id]]) REFERENCES {{%product}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
-            'FOREIGN KEY ([[supplier_id]]) REFERENCES {{%supplier}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
-            ], $tableOptions);
-
-        $this->createTable('{{%customer}}', [
-            'id' => Schema::TYPE_PK,
-            'code' => Schema::TYPE_STRING . '(4) NOT NULL',
+            'type' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'code' => Schema::TYPE_STRING . '(8) NOT NULL',
             'name' => Schema::TYPE_STRING . '(64) NOT NULL',
             'contact_name' => Schema::TYPE_STRING . '(64)',
             'contact_number' => Schema::TYPE_STRING . '(64)',
@@ -187,7 +163,21 @@ class m160201_050010_create_table_master extends \yii\db\Migration
             'updated_by' => Schema::TYPE_INTEGER,
             ], $tableOptions);
 
-        $this->createTable('{{%customer_detail}}', [
+        $this->createTable('{{%product_vendor}}', [
+            'product_id' => Schema::TYPE_INTEGER,
+            'vendor_id' => Schema::TYPE_INTEGER,
+            // history column
+            'created_at' => Schema::TYPE_INTEGER,
+            'created_by' => Schema::TYPE_INTEGER,
+            'updated_at' => Schema::TYPE_INTEGER,
+            'updated_by' => Schema::TYPE_INTEGER,
+            // constrain
+            'PRIMARY KEY ([[product_id]], [[vendor_id]])',
+            'FOREIGN KEY ([[product_id]]) REFERENCES {{%product}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
+            'FOREIGN KEY ([[vendor_id]]) REFERENCES {{%vendor}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
+            ], $tableOptions);
+
+        $this->createTable('{{%vendor_detail}}', [
             'id' => Schema::TYPE_INTEGER,
             'distric_id' => Schema::TYPE_INTEGER,
             'addr1' => Schema::TYPE_STRING . '(128)',
@@ -204,7 +194,7 @@ class m160201_050010_create_table_master extends \yii\db\Migration
             'updated_by' => Schema::TYPE_INTEGER,
             // constrain
             'PRIMARY KEY ([[id]])',
-            'FOREIGN KEY ([[id]]) REFERENCES {{%customer}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
+            'FOREIGN KEY ([[id]]) REFERENCES {{%vendor}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
             ], $tableOptions);
 
         $this->createTable('{{%price_category}}', [
@@ -266,7 +256,7 @@ class m160201_050010_create_table_master extends \yii\db\Migration
         $this->dropTable('{{%cogs}}');
         $this->dropTable('{{%price}}');
         $this->dropTable('{{%price_category}}');
-        $this->dropTable('{{%product_supplier}}');
+        $this->dropTable('{{%product_vendor}}');
         $this->dropTable('{{%product_stock}}');
         $this->dropTable('{{%product_uom}}');
         $this->dropTable('{{%product_child}}');
@@ -274,9 +264,8 @@ class m160201_050010_create_table_master extends \yii\db\Migration
         $this->dropTable('{{%product_group}}');
         $this->dropTable('{{%category}}');
         $this->dropTable('{{%uom}}');
-        $this->dropTable('{{%customer_detail}}');
-        $this->dropTable('{{%customer}}');
-        $this->dropTable('{{%supplier}}');
+        $this->dropTable('{{%vendor_detail}}');
+        $this->dropTable('{{%vendor}}');
         $this->dropTable('{{%warehouse}}');
         $this->dropTable('{{%branch}}');
         $this->dropTable('{{%orgn}}');

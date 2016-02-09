@@ -21,7 +21,7 @@ class m160201_050030_create_table_sales extends \yii\db\Migration
             'id' => Schema::TYPE_PK,
             'number' => Schema::TYPE_STRING . '(16) NOT NULL',
             'branch_id' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'customer_id' => Schema::TYPE_INTEGER,
+            'vendor_id' => Schema::TYPE_INTEGER,
             'date' => Schema::TYPE_DATE . ' NOT NULL',
             'value' => Schema::TYPE_FLOAT . ' NOT NULL',
             'discount' => Schema::TYPE_FLOAT . ' NULL',

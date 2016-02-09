@@ -135,9 +135,11 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
         $this->createTable('{{%payment}}', [
             'id' => Schema::TYPE_PK,
             'number' => Schema::TYPE_STRING . '(16) NOT NULL',
+            'vendor_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'date' => Schema::TYPE_DATE . ' NOT NULL',
             'type' => Schema::TYPE_INTEGER . ' NOT NULL',
             'payment_type' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'status' => Schema::TYPE_INTEGER . ' NOT NULL',
             // history column
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,
