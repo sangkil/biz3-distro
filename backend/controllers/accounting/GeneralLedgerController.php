@@ -60,7 +60,7 @@ class GeneralLedgerController extends Controller {
         $model = new GlHeader();
         $model->reff_type = '0';
         $model->status = $model::STATUS_RELEASED;
-        $model->GlDate = isset($dPost['GlHeader']['GlDate']) ? $dPost['GlHeader']['GlDate'] : date('d-m-Y');
+        $model->date = date('Y-m-d');
 
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
