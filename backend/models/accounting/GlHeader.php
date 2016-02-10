@@ -33,6 +33,7 @@ class GlHeader extends \yii\db\ActiveRecord {
 
     const STATUS_DRAFT = 10;
     const STATUS_RELEASED = 20;
+    const STATUS_CANCELED = 30;
 
     /**
      * @inheritdoc

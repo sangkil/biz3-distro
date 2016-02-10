@@ -35,6 +35,7 @@ use yii\helpers\Html;
                 <td colspan="4">
                     <?php
                     $bgcolor = ($model->status == $model::STATUS_DRAFT) ? 'bg-yellow' : 'bg-green';
+                    $bgcolor = ($model->status == $model::STATUS_CANCELED) ? 'bg-red' : $bgcolor;
                     echo Html::tag('span', $model->nmStatus, ['class' => "badge $bgcolor"]);
                     ?>
                 </td>

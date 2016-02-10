@@ -20,6 +20,14 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a('New Journal', ['create'], ['class' => 'btn btn-default']) ?>
             <?= ($model->status < $model::STATUS_RELEASED) ? Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) : '' ?>
             <?=
+            ($model->status == $model::STATUS_RELEASED) ?
+                    Html::a('Cancel', ['reverse', 'id' => $model->id], [
+                        'class' => 'btn btn-warning', 'data' => [
+                            'confirm' => 'Are you sure you want to cancel this item?',
+                            'method' => 'post',
+                ]]) : ''
+            ?>
+            <?=
             ($model->status < $model::STATUS_RELEASED) ?
                     Html::a('Delete', ['delete', 'id' => $model->id], [
                         'class' => 'btn btn-danger',
@@ -65,8 +73,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'description',
                 [                      // the owner name of the model
                     'label' => 'Status',
-                    'format'=>'raw',
-                    'value' => ($model->status == $model::STATUS_DRAFT)? '<span class="badge bg-yellow">'.$model->nmStatus.'</span>':'<span class="badge bg-green">'.$model->nmStatus.'</span>'
+                    'format' => 'raw',
+                    'value' => ($model->status == $model::STATUS_DRAFT) ? '<span class="badge bg-yellow">' . $model->nmStatus . '</span>' : (($model->status == $model::STATUS_CANCELED) ? '<span class="badge bg-red">' . $model->nmStatus . '</span>' : '<span class="badge bg-green">' . $model->nmStatus . '</span>')
                 ],
             ],
         ])
