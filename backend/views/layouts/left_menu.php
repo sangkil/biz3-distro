@@ -70,21 +70,7 @@ use yii\helpers\Url;
                 <ul class="treeview-menu">
                     <li><a href="#"><i class="fa fa-check"></i> Sales Order</a></li>
                     <li><a href="#"><i class="fa fa-check"></i> Sales Return</a></li>
-                    <li><a href="#"><i class="fa fa-check"></i> Sales Journey</a></li>
-                    <li style="<?php echo (\Yii::$app->user->can('/loreal/index')) ? '' : 'display:none;'; ?>">
-                        <a href="#"><i class="fa fa-check text-orange"></i> L'Real Interface<i class="fa fa-angle-left pull-right"></i></a>
-                        <ul class="treeview-menu">
-                            <li><a href="<?= Url::to(['/loreal/import-faktur']); ?>"><i class="fa fa-cloud-upload"></i> Upload Faktur</a></li>
-                            <li><a href="<?= Url::to(['/loreal/import-retur']); ?>"><i class="fa fa-cloud-upload"></i> Upload Retur</a></li>
-                            <li><a href="<?= Url::to(['/loreal/export-pelunasan']); ?>"><i class="fa fa-download"></i> Export Pelunasan</a></li>          
-                        </ul>
-                    </li>
-                    <li style="<?php echo (\Yii::$app->user->can('/intrasari/index')) ? '' : 'display:none;'; ?>">
-                        <a href="#"><i class="fa fa-check text-orange"></i> Intrasari Interface<i class="fa fa-angle-left pull-right"></i></a>
-                        <ul class="treeview-menu">
-                            <li><a href="<?= Url::to(['/intrasari/import-faktur']); ?>"><i class="fa fa-cloud-upload"></i> Upload Faktur</a></li>    
-                        </ul>
-                    </li>
+                    <li><a href="#"><i class="fa fa-check"></i> Sales Journey</a></li>                    
                 </ul>
             </li>  
             <li class="treeview">
@@ -129,11 +115,11 @@ use yii\helpers\Url;
                         <a href="<?= Url::to(['/accounting/coa']); ?>"><i class="fa fa-check"></i> COA</a>
                     </li>
                     <li>
-                        <a href="<?= Url::to(['/accounting/acc-periode']); ?>"><i class="fa fa-check"></i> Periodes</a>
+                        <a href="<?= Url::to(['/accounting/acc-periode']); ?>"><i class="fa fa-check"></i> Fi Periodes</a>
                     </li>
                     
                     <li>
-                        <a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> Journals</a>
+                        <a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> General Journal</a>
                     </li>
 <!--                    <li>
                         <a href="#"><i class="fa fa-check"></i> Cash In<i class="fa fa-angle-left pull-right"></i></a>
