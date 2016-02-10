@@ -205,7 +205,7 @@ class GeneralLedgerController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = GlHeader::findOne($id)) !== null) {
+        if (($model = GlHeader::find()->where('id=:did', [':did'=>$id])->with(['glDetails','glDetails.coa'])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

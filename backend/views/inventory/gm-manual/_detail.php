@@ -9,17 +9,17 @@ use backend\models\inventory\GoodsMovementDtl;
 /* @var $model GoodsMovement */
 ?>
 
-<table class="table table-striped">
+<table class="table table-hover">
     <thead>
         <tr>
             <th style="width: 10%">#</th>
             <th>
                 Product Name
             </th>
-            <th class="items" style="width: 20%">
+            <th class="items" style="width: 15%">
                 Qty
             </th>
-            <th style="width: 20%">
+            <th style="width: 10%">
                 Uom
             </th>
         </tr>

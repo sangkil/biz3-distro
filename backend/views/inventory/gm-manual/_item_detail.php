@@ -23,7 +23,7 @@ use yii\helpers\Html;
 </td>
 <td>
     <?=
-    Html::activeDropDownList($model, "[$key]uom_id", [1 => 'Pcs', 2 => 'Dz'], ['class' => 'form-control', 'data-field' => 'uom_id',
+    Html::activeDropDownList($model, "[$key]uom_id", \backend\models\master\Uom::selectOptions(), ['class' => 'form-control', 'data-field' => 'uom_id',
         'id' => false])
     ?>
 </td>
