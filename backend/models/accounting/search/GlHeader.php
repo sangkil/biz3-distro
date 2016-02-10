@@ -82,7 +82,7 @@ class GlHeader extends GlHeaderModel {
         //$query->select(['gl_header.*','gl_detail.*']);
         $query->with(['glDetails','glDetails.coa']);
         //$query->joinWith(['glDetails']);
-        //$query->orderBy(['number'=>SORT_ASC, 'gl_detail.amount'=>SORT_DESC]);
+        $query->orderBy(['number'=>SORT_ASC]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
