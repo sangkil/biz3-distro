@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\models\master\Product;
+use backend\models\master\Vendor;
 use yii\base\UserException;
 
 /**
@@ -16,6 +17,7 @@ use yii\base\UserException;
  */
 class InvoiceController extends Controller
 {
+
     public function behaviors()
     {
         return [
@@ -40,8 +42,8 @@ class InvoiceController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -53,7 +55,7 @@ class InvoiceController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                'model' => $this->findModel($id),
         ]);
     }
 
@@ -67,6 +69,8 @@ class InvoiceController extends Controller
         $model = new Invoice();
 
         $model->status = Invoice::STATUS_DRAFT;
+        $model->date = date('Y-m-d');
+        $model->due_date = date('Y-m-d', time() + 30 * 24 * 3600);
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
@@ -95,7 +99,7 @@ class InvoiceController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if($model->status != Invoice::STATUS_DRAFT){
+        if ($model->status != Invoice::STATUS_DRAFT) {
             throw new UserException('Tidak bisa diupdate');
         }
 
@@ -127,7 +131,7 @@ class InvoiceController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        if($model->status != Invoice::STATUS_DRAFT){
+        if ($model->status != Invoice::STATUS_DRAFT) {
             throw new UserException('Tidak bisa didelete');
         }
         $model->delete();
@@ -188,12 +192,24 @@ class InvoiceController extends Controller
         }
     }
 
-    public function actionListProduct($term = '')
+    public function actionProductList($term = '')
     {
         $response = Yii::$app->response;
         $response->format = 'json';
-        return Product::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+        return Product::find()
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
                 ->asArray()->limit(10)->all();
+    }
+
+    public function actionVendorList($term = '')
+    {
+        $response = Yii::$app->response;
+        $response->format = 'json';
+        return Vendor::find()
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+                ->limit(10)->asArray()->all();
     }
 
     /**

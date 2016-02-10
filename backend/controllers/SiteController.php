@@ -22,7 +22,7 @@ class SiteController extends Controller {
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'logout', 'error'],
+                        'actions' => ['login', 'logout', 'error', 'page'],
                         'allow' => true,
                     ],
                     [
@@ -49,6 +49,9 @@ class SiteController extends Controller {
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
+            'page' => [
+                'class' => 'yii\web\ViewAction'
+            ]
         ];
     }
 

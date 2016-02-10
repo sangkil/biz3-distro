@@ -17,6 +17,7 @@ use yii\base\UserException;
  */
 class PurchaseController extends Controller
 {
+
     public function behaviors()
     {
         return [
@@ -39,8 +40,8 @@ class PurchaseController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -52,7 +53,7 @@ class PurchaseController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                'model' => $this->findModel($id),
         ]);
     }
 
@@ -94,7 +95,7 @@ class PurchaseController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if($model->status != Purchase::STATUS_DRAFT){
+        if ($model->status != Purchase::STATUS_DRAFT) {
             throw new UserException('Tidak bisa diupdate');
         }
 
@@ -126,7 +127,7 @@ class PurchaseController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        if($model->status != Purchase::STATUS_DRAFT){
+        if ($model->status != Purchase::STATUS_DRAFT) {
             throw new UserException('Tidak bisa didelete');
         }
         $model->delete();
@@ -138,7 +139,9 @@ class PurchaseController extends Controller
     {
         $response = Yii::$app->response;
         $response->format = 'json';
-        return Product::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+        return Product::find()
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
                 ->limit(10)->asArray()->all();
     }
 
@@ -146,7 +149,9 @@ class PurchaseController extends Controller
     {
         $response = Yii::$app->response;
         $response->format = 'json';
-        return Vendor::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+        return Vendor::find()
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
                 ->limit(10)->asArray()->all();
     }
 
