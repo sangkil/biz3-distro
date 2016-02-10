@@ -169,8 +169,12 @@ class GeneralLedgerController extends Controller {
     public function actionListCoa($term = '') {
         $response = Yii::$app->response;
         $response->format = 'json';
-        return \backend\models\accounting\Coa::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])->codeOrdered()
-                        ->asArray()->limit(10)->all();
+        $coaList = \backend\models\accounting\Coa::find()
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+                ->codeOrdered()->asArray()->limit(10);
+        
+        return $coaList->all();
     }
 
 }

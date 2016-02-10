@@ -53,6 +53,7 @@ class GlHeader extends \yii\db\ActiveRecord {
             [['number'], 'string', 'max' => 16],
             [['description'], 'string', 'max' => 255],
             [['glDetails'], 'validateDualEntri'],
+            [['periode'], 'validateOpenPeriode'],            
             [['periode_id'], 'exist', 'skipOnError' => true, 'targetClass' => AccPeriode::className(), 'targetAttribute' => ['periode_id' => 'id']],
         ];
     }
@@ -119,8 +120,14 @@ class GlHeader extends \yii\db\ActiveRecord {
             if ($totAmount != 0) {
                 $this->addError($attribute, "Total Debit must equal to Total Credit");
             }
-        }else{
+        } else {
             $this->addError($attribute, "Detail Journal can't be blank");
+        }
+    }
+
+    public function validateOpenPeriode($attribute) {
+        if ($this->$attribute->status != AccPeriode::STATUS_OPEN) {
+            $this->addError($attribute, "Accounting Periode has been closed");
         }
     }
 
