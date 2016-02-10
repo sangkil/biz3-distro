@@ -8,44 +8,17 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="gl-header-search">
+<?php
+$form = ActiveForm::begin([
+            'action' => ['index'],
+            'method' => 'get',
+        ]);
+?>
+<td style="width: 10%;"><?= $form->field($model, 'number')->label(false); //Html::textInput('no', '', ['class' => 'form-control'])   ?></td>
+<td colspan="2"><?= $form->field($model, 'description')->label(false); //Html::textInput('desc', '', ['class' => 'form-control'])  ?></td>
+<td >
+    <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+    <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+</td>
 
-    <?php $form = ActiveForm::begin([
-        'action' => ['index'],
-        'method' => 'get',
-    ]); ?>
-
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'number') ?>
-
-    <?= $form->field($model, 'date') ?>
-
-    <?= $form->field($model, 'periode_id') ?>
-
-    <?= $form->field($model, 'branch_id') ?>
-
-    <?php // echo $form->field($model, 'reff_type') ?>
-
-    <?php // echo $form->field($model, 'reff_id') ?>
-
-    <?php // echo $form->field($model, 'description') ?>
-
-    <?php // echo $form->field($model, 'status') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'created_by') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <?php // echo $form->field($model, 'updated_by') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-
-</div>
+<?php ActiveForm::end(); ?>

@@ -20,6 +20,7 @@ class GeneralLedgerController extends Controller {
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'reverse' => ['post']
                 ],
             ],
         ];
@@ -31,8 +32,7 @@ class GeneralLedgerController extends Controller {
      */
     public function actionIndex() {
         $searchModel = new GlHeaderSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $dataProvider = $searchModel->searchDtl(Yii::$app->request->queryParams);
         return $this->render('index', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
@@ -59,31 +59,31 @@ class GeneralLedgerController extends Controller {
         $dPost = Yii::$app->request->post();
         $model = new GlHeader();
         $model->reff_type = '0';
-        $model->status = $model::STATUS_DRAFT;
-        $model->GlDate = isset($dPost['GlHeader']['GlDate']) ? $dPost['GlHeader']['GlDate'] : date('d-m-Y');
+        $model->status = $model::STATUS_RELEASED;
+        $model->date = date('Y-m-d');
 
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->glDetails = Yii::$app->request->post('GlDetail', []);
-                $model->addError('id','Something error added');
+                $model->addError('id', 'Something error added');
                 if ($model->save()) {
                     $transaction->commit();
-                    \Yii::$app->getSession()->setFlash('success', $model->number.' succesfully created');
+                    \Yii::$app->getSession()->setFlash('success', $model->number . ' succesfully created');
                     return $this->redirect(['view', 'id' => $model->id]);
                 } else {
-                    foreach ($model->getErrors() as $dkey=>$vald) {
-                        if($vald[0]=='Related error'){
-                            foreach ($model->getRelatedErrors() as $dkey=>$valr) {
+                    foreach ($model->getErrors() as $dkey => $vald) {
+                        if ($vald[0] == 'Related error') {
+                            foreach ($model->getRelatedErrors() as $dkey => $valr) {
                                 foreach ($valr as $tkey => $valt) {
                                     \Yii::$app->getSession()->setFlash('error', $valt);
                                 }
                                 break;
                             }
-                        }else{
+                        } else {
                             \Yii::$app->getSession()->setFlash('error', $vald[0]);
                             break;
-                        }   
+                        }
                     }
                     $transaction->rollback();
                 }
@@ -111,21 +111,21 @@ class GeneralLedgerController extends Controller {
                 $model->glDetails = Yii::$app->request->post('GlDetail', []);
                 if ($model->save()) {
                     $transaction->commit();
-                    \Yii::$app->getSession()->setFlash('success', $model->number.' succesfully updated');
+                    \Yii::$app->getSession()->setFlash('success', $model->number . ' succesfully updated');
                     return $this->redirect(['view', 'id' => $model->id]);
                 } else {
-                    foreach ($model->getErrors() as $dkey=>$vald) {
-                        if($vald[0]=='Related error'){
-                            foreach ($model->getRelatedErrors() as $dkey=>$valr) {
+                    foreach ($model->getErrors() as $dkey => $vald) {
+                        if ($vald[0] == 'Related error') {
+                            foreach ($model->getRelatedErrors() as $dkey => $valr) {
                                 foreach ($valr as $tkey => $valt) {
                                     \Yii::$app->getSession()->setFlash('error', $valt);
                                 }
                                 break;
                             }
-                        }else{
+                        } else {
                             \Yii::$app->getSession()->setFlash('error', $vald[0]);
                             break;
-                        }   
+                        }
                     }
                     $transaction->rollback();
                 }
@@ -152,6 +152,52 @@ class GeneralLedgerController extends Controller {
     }
 
     /**
+     * Deletes an existing GlHeader model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionReverse($id) {
+        $oldGl = $this->findModel($id);
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            $newGl = new GlHeader;           
+            $newGl->reff_type = 0;
+            $newGl->reff_id = $oldGl->id;
+            $newGl->date = date('Y-m-d');
+            $newDtls = [];
+            foreach ($oldGl->glDetails as $ddtl) {
+                $ndtl = new \backend\models\accounting\GlDetail();
+                $ndtl->attributes = $ddtl->attributes;
+                $ndtl->header_id = null;
+                $ndtl->amount = -1 * $ddtl->amount;
+                $newDtls[] = $ndtl;
+            }
+            $newGl->status = $newGl::STATUS_CANCELED; 
+            $newGl->periode_id = $oldGl->periode_id;
+            $newGl->branch_id = $oldGl->branch_id;
+            $newGl->description = 'Reverse of '.$oldGl->number;
+            $newGl->glDetails = $newDtls;
+
+            if ($newGl->save()) {
+                $oldGl->status = $oldGl::STATUS_CANCELED;
+                $oldGl->description = $oldGl->description. 'Canceled by '.$newGl->number;
+                if($oldGl->save()){
+                    $trans->commit();
+                    $this->redirect(['index']);
+                }
+            }else{
+                print_r($newGl->getErrors());
+                print_r($newGl->getRelatedErrors());
+            }
+        } catch (Exception $ex) {
+            $trans->rollBack();
+        } 
+        return;
+        //$this->redirect(['view','id'=>$id]);
+    }
+
+    /**
      * Finds the GlHeader model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
@@ -170,10 +216,10 @@ class GeneralLedgerController extends Controller {
         $response = Yii::$app->response;
         $response->format = 'json';
         $coaList = \backend\models\accounting\Coa::find()
-                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-                ->codeOrdered()->asArray()->limit(10);
-        
+                        ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                        ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+                        ->codeOrdered()->asArray()->limit(10);
+
         return $coaList->all();
     }
 

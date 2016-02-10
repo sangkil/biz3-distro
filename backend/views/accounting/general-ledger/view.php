@@ -17,8 +17,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="col-lg-12">
         <p class="pull-right">
-            <?= Html::a('Create New', ['create'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('New Journal', ['create'], ['class' => 'btn btn-default']) ?>
             <?= ($model->status < $model::STATUS_RELEASED) ? Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) : '' ?>
+            <?=
+            ($model->status == $model::STATUS_RELEASED) ?
+                    Html::a('Cancel', ['reverse', 'id' => $model->id], [
+                        'class' => 'btn btn-warning', 'data' => [
+                            'confirm' => 'Are you sure you want to cancel this item?',
+                            'method' => 'post',
+                ]]) : ''
+            ?>
             <?=
             ($model->status < $model::STATUS_RELEASED) ?
                     Html::a('Delete', ['delete', 'id' => $model->id], [
@@ -38,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['class' => 'table'],
             'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
             'attributes' => [
-                'id',
+                //'id',
                 'number',
                 'GlDate',
                 [
@@ -63,7 +71,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'reff_type',
                 'reff_id',
                 'description',
-                'nmStatus',
+                [                      // the owner name of the model
+                    'label' => 'Status',
+                    'format' => 'raw',
+                    'value' => ($model->status == $model::STATUS_DRAFT) ? '<span class="badge bg-yellow">' . $model->nmStatus . '</span>' : (($model->status == $model::STATUS_CANCELED) ? '<span class="badge bg-red">' . $model->nmStatus . '</span>' : '<span class="badge bg-green">' . $model->nmStatus . '</span>')
+                ],
             ],
         ])
         ?>
@@ -84,8 +96,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     $inputArea .= Html::beginTag('tr');
                     $inputArea .= Html::tag('th', 'Code', ['style' => 'width:20%;']);
                     $inputArea .= Html::tag('th', 'Account Name');
-                    $inputArea .= Html::tag('th', 'Debit', ['style' => 'width:16%;']);
-                    $inputArea .= Html::tag('th', 'Credit', ['style' => 'width:16%;']);
+                    $inputArea .= Html::tag('th', 'Debit', ['style' => 'width:16%;background-color:#FAFAFA; border-right:2px solid white;']);
+                    $inputArea .= Html::tag('th', 'Credit', ['style' => 'width:16%;background-color:#FAFAFA;']);
                     $inputArea .= Html::endTag('tr');
                     $inputArea .= Html::endTag('thead');
                     echo $inputArea;

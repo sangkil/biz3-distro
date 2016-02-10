@@ -33,6 +33,7 @@ class GlHeader extends \yii\db\ActiveRecord {
 
     const STATUS_DRAFT = 10;
     const STATUS_RELEASED = 20;
+    const STATUS_CANCELED = 30;
 
     /**
      * @inheritdoc
@@ -46,7 +47,7 @@ class GlHeader extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['date', 'periode_id', 'branch_id', 'reff_type', 'description', 'status'], 'required'],
+            [['glDetails', 'date', 'periode_id', 'branch_id', 'reff_type', 'description', 'status'], 'required'],
             [['number'], 'autonumber', 'format' => 'GL' . date('Ym') . '.?', 'digit' => 4],
             [['date', 'GlDate'], 'safe'],
             [['periode_id', 'branch_id', 'reff_type', 'reff_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
@@ -120,9 +121,7 @@ class GlHeader extends \yii\db\ActiveRecord {
             if ($totAmount != 0) {
                 $this->addError($attribute, "Total Debit must equal to Total Credit");
             }
-        } else {
-            $this->addError($attribute, "Detail Journal can't be blank");
-        }
+        } 
     }
 
     public function validateOpenPeriode($attribute) {

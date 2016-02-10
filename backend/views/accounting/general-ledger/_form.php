@@ -34,7 +34,7 @@ use backend\models\master\Branch;
             <li class="active"><a href="#items" data-toggle="tab" aria-expanded="false">Items</a></li>
             <li><a href="#notes" data-toggle="tab" aria-expanded="false">Notes</a></li>        
             <li class="pull-right">    
-                <?= ($model->status < $model::STATUS_RELEASED)? Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']):'' ?>
+                <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
             </li>             
         </ul> 
         <div class="tab-content" >
