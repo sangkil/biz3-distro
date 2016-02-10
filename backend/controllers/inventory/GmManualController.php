@@ -73,6 +73,7 @@ class GmManualController extends Controller
     {
         $model = new GoodsMovement();
 
+        $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {
             $model->status = GoodsMovement::STATUS_DRAFT;
             $transaction = Yii::$app->db->beginTransaction();
@@ -102,10 +103,10 @@ class GmManualController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if($model->status != GoodsMovement::STATUS_DRAFT){
+        if ($model->status != GoodsMovement::STATUS_DRAFT) {
             throw new UserException('Tidak bisa diupdate');
         }
-        if($model->vendor){
+        if ($model->vendor) {
             $model->vendor_name = $model->vendor->name;
         }
         if ($model->load(Yii::$app->request->post())) {
@@ -136,7 +137,7 @@ class GmManualController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        if($model->status != GoodsMovement::STATUS_DRAFT){
+        if ($model->status != GoodsMovement::STATUS_DRAFT) {
             throw new UserException('Tidak bisa didelete');
         }
         $model->delete();
@@ -153,7 +154,7 @@ class GmManualController extends Controller
     public function actionConfirm($id)
     {
         $model = $this->findModel($id);
-        if($model->status != GoodsMovement::STATUS_DRAFT){
+        if ($model->status != GoodsMovement::STATUS_DRAFT) {
             throw new UserException('Tidak bisa diconfirm');
         }
         $model->status = GoodsMovement::STATUS_APPLIED;
@@ -196,7 +197,7 @@ class GmManualController extends Controller
     public function actionRollback($id)
     {
         $model = $this->findModel($id);
-        if($model->status != GoodsMovement::STATUS_APPLIED){
+        if ($model->status != GoodsMovement::STATUS_APPLIED) {
             throw new UserException('Tidak bisa dirollback');
         }
         $model->status = GoodsMovement::STATUS_DRAFT;
@@ -234,7 +235,9 @@ class GmManualController extends Controller
     {
         $response = Yii::$app->response;
         $response->format = 'json';
-        return Product::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+        return Product::find()
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
                 ->asArray()->limit(10)->all();
     }
 
@@ -242,7 +245,9 @@ class GmManualController extends Controller
     {
         $response = Yii::$app->response;
         $response->format = 'json';
-        return Vendor::find()->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+        return Vendor::find()
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
                 ->limit(10)->asArray()->all();
     }
 

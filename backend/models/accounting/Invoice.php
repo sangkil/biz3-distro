@@ -42,12 +42,13 @@ class Invoice extends \yii\db\ActiveRecord
     const TYPE_IN = 10;
     const TYPE_OUT = 20;
 
+    public $vendor_name;
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'invoice';
+        return '{{%invoice}}';
     }
 
     /**
@@ -59,6 +60,7 @@ class Invoice extends \yii\db\ActiveRecord
             [['Date', 'DueDate', 'type', 'vendor_id', 'status', 'value'], 'required'],
             [['type', 'vendor_id', 'reff_type', 'reff_id', 'status'], 'integer'],
             [['value', 'tax_value'], 'number'],
+            [['vendor_name'], 'safe'],
             [['number'], 'autonumber', 'format' => 'IV' . date('Ymd') . '.?', 'digit' => 4],
             [['items'], 'required'],
             [['items'], 'relationUnique', 'targetAttributes' => ['item_type', 'item_id']],

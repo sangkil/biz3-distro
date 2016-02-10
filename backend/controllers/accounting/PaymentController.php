@@ -9,7 +9,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\base\UserException;
-use backend\models\accounting\Invoice;
 
 /**
  * PaymentController implements the CRUD actions for Payment model.
@@ -142,7 +141,7 @@ class PaymentController extends Controller
         }
 
         $query = (new \yii\db\Query())
-            ->select(['iv.id', 'iv.number', 'iv.date', 'paid' => 'sum([[pd.value]])'])
+            ->select(['iv.id', 'iv.number', 'iv.date', 'iv.value', 'paid' => 'sum([[pd.value]])'])
             ->from(['iv' => '{{%invoice}}'])
             ->leftJoin('{{%payment_dtl}} pd', '[[pd.invoice_id]]=[[iv.id]]')
             ->leftJoin('{{%payment}} p', '[[p.id]]=[[pd.payment_id]]')

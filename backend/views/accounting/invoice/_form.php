@@ -3,10 +3,22 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use backend\models\accounting\Invoice;
+use yii\jui\JuiAsset;
+use yii\helpers\Url;
+use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $model Invoice */
 /* @var $form ActiveForm */
+
+JuiAsset::register($this);
+$opts = json_encode([
+    'product_url' => Url::to(['product-list']),
+    'vendor_url' => Url::to(['vendor-list']),
+    ]);
+
+$this->registerJs("var biz = $opts;", View::POS_HEAD);
+$this->registerJs($this->render('_script.js'));
 ?>
 
 <div class="invoice-form">
@@ -49,7 +61,8 @@ use backend\models\accounting\Invoice;
         <div class="col-md-6">
             <div class="box">
                 <div class="box-body">
-                    <?= $form->field($model, 'vendor_id')->textInput() ?>
+                    <?= $form->field($model, 'vendor_name')->textInput() ?>
+                    <?= Html::activeHiddenInput($model, 'vendor_id', ['id' => 'hidden-vendor_id']) ?>
                     <?= $form->field($model, 'tax_type')->textInput() ?>
                     <?= $form->field($model, 'tax_value')->textInput() ?>
                     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>

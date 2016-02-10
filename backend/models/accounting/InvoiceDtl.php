@@ -20,6 +20,8 @@ use Yii;
  */
 class InvoiceDtl extends \yii\db\ActiveRecord
 {
+    const TYPE_PRODUCT = 10;
+
     /**
      * @inheritdoc
      */
