@@ -5,6 +5,9 @@ namespace backend\models\inventory;
 use Yii;
 use backend\models\master\Warehouse;
 use backend\models\master\Vendor;
+use backend\models\master\ProductUom;
+use backend\models\master\ProductStock;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "goods_movement".
@@ -33,7 +36,6 @@ class GoodsMovement extends \yii\db\ActiveRecord
 
     use \mdm\converter\EnumTrait,
         \mdm\behaviors\ar\RelationTrait;
-    
     // status movement
     const STATUS_DRAFT = 10;
     const STATUS_APPLIED = 20;
@@ -42,7 +44,9 @@ class GoodsMovement extends \yii\db\ActiveRecord
     const TYPE_RECEIVE = 10;
     const TYPE_ISSUE = 20;
 
+    const SCENARIO_CHANGE_STATUS = 'change_status';
     public $vendor_name;
+
     /**
      * @inheritdoc
      */
@@ -60,9 +64,9 @@ class GoodsMovement extends \yii\db\ActiveRecord
             [['warehouse_id', 'Date', 'type', 'status'], 'required'],
             [['number'], 'autonumber', 'format' => 'GM' . date('Ymd') . '.?', 'digit' => 4],
             [['warehouse_id', 'type', 'reff_type', 'reff_id', 'vendor_id', 'status'], 'integer'],
-            [['items'], 'required'],
+            [['items'], 'required', 'except'=>  self::SCENARIO_CHANGE_STATUS],
             [['vendor_name'], 'safe'],
-            [['items'], 'relationUnique', 'targetAttributes' => 'product_id'],
+            [['items'], 'relationUnique', 'targetAttributes' => 'product_id', 'except'=>  self::SCENARIO_CHANGE_STATUS],
             [['description'], 'string', 'max' => 255],
         ];
     }
@@ -133,6 +137,54 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return $this->getLogical('status', 'STATUS_');
     }
 
+    /**
+     *
+     * @return boolean
+     */
+    public function doApply()
+    {
+        $wh_id = $this->warehouse_id;
+        foreach ($this->items as $item) {
+            $product_id = $item->product_id;
+            $pu = ProductUom::findOne(['product_id' => $product_id, 'uom_id' => $item->uom_id]);
+            $qty = $item->qty * ($pu ? $pu->isi : 1);
+            $ps = ProductStock::findOne(['product_id' => $product_id, 'warehouse_id' => $wh_id]);
+            if ($ps) {
+                $ps->qty = new Expression('[[qty]] + :added', [':added' => $qty]);
+            } else {
+                $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
+            }
+            if(!$ps->save(false)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function doRevert()
+    {
+        $wh_id = $this->warehouse_id;
+        foreach ($this->items as $item) {
+            $product_id = $item->product_id;
+            $pu = ProductUom::findOne(['product_id' => $product_id, 'uom_id' => $item->uom_id]);
+            $qty = $item->qty * ($pu ? $pu->isi : 1);
+            $ps = ProductStock::findOne(['product_id' => $product_id, 'warehouse_id' => $wh_id]);
+            if ($ps) {
+                $ps->qty = new Expression('[[qty]] - :added', [':added' => $qty]);
+            } else {
+                $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
+            }
+            if(!$ps->save(false)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function behaviors()
     {
         return[
@@ -146,6 +198,13 @@ class GoodsMovement extends \yii\db\ActiveRecord
             ],
             'yii\behaviors\BlameableBehavior',
             'yii\behaviors\TimestampBehavior',
+            [
+                'class' => 'backend\classes\StatusChangeBehavior',
+                'states' => [
+                    [self::STATUS_DRAFT, self::STATUS_APPLIED, 'doApply'],
+                    [self::STATUS_APPLIED, self::STATUS_DRAFT, 'doRevert'],
+                ]
+            ]
         ];
     }
 }
