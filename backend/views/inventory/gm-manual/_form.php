@@ -37,8 +37,8 @@ $this->registerJs($this->render('_script.js'));
             'options' => ['class' => 'form-control', 'style' => 'width:40%;']
         ])
         ?>
-        <?= $form->field($model, 'vendor_name')->textInput() ?>
-        <?= Html::activeHiddenInput($model, 'vendor_id', ['id' => 'hidden-vendor_id']) ?>
+        <?= $form->field($model, 'vendor_name')->textInput(['required'=>true]) ?>
+        <?= Html::activeHiddenInput($model, 'vendor_id') ?>
 
         <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 

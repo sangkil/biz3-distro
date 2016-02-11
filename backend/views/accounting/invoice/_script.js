@@ -34,7 +34,7 @@ $('#invoice-vendor_name')
     },
     select: function (event, ui) {
         $("#invoice-vendor_name").val(ui.item.name);
-        $('#hidden-vendor_id').val(ui.item.id);
+        $('#invoice-vendor_id').val(ui.item.id);
         return false;
     }
 })

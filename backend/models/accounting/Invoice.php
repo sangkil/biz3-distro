@@ -43,6 +43,7 @@ class Invoice extends \yii\db\ActiveRecord
     const TYPE_OUT = 20;
 
     public $vendor_name;
+
     /**
      * @inheritdoc
      */
@@ -62,7 +63,6 @@ class Invoice extends \yii\db\ActiveRecord
             [['value', 'tax_value'], 'number'],
             [['vendor_name'], 'safe'],
             [['number'], 'autonumber', 'format' => 'IV' . date('Ymd') . '.?', 'digit' => 4],
-            [['items'], 'required'],
             [['items'], 'relationUnique', 'targetAttributes' => ['item_type', 'item_id']],
             [['description', 'tax_type'], 'string', 'max' => 64],
         ];
@@ -135,6 +135,24 @@ class Invoice extends \yii\db\ActiveRecord
     public function getPayments()
     {
         return $this->hasMany(Payment::className(), ['id' => 'payment_id'])->viaTable('payment_dtl', ['invoice_id' => 'id']);
+    }
+    private $_paid;
+
+    public function getPaid()
+    {
+        if ($this->_paid === null) {
+            $this->_paid = (new \yii\db\Query())
+                ->from('{{%payment_dtl}} pd')
+                ->innerJoin('{{%payment}} p', '[[p.id]]=[[pd.payment_id]]')
+                ->where(['invoice_id' => $this->id, 'p.status' => Payment::STATUS_CLOSE])
+                ->sum('value');
+        }
+        return $this->_paid;
+    }
+
+    public function getSisa()
+    {
+        return $this->value - $this->getPaid();
     }
 
     public function behaviors()

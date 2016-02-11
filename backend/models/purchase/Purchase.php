@@ -35,6 +35,9 @@ class Purchase extends \yii\db\ActiveRecord
     const STATUS_DRAFT = 10;
     const STATUS_APPLIED = 20;
     const STATUS_CLOSE = 90;
+
+    public $vendor_name;
+
     /**
      * @inheritdoc
      */
@@ -51,6 +54,7 @@ class Purchase extends \yii\db\ActiveRecord
         return [
             [['vendor_id', 'branch_id', 'Date', 'value', 'status'], 'required'],
             [['vendor_id', 'branch_id', 'status'], 'integer'],
+            [['vendor_name'], 'safe'],
             [['number'], 'autonumber', 'format' => 'PU' . date('Ymd') . '.?', 'digit' => 4],
             [['items'], 'required'],
             [['items'], 'relationUnique', 'targetAttributes' => 'product_id'],

@@ -1,18 +1,30 @@
 <?php
 
+use yii\web\View;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use backend\models\purchase\Purchase;
 use backend\models\master\Branch;
+use yii\jui\JuiAsset;
+use yii\helpers\Url;
 
-/* @var $this yii\web\View */
+/* @var $this View */
 /* @var $model Purchase */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $form ActiveForm */
+
+JuiAsset::register($this);
+$opts = json_encode([
+    'product_url' => Url::to(['list-product']),
+    'vendor_url' => Url::to(['list-vendor']),
+    ]);
+
+$this->registerJs("var biz = $opts;", View::POS_HEAD);
+$this->registerJs($this->render('_script.js'));
 ?>
 
 <div class="purchase-form">
 
-        <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(); ?>
 
     <?= Html::errorSummary($model); ?>
     <div class="row">
@@ -28,7 +40,8 @@ use backend\models\master\Branch;
             <div class="box">
                 <div class="box-body">
                     <?= $form->field($model, 'number')->staticControl() ?>
-                    <?= $form->field($model, 'vendor_id')->textInput() ?>
+                    <?= $form->field($model, 'vendor_name')->textInput(['required' => true]) ?>
+                    <?= Html::activeHiddenInput($model, 'vendor_id') ?>
                     <?=
                     $form->field($model, 'branch_id')->dropDownList(Branch::selectOptions())
                     ?>

@@ -61,8 +61,8 @@ $this->registerJs($this->render('_script.js'));
         <div class="col-md-6">
             <div class="box">
                 <div class="box-body">
-                    <?= $form->field($model, 'vendor_name')->textInput() ?>
-                    <?= Html::activeHiddenInput($model, 'vendor_id', ['id' => 'hidden-vendor_id']) ?>
+                    <?= $form->field($model, 'vendor_name')->textInput(['required' => true]) ?>
+                    <?= Html::activeHiddenInput($model, 'vendor_id') ?>
                     <?= $form->field($model, 'tax_type')->textInput() ?>
                     <?= $form->field($model, 'tax_value')->textInput() ?>
                     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
