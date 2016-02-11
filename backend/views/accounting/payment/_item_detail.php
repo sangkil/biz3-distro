@@ -10,8 +10,8 @@ use yii\helpers\Html;
     <?= Html::activeHiddenInput($model, "[$key]invoice_id", ['data-field' => 'invoice_id', 'id' => false]) ?>
 </td>
 <td>
-    <span data-field="invoice"></span>
-    &nbsp; Sisa: <span data-field="sisa"></span>
+    <span data-field="invoice"><?= Html::getAttributeValue($model, "[$key]invoice[number]")?></span>
+    &nbsp; Sisa: <span data-field="sisa"><?= Html::getAttributeValue($model, "[$key]invoice[sisa]")?></span>
 </td>
 <td class="items" style="width: 45%">
     <?=

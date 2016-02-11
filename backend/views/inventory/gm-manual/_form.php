@@ -59,7 +59,7 @@ $this->registerJs($this->render('_script.js'));
                     ])
                     ?>
                     <?= $form->field($model, 'vendor_name')->textInput() ?>
-                    <?= Html::activeHiddenInput($model, 'vendor_id', ['id' => 'hidden-vendor_id']) ?>
+                    <?= Html::activeHiddenInput($model, 'vendor_id') ?>
 
                     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
                 </div>

@@ -3,6 +3,7 @@
 namespace backend\models\accounting;
 
 use Yii;
+use backend\models\master\Vendor;
 
 /**
  * This is the model class for table "payment".
@@ -20,6 +21,7 @@ use Yii;
  *
  * @property PaymentDtl[] $items
  * @property Invoice[] $invoices
+ * @property Vendor $vendor
  */
 class Payment extends \yii\db\ActiveRecord
 {
@@ -37,6 +39,8 @@ class Payment extends \yii\db\ActiveRecord
     const METHOD_CASH = 10;
     const METHOD_BANK = 20;
 
+    public $vendor_name;
+
     /**
      * @inheritdoc
      */
@@ -53,11 +57,23 @@ class Payment extends \yii\db\ActiveRecord
         return [
             [['Date', 'type', 'payment_type', 'vendor_id', 'status'], 'required'],
             [['number'], 'autonumber', 'format' => 'PY' . date('Ymd') . '.?', 'digit' => 4],
+            [['vendor_name'], 'safe'],
             [['items'], 'required'],
+            [['items'], 'checkVendorAndType'],
             [['items'], 'relationUnique', 'targetAttributes' => 'invoice_id'],
             [['type', 'vendor_id', 'payment_type', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['number'], 'string', 'max' => 16],
         ];
+    }
+
+    public function checkVendorAndType()
+    {
+        foreach ($this->items as $item) {
+            if ($item->invoice->vendor_id != $this->vendor_id || $item->invoice->vendor_id != $this->vendor_id) {
+                $this->addError('items', 'Vendor atau type invoice tidak sama dengan vendor atau type payment');
+                break;
+            }
+        }
     }
 
     /**
@@ -86,7 +102,7 @@ class Payment extends \yii\db\ActiveRecord
         return $this->hasMany(PaymentDtl::className(), ['payment_id' => 'id']);
     }
 
-     /**
+    /**
      *
      * @param array $value
      */
@@ -110,12 +126,20 @@ class Payment extends \yii\db\ActiveRecord
         return $this->getLogical('payment_type', 'METHOD_');
     }
 
-   /**
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getInvoices()
     {
         return $this->hasMany(Invoice::className(), ['id' => 'invoice_id'])->viaTable('{{%payment_dtl}}', ['payment_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVendor()
+    {
+        return $this->hasOne(Vendor::className(), ['id' => 'vendor_id']);
     }
 
     public function behaviors()

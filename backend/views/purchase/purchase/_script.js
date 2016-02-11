@@ -22,3 +22,23 @@ $('#input-product').autocomplete({
         .append("<a>" + item.code + "<br>" + item.name + "</a>")
         .appendTo(ul);
 };
+
+$('#purchase-vendor_name')
+    .autocomplete({
+    minLength: 1,
+    source: biz.vendor_url,
+    focus: function (event, ui) {
+        $("#purchase-vendor_name").val(ui.item.name);
+        return false;
+    },
+    select: function (event, ui) {
+        $("#purchase-vendor_name").val(ui.item.name);
+        $('#purchase-vendor_id').val(ui.item.id);
+        return false;
+    }
+})
+    .autocomplete("instance")._renderItem = function (ul, item) {
+    return $("<li>")
+        .append("<a>" + item.code + "<br>" + item.name + "</a>")
+        .appendTo(ul);
+};

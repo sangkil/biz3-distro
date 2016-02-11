@@ -33,7 +33,7 @@ $('#goodsmovement-vendor_name')
     },
     select: function (event, ui) {
         $("#goodsmovement-vendor_name").val(ui.item.name);
-        $('#hidden-vendor_id').val(ui.item.id);
+        $('#goodsmovement-vendor_id').val(ui.item.id);
         return false;
     }
 })

@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\base\UserException;
+use backend\models\master\Vendor;
 
 /**
  * PaymentController implements the CRUD actions for Payment model.
@@ -65,6 +66,7 @@ class PaymentController extends Controller
         $model = new Payment();
 
         $model->status = Payment::STATUS_DRAFT;
+        $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
@@ -97,6 +99,9 @@ class PaymentController extends Controller
             throw new UserException('Tidak bisa diupdate');
         }
 
+        if ($model->vendor) {
+            $model->vendor_name = $model->vendor->name;
+        }
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
@@ -133,21 +138,36 @@ class PaymentController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionInvoiceList($type = null, $vendor = null, $term = '')
+    public function actionVendorList($term = '', $id = null)
+    {
+        $response = Yii::$app->response;
+        $response->format = 'json';
+        return Vendor::find()
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+                ->andFilterWhere(['id' => $id])
+                ->limit(10)->asArray()->all();
+    }
+
+    public function actionInvoiceList($type = '', $vendor = '', $term = '')
     {
         Yii::$app->response->format = 'json';
-        if (empty($type) || empty($vendor)) {
-            return[];
-        }
 
+        $queryPD = (new \yii\db\Query())
+            ->select(['pd.invoice_id', 'pd.value'])
+            ->from(['pd' => '{{%payment_dtl}}'])
+            ->innerJoin('{{%payment}} p', '[[p.id]]=[[pd.payment_id]]')
+            ->where(['p.status' => Payment::STATUS_CLOSE]);
+        
         $query = (new \yii\db\Query())
-            ->select(['iv.id', 'iv.number', 'iv.date', 'iv.value', 'paid' => 'sum([[pd.value]])'])
+            ->select(['iv.id', 'iv.number', 'iv.date', 'iv.value', 'paid' => 'sum([[pd.value]])',
+                'iv.vendor_id', 'iv.type'])
             ->from(['iv' => '{{%invoice}}'])
-            ->leftJoin('{{%payment_dtl}} pd', '[[pd.invoice_id]]=[[iv.id]]')
-            ->leftJoin('{{%payment}} p', '[[p.id]]=[[pd.payment_id]]')
-            ->where(['iv.vendor_id' => $vendor, 'iv.type' => $type, 'p.status' => Payment::STATUS_CLOSE])
+            ->leftJoin(['pd' => $queryPD], '[[pd.invoice_id]]=[[iv.id]]')
+            ->andFilterWhere(['iv.vendor_id' => $vendor, 'iv.type' => $type])
             ->andFilterwhere(['like', 'LOWER([[iv.number]])', strtolower($term)])
             ->groupBy(['iv.id']);
+
         return $query->all();
     }
 

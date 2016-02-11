@@ -1,13 +1,24 @@
 <?php
 
+use yii\web\View;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use backend\models\sales\Sales;
 use backend\models\master\Branch;
+use yii\jui\JuiAsset;
+use yii\helpers\Url;
 
-/* @var $this yii\web\View */
+/* @var $this View */
 /* @var $model Sales */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $form ActiveForm */
+
+JuiAsset::register($this);
+$opts = json_encode([
+    'product_url' => Url::to(['list-product']),
+    ]);
+
+$this->registerJs("var biz = $opts;", View::POS_HEAD);
+$this->registerJs($this->render('_script.js'));
 ?>
 
 <div class="sales-form">
