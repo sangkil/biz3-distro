@@ -72,7 +72,7 @@ class Uom extends \yii\db\ActiveRecord {
     }
 
     public static function selectOptions() {
-        return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
+        return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'code');
     }
 
     public function behaviors() {

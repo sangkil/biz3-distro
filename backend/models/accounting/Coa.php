@@ -32,8 +32,12 @@ class Coa extends \yii\db\ActiveRecord {
 
     const BALANCE_DEBIT = 'D';
     const BALANCE_KREDIT = 'K';
+     
+    const TYPE_REAL = 1;
+    const TYPE_NOMINAL = 2;
 
-    /**
+
+        /**
      * @inheritdoc
      */
     public static function tableName() {
@@ -102,6 +106,10 @@ class Coa extends \yii\db\ActiveRecord {
 
     public function getNmBalance() {
         return $this->getLogical('normal_balance', 'BALANCE_');
+    }
+    
+    public function getAccType() {
+        return $this->getLogical('type', 'TYPE_');
     }
 
     public static function find() {

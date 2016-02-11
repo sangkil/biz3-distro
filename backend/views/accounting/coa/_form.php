@@ -16,10 +16,10 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'parent_id')->dropDownList($model->selectOptions()) ?>
+        <?= $form->field($model, 'parent_id')->dropDownList($model->selectOptions(),['prompt'=>'--no parent--']) ?>
     </div>
     <div class="col-lg-8">
-        <?= $form->field($model, 'type')->textInput(['style' => 'width:40%;']) ?>
+        <?= $form->field($model, 'type')->dropDownList($model::enums('TYPE_'), ['style' => 'width:20%;']) ?>
 
         <?= $form->field($model, 'normal_balance')->dropDownList($model::enums('BALANCE_'), ['style' => 'width:40%;']) ?>
 

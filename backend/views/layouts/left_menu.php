@@ -96,10 +96,11 @@ use yii\helpers\Url;
                         </ul>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-check"></i> Stock Management <i class="fa fa-angle-left pull-right"></i></a>
+                        <a href="#"><i class="fa fa-check"></i> Stock Mangmt<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-check"></i> Adjust by Opname</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> Adjustment</a></li>                           
+                            <li><a href="<?= Url::to(['/inventory/product-stock']); ?>"><i class="fa fa-check"></i> Stocks</a></li>
+                            <li><a href="#"><i class="fa fa-check"></i> Total Opname</a></li>
+                            <li><a href="#"><i class="fa fa-check"></i> Stock Adjustment</a></li>                           
                         </ul>
                     </li>
                 </ul>
@@ -111,26 +112,19 @@ use yii\helpers\Url;
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    <li><a href="<?= Url::to(['/accounting/coa']); ?>"><i class="fa fa-check"></i> COA</a></li>
+                    <li><a href="<?= Url::to(['/accounting/acc-periode']); ?>"><i class="fa fa-check"></i> Fi Periodes</a></li>                    
+                    <li><a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> Journals</a></li>
+                    <li><a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> General Ledger</a></li>
                     <li>
-                        <a href="<?= Url::to(['/accounting/coa']); ?>"><i class="fa fa-check"></i> COA</a>
-                    </li>
-                    <li>
-                        <a href="<?= Url::to(['/accounting/acc-periode']); ?>"><i class="fa fa-check"></i> Fi Periodes</a>
-                    </li>
-                    
-                    <li>
-                        <a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> General Journal</a>
-                    </li>
-<!--                    <li>
-                        <a href="#"><i class="fa fa-check"></i> Cash In<i class="fa fa-angle-left pull-right"></i></a>
+                        <a href="#"><i class="fa fa-check"></i> Invoices<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-check"></i> Penerimaan SO</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> Piutang Karyawan</a></li> 
-                            <li><a href="#"><i class="fa fa-check"></i> Penerimaan Lain</a></li>                          
+                            <li><a href="#"><i class="fa fa-check"></i> Supplier Inv</a></li>
+                            <li><a href="#"><i class="fa fa-check"></i> Customer Inv</a></li>                        
                         </ul>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-check"></i> Cash Out<i class="fa fa-angle-left pull-right"></i></a>
+                        <a href="#"><i class="fa fa-check"></i> Payment<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
                             <li><a href="#"><i class="fa fa-check"></i> Biaya-biaya</a></li>
                             <li><a href="#"><i class="fa fa-check"></i> Pembelian Asset</a></li>  
@@ -139,23 +133,6 @@ use yii\helpers\Url;
                             <li><a href="#"><i class="fa fa-check"></i> Prive Owner</a></li>                            
                         </ul>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa fa-check"></i> Bank In<i class="fa fa-angle-left pull-right"></i></a>
-                        <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-check"></i> Giro SO</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> Clearing Giro</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> Transfer SO</a></li>  
-                            <li><a href="#"><i class="fa fa-check"></i> Transfer Lain</a></li>           
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-check"></i> Bank Out<i class="fa fa-angle-left pull-right"></i></a>
-                        <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-check"></i> Penarikan Tunai</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> ...</a></li>  
-                            <li><a href="#"><i class="fa fa-check"></i> ...</a></li>                          
-                        </ul>
-                    </li>-->
                 </ul>
             </li> 
             <li class="treeview">
