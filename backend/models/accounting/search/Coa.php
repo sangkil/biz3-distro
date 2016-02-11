@@ -46,7 +46,8 @@ class Coa extends CoaModel
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination'=>false
+            'pagination'=>false,
+            'sort' =>false
         ]);
 
         $this->load($params);

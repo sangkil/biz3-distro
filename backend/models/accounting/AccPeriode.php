@@ -83,7 +83,51 @@ class AccPeriode extends \yii\db\ActiveRecord {
     public static function selectOptions($type = 'open') {
         return ArrayHelper::map(static::find()->$type()->asArray()->all(), 'id', 'name');
     }
+
+    public function beforeSave($insert) {
+        parent::beforeSave($insert);
+        //Insert New Record
+        if($this->isNewRecord){
+            $this->status = self::STATUS_OPEN;
+            return true;
+        }
+        
+        $oldPeriode = $this->findOne($this->id);
+        
+        //Closing
+        if ($this->status == self::STATUS_CLOSE && $oldPeriode->status == self::STATUS_OPEN) {
+            $cekBfor = $this->find()->where('status=:dstatus AND id<:did', [':dstatus' => self::STATUS_OPEN, ':did' => $this->id])->one();
+            if ($cekBfor) {
+                $this->status = $oldPeriode->status;
+                $this->addError('status', 'Periode hanya dapat ditutup secara berurutan.');
+
+                return false;
+            }
+        }
+
+        //Cancel Closing
+        if ($this->status == self::STATUS_OPEN && $oldPeriode->status == self::STATUS_CLOSE) {
+            $cekAfter = $this->find()->where('status=:dstatus AND id>:did', [':dstatus' => self::STATUS_CLOSE, ':did' => $this->id])->one();
+            if ($cekAfter) {
+                $this->status = $oldPeriode->status;
+                $this->addError('status', 'Periode yang telah ditutup hanya dapat dibatalkan jika periode sesudahnya masih open.');
+
+                return false;
+            }
+        }
+        return true;
+    }
     
+    public function beforeDelete() {
+        parent::beforeDelete();
+        $ada = GlHeader::find()->where('periode_id = :did',[':did'=>  $this->id])->exists();
+        if($ada){
+            $this->addError('id', $this->name. 'telah digunakan dalam journal');
+            return false;
+        }
+        return true;
+    }
+
     public function behaviors() {
         return [
             [

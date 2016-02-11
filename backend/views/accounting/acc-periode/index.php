@@ -50,7 +50,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'status',
-                'value' => 'nmStatus',
+                'format'=>'raw',
+                'value' => function($model){
+                    return ($model->status == $model::STATUS_OPEN)?
+                    Html::tag('span',$model->nmStatus,['class'=>'badge bg-green']):
+                        Html::tag('span',$model->nmStatus,['class'=>'badge bg-red']);
+                },
                 'filter' => $searchModel::enums('STATUS_')
             ],
             // 'created_at',

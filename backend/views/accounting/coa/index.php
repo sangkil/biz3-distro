@@ -53,12 +53,14 @@ $this->params['breadcrumbs'][] = $this->title;
             //'parent_id',            
             [
                 'attribute' => 'normal_balance',
+                'value'=>'nmBalance',
                 'contentOptions' => ['style' => 'width:10%;'],
-                'filter'=>['D'=>'Debit','K'=>'Kredit']
+                'filter'=>$searchModel::enums('BALANCE_')
             ],
             [
                 'attribute' => 'type',
                 'value'=>'accType',
+                'contentOptions' => ['style' => 'width:10%;'],
                 'filter'=>$searchModel::enums('TYPE_')
             ],
             // 'created_at',

@@ -33,7 +33,7 @@ class Coa extends \yii\db\ActiveRecord {
     const BALANCE_DEBIT = 'D';
     const BALANCE_KREDIT = 'K';
      
-    const TYPE_REAL = 1;
+    const TYPE_RIIL = 1;
     const TYPE_NOMINAL = 2;
 
 
