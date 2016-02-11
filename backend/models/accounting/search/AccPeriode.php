@@ -39,9 +39,9 @@ class AccPeriode extends AccPeriodeModel {
      */
     public function search($params) {
         $query = AccPeriodeModel::find();
-
+        $query->orderBy('id ASC');
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => $query
         ]);
 
         $this->load($params);
