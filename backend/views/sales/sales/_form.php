@@ -14,7 +14,8 @@ use yii\helpers\Url;
 
 JuiAsset::register($this);
 $opts = json_encode([
-    'product_url' => Url::to(['list-product']),
+    'product_url' => Url::to(['product-list']),
+    'vendor_url' => Url::to(['vendor-list']),
     ]);
 
 $this->registerJs("var biz = $opts;", View::POS_HEAD);
@@ -39,6 +40,7 @@ $this->registerJs($this->render('_script.js'));
             <div class="box">
                 <div class="box-body">
                     <?= $form->field($model, 'number')->staticControl() ?>
+                    <?= $form->field($model, 'vendor_name')->textInput() ?>
                     <?= $form->field($model, 'vendor_id')->textInput() ?>
                     <?=
                     $form->field($model, 'branch_id')->dropDownList(Branch::selectOptions())

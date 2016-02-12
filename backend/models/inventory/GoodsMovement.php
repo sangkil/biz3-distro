@@ -43,8 +43,9 @@ class GoodsMovement extends \yii\db\ActiveRecord
     // type movement
     const TYPE_RECEIVE = 10;
     const TYPE_ISSUE = 20;
-
+    // scenario
     const SCENARIO_CHANGE_STATUS = 'change_status';
+
     public $vendor_name;
 
     /**
@@ -64,9 +65,9 @@ class GoodsMovement extends \yii\db\ActiveRecord
             [['warehouse_id', 'Date', 'type', 'status'], 'required'],
             [['number'], 'autonumber', 'format' => 'GM' . date('Ymd') . '.?', 'digit' => 4],
             [['warehouse_id', 'type', 'reff_type', 'reff_id', 'vendor_id', 'status'], 'integer'],
-            [['items'], 'required', 'except'=>  self::SCENARIO_CHANGE_STATUS],
+            [['items'], 'required', 'except' => self::SCENARIO_CHANGE_STATUS],
             [['vendor_name'], 'safe'],
-            [['items'], 'relationUnique', 'targetAttributes' => 'product_id', 'except'=>  self::SCENARIO_CHANGE_STATUS],
+            [['items'], 'relationUnique', 'targetAttributes' => 'product_id', 'except' => self::SCENARIO_CHANGE_STATUS],
             [['description'], 'string', 'max' => 255],
         ];
     }
@@ -154,7 +155,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
             } else {
                 $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
             }
-            if(!$ps->save(false)){
+            if (!$ps->save(false)) {
                 return false;
             }
         }
@@ -178,7 +179,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
             } else {
                 $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
             }
-            if(!$ps->save(false)){
+            if (!$ps->save(false)) {
                 return false;
             }
         }

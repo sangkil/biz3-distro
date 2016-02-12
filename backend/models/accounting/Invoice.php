@@ -39,8 +39,8 @@ class Invoice extends \yii\db\ActiveRecord
     const STATUS_APPLIED = 20;
     const STATUS_CLOSE = 90;
     // type invoice
-    const TYPE_IN = 10;
-    const TYPE_OUT = 20;
+    const TYPE_SUPPLIER = 10;
+    const TYPE_CUSTOMER = 20;
 
     public $vendor_name;
 
