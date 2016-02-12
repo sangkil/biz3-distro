@@ -2,47 +2,41 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-use backend\models\inventory\GoodsMovement;
-use backend\models\master\Warehouse;
+use backend\models\inventory\Transfer;
+use backend\models\master\Branch;
 use yii\jui\JuiAsset;
 use yii\helpers\Url;
 use yii\web\View;
 
 /* @var $this yii\web\View */
-/* @var $model GoodsMovement */
+/* @var $model Transfer */
 /* @var $form ActiveForm */
 
 JuiAsset::register($this);
 $opts = json_encode([
     'product_url' => Url::to(['product-list']),
-    'vendor_url' => Url::to(['vendor-list']),
     ]);
 
 $this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
 ?>
 
-<div class="goods-movement-form">
+<div class="transfer-form">
     <?= Html::errorSummary($model); ?>
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-md-4">
             <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:40%;']) ?>
-            <?= $form->field($model, 'type')->dropDownList(GoodsMovement::enums('TYPE_'), ['style' => 'width:60%;']) ?>
-            <?= $form->field($model, 'warehouse_id')->dropDownList(Warehouse::selectOptions(), ['style' => 'width:60%;']) ?>
-        </div>
-        <div class="col-md-4">
             <?=
             $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
                 'dateFormat' => 'dd-MM-yyyy',
                 'options' => ['class' => 'form-control', 'style' => 'width:40%;']
             ])
             ?>
-            <?= $form->field($model, 'vendor_name')->textInput(['required' => true]) ?>
-            <?= Html::activeHiddenInput($model, 'vendor_id') ?>
-
-            <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
-
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'branch_id')->dropDownList(Branch::selectOptions(), ['style' => 'width:60%;']) ?>
+            <?= $form->field($model, 'branch_dest_id')->dropDownList(Branch::selectOptions(), ['style' => 'width:60%;']) ?>
         </div>
         <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
             <ul class="nav nav-tabs">

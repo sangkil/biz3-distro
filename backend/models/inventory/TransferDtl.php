@@ -3,6 +3,8 @@
 namespace backend\models\inventory;
 
 use Yii;
+use backend\models\master\Product;
+use backend\models\master\Uom;
 
 /**
  * This is the model class for table "transfer_dtl".
@@ -15,9 +17,11 @@ use Yii;
  * @property double $total_receive
  *
  * @property Transfer $transfer
+ * @property Product $product
  */
 class TransferDtl extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -32,10 +36,9 @@ class TransferDtl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['transfer_id', 'product_id', 'uom_id'], 'required'],
+            [['product_id', 'uom_id'], 'required'],
             [['transfer_id', 'product_id', 'uom_id'], 'integer'],
             [['qty', 'total_release', 'total_receive'], 'number'],
-            [['transfer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Transfer::className(), 'targetAttribute' => ['transfer_id' => 'id']],
         ];
     }
 
@@ -60,5 +63,21 @@ class TransferDtl extends \yii\db\ActiveRecord
     public function getTransfer()
     {
         return $this->hasOne(Transfer::className(), ['id' => 'transfer_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduct()
+    {
+        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUom()
+    {
+        return $this->hasOne(Uom::className(), ['id' => 'uom_id']);
     }
 }
