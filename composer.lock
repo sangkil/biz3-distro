@@ -141,36 +141,22 @@
         },
         {
             "name": "bower-asset/jquery",
-            "version": "2.1.4",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jquery/jquery-dist.git",
-                "reference": "7751e69b615c6eca6f783a81e292a55725af6b85"
+                "reference": "6fc01e29bdad0964f62ef56d01297039cdcadbe5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/7751e69b615c6eca6f783a81e292a55725af6b85",
-                "reference": "7751e69b615c6eca6f783a81e292a55725af6b85",
+                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/6fc01e29bdad0964f62ef56d01297039cdcadbe5",
+                "reference": "6fc01e29bdad0964f62ef56d01297039cdcadbe5",
                 "shasum": ""
-            },
-            "require-dev": {
-                "bower-asset/qunit": "1.14.0",
-                "bower-asset/requirejs": "2.1.10",
-                "bower-asset/sinon": "1.8.1",
-                "bower-asset/sizzle": "2.1.1-patch2"
             },
             "type": "bower-asset-library",
             "extra": {
                 "bower-asset-main": "dist/jquery.js",
                 "bower-asset-ignore": [
-                    "**/.*",
-                    "build",
-                    "dist/cdn",
-                    "speed",
-                    "test",
-                    "*.md",
-                    "AUTHORS.txt",
-                    "Gruntfile.js",
                     "package.json"
                 ]
             },
@@ -178,6 +164,7 @@
                 "MIT"
             ],
             "keywords": [
+                "browser",
                 "javascript",
                 "jquery",
                 "library"
@@ -477,12 +464,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mdmsoft/yii2-ar-behaviors.git",
-                "reference": "95231384359f0018347d0cce715260f50e7d95e4"
+                "reference": "48da802ddd4a948bcbf5127702f60a807427f565"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mdmsoft/yii2-ar-behaviors/zipball/95231384359f0018347d0cce715260f50e7d95e4",
-                "reference": "95231384359f0018347d0cce715260f50e7d95e4",
+                "url": "https://api.github.com/repos/mdmsoft/yii2-ar-behaviors/zipball/48da802ddd4a948bcbf5127702f60a807427f565",
+                "reference": "48da802ddd4a948bcbf5127702f60a807427f565",
                 "shasum": ""
             },
             "require": {
@@ -517,7 +504,7 @@
                 "query scope",
                 "yii2"
             ],
-            "time": "2016-02-09 00:58:47"
+            "time": "2016-02-11 14:27:39"
         },
         {
             "name": "mdmsoft/yii2-autonumber",
@@ -717,12 +704,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "1800d3840b098fc6e936852fa84b8c1b1a0a2e57"
+                "reference": "abb6d386b71fe4d30d028c293202223311162dd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/1800d3840b098fc6e936852fa84b8c1b1a0a2e57",
-                "reference": "1800d3840b098fc6e936852fa84b8c1b1a0a2e57",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/abb6d386b71fe4d30d028c293202223311162dd2",
+                "reference": "abb6d386b71fe4d30d028c293202223311162dd2",
                 "shasum": ""
             },
             "require": {
@@ -803,7 +790,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2016-02-10 22:42:43"
+            "time": "2016-02-11 15:39:25"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
