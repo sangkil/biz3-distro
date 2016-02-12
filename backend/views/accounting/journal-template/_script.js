@@ -6,21 +6,12 @@
 $(function() {
     $('#dcode').autocomplete({
         minLength: 0,
-        source: biz.gl_url,
-        focus: function(event, ui) {
-            $("#dname").val(ui.item.name);
-            return false;
-        },
+        source: biz.coa_url,
         select: function(event, ui) {
             $('#did').val(ui.item.id);
             $('#dcode').val(ui.item.code);
             $('#dname').val(ui.item.name);
-            $('#dbalance').val(ui.item.name);
-            if (ui.item.normal_balance === 'D') {
-                $('#ddebit').focus();
-            } else {
-                $('#dcredit').focus();
-            }
+            $('#dbalance').focus();            
             return false;
         }
     }).autocomplete("instance")._renderItem = function(ul, item) {
@@ -31,25 +22,12 @@ $(function() {
 
     $('#dname').autocomplete({
         minLength: 0,
-        source: biz.gl_url,
-        focus: function(event, ui) {
-            $("#dname").val(ui.item.name);
-            return false;
-        },
+        source: biz.coa_url,
         select: function(event, ui) {
             $('#did').val(ui.item.id);
             $('#dcode').val(ui.item.code);
             $('#dname').val(ui.item.name);
-            $('#dbalance').val(ui.item.name);
-            if (ui.item.normal_balance === 'D') {
-                $('#ddebit').focus();
-                $('#dcredit').css('background-color', 'whitesmoke');
-                $('#ddebit').css('background-color', 'white');
-            } else {
-                $('#dcredit').focus();
-                $('#ddebit').css('background-color', 'whitesmoke');
-                $('#dcredit').css('background-color', 'white');
-            }
+            $('#dbalance').focus();            
             return false;
         }
     }).autocomplete("instance")._renderItem = function(ul, item) {
@@ -81,13 +59,10 @@ $(function() {
     $(this).on('click', '#journal_add', function() {
         var $row = $('#detail-grid').mdmTabularInput('addRow');
         $row.find('span[data-field="coa_code"]').text($('#dcode').val());
-        $row.find('span[data-field="coa_name"]').text($('#dname').val());
-        //$row.find('span[data-field="debit"]').text($('#ddebit').val()).parent('td').css('background-color', '#FAFAFA').css('border-right', '2px solid white');
-        //$row.find('span[data-field="credit"]').text($('#dcredit').val()).parent('td').css('background-color', '#FAFAFA');
-
-        $row.find(':input[data-field="coa_id"]').val($('#did').val());
-        $row.find(':input[data-field="idebit"]').val($('#ddebit').val());
-        $row.find(':input[data-field="icredit"]').val($('#dcredit').val());
+        $row.find('span[data-field="coa_name"]').text($('#dname').val());       
+        $row.find(':input[data-field="coa_id"]').val($('#did').val());      
+        $row.find('span[data-field="ddk"]').text($('#dbalance').val());      
+        $row.find(':input[data-field="idk"]').val($('#dbalance').val());
         $row.find(':input[data-field="btn-minus"]').addClass('btn-minus');
         clearInput();
     });

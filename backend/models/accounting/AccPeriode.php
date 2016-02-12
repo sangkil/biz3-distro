@@ -87,13 +87,13 @@ class AccPeriode extends \yii\db\ActiveRecord {
     public function beforeSave($insert) {
         parent::beforeSave($insert);
         //Insert New Record
-        if($this->isNewRecord){
+        if ($this->isNewRecord) {
             $this->status = self::STATUS_OPEN;
             return true;
         }
-        
+
         $oldPeriode = $this->findOne($this->id);
-        
+
         //Closing
         if ($this->status == self::STATUS_CLOSE && $oldPeriode->status == self::STATUS_OPEN) {
             $cekBfor = $this->find()->where('status=:dstatus AND id<:did', [':dstatus' => self::STATUS_OPEN, ':did' => $this->id])->one();
@@ -102,6 +102,9 @@ class AccPeriode extends \yii\db\ActiveRecord {
                 $this->addError('status', 'Periode hanya dapat ditutup secara berurutan.');
 
                 return false;
+            } else {
+                //CLI Call closing function...
+                return $this->closePeriode($this->attributes);
             }
         }
 
@@ -113,17 +116,25 @@ class AccPeriode extends \yii\db\ActiveRecord {
                 $this->addError('status', 'Periode yang telah ditutup hanya dapat dibatalkan jika periode sesudahnya masih open.');
 
                 return false;
+            } else {
+                //CLI Call cancel closing function...
+                return $this->cancelClosing($this->attributes);
             }
         }
         return true;
     }
-    
+
     public function beforeDelete() {
         parent::beforeDelete();
-        $ada = GlHeader::find()->where('periode_id = :did',[':did'=>  $this->id])->exists();
-        if($ada){
-            $this->addError('id', $this->name. 'telah digunakan dalam journal');
+        $ada = GlHeader::find()->where('periode_id = :did', [':did' => $this->id])->exists();
+        if ($ada) {
+            $this->addError('id', $this->name . 'telah digunakan dalam journal');
             return false;
+        } else {
+            if ($this->status == self::STATUS_CLOSE) {
+                $this->addError('id', $this->name . ' telah close, tidak dapat dihapus');
+                return false;
+            }
         }
         return true;
     }
@@ -142,6 +153,17 @@ class AccPeriode extends \yii\db\ActiveRecord {
             ['class' => TimestampBehavior::className()],
             ['class' => BlameableBehavior::className()]
         ];
+    }
+
+    protected function closePeriode($param) {
+        //$this->addError('status', 'Error on close');
+        sleep(5);
+        return true;
+    }
+
+    protected function cancelClosing($param) {
+        //$this->addError('status', 'Error on cancel');
+        return true;
     }
 
 }

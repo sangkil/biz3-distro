@@ -21,6 +21,8 @@ class AccPeriodeController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'close' => ['post'],
+                    'unclose' => ['post'],
                 ],
             ],
         ];
@@ -94,6 +96,44 @@ class AccPeriodeController extends Controller
         }
     }
 
+        /**
+     * Updates an existing AccPeriode model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionClose($id)
+    {
+        $model = $this->findModel($id);
+        $model->status = $model::STATUS_CLOSE;
+
+        if ($model->save()) {
+            return $this->redirect(['index']);
+        } else {
+            \Yii::$app->getSession()->setFlash('error', 'Periode "'. $model->name . '" fail to close');
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+    }
+    
+            /**
+     * Updates an existing AccPeriode model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUnclose($id)
+    {
+        $model = $this->findModel($id);
+        $model->status = $model::STATUS_OPEN;
+
+        if ($model->save()) {
+            return $this->redirect(['index']);
+        } else {
+            \Yii::$app->getSession()->setFlash('error', 'Periode "'. $model->name . '" failed on reverse');
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+    }
+    
     /**
      * Deletes an existing AccPeriode model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

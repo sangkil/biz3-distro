@@ -66,7 +66,6 @@ class GeneralLedgerController extends Controller {
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->glDetails = Yii::$app->request->post('GlDetail', []);
-                $model->addError('id', 'Something error added');
                 if ($model->save()) {
                     $transaction->commit();
                     \Yii::$app->getSession()->setFlash('success', $model->number . ' succesfully created');
@@ -94,6 +93,65 @@ class GeneralLedgerController extends Controller {
         }
 
         return $this->render('create', ['model' => $model]);
+    }
+
+    /**
+     * Creates a new GlHeader model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreateByTemplate() {
+        $dPost = Yii::$app->request->post();
+        $model = new GlHeader();
+        $model->reff_type = '0';
+        $model->status = $model::STATUS_RELEASED;
+        $model->date = date('Y-m-d');
+        $dPost = Yii::$app->request->post();
+
+        if ($model->load($dPost)) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                //entri details from templates
+                $newDtls = [];
+                $templates = Yii::$app->request->post('glTemplate', []);
+                foreach ($templates as $value) {
+                    $dtl_template = \backend\models\accounting\EntriSheet::findOne($value['id']);
+                    foreach ($dtl_template->entriSheetDtls as $ddtl) {
+                        $ndtl = new \backend\models\accounting\GlDetail();
+                        $ndtl->coa_id = $ddtl->coa_id;
+                        $ndtl->header_id = null;
+                        $ndtl->amount = ($ddtl->dk == $ddtl::DK_CREDIT) ? -1 * $value['amount'] : $value['amount'];
+                        $newDtls[] = $ndtl;
+                    }
+                }
+                $model->glDetails = $newDtls;
+                if ($model->save()) {
+                    $transaction->commit();
+                    \Yii::$app->getSession()->setFlash('success', $model->number . ' succesfully created');
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    foreach ($model->getErrors() as $dkey => $vald) {
+                        if ($vald[0] == 'Related error') {
+                            foreach ($model->getRelatedErrors() as $dkey => $valr) {
+                                foreach ($valr as $tkey => $valt) {
+                                    \Yii::$app->getSession()->setFlash('error', $valt);
+                                }
+                                break;
+                            }
+                        } else {
+                            \Yii::$app->getSession()->setFlash('error', $vald[0]);
+                            break;
+                        }
+                    }
+                    $transaction->rollback();
+                }
+            } catch (Exception $e) {
+                $transaction->rollback();
+                throw $e;
+            }
+        }
+
+        return $this->render('create-by-template', ['model' => $model]);
     }
 
     /**
@@ -161,7 +219,7 @@ class GeneralLedgerController extends Controller {
         $oldGl = $this->findModel($id);
         $trans = \Yii::$app->db->beginTransaction();
         try {
-            $newGl = new GlHeader;           
+            $newGl = new GlHeader;
             $newGl->reff_type = 0;
             $newGl->reff_id = $oldGl->id;
             $newGl->date = date('Y-m-d');
@@ -173,26 +231,26 @@ class GeneralLedgerController extends Controller {
                 $ndtl->amount = -1 * $ddtl->amount;
                 $newDtls[] = $ndtl;
             }
-            $newGl->status = $newGl::STATUS_CANCELED; 
+            $newGl->status = $newGl::STATUS_CANCELED;
             $newGl->periode_id = $oldGl->periode_id;
             $newGl->branch_id = $oldGl->branch_id;
-            $newGl->description = 'Reverse of '.$oldGl->number;
+            $newGl->description = 'Reverse of ' . $oldGl->number;
             $newGl->glDetails = $newDtls;
 
             if ($newGl->save()) {
                 $oldGl->status = $oldGl::STATUS_CANCELED;
-                $oldGl->description = $oldGl->description. 'Canceled by '.$newGl->number;
-                if($oldGl->save()){
+                $oldGl->description = $oldGl->description . 'Canceled by ' . $newGl->number;
+                if ($oldGl->save()) {
                     $trans->commit();
                     $this->redirect(['index']);
                 }
-            }else{
+            } else {
                 print_r($newGl->getErrors());
                 print_r($newGl->getRelatedErrors());
             }
         } catch (Exception $ex) {
             $trans->rollBack();
-        } 
+        }
         return;
         //$this->redirect(['view','id'=>$id]);
     }
@@ -205,7 +263,7 @@ class GeneralLedgerController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = GlHeader::find()->where('id=:did', [':did'=>$id])->with(['glDetails','glDetails.coa'])->one()) !== null) {
+        if (($model = GlHeader::find()->where('id=:did', [':did' => $id])->with(['glDetails', 'glDetails.coa'])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -221,6 +279,15 @@ class GeneralLedgerController extends Controller {
                         ->codeOrdered()->asArray()->limit(10);
 
         return $coaList->all();
+    }
+
+    public function actionJournalTemplates($term = '') {
+        $response = Yii::$app->response;
+        $response->format = 'json';
+        $glTemplates = \backend\models\accounting\EntriSheet::find()
+                        ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                        ->orderBy('name ASC')->limit(10);
+        return $glTemplates->all();
     }
 
 }

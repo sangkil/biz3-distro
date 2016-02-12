@@ -27,7 +27,8 @@ use yii\widgets\ActiveForm;
             'options' => ['class' => 'form-control', 'style' => 'width:40%;']
         ])
         ?>
-        <?= $form->field($model, 'status')->dropDownList($model::enums('STATUS_'), ['prompt' => '-- select status--', 'style' => 'width:40%']) ?>
+
+        <?= ($model->isNewRecord) ? $form->field($model, 'status')->dropDownList($model::enums('STATUS_'), ['prompt' => '-- select status--', 'style' => 'width:40%']) : '' ?>
 
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

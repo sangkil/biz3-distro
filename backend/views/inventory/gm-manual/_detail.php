@@ -25,7 +25,7 @@ use backend\models\inventory\GoodsMovementDtl;
         </tr>
         <tr>
             <td colspan="2">                
-                <div class="input-group">
+                <div class="input-group" style="width:100%;">
                     <span class="input-group-addon">
                         <i class="fa fa-search"></i>
                     </span>
