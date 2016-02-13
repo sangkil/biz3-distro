@@ -372,12 +372,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/deesoft/yii2-console.git",
-                "reference": "b48ffe70b183e23d665b0166ed70a2dafb9b0e2b"
+                "reference": "be520c6f8b28838a3b71ee759507a12f72f4db33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deesoft/yii2-console/zipball/b48ffe70b183e23d665b0166ed70a2dafb9b0e2b",
-                "reference": "b48ffe70b183e23d665b0166ed70a2dafb9b0e2b",
+                "url": "https://api.github.com/repos/deesoft/yii2-console/zipball/be520c6f8b28838a3b71ee759507a12f72f4db33",
+                "reference": "be520c6f8b28838a3b71ee759507a12f72f4db33",
                 "shasum": ""
             },
             "require": {
@@ -412,7 +412,7 @@
                 "migration",
                 "yii2"
             ],
-            "time": "2015-07-24 09:07:00"
+            "time": "2016-02-12 10:08:15"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -704,12 +704,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "abb6d386b71fe4d30d028c293202223311162dd2"
+                "reference": "33f50af818d9d4609a964da275aa3c1ddda68bd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/abb6d386b71fe4d30d028c293202223311162dd2",
-                "reference": "abb6d386b71fe4d30d028c293202223311162dd2",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/33f50af818d9d4609a964da275aa3c1ddda68bd3",
+                "reference": "33f50af818d9d4609a964da275aa3c1ddda68bd3",
                 "shasum": ""
             },
             "require": {
@@ -790,7 +790,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2016-02-11 15:39:25"
+            "time": "2016-02-12 13:30:05"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
