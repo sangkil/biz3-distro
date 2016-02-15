@@ -15,6 +15,12 @@ use backend\models\master\Uom;
 </td>
 <td >
     <?=
+    Html::activeTextInput($model, "[$key]price", ['class' => 'form-control',
+        'data-field' => 'price', 'size' => 8, 'id' => false, 'required' => true])
+    ?>
+</td>
+<td >
+    <?=
     Html::activeTextInput($model, "[$key]qty", ['class' => 'form-control',
         'data-field' => 'qty', 'size' => 5, 'id' => false, 'required' => true])
     ?>

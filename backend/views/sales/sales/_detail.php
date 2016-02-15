@@ -16,10 +16,13 @@ use backend\models\sales\SalesDtl;
             <th>
                 Product Name
             </th>
-            <th class="items" style="width: 25%">
+            <th class="items" style="width: 20%">
+                Price
+            </th>
+            <th class="items" style="width: 20%">
                 Qty
             </th>
-            <th style="width: 20%">
+            <th style="width: 10%">
                 Uom
             </th>
         </tr>
