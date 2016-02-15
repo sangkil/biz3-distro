@@ -40,7 +40,7 @@ class m160201_050030_create_table_sales extends \yii\db\Migration
             'uom_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'qty' => Schema::TYPE_FLOAT . ' NOT NULL',
             'price' => Schema::TYPE_FLOAT . ' NOT NULL',
-            'qty_release' => Schema::TYPE_FLOAT,
+            'total_release' => Schema::TYPE_FLOAT,
             'cogs' => Schema::TYPE_FLOAT . ' NOT NULL',
             'discount' => Schema::TYPE_FLOAT,
             'tax' => Schema::TYPE_FLOAT,
