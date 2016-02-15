@@ -67,6 +67,7 @@ class SalesController extends Controller
         $model = new Sales();
 
         $model->status = Sales::STATUS_DRAFT;
+        $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {

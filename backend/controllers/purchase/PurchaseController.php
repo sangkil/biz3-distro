@@ -67,6 +67,7 @@ class PurchaseController extends Controller
         $model = new Purchase();
 
         $model->status = Purchase::STATUS_DRAFT;
+        $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {

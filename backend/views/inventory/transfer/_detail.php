@@ -16,10 +16,10 @@ use backend\models\inventory\TransferDtl;
             <th>
                 Product Name
             </th>
-            <th class="items" style="width: 15%">
+            <th class="items" style="width: 25%">
                 Qty
             </th>
-            <th style="width: 10%">
+            <th style="width: 20%">
                 Uom
             </th>
         </tr>

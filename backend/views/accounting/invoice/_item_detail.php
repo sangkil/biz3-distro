@@ -4,16 +4,14 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 ?>
-<td style="width: 50px">
+<td>
     <span class="serial"></span>
     <a data-action="delete" title="Delete" href="#"><span class="glyphicon glyphicon-trash"></span></a>
     <?= Html::activeHiddenInput($model, "[$key]item_type", ['data-field' => 'item_type', 'id' => false]) ?>
     <?= Html::activeHiddenInput($model, "[$key]item_id", ['data-field' => 'item_id', 'id' => false]) ?>
 </td>
+<td><span data-field="item"></span></td>
 <td>
-    <span data-field="item"></span>
-</td>
-<td class="items" style="width: 45%">
     <?=
     Html::activeTextInput($model, "[$key]qty", [
         'data-field' => 'qty',

@@ -27,51 +27,51 @@ $this->registerJs($this->render('_script.js'));
 
     <?= Html::errorSummary($model); ?>
     <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <?=
-                Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success'
-                            : 'btn btn-primary'])
-                ?>
-            </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:40%;']) ?>
+            <?= $form->field($model, 'type')->dropDownList(Invoice::enums('TYPE_'), ['style' => 'width:60%;']) ?>
+            <?= $form->field($model, 'vendor_name')->textInput(['required' => true]) ?>
+            <?= Html::activeHiddenInput($model, 'vendor_id') ?>
         </div>
-        <div class="col-md-6">
-            <div class="box">
-                <div class="box-body">
-                    <?= $form->field($model, 'number')->staticControl() ?>
+        <div class="col-md-4">
+            <?=
+            $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
+                'dateFormat' => 'dd-MM-yyyy',
+                'options' => ['class' => 'form-control', 'style' => 'width:40%;']
+            ])
+            ?>
+            <?=
+            $form->field($model, 'DueDate')->widget('yii\jui\DatePicker', [
+                'dateFormat' => 'dd-MM-yyyy',
+                'options' => ['class' => 'form-control', 'style' => 'width:40%;']
+            ])
+            ?>
+            <?= $form->field($model, 'value')->textInput(['required' => true, 'style' => 'width:40%;']) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'tax_type')->textInput() ?>
+            <?= $form->field($model, 'tax_value')->textInput(['style' => 'width:40%;']) ?>
+            <?= $form->field($model, 'description')->textarea([]) ?>
+        </div>
+        <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#item" data-toggle="tab" aria-expanded="false">Items</a></li>
+                <li><a href="#notes" data-toggle="tab" aria-expanded="false">Notes</a></li>
+                <li class="pull-right">
                     <?=
-                    $form->field($model, 'type')->dropDownList(Invoice::enums('TYPE_'))
+                    Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success'
+                                : 'btn btn-primary'])
                     ?>
-                    <?=
-                    $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
-                        'dateFormat' => 'dd-MM-yyyy',
-                        'options' => ['class' => 'form-control']
-                    ])
-                    ?>
-                    <?=
-                    $form->field($model, 'DueDate')->widget('yii\jui\DatePicker', [
-                        'dateFormat' => 'dd-MM-yyyy',
-                        'options' => ['class' => 'form-control']
-                    ])
-                    ?>
-                    <?= $form->field($model, 'value')->textInput() ?>
+                </li>
+            </ul>
+            <div class="tab-content" >
+                <div class="tab-pane active" id="item">
+                    <?= $this->render('_detail', ['model' => $model]) ?>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="box">
-                <div class="box-body">
-                    <?= $form->field($model, 'vendor_name')->textInput(['required' => true]) ?>
-                    <?= Html::activeHiddenInput($model, 'vendor_id') ?>
-                    <?= $form->field($model, 'tax_type')->textInput() ?>
-                    <?= $form->field($model, 'tax_value')->textInput() ?>
-                    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+                <div class="tab-pane" id="notes">
 
                 </div>
             </div>
-        </div>
-        <div class="col-md-12">
-            <?= $this->render('_detail', ['model' => $model]) ?>
         </div>
     </div>
     <?php ActiveForm::end(); ?>
