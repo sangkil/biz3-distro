@@ -5,6 +5,7 @@ namespace backend\models\sales;
 use Yii;
 use backend\models\master\Product;
 use backend\models\master\Uom;
+use backend\models\master\Cogs;
 
 /**
  * This is the model class for table "sales_dtl".
@@ -22,6 +23,7 @@ use backend\models\master\Uom;
  */
 class SalesDtl extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -36,9 +38,14 @@ class SalesDtl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'uom_id', 'qty', 'price', 'cogs'], 'required'],
+            [['product_id', 'uom_id', 'qty', 'price'], 'required'],
             [['sales_id', 'product_id', 'uom_id'], 'integer'],
-            [['qty', 'price', 'discount', 'total_release'], 'number'],
+            [['cogs'], 'default', 'value' => function() {
+                $cogs = Cogs::findOne($this->product_id);
+                return $cogs ? $cogs->cogs : null;
+            }],
+            [['cogs'], 'required'],
+            [['qty', 'price', 'cogs', 'discount', 'total_release'], 'number'],
         ];
     }
 
