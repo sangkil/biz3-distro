@@ -704,12 +704,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "33f50af818d9d4609a964da275aa3c1ddda68bd3"
+                "reference": "91891865054fa60982c85cb3926414fd84c60f50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/33f50af818d9d4609a964da275aa3c1ddda68bd3",
-                "reference": "33f50af818d9d4609a964da275aa3c1ddda68bd3",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/91891865054fa60982c85cb3926414fd84c60f50",
+                "reference": "91891865054fa60982c85cb3926414fd84c60f50",
                 "shasum": ""
             },
             "require": {
@@ -790,7 +790,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2016-02-12 13:30:05"
+            "time": "2016-02-14 14:51:30"
         },
         {
             "name": "yiisoft/yii2-bootstrap",

@@ -26,6 +26,7 @@ use yii\db\Expression;
  * @property integer $created_by
  * @property integer $updated_at
  * @property integer $updated_by
+ * @property boolean $statusChanged
  *
  * @property GoodsMovementDtl[] $items
  * @property Warehouse $warehouse
@@ -200,10 +201,12 @@ class GoodsMovement extends \yii\db\ActiveRecord
             'yii\behaviors\BlameableBehavior',
             'yii\behaviors\TimestampBehavior',
             [
-                'class' => 'backend\classes\StatusChangeBehavior',
+                'class' => 'common\classes\StatusChangeBehavior',
                 'states' => [
+                    [null, self::STATUS_APPLIED, 'doApply'],
                     [self::STATUS_DRAFT, self::STATUS_APPLIED, 'doApply'],
                     [self::STATUS_APPLIED, self::STATUS_DRAFT, 'doRevert'],
+                    [self::STATUS_APPLIED, null, 'doRevert'],
                 ]
             ]
         ];
