@@ -29,6 +29,13 @@ $(function() {
         return false;
     });
 
+    $(this).on('keydown', '#damount', function(e) {
+        if (e.keyCode === 13) {
+            $('#journal_add').click();
+            return false;
+        }
+    });
+
     $(this).on('click', '#journal_add', function() {
         var $newRow = $('#table-templates tbody').find('.row-template').clone().removeClass('row-template');
         $newRow.show();

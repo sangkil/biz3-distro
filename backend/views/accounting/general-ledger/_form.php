@@ -26,7 +26,17 @@ use backend\models\master\Branch;
         <?= $form->field($model, 'periode_id')->dropDownList(backend\models\accounting\AccPeriode::selectOptions(), ['style' => 'width:40%;']) ?>
     </div>
     <div class="col-lg-4">      
-        <?= $form->field($model, 'status')->dropDownList($model::enums('STATUS_'), ['prompt' => '-- select status--', 'style' => 'width:40%']) ?>
+        <?php
+        $list_status = $model::enums('STATUS_');
+        $nlist = [];
+        foreach ($list_status as $key => $dval) {
+            if ($key == $model::STATUS_CANCELED) {
+                continue;
+            }
+            $nlist[$key] = $dval;            
+        }
+        ?>
+        <?= $form->field($model, 'status')->dropDownList($nlist, ['prompt' => '-- select status--', 'style' => 'width:40%']) ?>
         <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
     </div>
     <div class="nav-tabs-justified col-lg-12" style="margin-top: 20px;">

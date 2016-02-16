@@ -156,13 +156,12 @@ class AccPeriode extends \yii\db\ActiveRecord {
     }
 
     protected function closePeriode($param) {
-        //$this->addError('status', 'Error on close');
-        sleep(5);
+        sleep(1);
         return true;
     }
 
     protected function cancelClosing($param) {
-        //$this->addError('status', 'Error on cancel');
+        sleep(1);
         return true;
     }
 

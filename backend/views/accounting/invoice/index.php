@@ -17,25 +17,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="invoice-index">
 
-                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-            <?= GridView::widget([
+
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => ['class' => 'table table-hover'],
         'filterModel' => $searchModel,
         'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-
-                    'id',
+            ['class' => 'yii\grid\SerialColumn'],
+            //'id',
             'number',
+            'vendor.name',
             'date',
             'due_date',
-            'type',
-            // 'vendor_id',
+            [
+                'attribute' => 'type',
+                //'value'=>'nmType',
+                'filter'=>$searchModel::enums('TYPE_')
+            ],            
+            [
+                'attribute' => 'status',
+                'value'=>'nmStatus',
+                'filter'=>$searchModel::enums('STATUS_')
+            ],
             // 'reff_type',
             // 'reff_id',
-            // 'status',
             // 'description',
             // 'value',
             // 'tax_type',
@@ -44,9 +52,9 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'created_by',
             // 'updated_at',
             // 'updated_by',
-
-        ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn'],
         ],
-        ]); ?>
-    
+    ]);
+    ?>
+
 </div>

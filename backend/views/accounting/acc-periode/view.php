@@ -15,20 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <p class="pull-right">
         <?= Html::a('Create New', ['create'], ['class' => 'btn btn-default']) ?>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
-        <?= ($model->status == $model::STATUS_CLOSE)? Html::a('Reverse', ['unclose', 'id' => $model->id], [
-            'class' => 'btn btn-warning',
-            'data' => [
-                'confirm' => 'Are you sure you want to reverse this closed periode?',
-                'method' => 'post',
-            ],
-        ]):'' ?>
-        <?= ($model->status == $model::STATUS_OPEN)? Html::a('Close', ['close', 'id' => $model->id], [
-            'class' => 'btn btn-primary',
-            'data' => [
-                'confirm' => 'Are you sure you want to close this periode?',
-                'method' => 'post',
-            ],
-        ]):'' ?>
+        <?= ($model->status == $model::STATUS_CLOSE)? Html::a('Reverse', ['unclose', 'id' => $model->id], ['class' => 'btn btn-warning']):'' ?>
+        <?= ($model->status == $model::STATUS_OPEN)? Html::a('Close', ['close', 'id' => $model->id], ['class' => 'btn btn-primary']):'' ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [

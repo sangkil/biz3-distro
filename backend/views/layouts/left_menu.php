@@ -6,18 +6,17 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-
 ?>
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
- <!-- Sidebar user panel -->
+        <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
                 <?php echo Html::img('@web/../../vendor/bower/adminlte/dist/img/user2-160x160.jpg', ['class' => 'img-circle', 'alt' => 'User Image']); ?>
             </div>
             <div class="pull-left info">
-                <p><?= (Yii::$app->user->isGuest)?'Guest':Yii::$app->user->identity->username ?></p>
+                <p><?= (Yii::$app->user->isGuest) ? 'Guest' : Yii::$app->user->identity->username ?></p>
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
@@ -58,7 +57,7 @@ use yii\helpers\Url;
                             <li><a href="<?= Url::to(['/master/category']); ?>"><i class="fa fa-check"></i> Category</a></li>
                         </ul>
                     </li>
-                   <li><a href="<?= Url::to(['/master/customer']); ?>"><i class="fa fa-check"></i> Customers</a></li>
+                    <li><a href="<?= Url::to(['/master/customer']); ?>"><i class="fa fa-check"></i> Customers</a></li>
                 </ul>
             </li>
             <li class="treeview">
@@ -113,14 +112,20 @@ use yii\helpers\Url;
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="<?= Url::to(['/accounting/coa']); ?>"><i class="fa fa-check"></i> COA</a></li>
-                    <li><a href="<?= Url::to(['/accounting/acc-periode']); ?>"><i class="fa fa-check"></i> Fi Periodes</a></li>                    
+                    <li>
+                        <a href="#"><i class="fa fa-check"></i> Fi Periode<i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?= Url::to(['/accounting/acc-periode']); ?>"><i class="fa fa-check"></i> Periodes</a></li>
+                            <li><a href="<?= Url::to(['/accounting/acc-periode/close']); ?>"><i class="fa fa-check"></i> Closing</a></li>                        
+                        </ul>
+                    </li>
                     <li><a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> Journals</a></li>
                     <li><a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> General Ledger</a></li>
                     <li>
                         <a href="#"><i class="fa fa-check"></i> Invoices<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-check"></i> Supplier Inv</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> Customer Inv</a></li>                        
+                            <li><a href="<?= Url::to(['/accounting/invoice', 'Invoice[type]' => backend\models\accounting\Invoice::TYPE_SUPPLIER]); ?>"><i class="fa fa-check"></i> Supplier Inv</a></li>
+                            <li><a href="<?= Url::to(['/accounting/invoice', 'Invoice[type]' => backend\models\accounting\Invoice::TYPE_SUPPLIER]); ?>"><i class="fa fa-check"></i> Customer Inv</a></li>                        
                         </ul>
                     </li>
                     <li>
@@ -151,14 +156,6 @@ use yii\helpers\Url;
                         </ul>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-check text-aqua"></i> Principal Report<i class="fa fa-angle-left pull-right"></i></a>
-                        <ul class="treeview-menu">
-                            <li><a href="<?= Url::to(['/uci/index']); ?>"><i class="fa fa-check"></i> Unicharm</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> ...</a></li>  
-                            <li><a href="#"><i class="fa fa-check"></i> ...</a></li>                          
-                        </ul>
-                    </li>
-                    <li>
                         <a href="#"><i class="fa fa-check"></i> Stocks<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
                             <li><a href="#"><i class="fa fa-check"></i> ...</a></li>
@@ -170,8 +167,10 @@ use yii\helpers\Url;
                         <a href="#"><i class="fa fa-check"></i> FI & Accounting<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
                             <li><a href="#"><i class="fa fa-check"></i> GL</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> ...</a></li>  
-                            <li><a href="#"><i class="fa fa-check"></i> ...</a></li>                          
+                            <li><a href="#"><i class="fa fa-check"></i> Neraca</a></li>  
+                            <li><a href="#"><i class="fa fa-check"></i> Laba Rugi</a></li>                          
+                            <li><a href="#"><i class="fa fa-check"></i> Perubahan Modal</a></li>                          
+                            <li><a href="#"><i class="fa fa-check"></i> Arus Kas</a></li>                          
                         </ul>
                     </li>
                 </ul>

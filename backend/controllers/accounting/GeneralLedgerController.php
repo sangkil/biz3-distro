@@ -239,7 +239,7 @@ class GeneralLedgerController extends Controller {
 
             if ($newGl->save()) {
                 $oldGl->status = $oldGl::STATUS_CANCELED;
-                $oldGl->description = $oldGl->description . 'Canceled by ' . $newGl->number;
+                $oldGl->description = $oldGl->description . ' canceled by ' . $newGl->number;
                 if ($oldGl->save()) {
                     $trans->commit();
                     $this->redirect(['index']);
