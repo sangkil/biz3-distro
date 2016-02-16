@@ -3,6 +3,7 @@
 namespace backend\models\accounting;
 
 use Yii;
+use backend\models\master\Vendor;
 
 /**
  * This is the model class for table "invoice".
@@ -28,6 +29,7 @@ use Yii;
  * @property InvoiceDtl[] $items
  * @property PaymentDtl[] $paymentDtls
  * @property Payment[] $payments
+ * @property Vendor $vendor
  */
 class Invoice extends \yii\db\ActiveRecord
 {
@@ -37,7 +39,10 @@ class Invoice extends \yii\db\ActiveRecord
     // status invoice
     const STATUS_DRAFT = 10;
     const STATUS_APPLIED = 20;
+    const STATUS_PARTIAL_PAID = 30;
+    const STATUS_PAID = 40;
     const STATUS_CLOSE = 90;
+    
     // type invoice
     const TYPE_SUPPLIER = 10;
     const TYPE_CUSTOMER = 20;
@@ -127,6 +132,14 @@ class Invoice extends \yii\db\ActiveRecord
     public function getPaymentDtls()
     {
         return $this->hasMany(PaymentDtl::className(), ['invoice_id' => 'id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVendor()
+    {
+        return $this->hasOne(Vendor::className(), ['id' => 'vendor_id']);
     }
 
     /**

@@ -82,8 +82,6 @@ $(function() {
         var $row = $('#detail-grid').mdmTabularInput('addRow');
         $row.find('span[data-field="coa_code"]').text($('#dcode').val());
         $row.find('span[data-field="coa_name"]').text($('#dname').val());
-        //$row.find('span[data-field="debit"]').text($('#ddebit').val()).parent('td').css('background-color', '#FAFAFA').css('border-right', '2px solid white');
-        //$row.find('span[data-field="credit"]').text($('#dcredit').val()).parent('td').css('background-color', '#FAFAFA');
 
         $row.find(':input[data-field="coa_id"]').val($('#did').val());
         $row.find(':input[data-field="idebit"]').val($('#ddebit').val());
