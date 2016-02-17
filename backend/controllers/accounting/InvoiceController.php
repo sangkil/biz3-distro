@@ -161,6 +161,8 @@ class InvoiceController extends Controller {
                 $gl->status = $gl::STATUS_RELEASED;
                 $gl->date = date('Y-m-d');
                 $newDtls = [];
+                
+                //160006 not set
                 $dtl_template = \backend\models\accounting\EntriSheet::findOne(160006);
                 foreach ($dtl_template->entriSheetDtls as $ddtl) {
                     $ndtl = new \backend\models\accounting\GlDetail();

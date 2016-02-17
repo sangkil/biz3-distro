@@ -28,34 +28,39 @@ $this->registerJs($this->render('_script.js'));
 
     <?= Html::errorSummary($model); ?>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <?php
             $bgcolor = ($model->status == $model::STATUS_DRAFT) ? 'bg-yellow' : 'bg-green';
             $bgcolor = ($model->status == $model::STATUS_CANCELED) ? 'bg-red' : $bgcolor;
             ?>
             <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:40%;'])->label('Number &nbsp;' . Html::tag('td', Html::tag('span', $model->nmStatus, ['class' => "badge $bgcolor"]))) ?>
-            <?= (!$model->isNewRecord) ? $form->field($model->vendor, 'name')->textInput(['id' => 'invoice-vendor_name', 'required' => true])->label('Vendor Name') :
+            <?=
+            (!$model->isNewRecord) ? $form->field($model->vendor, 'name')->textInput(['id' => 'invoice-vendor_name', 'required' => true])->label('Vendor Name') :
                     $form->field($model, 'vendor_name')->textInput(['required' => true])
             ?>
-<?= Html::activeHiddenInput($model, 'vendor_id') ?>
+            <?= Html::activeHiddenInput($model, 'vendor_id') ?>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
             <?=
             $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
                 'dateFormat' => 'dd-MM-yyyy',
-                'options' => ['class' => 'form-control', 'style' => 'width:40%;']
+                'options' => ['class' => 'form-control']
             ])
             ?>
             <?=
             $form->field($model, 'DueDate')->widget('yii\jui\DatePicker', [
                 'dateFormat' => 'dd-MM-yyyy',
-                'options' => ['class' => 'form-control', 'style' => 'width:40%;']
+                'options' => ['class' => 'form-control']
             ])
             ?>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
+            <?= $form->field($model, 'reff_type')->dropDownList($model::enums('REFF_')) ?>
+            <?= $form->field($model, 'reff_type')->textInput() ?>
+        </div>
+        <div class="col-md-5">
             <?= $form->field($model, 'value')->textInput(['required' => true, 'style' => 'width:40%;']) ?>
-<?= $form->field($model, 'description')->textarea() ?>
+            <?= $form->field($model, 'description')->textarea() ?>
         </div>
         <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
             <ul class="nav nav-tabs">
@@ -69,7 +74,7 @@ $this->registerJs($this->render('_script.js'));
             </ul>
             <div class="tab-content" >
                 <div class="tab-pane active" id="item">
-<?= $this->render('_detail', ['model' => $model]) ?>
+                    <?= $this->render('_detail', ['model' => $model]) ?>
                 </div>
                 <div class="tab-pane" id="notes">
                     <?=
@@ -89,6 +94,6 @@ $this->registerJs($this->render('_script.js'));
             </div>
         </div>
     </div>
-<?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); ?>
 
 </div>
