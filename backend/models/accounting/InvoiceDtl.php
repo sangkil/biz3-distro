@@ -67,4 +67,12 @@ class InvoiceDtl extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Invoice::className(), ['id' => 'invoice_id']);
     }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProduct()
+    {
+        return $this->hasOne(\backend\models\master\Product::className(), ['id' => 'item_id']);
+    }
 }

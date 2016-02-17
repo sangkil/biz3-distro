@@ -143,6 +143,7 @@ class AccPeriodeController extends Controller {
             try {
                 $model->status = $model::STATUS_OPEN;
                 if ($model->save()) {
+                    $transaction->commit();
                     return $this->redirect(['view', 'id' => $model->id]);
                 } else {
                     foreach ($model->getErrors() as $dkey => $vald) {

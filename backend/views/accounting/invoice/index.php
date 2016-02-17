@@ -35,12 +35,19 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'type',
                 //'value'=>'nmType',
-                'filter'=>$searchModel::enums('TYPE_')
-            ],            
+                'filter' => $searchModel::enums('TYPE_')
+            ],
             [
                 'attribute' => 'status',
-                'value'=>'nmStatus',
-                'filter'=>$searchModel::enums('STATUS_')
+                'format' => 'raw',
+                'value' => function($model) {
+                    $temp = '';
+                    $bgcolor = ($model->status == $model::STATUS_DRAFT) ? 'bg-yellow' : 'bg-green';
+                    $bgcolor = ($model->status == $model::STATUS_CANCELED) ? 'bg-red' : $bgcolor;
+                    $temp .= Html::tag('td', Html::tag('span', $model->nmStatus, ['class' => "badge $bgcolor"]), ['style' => 'width:10%']);
+                    return $temp;
+                },
+                'filter' => $searchModel::enums('STATUS_')
             ],
             // 'reff_type',
             // 'reff_id',

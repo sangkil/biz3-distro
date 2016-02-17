@@ -22,19 +22,9 @@ use backend\models\accounting\InvoiceDtl;
             <th style="text-align:right;width: 15%">
                 Unit Cost
             </th>
-            <th style="text-align:right; width: 15%">
+            <th style="text-align:right;width: 15%">
                 Line Total
             </th>
-        </tr>
-        <tr>
-            <td colspan="5">
-                <div class="input-group" style="width:100%;">
-                    <span class="input-group-addon">
-                        <i class="fa fa-search"></i>
-                    </span>
-                    <input id="input-product" class="form-control" placeholder="Search Product..">
-                </div>
-            </td>
         </tr>
     </thead>
     <?=
@@ -44,7 +34,7 @@ use backend\models\accounting\InvoiceDtl;
         'modelClass' => InvoiceDtl::className(),
         'options' => ['tag' => 'tbody'],
         'itemOptions' => ['tag' => 'tr'],
-        'itemView' => '_item_detail',
+        'itemView' => '_item_detail_view',
         'clientOptions' => [
         ]
     ])
