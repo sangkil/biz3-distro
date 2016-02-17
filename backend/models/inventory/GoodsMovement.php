@@ -145,6 +145,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
      */
     public function doApply()
     {
+        // update stock
         $wh_id = $this->warehouse_id;
         foreach ($this->items as $item) {
             $product_id = $item->product_id;
@@ -169,6 +170,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
      */
     public function doRevert()
     {
+        // update stock
         $wh_id = $this->warehouse_id;
         foreach ($this->items as $item) {
             $product_id = $item->product_id;

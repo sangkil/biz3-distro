@@ -17,13 +17,26 @@ use yii\db\AfterSaveEvent;
  */
 class StatusChangeBehavior extends Behavior
 {
+    const BEFORE = 'before';
+    const AFTER = 'after';
+
+    /**
+     *
+     * @var string
+     */
     public $attribute = 'status';
-    public $useBeforeInsert = true;
+
+    /**
+     *
+     * @var string
+     */
+    public $whenInsert = self::BEFORE;
 
     /**
      * Status state, [old_status, new_status, handler]
      * ```
      * [
+     *     [null, Purchase::STATUS_APPLY, 'apply'],
      *     [Purchase::STATUS_DRAFT, Purchase::STATUS_APPLY, 'apply'],
      *     [Purchase::STATUS_APPLY, Purchase::STATUS_DRAFT, 'revert'],
      * ]
@@ -36,10 +49,10 @@ class StatusChangeBehavior extends Behavior
     public function events()
     {
         return[
-            ActiveRecord::EVENT_BEFORE_INSERT => 'beforeInsert',
-            ActiveRecord::EVENT_AFTER_INSERT => 'beforeInsert',
-            ActiveRecord::EVENT_BEFORE_UPDATE => 'beforeUpdate',
-            ActiveRecord::EVENT_BEFORE_DELETE => 'beforeDelete',
+            ActiveRecord::EVENT_BEFORE_INSERT => 'onInsert',
+            ActiveRecord::EVENT_AFTER_INSERT => 'onInsert',
+            ActiveRecord::EVENT_BEFORE_UPDATE => 'onUpdate',
+            ActiveRecord::EVENT_BEFORE_DELETE => 'onDelete',
         ];
     }
 
@@ -50,62 +63,43 @@ class StatusChangeBehavior extends Behavior
 
     /**
      *
+     * @param ModelEvent|AfterSaveEvent $event
+     */
+    public function onInsert($event)
+    {
+        if ($this->whenInsert == self::BEFORE && $event->name == ActiveRecord::EVENT_AFTER_INSERT ||
+            $this->whenInsert != self::BEFORE && $event->name == ActiveRecord::EVENT_BEFORE_INSERT) {
+            return;
+        }
+        if ($event->name == ActiveRecord::EVENT_BEFORE_INSERT) {
+            $this->_status = true;
+        }
+        $model = $this->owner;
+        $attribute = $this->attribute;
+        if (($new = $model->$attribute) != null) {
+            foreach ($this->states as $state) {
+                if ($state[0] == null && $state[1] == $new) {
+                    $handler = is_string($state[2]) ? [$model, $state[2]] : $state[2];
+                    $result = call_user_func_array($handler, array_slice($state, 3));
+                    if ($result === false) {
+                        if ($event instanceof ModelEvent) {
+                            $event->isValid = false;
+                        }
+                        $this->_status = false;
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+     *
      * @param ModelEvent $event
      */
-    public function beforeInsert($event)
+    public function onUpdate($event)
     {
         $this->_status = true;
-        if (!$this->useBeforeInsert) {
-            return;
-        }
-        $model = $this->owner;
-        $attribute = $this->attribute;
-        if (($new = $model->$attribute) != null) {
-            foreach ($this->states as $state) {
-                if ($state[0] == null && $state[1] == $new) {
-                    $handler = is_string($state[2]) ? [$model, $state[2]] : $state[2];
-                    $result = call_user_func_array($handler, array_slice($state, 3));
-                    if ($result === false) {
-                        $event->isValid = false;
-                        $this->_status = false;
-                    }
-                    return;
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     * @param AfterSaveEvent $event
-     */
-    public function afterInsert($event)
-    {
-        if ($this->useBeforeInsert) {
-            return;
-        }
-        $model = $this->owner;
-        $attribute = $this->attribute;
-        if (($new = $model->$attribute) != null) {
-            foreach ($this->states as $state) {
-                if ($state[0] == null && $state[1] == $new) {
-                    $handler = is_string($state[2]) ? [$model, $state[2]] : $state[2];
-                    $result = call_user_func_array($handler, array_slice($state, 3));
-                    if ($result === false) {
-                        $this->_status = false;
-                    }
-                    return;
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     * @param ModelEvent $event
-     */
-    public function beforeUpdate($event)
-    {
         $model = $this->owner;
         $attribute = $this->attribute;
         $dirty = $model->getDirtyAttributes([$attribute]);
@@ -130,8 +124,9 @@ class StatusChangeBehavior extends Behavior
      *
      * @param ModelEvent $event
      */
-    public function beforeDelete($event)
+    public function onDelete($event)
     {
+        $this->_status = true;
         $model = $this->owner;
         $attribute = $this->attribute;
         if (($old = $model->$attribute) != null) {

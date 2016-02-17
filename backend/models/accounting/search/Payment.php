@@ -18,7 +18,7 @@ class Payment extends PaymentModel
     public function rules()
     {
         return [
-            [['id', 'type', 'payment_type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['id', 'type', 'payment_method', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['number', 'date'], 'safe'],
         ];
     }
@@ -57,7 +57,7 @@ class Payment extends PaymentModel
             'id' => $this->id,
             'date' => $this->date,
             'type' => $this->type,
-            'payment_type' => $this->payment_type,
+            'payment_method' => $this->payment_method,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,

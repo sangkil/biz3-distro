@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'number',
             'date',
             'type',
-            'payment_type',
+            'payment_method',
             // 'status',
             // 'created_at',
             // 'created_by',

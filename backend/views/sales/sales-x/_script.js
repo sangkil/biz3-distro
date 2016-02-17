@@ -42,3 +42,10 @@ $('#sales-vendor_name')
         .append("<a>" + item.code + "<br>" + item.name + "</a>")
         .appendTo(ul);
 };
+
+$('#add-payment').click(function(){
+    console.log('xxxx');
+    var $row = $('#payment-grid').mdmTabularInput('addRow');
+    $row.find('[data-field="payment_method"]').val($('#inp-payment-method').val());
+    $row.find('[data-field="payment_value"]').val($('#inp-payment-value').val());
+});

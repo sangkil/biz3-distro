@@ -4,6 +4,8 @@ namespace backend\models\accounting;
 
 use Yii;
 use backend\models\master\Vendor;
+use mdm\converter\EnumTrait;
+use mdm\behaviors\ar\RelationTrait;
 
 /**
  * This is the model class for table "payment".
@@ -12,7 +14,7 @@ use backend\models\master\Vendor;
  * @property string $number
  * @property string $date
  * @property integer $type
- * @property integer $payment_type
+ * @property integer $payment_method
  * @property integer $status
  * @property integer $created_at
  * @property integer $created_by
@@ -26,15 +28,15 @@ use backend\models\master\Vendor;
 class Payment extends \yii\db\ActiveRecord
 {
 
-    use \mdm\converter\EnumTrait,
-        \mdm\behaviors\ar\RelationTrait;
+    use EnumTrait,
+        RelationTrait;
     // status payment
     const STATUS_DRAFT = 10;
     const STATUS_APPLIED = 20;
     const STATUS_CLOSE = 90;
     // type payment
-    const TYPE_IN = 10;
-    const TYPE_OUT = 20;
+    const TYPE_SUPLIER = 10;
+    const TYPE_CUSTOMER = 20;
     // payment method
     const METHOD_CASH = 10;
     const METHOD_BANK = 20;
@@ -55,13 +57,13 @@ class Payment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Date', 'type', 'payment_type', 'vendor_id', 'status'], 'required'],
+            [['Date', 'type', 'payment_method', 'vendor_id', 'status'], 'required'],
             [['number'], 'autonumber', 'format' => 'PY' . date('Ymd') . '.?', 'digit' => 4],
             [['vendor_name'], 'safe'],
             [['items'], 'required'],
             [['items'], 'checkVendorAndType'],
             [['items'], 'relationUnique', 'targetAttributes' => 'invoice_id'],
-            [['type', 'vendor_id', 'payment_type', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['type', 'vendor_id', 'payment_method', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['number'], 'string', 'max' => 16],
         ];
     }
@@ -69,7 +71,7 @@ class Payment extends \yii\db\ActiveRecord
     public function checkVendorAndType()
     {
         foreach ($this->items as $item) {
-            if ($item->invoice->vendor_id != $this->vendor_id || $item->invoice->vendor_id != $this->vendor_id) {
+            if ($item->invoice->vendor_id != $this->vendor_id || $item->invoice->type != $this->type) {
                 $this->addError('items', 'Vendor atau type invoice tidak sama dengan vendor atau type payment');
                 break;
             }
@@ -86,7 +88,7 @@ class Payment extends \yii\db\ActiveRecord
             'number' => 'Number',
             'date' => 'Date',
             'type' => 'Type',
-            'payment_type' => 'Payment Type',
+            'payment_method' => 'Payment Type',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
@@ -123,7 +125,7 @@ class Payment extends \yii\db\ActiveRecord
 
     public function getNmMethod()
     {
-        return $this->getLogical('payment_type', 'METHOD_');
+        return $this->getLogical('payment_method', 'METHOD_');
     }
 
     /**

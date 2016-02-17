@@ -43,7 +43,7 @@ $this->registerJs($this->render('_script.js'));
         </div>
         <div class="col-md-4">
             <?=
-            $form->field($model, 'payment_type')->dropDownList(Payment::enums('METHOD_'), [
+            $form->field($model, 'payment_method')->dropDownList(Payment::enums('METHOD_'), [
                 'prompt' => '--Pilih payment method--', 'style' => 'width:60%;'])
             ?>
         </div>

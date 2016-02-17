@@ -138,7 +138,7 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
             'vendor_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'date' => Schema::TYPE_DATE . ' NOT NULL',
             'type' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'payment_type' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'payment_method' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_INTEGER . ' NOT NULL',
             // history column
             'created_at' => Schema::TYPE_INTEGER,
