@@ -48,10 +48,10 @@ class Invoice extends \yii\db\ActiveRecord
     //document reff type
     const REFF_PURCH = 10;
     const REFF_PURCH_RETURN = 11;
-    const REFF_GOODSMV = 20;
+    const REFF_GOODS_MOVEMENT = 20;
     const REFF_TRANSFER = 30;
-    const REFF_INVOICE = 40;
-    const REFF_PAYMENT = 50;
+    //const REFF_INVOICE = 40;
+    //const REFF_PAYMENT = 50;
     const REFF_SALES = 60;
     const REFF_SALES_RETURN = 61;
     //const REFF_NOTHING = 90;

@@ -15,8 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::button('New Invoice', ['class' => 'btn btn-default', 'type' => 'button']) ?>        
         <?= Html::button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', ['class' => 'btn btn-default dropdown-toggle', 'aria-expanded' => false, 'type' => 'button', 'data-toggle' => 'dropdown']) ?>
         <ul class="dropdown-menu" role="menu">
-            <li><?= Html::a('Supplier Inv', ['create','Invoice[type]'=>$searchModel::TYPE_SUPPLIER]) ?></li>
-            <li><?= Html::a('Customer Inv', ['create','Invoice[type]'=>$searchModel::TYPE_CUSTOMER]) ?></li>            
+            <li><?= Html::a('Incoming', ['create','Invoice[type]'=>$searchModel::TYPE_INCOMING]) ?></li>
+            <li><?= Html::a('Outgoing', ['create','Invoice[type]'=>$searchModel::TYPE_OUTGOING]) ?></li>            
         </ul>        
     </div>
 </div>
@@ -38,19 +38,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'due_date',
             [
                 'attribute' => 'type',
-                //'value'=>'nmType',
+                'value'=>'nmType',
                 'filter' => $searchModel::enums('TYPE_')
             ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
                 'value' => function($model) {
-            $temp = '';
-            $bgcolor = ($model->status == $model::STATUS_DRAFT) ? 'bg-yellow' : 'bg-green';
-            $bgcolor = ($model->status == $model::STATUS_CANCELED) ? 'bg-red' : $bgcolor;
-            $temp .= Html::tag('td', Html::tag('span', $model->nmStatus, ['class' => "badge $bgcolor"]), ['style' => 'width:10%']);
-            return $temp;
-        },
+                    $temp = '';
+                    $bgcolor = ($model->status == $model::STATUS_DRAFT) ? 'bg-yellow' : 'bg-green';
+                    $bgcolor = ($model->status == $model::STATUS_CANCELED) ? 'bg-red' : $bgcolor;
+                    $temp .= Html::tag('td', Html::tag('span', $model->nmStatus, ['class' => "badge $bgcolor"]), ['style' => 'width:10%']);
+                    return $temp;
+                },
                 'filter' => $searchModel::enums('STATUS_')
             ],
             // 'reff_type',
