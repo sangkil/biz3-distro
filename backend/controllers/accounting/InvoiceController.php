@@ -63,8 +63,8 @@ class InvoiceController extends Controller {
     public function actionCreate() {
         $model = new Invoice();
         $model->load(Yii::$app->request->get());
-        $model->reff_type = ($model->type == $model::TYPE_SUPPLIER) ? $model::REFF_PURCH : null;
-        $model->reff_type = ($model->type == $model::TYPE_CUSTOMER) ? $model::REFF_SALES : $model->reff_type;
+        $model->reff_type = ($model->type == $model::TYPE_INCOMING) ? $model::REFF_PURCH : null;
+        $model->reff_type = ($model->type == $model::TYPE_OUTGOING) ? $model::REFF_SALES : $model->reff_type;
 
         $model->status = Invoice::STATUS_DRAFT;
         $model->date = date('Y-m-d');

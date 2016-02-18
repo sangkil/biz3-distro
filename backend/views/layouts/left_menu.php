@@ -120,12 +120,12 @@ use yii\helpers\Url;
                         </ul>
                     </li>
                     <li><a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> Journals</a></li>
-                    <li><a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> General Ledger</a></li>
+                    <li><a href="#"><i class="fa fa-check"></i> General Ledger</a></li>               
                     <li>
                         <a href="#"><i class="fa fa-check"></i> Invoices<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
-                            <li><a href="<?= Url::to(['/accounting/invoice', 'Invoice[type]' => backend\models\accounting\Invoice::TYPE_SUPPLIER]); ?>"><i class="fa fa-check"></i> Supplier Inv</a></li>
-                            <li><a href="<?= Url::to(['/accounting/invoice', 'Invoice[type]' => backend\models\accounting\Invoice::TYPE_CUSTOMER]); ?>"><i class="fa fa-check"></i> Customer Inv</a></li>                        
+                            <li><a href="<?= Url::to(['/accounting/invoice', 'Invoice[type]' => backend\models\accounting\Invoice::TYPE_INCOMING]); ?>"><i class="fa fa-check"></i> Incoming</a></li>
+                            <li><a href="<?= Url::to(['/accounting/invoice', 'Invoice[type]' => backend\models\accounting\Invoice::TYPE_OUTGOING]); ?>"><i class="fa fa-check"></i> Outgoing</a></li>                        
                         </ul>
                     </li>
                     <li>
