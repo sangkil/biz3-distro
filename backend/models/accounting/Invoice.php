@@ -42,8 +42,8 @@ class Invoice extends \yii\db\ActiveRecord
     const STATUS_CANCELED = 90;
     
     // type invoice
-    const TYPE_SUPPLIER = 10;
-    const TYPE_CUSTOMER = 20;
+    const TYPE_INCOMING = 10;
+    const TYPE_OUTGOING = 20;
     
     //document reff type
     const REFF_PURCH = 10;
