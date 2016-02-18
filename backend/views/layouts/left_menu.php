@@ -125,7 +125,7 @@ use yii\helpers\Url;
                         <a href="#"><i class="fa fa-check"></i> Invoices<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
                             <li><a href="<?= Url::to(['/accounting/invoice', 'Invoice[type]' => backend\models\accounting\Invoice::TYPE_SUPPLIER]); ?>"><i class="fa fa-check"></i> Supplier Inv</a></li>
-                            <li><a href="<?= Url::to(['/accounting/invoice', 'Invoice[type]' => backend\models\accounting\Invoice::TYPE_SUPPLIER]); ?>"><i class="fa fa-check"></i> Customer Inv</a></li>                        
+                            <li><a href="<?= Url::to(['/accounting/invoice', 'Invoice[type]' => backend\models\accounting\Invoice::TYPE_CUSTOMER]); ?>"><i class="fa fa-check"></i> Customer Inv</a></li>                        
                         </ul>
                     </li>
                     <li>

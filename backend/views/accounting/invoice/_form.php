@@ -6,6 +6,7 @@ use backend\models\accounting\Invoice;
 use yii\jui\JuiAsset;
 use yii\helpers\Url;
 use yii\web\View;
+use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model Invoice */
@@ -15,7 +16,7 @@ JuiAsset::register($this);
 $opts = json_encode([
     'product_url' => Url::to(['product-list']),
     'vendor_url' => Url::to(['vendor-list']),
-    ]);
+        ]);
 
 $this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
@@ -27,31 +28,35 @@ $this->registerJs($this->render('_script.js'));
 
     <?= Html::errorSummary($model); ?>
     <div class="row">
-        <div class="col-md-4">
-            <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:40%;']) ?>
-            <?= $form->field($model, 'type')->dropDownList(Invoice::enums('TYPE_'), ['style' => 'width:60%;']) ?>
-            <?= $form->field($model, 'vendor_name')->textInput(['required' => true]) ?>
-            <?= Html::activeHiddenInput($model, 'vendor_id') ?>
+        <div class="col-md-3">
+            <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:40%;'])->label('Inv Number') ?>
+            <?=
+            (!$model->isNewRecord) ? $form->field($model->vendor, 'name')->textInput(['id' => 'invoice-vendor_name', 'required' => true])->label('Vendor Name') :
+                    $form->field($model, 'vendor_name')->textInput()
+            ?>
+            <?= $form->field($model, 'vendor_id')->hiddenInput()->label(false) ?>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
             <?=
             $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
                 'dateFormat' => 'dd-MM-yyyy',
-                'options' => ['class' => 'form-control', 'style' => 'width:40%;']
+                'options' => ['class' => 'form-control']
             ])
             ?>
             <?=
             $form->field($model, 'DueDate')->widget('yii\jui\DatePicker', [
                 'dateFormat' => 'dd-MM-yyyy',
-                'options' => ['class' => 'form-control', 'style' => 'width:40%;']
+                'options' => ['class' => 'form-control']
             ])
             ?>
-            <?= $form->field($model, 'value')->textInput(['required' => true, 'style' => 'width:40%;']) ?>
         </div>
-        <div class="col-md-4">
-            <?= $form->field($model, 'tax_type')->textInput() ?>
-            <?= $form->field($model, 'tax_value')->textInput(['style' => 'width:40%;']) ?>
-            <?= $form->field($model, 'description')->textarea([]) ?>
+        <div class="col-md-2">
+            <?= $form->field($model, 'reff_type')->dropDownList($model::enums('REFF_',['prompt'=>'--'])) ?>
+            <?= $form->field($model, 'reff_id')->textInput() ?>
+        </div>
+        <div class="col-md-5">
+            <?= $form->field($model, 'value')->textInput(['required' => true, 'style' => 'width:40%;']) ?>
+            <?= $form->field($model, 'description')->textInput() ?>
         </div>
         <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
             <ul class="nav nav-tabs">
@@ -59,8 +64,7 @@ $this->registerJs($this->render('_script.js'));
                 <li><a href="#notes" data-toggle="tab" aria-expanded="false">Notes</a></li>
                 <li class="pull-right">
                     <?=
-                    Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success'
-                                : 'btn btn-primary'])
+                    Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'])
                     ?>
                 </li>
             </ul>
@@ -69,7 +73,19 @@ $this->registerJs($this->render('_script.js'));
                     <?= $this->render('_detail', ['model' => $model]) ?>
                 </div>
                 <div class="tab-pane" id="notes">
-
+                    <?=
+                    DetailView::widget([
+                        'model' => $model,
+                        'options' => ['class' => 'table'],
+                        'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
+                        'attributes' => [
+                            'created_by',
+                            'created_at:datetime',
+                            'updated_by',
+                            'updated_at:datetime',
+                        ],
+                    ])
+                    ?>
                 </div>
             </div>
         </div>
