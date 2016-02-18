@@ -156,7 +156,7 @@ class InvoiceController extends Controller {
                 $gl->branch_id = 1;
                 $aPeriode = \backend\models\accounting\AccPeriode::find()->active()->one();
                 if ($aPeriode == null) {
-                    throw new NotFoundHttpException('No active periode exist.');
+                    throw new NotFoundHttpException('No active periode exist for now.');
                 }
                 $gl->periode_id = $aPeriode->id;
                 $gl->reff_type = Invoice::REFF_INVOICE;
