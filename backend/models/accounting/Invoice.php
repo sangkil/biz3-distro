@@ -148,7 +148,7 @@ class Invoice extends \yii\db\ActiveRecord
      */
     public function getJournals()
     {
-        return $this->hasMany(GlHeader::className(), ['reff_id' => 'id'])->where(['reff_type'=>self::REFF_INVOICE])->andFilterWhere(['<>','status',  GlHeader::STATUS_CANCELED]);
+        return $this->hasMany(GlHeader::className(), ['reff_id' => 'id'])->where(['reff_type'=>GlHeader::REFF_INVOICE])->andFilterWhere(['<>','status',  GlHeader::STATUS_CANCELED]);
     }
     
     /**
