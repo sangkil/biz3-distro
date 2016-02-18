@@ -63,6 +63,7 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
             'id' => Schema::TYPE_STRING . '(16) NOT NULL',
             'name' => Schema::TYPE_STRING . '(64)',
             'coa_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'dk' => Schema::TYPE_STRING . '(1)',
             // constrain
             'PRIMARY KEY ([[esheet_id]], [[id]])',
             'FOREIGN KEY ([[esheet_id]]) REFERENCES {{%entri_sheet}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
