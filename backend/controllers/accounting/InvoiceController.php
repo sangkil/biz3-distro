@@ -51,7 +51,7 @@ class InvoiceController extends Controller {
      */
     public function actionView($id) {
         return $this->render('view', [
-             'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -65,7 +65,7 @@ class InvoiceController extends Controller {
         $model->load(Yii::$app->request->get());
         $model->reff_type = ($model->type == $model::TYPE_SUPPLIER) ? $model::REFF_PURCH : null;
         $model->reff_type = ($model->type == $model::TYPE_CUSTOMER) ? $model::REFF_SALES : $model->reff_type;
-        
+
         $model->status = Invoice::STATUS_DRAFT;
         $model->date = date('Y-m-d');
         $model->due_date = date('Y-m-d', time() + 30 * 24 * 3600);
@@ -164,9 +164,13 @@ class InvoiceController extends Controller {
                 $gl->status = $gl::STATUS_RELEASED;
                 $gl->date = date('Y-m-d');
                 $newDtls = [];
-                
+
                 //160006 entriseet for test
-                $dtl_template = \backend\models\accounting\EntriSheet::findOne(160006);
+                $journal_template_id = 160006;
+                $dtl_template = \backend\models\accounting\EntriSheet::findOne($journal_template_id);
+                if ($dtl_template == null) {
+                    throw new NotFoundHttpException('No journal template #' . $journal_template_id);
+                }
                 foreach ($dtl_template->entriSheetDtls as $ddtl) {
                     $ndtl = new \backend\models\accounting\GlDetail();
                     $ndtl->coa_id = $ddtl->coa_id;
