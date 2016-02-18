@@ -18,8 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::button('New Invoice', ['class' => 'btn btn-default', 'type' => 'button']) ?>        
                 <?= Html::button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', ['class' => 'btn btn-default dropdown-toggle', 'aria-expanded' => false, 'type' => 'button', 'data-toggle' => 'dropdown']) ?>
                 <ul class="dropdown-menu" role="menu">
-                    <li><?= Html::a('Incoming', ['create', 'Invoice[type]' => $searchModel::TYPE_INCOMING]) ?></li>
-                    <li><?= Html::a('Outgoing', ['create', 'Invoice[type]' => $searchModel::TYPE_OUTGOING]) ?></li>            
+                    <li><?= Html::a('Incoming', ['create', 'Invoice[type]' => $model::TYPE_INCOMING]) ?></li>
+                    <li><?= Html::a('Outgoing', ['create', 'Invoice[type]' => $model::TYPE_OUTGOING]) ?></li>            
                 </ul>        
             </div>
             <?= ($model->status == $model::STATUS_DRAFT) ? Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) : '' ?>
