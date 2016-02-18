@@ -68,8 +68,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['class' => 'table'],
             'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
             'attributes' => [
-                'reff_type',
-                'reff_id',
+                [                      // the owner name of the model
+                    'label' => 'Reff Type',
+                    'format' => 'raw',
+                    'value' => $model->nmReffType
+                ],
+                [                      // the owner name of the model
+                    'label' => 'Reff Number',
+                    'format' => 'raw',
+                    'value' => $model->reffNumber
+                ],
                 'description',
                 [                      // the owner name of the model
                     'label' => 'Status',

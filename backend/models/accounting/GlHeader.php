@@ -5,6 +5,7 @@ namespace backend\models\accounting;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "gl_header".
@@ -33,8 +34,7 @@ class GlHeader extends \yii\db\ActiveRecord {
 
     const STATUS_DRAFT = 10;
     const STATUS_RELEASED = 20;
-    const STATUS_CANCELED = 30;   
-    
+    const STATUS_CANCELED = 30;
     //document reff type
     const REFF_PURCH = 10;
     const REFF_PURCH_RETURN = 11;
@@ -44,6 +44,7 @@ class GlHeader extends \yii\db\ActiveRecord {
     const REFF_PAYMENT = 50;
     const REFF_SALES = 60;
     const REFF_SALES_RETURN = 61;
+
     //const REFF_NOTHING = 90;
 
     /**
@@ -65,7 +66,7 @@ class GlHeader extends \yii\db\ActiveRecord {
             [['number'], 'string', 'max' => 16],
             [['description'], 'string', 'max' => 255],
             [['glDetails'], 'validateDualEntri'],
-            [['periode'], 'validateOpenPeriode'],            
+            [['periode'], 'validateOpenPeriode'],
             [['periode_id'], 'exist', 'skipOnError' => true, 'targetClass' => AccPeriode::className(), 'targetAttribute' => ['periode_id' => 'id']],
         ];
     }
@@ -119,8 +120,46 @@ class GlHeader extends \yii\db\ActiveRecord {
         return $this->hasOne(\backend\models\master\Branch::className(), ['id' => 'branch_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGMovement() {
+        return $this->hasOne(\backend\models\inventory\GoodsMovement::className(), ['id' => 'reff_id'])->where(['reff_type' => self::REFF_GOODS_MOVEMENT]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInvoice() {
+        return $this->hasOne(\backend\models\accounting\Invoice::className(), ['id' => 'reff_id']);
+    }
+
     public function getNmStatus() {
         return $this->getLogical('status', 'STATUS_');
+    }
+
+    public function getNmReffType() {
+        return $this->getLogical('reff_type', 'REFF_');
+    }
+
+    public function getReffNumber() {
+        $link = null;
+        switch ((int) $this->reff_type) {
+            case (int) self::REFF_GOODS_MOVEMENT:
+                $link = ($this->invoice != null) ? Html::a($this->gMovement->number, ['/inventory/gm-manual/view', 'id' => $this->reff_id]) : '';
+                break;
+            case (int) self::REFF_INVOICE:
+                $link = ($this->invoice != null) ? Html::a($this->invoice->number, ['/accounting/invoice/view', 'id' => $this->reff_id]) : '';
+                break;
+            default:
+                break;
+        }
+        //echo $this->reff_type.'vs'.self::REFF_INVOICE;
+        return $link;
+    }
+
+    public function getReffLink() {
+        return $this->getLogical('status', 'REFF_');
     }
 
     public function validateDualEntri($attribute) {
@@ -132,7 +171,7 @@ class GlHeader extends \yii\db\ActiveRecord {
             if ($totAmount != 0) {
                 $this->addError($attribute, "Total Debit must equal to Total Credit");
             }
-        } 
+        }
     }
 
     public function validateOpenPeriode($attribute) {
