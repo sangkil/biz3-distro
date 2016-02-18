@@ -134,14 +134,6 @@ class Invoice extends \yii\db\ActiveRecord
     {
         return $this->getLogical('status', 'STATUS_');
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPaymentDtls()
-    {
-        return $this->hasMany(PaymentDtl::className(), ['invoice_id' => 'id']);
-    }
     
     /**
      * @return \yii\db\ActiveQuery
@@ -165,6 +157,14 @@ class Invoice extends \yii\db\ActiveRecord
     public function getPayments()
     {
         return $this->hasMany(Payment::className(), ['id' => 'payment_id'])->viaTable('payment_dtl', ['invoice_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPaymentDtls()
+    {
+        return $this->hasMany(PaymentDtl::className(), ['invoice_id' => 'id']);
     }
     
     private $_paid;
