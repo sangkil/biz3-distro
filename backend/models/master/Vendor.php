@@ -29,6 +29,7 @@ class Vendor extends \yii\db\ActiveRecord
 
     const TYPE_SUPPLIER = 10;
     const TYPE_CUSTOMER = 20;
+    const TYPE_INTERN = 30;
 
     const STATUS_ACTIVE = 10;
     const STATUS_INACTIVE = 0;

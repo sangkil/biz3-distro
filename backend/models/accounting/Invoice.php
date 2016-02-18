@@ -76,7 +76,7 @@ class Invoice extends \yii\db\ActiveRecord
             [['type', 'vendor_id', 'reff_type', 'reff_id', 'status'], 'integer'],
             [['value', 'tax_value'], 'number'],
             [['vendor_name'], 'safe'],
-            [['number'], 'autonumber', 'format' => 'IV' . date('Ymd') . '.?', 'digit' => 4],
+            [['number'], 'autonumber', 'format' => 'IV' . date('Ym') . '.?', 'digit' => 4],
             [['items'], 'relationUnique', 'targetAttributes' => ['item_type', 'item_id']],
             [['description', 'tax_type'], 'string', 'max' => 64],
         ];
@@ -141,6 +141,14 @@ class Invoice extends \yii\db\ActiveRecord
     public function getPaymentDtls()
     {
         return $this->hasMany(PaymentDtl::className(), ['invoice_id' => 'id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getJournals()
+    {
+        return $this->hasMany(GlHeader::className(), ['reff_id' => 'id'])->where(['reff_type'=>self::REFF_INVOICE])->andFilterWhere(['<>','status',  GlHeader::STATUS_CANCELED]);
     }
     
     /**

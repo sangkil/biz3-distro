@@ -220,8 +220,7 @@ class GeneralLedgerController extends Controller {
         $trans = \Yii::$app->db->beginTransaction();
         try {
             $newGl = new GlHeader;
-            $newGl->reff_type = 0;
-            $newGl->reff_id = $oldGl->id;
+            $newGl->attributes = $oldGl->attributes;
             $newGl->date = date('Y-m-d');
             $newDtls = [];
             foreach ($oldGl->glDetails as $ddtl) {
@@ -232,10 +231,13 @@ class GeneralLedgerController extends Controller {
                 $newDtls[] = $ndtl;
             }
             $newGl->status = $newGl::STATUS_CANCELED;
-            $newGl->periode_id = $oldGl->periode_id;
-            $newGl->branch_id = $oldGl->branch_id;
             $newGl->description = 'Reverse of ' . $oldGl->number;
             $newGl->glDetails = $newDtls;
+            
+            $newGl->created_at = null;
+            $newGl->created_by = null;
+            $newGl->updated_at = null;
+            $newGl->updated_by = null;
 
             if ($newGl->save()) {
                 $oldGl->status = $oldGl::STATUS_CANCELED;

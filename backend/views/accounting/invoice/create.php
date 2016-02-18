@@ -10,7 +10,7 @@ $this->title = $model->nmType.' Invoice';
 $this->params['breadcrumbs'][] = ['label' => 'Invoices', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="invoice-create">
+<div class="col-lg-12 invoice-create">
 
     <?= $this->render('_form'.$model->type, [
         'model' => $model,

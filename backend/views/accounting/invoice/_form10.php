@@ -29,16 +29,12 @@ $this->registerJs($this->render('_script.js'));
     <?= Html::errorSummary($model); ?>
     <div class="row">
         <div class="col-md-3">
-            <?php
-            $bgcolor = ($model->status == $model::STATUS_DRAFT) ? 'bg-yellow' : 'bg-green';
-            $bgcolor = ($model->status == $model::STATUS_CANCELED) ? 'bg-red' : $bgcolor;
-            ?>
-            <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:40%;'])->label('Number &nbsp;' . Html::tag('td', Html::tag('span', $model->nmStatus, ['class' => "badge $bgcolor"]))) ?>
+            <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:40%;'])->label('Inv Number') ?>
             <?=
             (!$model->isNewRecord) ? $form->field($model->vendor, 'name')->textInput(['id' => 'invoice-vendor_name', 'required' => true])->label('Vendor Name') :
-                    $form->field($model, 'vendor_name')->textInput(['required' => true])
+                    $form->field($model, 'vendor_name')->textInput()
             ?>
-            <?= Html::activeHiddenInput($model, 'vendor_id') ?>
+            <?= $form->field($model, 'vendor_id')->hiddenInput()->label(false) ?>
         </div>
         <div class="col-md-2">
             <?=
@@ -55,12 +51,12 @@ $this->registerJs($this->render('_script.js'));
             ?>
         </div>
         <div class="col-md-2">
-            <?= $form->field($model, 'reff_type')->dropDownList($model::enums('REFF_')) ?>
-            <?= $form->field($model, 'reff_type')->textInput() ?>
+            <?= $form->field($model, 'reff_type')->dropDownList($model::enums('REFF_',['prompt'=>'--'])) ?>
+            <?= $form->field($model, 'reff_id')->textInput() ?>
         </div>
         <div class="col-md-5">
             <?= $form->field($model, 'value')->textInput(['required' => true, 'style' => 'width:40%;']) ?>
-            <?= $form->field($model, 'description')->textarea() ?>
+            <?= $form->field($model, 'description')->textInput() ?>
         </div>
         <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
             <ul class="nav nav-tabs">
