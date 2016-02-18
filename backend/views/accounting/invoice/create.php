@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="col-lg-12 invoice-create">
 
-    <?= $this->render('_form'.$model->type, [
+    <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
 
