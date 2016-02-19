@@ -38,8 +38,9 @@ class GoodsMovement extends \yii\db\ActiveRecord
         \mdm\behaviors\ar\RelationTrait;
     // status movement
     const STATUS_DRAFT = 10;
-    const STATUS_APPLIED = 20;
-    const STATUS_CLOSE = 90;
+    const STATUS_RELEASED = 20;
+    const STATUS_CANCELED = 90;
+    
     // type movement
     const TYPE_RECEIVE = 10;
     const TYPE_ISSUE = 20;
@@ -202,8 +203,8 @@ class GoodsMovement extends \yii\db\ActiveRecord
             [
                 'class' => 'backend\classes\StatusChangeBehavior',
                 'states' => [
-                    [self::STATUS_DRAFT, self::STATUS_APPLIED, 'doApply'],
-                    [self::STATUS_APPLIED, self::STATUS_DRAFT, 'doRevert'],
+                    [self::STATUS_DRAFT, self::STATUS_RELEASED, 'doApply'],
+                    [self::STATUS_RELEASED, self::STATUS_DRAFT, 'doRevert'],
                 ]
             ]
         ];
