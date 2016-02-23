@@ -42,4 +42,3 @@ $('#goodsmovement-vendor_name')
         .append("<a>" + item.code + "<br>" + item.name + "</a>")
         .appendTo(ul);
 };
-

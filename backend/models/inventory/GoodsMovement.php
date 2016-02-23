@@ -7,6 +7,7 @@ use backend\models\master\Warehouse;
 use backend\models\master\Vendor;
 use backend\models\master\ProductUom;
 use backend\models\master\ProductStock;
+use backend\models\accounting\Invoice;
 use yii\db\Expression;
 
 /**
@@ -39,11 +40,20 @@ class GoodsMovement extends \yii\db\ActiveRecord
         \mdm\behaviors\ar\RelationTrait;
     // status movement
     const STATUS_DRAFT = 10;
-    const STATUS_APPLIED = 20;
-    const STATUS_CLOSE = 90;
+    const STATUS_RELEASED = 20;
+    const STATUS_CANCELED = 90;
     // type movement
     const TYPE_RECEIVE = 10;
     const TYPE_ISSUE = 20;
+    //document reff type
+    const REFF_PURCH = 10;
+    const REFF_PURCH_RETURN = 11;
+    const REFF_GOODS_MOVEMENT = 20;
+    const REFF_TRANSFER = 30;
+    //const REFF_INVOICE = 40;
+    //const REFF_PAYMENT = 50;
+    const REFF_SALES = 60;
+    const REFF_SALES_RETURN = 61;
     // scenario
     const SCENARIO_CHANGE_STATUS = 'change_status';
 
@@ -67,7 +77,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
             [['number'], 'autonumber', 'format' => 'GM' . date('Ymd') . '.?', 'digit' => 4],
             [['warehouse_id', 'type', 'reff_type', 'reff_id', 'vendor_id', 'status'], 'integer'],
             [['items'], 'required', 'except' => self::SCENARIO_CHANGE_STATUS],
-            [['vendor_name'], 'safe'],
+            [['vendor_name', 'vendor_id', 'date'], 'safe'],
             [['items'], 'relationUnique', 'targetAttributes' => 'product_id', 'except' => self::SCENARIO_CHANGE_STATUS],
             [['description'], 'string', 'max' => 255],
         ];
@@ -147,10 +157,11 @@ class GoodsMovement extends \yii\db\ActiveRecord
     {
         // update stock
         $wh_id = $this->warehouse_id;
+        $factor = $this->type == self::TYPE_RECEIVE ? 1 : -1;
         foreach ($this->items as $item) {
             $product_id = $item->product_id;
             $pu = ProductUom::findOne(['product_id' => $product_id, 'uom_id' => $item->uom_id]);
-            $qty = $item->qty * ($pu ? $pu->isi : 1);
+            $qty = $factor * $item->qty * ($pu ? $pu->isi : 1);
             $ps = ProductStock::findOne(['product_id' => $product_id, 'warehouse_id' => $wh_id]);
             if ($ps) {
                 $ps->qty = new Expression('[[qty]] + :added', [':added' => $qty]);
@@ -172,13 +183,14 @@ class GoodsMovement extends \yii\db\ActiveRecord
     {
         // update stock
         $wh_id = $this->warehouse_id;
+        $factor = $this->type == self::TYPE_RECEIVE ? -1 : 1;
         foreach ($this->items as $item) {
             $product_id = $item->product_id;
             $pu = ProductUom::findOne(['product_id' => $product_id, 'uom_id' => $item->uom_id]);
-            $qty = $item->qty * ($pu ? $pu->isi : 1);
+            $qty = $factor * $item->qty * ($pu ? $pu->isi : 1);
             $ps = ProductStock::findOne(['product_id' => $product_id, 'warehouse_id' => $wh_id]);
             if ($ps) {
-                $ps->qty = new Expression('[[qty]] - :added', [':added' => $qty]);
+                $ps->qty = new Expression('[[qty]] + :added', [':added' => $qty]);
             } else {
                 $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
             }
@@ -187,6 +199,54 @@ class GoodsMovement extends \yii\db\ActiveRecord
             }
         }
         return true;
+    }
+
+    /**
+     *
+     * @param array $options
+     * @return Invoice|boolean
+     */
+    public function createInvoice($options = [])
+    {
+        if ($this->status == self::STATUS_RELEASED) {
+            $oldInvoice = Invoice::findOne(['reff_type' => Invoice::REFF_GOODS_MOVEMENT,
+                    'reff_id' => $this->id, 'status' => Invoice::STATUS_POSTED]);
+
+            if ($oldInvoice !== null) {
+                return false;
+            }
+            $invoice = new Invoice();
+            $invoice->attributes = array_merge([
+                'date' => date('Y-m-d'),
+                'due_date' => date('Y-m-d', time() + 30 * 24 * 3600)
+                ], $options);
+            $invoice->reff_type = Invoice::REFF_GOODS_MOVEMENT;
+            $invoice->reff_id = $this->id;
+            $invoice->vendor_id = $this->vendor_id;
+            $invoice->type = $this->type == self::TYPE_RECEIVE ? Invoice::TYPE_OUTGOING : Invoice::TYPE_INCOMING;
+            $invoice->status = Invoice::STATUS_POSTED;
+
+            $items = [];
+            /* @var $item GoodsMovementDtl */
+            $total = 0;
+            foreach ($this->items as $item) {
+                $p_id = $item->product_id;
+                $pu = ProductUom::findOne(['product_id' => $p_id, 'uom_id' => $item->uom_id]);
+                $qty = ($pu ? $pu->isi : 1) * $item->qty;
+                $total += $qty * $item->value;
+                $items[] = [
+                    'item_type' => 10,
+                    'item_id' => $item->product_id,
+                    'qty' => $qty,
+                    'item_value' => $item->value,
+                ];
+            }
+            $invoice->value = $total;
+
+            $invoice->items = $items;
+            return $invoice;
+        }
+        return false;
     }
 
     public function behaviors()
@@ -205,10 +265,10 @@ class GoodsMovement extends \yii\db\ActiveRecord
             [
                 'class' => 'common\classes\StatusChangeBehavior',
                 'states' => [
-                    [null, self::STATUS_APPLIED, 'doApply'],
-                    [self::STATUS_DRAFT, self::STATUS_APPLIED, 'doApply'],
-                    [self::STATUS_APPLIED, self::STATUS_DRAFT, 'doRevert'],
-                    [self::STATUS_APPLIED, null, 'doRevert'],
+                    [null, self::STATUS_RELEASED, 'doApply'],
+                    [self::STATUS_DRAFT, self::STATUS_RELEASED, 'doApply'],
+                    [self::STATUS_RELEASED, self::STATUS_DRAFT, 'doRevert'],
+                    [self::STATUS_RELEASED, null, 'doRevert'],
                 ]
             ]
         ];

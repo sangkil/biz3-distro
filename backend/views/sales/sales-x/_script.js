@@ -44,8 +44,8 @@ $('#sales-vendor_name')
 };
 
 $('#add-payment').click(function(){
-    console.log('xxxx');
     var $row = $('#payment-grid').mdmTabularInput('addRow');
     $row.find('[data-field="payment_method"]').val($('#inp-payment-method').val());
+    $row.find('[data-field="nm_method"]').text($('#inp-payment-method').children(':selected').text());
     $row.find('[data-field="payment_value"]').val($('#inp-payment-value').val());
 });

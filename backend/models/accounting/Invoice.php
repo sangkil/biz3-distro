@@ -40,11 +40,9 @@ class Invoice extends \yii\db\ActiveRecord
     const STATUS_DRAFT = 10;
     const STATUS_POSTED = 20;
     const STATUS_CANCELED = 90;
-    
     // type invoice
     const TYPE_INCOMING = 10;
     const TYPE_OUTGOING = 20;
-    
     //document reff type
     const REFF_PURCH = 10;
     const REFF_PURCH_RETURN = 11;
@@ -54,6 +52,7 @@ class Invoice extends \yii\db\ActiveRecord
     //const REFF_PAYMENT = 50;
     const REFF_SALES = 60;
     const REFF_SALES_RETURN = 61;
+
     //const REFF_NOTHING = 90;
 
     public $vendor_name;
@@ -75,7 +74,7 @@ class Invoice extends \yii\db\ActiveRecord
             [['Date', 'DueDate', 'type', 'vendor_id', 'status', 'value'], 'required'],
             [['type', 'vendor_id', 'reff_type', 'reff_id', 'status'], 'integer'],
             [['value', 'tax_value'], 'number'],
-            [['vendor_name'], 'safe'],
+            [['vendor_name', 'date', 'due_date'], 'safe'],
             [['number'], 'autonumber', 'format' => 'IV' . date('Ym') . '.?', 'digit' => 4],
             [['items'], 'relationUnique', 'targetAttributes' => ['item_type', 'item_id']],
             [['description', 'tax_type'], 'string', 'max' => 64],
@@ -134,15 +133,16 @@ class Invoice extends \yii\db\ActiveRecord
     {
         return $this->getLogical('status', 'STATUS_');
     }
-    
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getJournals()
     {
-        return $this->hasMany(GlHeader::className(), ['reff_id' => 'id'])->where(['reff_type'=>GlHeader::REFF_INVOICE])->andFilterWhere(['<>','status',  GlHeader::STATUS_CANCELED]);
+        return $this->hasMany(GlHeader::className(), ['reff_id' => 'id'])->where(['reff_type' => GlHeader::REFF_INVOICE])->andFilterWhere(['<>',
+                'status', GlHeader::STATUS_CANCELED]);
     }
-    
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -166,7 +166,6 @@ class Invoice extends \yii\db\ActiveRecord
     {
         return $this->hasMany(PaymentDtl::className(), ['invoice_id' => 'id']);
     }
-    
     private $_paid;
 
     public function getPaid()
@@ -175,8 +174,8 @@ class Invoice extends \yii\db\ActiveRecord
             $this->_paid = (new \yii\db\Query())
                 ->from('{{%payment_dtl}} pd')
                 ->innerJoin('{{%payment}} p', '[[p.id]]=[[pd.payment_id]]')
-                ->where(['invoice_id' => $this->id, 'p.status' => Payment::STATUS_CLOSE])
-                ->sum('value');
+                ->where(['pd.invoice_id' => $this->id, 'p.status' => Payment::STATUS_CLOSE])
+                ->sum('pd.value');
         }
         return $this->_paid;
     }
@@ -184,6 +183,28 @@ class Invoice extends \yii\db\ActiveRecord
     public function getSisa()
     {
         return $this->value - $this->getPaid();
+    }
+
+    public function createPayment($options = [], $value = null)
+    {
+        if ($this->status == self::STATUS_POSTED && ($paid = $this->getPaid()) > 0) {
+            $payment = new Payment();
+            $payment->attributes = array_merge([
+                'date' => date('Y-m-d')
+                ], $options, ['items' => []]);
+            $payment->vendor_id = $this->vendor_id;
+            $payment->status = Payment::STATUS_APPLIED;
+            $payment->type = $this->type;
+            $items = [
+                [
+                    'invoice_id' => $this->id,
+                    'value' => $value !== null ? $value : $paid,
+                ]
+            ];
+            $payment->items = $items;
+            return $payment;
+        }
+        return false;
     }
 
     public function behaviors()

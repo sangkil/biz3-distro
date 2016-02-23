@@ -13,8 +13,8 @@ use backend\models\master\Uom;
  * @property integer $product_id
  * @property integer $uom_id
  * @property double $qty
- * @property double $item_value
- * @property double $trans_value
+ * @property double $value
+ * @property double $cogs
  *
  * @property GoodsMovement $movement
  * @property Product $product
@@ -37,7 +37,7 @@ class GoodsMovementDtl extends \yii\db\ActiveRecord
         return [
             [['product_id', 'uom_id', 'qty'], 'required'],
             [['movement_id', 'product_id', 'uom_id'], 'integer'],
-            [['qty', 'item_value', 'trans_value'], 'number'],
+            [['qty', 'value', 'cogs'], 'number'],
         ];
     }
 
@@ -51,8 +51,8 @@ class GoodsMovementDtl extends \yii\db\ActiveRecord
             'product_id' => 'Product ID',
             'uom_id' => 'Uom ID',
             'qty' => 'Qty',
-            'item_value' => 'Item Value',
-            'trans_value' => 'Trans Value',
+            'value' => 'Item Value',
+            'cogs' => 'Cogs',
         ];
     }
 

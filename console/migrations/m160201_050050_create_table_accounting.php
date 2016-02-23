@@ -49,6 +49,8 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
         $this->createTable('{{%entri_sheet}}', [
             'id' => Schema::TYPE_STRING . '(16) NOT NULL',
             'name' => Schema::TYPE_STRING . '(64)',
+            'd_coa_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'k_coa_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             // history column
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,
@@ -56,18 +58,8 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
             'updated_by' => Schema::TYPE_INTEGER,
             // constrain
             'PRIMARY KEY ([[id]])',
-            ], $tableOptions);
-
-        $this->createTable('{{%entri_sheet_dtl}}', [
-            'esheet_id' => Schema::TYPE_STRING . '(16) NOT NULL',
-            'id' => Schema::TYPE_STRING . '(16) NOT NULL',
-            'name' => Schema::TYPE_STRING . '(64)',
-            'coa_id' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'dk' => Schema::TYPE_STRING . '(1)',
-            // constrain
-            'PRIMARY KEY ([[esheet_id]], [[id]])',
-            'FOREIGN KEY ([[esheet_id]]) REFERENCES {{%entri_sheet}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
-            'FOREIGN KEY ([[coa_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
+            'FOREIGN KEY ([[d_coa_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
+            'FOREIGN KEY ([[k_coa_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
             ], $tableOptions);
 
         $this->createTable('{{%gl_header}}', [
@@ -167,7 +159,6 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
         $this->dropTable('{{%invoice}}');
         $this->dropTable('{{%gl_detail}}');
         $this->dropTable('{{%gl_header}}');
-        $this->dropTable('{{%entri_sheet_dtl}}');
         $this->dropTable('{{%entri_sheet}}');
         $this->dropTable('{{%acc_periode}}');
         $this->dropTable('{{%coa}}');

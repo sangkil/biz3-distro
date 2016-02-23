@@ -12,18 +12,20 @@ use yii\helpers\ArrayHelper;
  *
  * @property string $id
  * @property string $name
+ * @property integer $d_coa_id
+ * @property integer $k_coa_id
  * @property integer $created_at
  * @property integer $created_by
  * @property integer $updated_at
  * @property integer $updated_by
  * @property double $amount
  *
- * @property EntriSheetDtl[] $entriSheetDtls
+ * @property Coa $dCoa
+ * @property Coa $kCoa
  */
 class EntriSheet extends \yii\db\ActiveRecord {
 
-    use \mdm\converter\EnumTrait,
-        \mdm\behaviors\ar\RelationTrait;
+    use \mdm\converter\EnumTrait;
 
     public $amount;
 
@@ -39,7 +41,7 @@ class EntriSheet extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            //[['id','amount'], 'required'],
+            [['d_coa_id','k_coa_id'], 'required'],
             [['id'], 'autonumber', 'format' => date('y') . '?', 'digit' => 4],
             [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['id'], 'string', 'max' => 16],
@@ -64,15 +66,15 @@ class EntriSheet extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEntriSheetDtls() {
-        return $this->hasMany(EntriSheetDtl::className(), ['esheet_id' => 'id']);
+    public function getDCoa() {
+        return $this->hasOne(Coa::className(), ['id' => 'd_coa_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function setEntriSheetDtls($value) {
-        $this->loadRelated('entriSheetDtls', $value);
+    public function getKCoa() {
+        return $this->hasOne(Coa::className(), ['id' => 'k_coa_id']);
     }
     
     

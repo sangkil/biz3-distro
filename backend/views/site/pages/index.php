@@ -8,3 +8,6 @@ use yii\web\View;
 
 ?>
 <?= __FILE__ ?>
+<?php
+$sales = new backend\models\sales\Sales();
+$sales->save(false);

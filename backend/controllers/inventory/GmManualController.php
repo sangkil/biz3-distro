@@ -156,7 +156,7 @@ class GmManualController extends Controller
             throw new UserException('Tidak bisa diconfirm');
         }
         $model->scenario = GoodsMovement::SCENARIO_CHANGE_STATUS;
-        $model->status = GoodsMovement::STATUS_APPLIED;
+        $model->status = GoodsMovement::STATUS_RELEASED;
         $transaction = Yii::$app->db->beginTransaction();
         try {
             if ($model->save()) {
@@ -180,7 +180,7 @@ class GmManualController extends Controller
     public function actionRollback($id)
     {
         $model = $this->findModel($id);
-        if ($model->status != GoodsMovement::STATUS_APPLIED) {
+        if ($model->status != GoodsMovement::STATUS_RELEASED) {
             throw new UserException('Tidak bisa dirollback');
         }
         $model->scenario = GoodsMovement::SCENARIO_CHANGE_STATUS;

@@ -13,8 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="invoice-view">
     <div class="col-lg-12" style="margin-bottom:10px;">
         <div class="pull-right">
-
-            <div class='btn-group pull-right'>
+            <div class='btn-group'>
                 <?= Html::button('New Invoice', ['class' => 'btn btn-default', 'type' => 'button']) ?>        
                 <?= Html::button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', ['class' => 'btn btn-default dropdown-toggle', 'aria-expanded' => false, 'type' => 'button', 'data-toggle' => 'dropdown']) ?>
                 <ul class="dropdown-menu" role="menu">

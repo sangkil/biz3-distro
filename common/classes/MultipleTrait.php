@@ -2,6 +2,8 @@
 
 namespace common\classes;
 
+use yii\helpers\ArrayHelper;
+
 /**
  * Description of MultipleTrait
  *
@@ -11,46 +13,66 @@ namespace common\classes;
 trait MultipleTrait
 {
 
-    public static function createMultiple($data, $formName = null, $origin = [], $keys = null)
+    /**
+     *
+     * @param array $data
+     * @param string $formName
+     * @param array $origin
+     * @param string|array $keys
+     * @return static[]
+     */
+    public static function createMultiple($data, $formName = null, &$origin = [], $keys = null)
     {
         if ($formName === null) {
             $ref = new \ReflectionClass(get_called_class());
             $formName = $ref->getShortName();
         }
         if ($formName != '') {
-            $data = $data[$formName];
+            $data = ArrayHelper::getValue($data, $formName, null);
+        }
+        if($data === null){
+            return false;
         }
         $result = [];
+        $newOrigin = [];
         if ($keys !== null && !empty($origin)) {
-            $newOrigin = [];
-            if (is_array($keys)) {
-                foreach ($origin as $model) {
+            foreach ($origin as $index => $model) {
+                if (is_array($keys)) {
                     $id = [];
                     foreach ($keys as $key) {
                         $id[] = $model[$key];
                     }
-                    $newOrigin[md5(serialize($id))] = $model;
+                    $id = md5(serialize($id));
+                } else {
+                    $id = $model[$keys];
                 }
-            } else {
-                foreach ($origin as $model) {
-                    $newOrigin[$model[$keys]] = $model;
-                }
+                $newOrigin[$id] = [$index, $model];
             }
-            $origin = $newOrigin;
         }
         /* @var $model \yii\base\Model */
         foreach ($data as $index => $row) {
+            $model = [];
             if ($keys === null) {
-                $model = isset($origin[$index]) ? $origin[$index] : new static();
+                if (isset($origin[$index])) {
+                    $model = $origin[$index];
+                    unset($origin[$index]);
+                }
             } elseif (is_array($keys)) {
                 $id = [];
                 foreach ($keys as $key) {
                     $id[] = $row[$key];
                 }
                 $id = md5(serialize($id));
-                $model = isset($origin[$id]) ? $origin[$id] : new static();
+                if (isset($newOrigin[$id])) {
+                    list($idx, $model) = $newOrigin[$id];
+                    unset($origin[$idx], $newOrigin[$id]);
+                }
             } else {
-                $model = isset($origin[$row[$keys]]) ? $origin[$row[$keys]] : new static();
+                $id = $row[$keys];
+                if (isset($newOrigin[$id])) {
+                    list($idx, $model) = $newOrigin[$id];
+                    unset($origin[$idx], $newOrigin[$id]);
+                }
             }
             if (!($model instanceof static)) {
                 $m = new static();

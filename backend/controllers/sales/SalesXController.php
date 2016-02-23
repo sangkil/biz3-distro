@@ -11,6 +11,9 @@ use yii\filters\VerbFilter;
 use backend\models\master\Product;
 use backend\models\master\Vendor;
 use yii\base\UserException;
+use backend\models\accounting\Invoice;
+use backend\models\accounting\Payment;
+use common\classes\Helper;
 
 /**
  * SalesController implements the CRUD actions for Sales model.
@@ -66,16 +69,79 @@ class SalesXController extends Controller
     {
         $model = new Sales();
 
-
-        $model->status = Sales::STATUS_DRAFT;
+        $model->status = Sales::STATUS_APPLIED;
         $model->date = date('Y-m-d');
+        $error = false;
+        $payments = [];
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                $model->items = Yii::$app->request->post('SalesDtl', []);
-                if ($model->save()) {
-                    $transaction->commit();
-                    return $this->redirect(['view', 'id' => $model->id]);
+                $payments = Helper::createMultiple(Payment::className(), Yii::$app->request->post());
+                if (!empty($payments)) {
+                    $model->items = Yii::$app->request->post('SalesDtl', []);
+                    if ($model->save()) {
+                        $movement = $model->createMovement([
+                            'warehouse_id' => 1
+                        ]);
+                        if ($movement && $movement->save()) {
+                            $invoice = $movement->createInvoice();
+                            if ($invoice && $invoice->save()) {
+                                /* @var $payment Payment */
+                                $success = true;
+                                $total = 0;
+                                $paymentData = [
+                                    'vendor_id'=>$invoice->vendor_id,
+                                    'date'=>  date('Y-m-d'),
+                                    'type'=>$invoice->type,
+                                ];
+                                foreach ($payments as $payment) {
+                                    $payment->attributes = $paymentData;
+                                    $payment->status = Payment::STATUS_APPLIED;
+
+                                    $payItems = $payment->items;
+                                    $payItems[0]->invoice_id = $invoice->id;
+                                    $total += $payItems[0]->value;
+                                    $payment->items = $payItems;
+                                }
+                                if ($invoice->value == $total) {
+                                    foreach ($payments as $i => $payment) {
+                                        if (!$payment->save()) {
+                                            $success = false;
+                                            $firstErrors = $payment->firstErrors;
+                                            $error = "Payment {$i}: " . reset($firstErrors);
+                                            break;
+                                        }
+                                    }
+                                }  else {
+                                    $success = false;
+                                    $error = 'Total payment tidak sama dengan invoice';
+                                }
+                                if ($success) {
+                                    $transaction->commit();
+                                    return $this->redirect(['view', 'id' => $model->id]);
+                                }
+                            } else {
+                                if ($invoice) {
+                                    $firstErrors = $invoice->firstErrors;
+                                    $error = "Invoice: " . reset($firstErrors);
+                                } else {
+                                    $error = 'Cannot create invoice';
+                                }
+                            }
+                        } else {
+                            if ($movement) {
+                                $firstErrors = $movement->firstErrors;
+                                $error = "GI: " . reset($firstErrors);
+                            } else {
+                                $error = 'Cannot create GI';
+                            }
+                        }
+                    }
+                } else {
+                    $error = "Payment can not empty";
+                }
+                if ($error !== false) {
+                    $model->addError('related', $error);
                 }
             } catch (\Exception $exc) {
                 $transaction->rollBack();
@@ -85,6 +151,7 @@ class SalesXController extends Controller
         }
         return $this->render('create', [
                 'model' => $model,
+                'payments' => $payments
         ]);
     }
 

@@ -5,6 +5,8 @@ namespace backend\models\sales;
 use Yii;
 use backend\models\master\Branch;
 use backend\models\master\Vendor;
+use backend\models\inventory\GoodsMovement;
+use backend\models\inventory\GoodsMovementDtl;
 
 /**
  * This is the model class for table "sales".
@@ -28,15 +30,16 @@ use backend\models\master\Vendor;
  */
 class Sales extends \yii\db\ActiveRecord
 {
+
     use \mdm\converter\EnumTrait,
         \mdm\behaviors\ar\RelationTrait;
-
     // status movement
     const STATUS_DRAFT = 10;
     const STATUS_APPLIED = 20;
     const STATUS_CLOSE = 90;
 
     public $vendor_name;
+
     /**
      * @inheritdoc
      */
@@ -119,6 +122,69 @@ class Sales extends \yii\db\ActiveRecord
     public function getNmStatus()
     {
         return $this->getLogical('status', 'STATUS_');
+    }
+
+    /**
+     *
+     * @param array $options
+     * @param array $data
+     * @return GoodsMovement|boolean
+     */
+    public function createMovement($options = [], $data = null)
+    {
+        if ($this->status == self::STATUS_APPLIED) {
+            $movement = new GoodsMovement();
+            $movement->attributes = array_merge([
+                'date' => date('Y-m-d'),
+                ], $options);
+            $movement->reff_type = GoodsMovement::REFF_SALES;
+            $movement->reff_id = $this->id;
+            $movement->type = GoodsMovement::TYPE_ISSUE;
+            $movement->status = GoodsMovement::STATUS_RELEASED;
+            $movement->vendor_id = $this->vendor_id;
+
+            $sqlMv = (new \yii\db\Query())
+                ->select(['d.product_id', 'total' => 'sum(d.qty)'])
+                ->from('{{%goods_movement_dtl}} d')
+                ->innerJoin('{{%goods_movement}} m', '[[m.id]]=[[d.movement_id]]')
+                ->where(['m.status' => GoodsMovement::STATUS_RELEASED,
+                    'm.reff_type' => GoodsMovement::REFF_SALES, 'm.reff_id' => $this->id])
+                ->groupBy(['d.product_id']);
+
+            $sql = (new \yii\db\Query())
+                ->select(['sd.*', 'mv.total'])
+                ->from('{{%sales_dtl}} sd')
+                ->leftJoin(['mv' => $sqlMv], '[[sd.product_id]]=[[mv.product_id]]')
+                ->where(['sd.sales_id' => $this->id]);
+
+            $items = [];
+            $details = $sql->indexBy('product_id')->all();
+
+            if ($data !== null) {
+                foreach ($data as $row) {
+                    $detail = $details[$row['product_id']];
+                    $items[] = array_merge([
+                        'qty' => $detail['qty'] - $detail['total'],
+                        'uom_id' => $detail['uom_id'],
+                        'value' => $detail['price'] - $detail['discount'],
+                        'cogs' => $detail['cogs'],
+                        ], $row);
+                }
+            } else {
+                foreach ($details as $detail) {
+                    $items[] = [
+                        'product_id' => $detail['product_id'],
+                        'qty' => $detail['qty'] - $detail['total'],
+                        'uom_id' => $detail['uom_id'],
+                        'value' => $detail['price'] - $detail['discount'],
+                        'cogs' => $detail['cogs'],
+                    ];
+                }
+            }
+            $movement->items = $items;
+            return $movement;
+        }
+        return false;
     }
 
     public function behaviors()

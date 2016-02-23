@@ -9,7 +9,7 @@ use backend\models\accounting\Payment;
 ?>
 <td>
     <?= Html::activeHiddenInput($model, "[$key]payment_method", ['id' => false, 'data-field' => 'payment_method']) ?>
-    <span data-field="nm-method"><?= Html::getAttributeValue($model, "[$key]nmMethod") ?></span>
+    <span data-field="nm_method"><?= Html::getAttributeValue($model, "[$key]nmMethod") ?></span>
 </td>
 <td>
     <?= Html::activeTextInput($model, "[$key]items[0][value]", ['id' => false,

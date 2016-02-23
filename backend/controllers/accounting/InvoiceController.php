@@ -159,7 +159,7 @@ class InvoiceController extends Controller {
                     throw new NotFoundHttpException('No active periode exist for now.');
                 }
                 $gl->periode_id = $aPeriode->id;
-                $gl->reff_type = Invoice::REFF_INVOICE;
+                $gl->reff_type = $gl::REFF_INVOICE;
                 $gl->reff_id = $model->id;
                 $gl->status = $gl::STATUS_RELEASED;
                 $gl->date = date('Y-m-d');

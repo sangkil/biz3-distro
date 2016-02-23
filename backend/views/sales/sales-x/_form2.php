@@ -12,8 +12,8 @@ use mdm\widgets\TabularInput;
 ?>
 <div class="row">
     <div class="col-md-6">
-        <?= $form->field($model, 'value')->textInput(['readonly' => true, 'style' => 'width:40%;']) ?>
-        <table>
+        <?= $form->field($model, 'value')->textInput(['readonly' => true, 'style' => 'width:40%;','name'=>'']) ?>
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th><?=
@@ -32,7 +32,7 @@ use mdm\widgets\TabularInput;
             <?=
             TabularInput::widget([
                 'id' => 'payment-grid',
-                'allModels' => [],
+                'allModels' => $payments,
                 'modelClass' => Payment::className(),
                 'options' => ['tag' => 'tbody'],
                 'itemOptions' => ['tag' => 'tr'],

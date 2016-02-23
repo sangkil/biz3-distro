@@ -38,7 +38,7 @@ $this->registerJs($this->render('_script.js'));
                     <?= $this->render('_form1', ['form' => $form, 'model' => $model]) ?>
                 </div>
                 <div class="tab-pane" id="form2">
-                    <?= $this->render('_form2', ['form' => $form, 'model' => $model]) ?>
+                    <?= $this->render('_form2', ['form' => $form, 'model' => $model,'payments'=>$payments,]) ?>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@ $this->registerJs($this->render('_script.js'));
                 <li><a href="#notes" data-toggle="tab" aria-expanded="false">Notes</a></li>
                 <li class="pull-right">
                     <?=
-                    Html::button('Bayar', ['class' => 'btn btn-success', 'id' => 'btn-bayar',
+                    Html::submitButton('Create', ['class' => 'btn btn-success', 'id' => 'btn-bayar',
                         'data' => ['toggle' => 'modal', 'target' => '#payment-dlg']])
                     ?>
                 </li>
