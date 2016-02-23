@@ -67,6 +67,10 @@ class SalesXController extends Controller
      */
     public function actionCreate()
     {
+        $profile = Yii::$app->profile;
+        if(!isset($profile->branch_id,$profile->warehouse_id)){
+            return $this->redirect(['config']);
+        }
         $model = new Sales();
 
         $model->status = Sales::STATUS_APPLIED;
@@ -81,7 +85,7 @@ class SalesXController extends Controller
                     $model->items = Yii::$app->request->post('SalesDtl', []);
                     if ($model->save()) {
                         $movement = $model->createMovement([
-                            'warehouse_id' => 1
+                            'warehouse_id' => $profile->warehouse_id,
                         ]);
                         if ($movement && $movement->save()) {
                             $invoice = $movement->createInvoice();
@@ -90,9 +94,9 @@ class SalesXController extends Controller
                                 $success = true;
                                 $total = 0;
                                 $paymentData = [
-                                    'vendor_id'=>$invoice->vendor_id,
-                                    'date'=>  date('Y-m-d'),
-                                    'type'=>$invoice->type,
+                                    'vendor_id' => $invoice->vendor_id,
+                                    'date' => date('Y-m-d'),
+                                    'type' => $invoice->type,
                                 ];
                                 foreach ($payments as $payment) {
                                     $payment->attributes = $paymentData;
@@ -112,7 +116,7 @@ class SalesXController extends Controller
                                             break;
                                         }
                                     }
-                                }  else {
+                                } else {
                                     $success = false;
                                     $error = 'Total payment tidak sama dengan invoice';
                                 }
@@ -155,35 +159,16 @@ class SalesXController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Sales model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
+    public function actionConfig()
     {
-        $model = $this->findModel($id);
-        if ($model->status != Sales::STATUS_DRAFT) {
-            throw new UserException('Tidak bisa diupdate');
+        $model = new \backend\models\sales\Config();
+        $model->attributes = Yii::$app->profile->states();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            Yii::$app->profile->states($model->attributes);
+            return $this->redirect(['index']);
         }
-
-        if ($model->load(Yii::$app->request->post())) {
-            $transaction = Yii::$app->db->beginTransaction();
-            try {
-                $model->items = Yii::$app->request->post('SalesDtl', []);
-                if ($model->save()) {
-                    $transaction->commit();
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }
-            } catch (\Exception $exc) {
-                $transaction->rollBack();
-                throw $exc;
-            }
-            $transaction->rollBack();
-        }
-        return $this->render('update', [
-                'model' => $model,
+        return $this->render('config', [
+                'model' => $model
         ]);
     }
 

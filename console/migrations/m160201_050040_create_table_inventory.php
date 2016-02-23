@@ -117,8 +117,8 @@ class m160201_050040_create_table_inventory extends \yii\db\Migration
             'product_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'uom_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'qty' => Schema::TYPE_FLOAT . ' NOT NULL',
-            'item_value' => Schema::TYPE_FLOAT,
-            'trans_value' => Schema::TYPE_FLOAT,
+            'value' => Schema::TYPE_FLOAT,
+            'cogs' => Schema::TYPE_FLOAT,
             // constrain
             'PRIMARY KEY ([[movement_id]], [[product_id]])',
             'FOREIGN KEY ([[movement_id]]) REFERENCES {{%goods_movement}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',

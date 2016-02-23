@@ -8,5 +8,8 @@ return [
         'session' => [
             'class' => 'common\classes\DbSession',
         ],
+        'profile' => [
+            'class' => 'common\classes\State'
+        ]
     ],
 ];
