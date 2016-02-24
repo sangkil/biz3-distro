@@ -81,13 +81,13 @@ $this->registerJs($this->render('_script.js'));
                     <?= Html::textInput('payment[items][value]', '', ['class' => 'form-control']) ?>
                 </div>
                 <div class="col-lg-2" style="padding-left: 0px;">
-                    <?= Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;']) ?>
+                    <?= Html::buttonInput('<i class="fa fa-plus></i>"', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;']) ?>
                 </div>
             </div>
             <div class="box-footer box-comments">
                 <div class="col-lg-12">
                 <?=
-                Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'])
+                Html::submitButton($model->isNewRecord ? 'Complete' : '', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'])
                 ?></div>
             </div>
         </div>
