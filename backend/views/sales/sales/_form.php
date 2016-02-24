@@ -85,9 +85,10 @@ $this->registerJs($this->render('_script.js'));
                 </div>
             </div>
             <div class="box-footer box-comments">
+                <div class="col-lg-12">
                 <?=
                 Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'])
-                ?>
+                ?></div>
             </div>
         </div>
     </div>
