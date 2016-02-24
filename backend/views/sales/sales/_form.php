@@ -64,7 +64,7 @@ $this->registerJs($this->render('_script.js'));
                     </button>
                 </div>
             </div>
-            <div class="box-body">
+            <div class="box-body with-border">
                 <!--                <div class="col-lg-5">
                 <?= $form->field($model, 'number')->textInput(['readonly' => true]) ?>
                 <?= ''//$form->field($model, 'branch_id')->dropDownList(Branch::selectOptions()) ?>
@@ -85,10 +85,9 @@ $this->registerJs($this->render('_script.js'));
                 </div>
             </div>
             <div class="box-footer box-comments">
-                <div class="pull-right">
                 <?=
                 Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'])
-                ?></div>
+                ?>
             </div>
         </div>
     </div>
