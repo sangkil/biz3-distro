@@ -60,7 +60,7 @@ $this->registerJs($this->render('_script.js'));
                 <h3 class="box-title">Customer & Payments</h3>   
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                        <i class="fa fa-plus"></i>
+                        <i class="fa fa-minus"></i>
                     </button>
                 </div>
             </div>
