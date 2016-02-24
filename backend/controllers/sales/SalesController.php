@@ -65,6 +65,7 @@ class SalesController extends Controller
     public function actionCreate()
     {
         $model = new Sales();
+        $payment = new \backend\models\accounting\Payment;
 
         $model->status = Sales::STATUS_DRAFT;
         $model->date = date('Y-m-d');
@@ -83,7 +84,7 @@ class SalesController extends Controller
             $transaction->rollBack();
         }
         return $this->render('create', [
-                'model' => $model,
+                'model' => $model, 'payment'=>$payment
         ]);
     }
 

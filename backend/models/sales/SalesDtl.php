@@ -21,29 +21,28 @@ use backend\models\master\Cogs;
  *
  * @property Sales $sales
  */
-class SalesDtl extends \yii\db\ActiveRecord
-{
+class SalesDtl extends \yii\db\ActiveRecord {
 
+    public $total_release;
+    
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%sales_dtl}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['product_id', 'uom_id', 'qty', 'price'], 'required'],
             [['sales_id', 'product_id', 'uom_id'], 'integer'],
             [['cogs'], 'default', 'value' => function() {
-                $cogs = Cogs::findOne($this->product_id);
-                return $cogs ? $cogs->cogs : null;
-            }],
+            $cogs = Cogs::findOne($this->product_id);
+            return $cogs ? $cogs->cogs : null;
+        }],
             [['cogs'], 'required'],
             [['qty', 'price', 'cogs', 'discount', 'total_release'], 'number'],
         ];
@@ -52,8 +51,7 @@ class SalesDtl extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'sales_id' => 'Sales ID',
             'product_id' => 'Product ID',
@@ -68,24 +66,30 @@ class SalesDtl extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSales()
-    {
+    public function getSales() {
         return $this->hasOne(Sales::className(), ['id' => 'sales_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProduct()
-    {
+    public function getProduct() {
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUom()
-    {
+    public function getUom() {
         return $this->hasOne(Uom::className(), ['id' => 'uom_id']);
     }
+
+    /**
+     * @return Double
+     */
+    public function getTotalLine() {
+        $post_discount = (1-($this->discount/100));
+        return ($this->qty * $this->price) * $post_discount;
+    }
+
 }

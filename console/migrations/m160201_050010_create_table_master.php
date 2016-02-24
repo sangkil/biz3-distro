@@ -85,6 +85,8 @@ class m160201_050010_create_table_master extends \yii\db\Migration
             'code' => Schema::TYPE_STRING . '(13) NOT NULL',
             'name' => Schema::TYPE_STRING . '(64) NOT NULL',
             'status' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'edition' => Schema::TYPE_DATE ,
+            'stockable'=> Schema::TYPE_BOOLEAN .' DEFAULT TRUE',
             // history column
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,

@@ -227,7 +227,7 @@ class InvoiceController extends Controller {
         return Product::find()
                         ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
                         ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-                        ->asArray()->limit(10)->all();
+                        ->asArray()->limit(100)->all();
     }
 
     public function actionVendorList($term = '') {

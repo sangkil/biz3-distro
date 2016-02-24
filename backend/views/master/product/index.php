@@ -32,20 +32,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => 'Product Group',
                 'attribute' => 'group_id',
                 'value' => 'group.name',
-                'format'=>'raw',
+                'format' => 'raw',
                 'filter' => backend\models\master\ProductGroup::selectOptions()
             ],
             [
                 'header' => 'Product Category',
                 'attribute' => 'category_id',
                 'value' => 'category.name',
-                'format'=>'raw',
+                'format' => 'raw',
                 'filter' => \backend\models\master\Category::selectOptions()
             ],
             [
-                'attribute'=>'status',
-                'value'=>'nmStatus',
-                'filter' =>$searchModel::enums('STATUS_')
+                'attribute' => 'status',
+                'value' => 'nmStatus',
+                'filter' => $searchModel::enums('STATUS_')
+            ],
+            'edition:date',
+            [
+                'header'=>'stockable',
+                'class' => 'yii\grid\CheckboxColumn',
+                'checkboxOptions' => function ($model, $key, $index, $column) {
+                    return ['value' => $model->id, 'checked' => $model->stockable];
+                }
             ],
             //'id',
             // 'created_at',

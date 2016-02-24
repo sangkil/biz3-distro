@@ -16,14 +16,20 @@ use backend\models\sales\SalesDtl;
             <th>
                 Product Name
             </th>
-            <th class="items" style="width: 20%">
+            <th class="items" style="width: 10%">
                 Price
             </th>
-            <th class="items" style="width: 20%">
+            <th class="items" style="width: 10%">
                 Qty
             </th>
             <th style="width: 10%">
                 Uom
+            </th>
+            <th style="width: 10%">
+                Disc %
+            </th>
+            <th style="width: 10%">
+                Line Total
             </th>
         </tr>
         <tr>
@@ -34,6 +40,10 @@ use backend\models\sales\SalesDtl;
                     </span>
                     <input id="input-product" class="form-control" placeholder="Search Product..">
                 </div>
+            </td>
+            <td colspan="3"></td>            
+            <td>
+                <input id="global-discount" class="form-control" placeholder="Global Discount">
             </td>
         </tr>
     </thead>

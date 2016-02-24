@@ -19,7 +19,7 @@ class Product extends ProductModel
     {
         return [
             [['id', 'group_id', 'category_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['code', 'name'], 'safe'],
+            [['code', 'name', 'edition','stockable','Edition'], 'safe'],
         ];
     }
 

@@ -66,7 +66,8 @@ class ProductController extends Controller {
                 if (!$model->save()) {
                     $allSaved = false;
                 } else {
-                    foreach ($dPost['prodUom'] as $row) {
+
+                    foreach (Yii::$app->request->post('prodUom', []) as $row) {
                         $modelUom = new \backend\models\master\ProductUom();
                         $modelUom->product_id = $model->id;
                         $modelUom->uom_id = $row['id_uom'];
@@ -75,7 +76,7 @@ class ProductController extends Controller {
                             $allSaved = false;
                         }
                     }
-                    foreach ($dPost['prodBcode'] as $row) {
+                    foreach (Yii::$app->request->post('prodBcode', []) as $row) {
                         $modelChild = new \backend\models\master\ProductChild();
                         $modelChild->product_id = $model->id;
                         $modelChild->barcode = $row['barcode'];
@@ -106,7 +107,6 @@ class ProductController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
-
         $dPost = Yii::$app->request->post();
         if ($model->load($dPost)) {
             $old_proUom = [];
@@ -177,7 +177,7 @@ class ProductController extends Controller {
                         if ($is_del) {
                             $pisah = explode('-', $prow);
                             $todel = $this->findProChild($pisah[0], $pisah[1]);
-                            if(!$todel->delete()){
+                            if (!$todel->delete()) {
                                 print_r($todel->getErrors());
                             }
                         }

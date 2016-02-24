@@ -16,6 +16,8 @@ use backend\models\sales\Price;
  * @property string $code
  * @property string $name
  * @property integer $status
+ * @property boolean $stockable
+ * @property string $edition
  * @property integer $created_at
  * @property integer $created_by
  * @property integer $updated_at
@@ -57,6 +59,7 @@ class Product extends \yii\db\ActiveRecord {
             [['group_id', 'category_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['code'], 'string', 'max' => 13],
             [['name'], 'string', 'max' => 64],
+            [['stockable', 'edition', 'Edition'], 'safe'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductGroup::className(), 'targetAttribute' => ['group_id' => 'id']],
         ];
@@ -73,6 +76,8 @@ class Product extends \yii\db\ActiveRecord {
             'code' => 'Code',
             'name' => 'Name',
             'status' => 'Status',
+            'edition' => 'Edition',
+            'stockable' => 'Stockable',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
@@ -170,6 +175,14 @@ class Product extends \yii\db\ActiveRecord {
 
     public function behaviors() {
         return [
+            [
+                'class' => 'mdm\converter\DateConverter',
+                'type' => 'date', // 'date', 'time', 'datetime'
+                'logicalFormat' => 'php:d-m-Y',
+                'attributes' => [
+                    'Edition' => 'edition', // date is original attribute
+                ]
+            ],
             ['class' => TimestampBehavior::className()],
             ['class' => BlameableBehavior::className()]
         ];
