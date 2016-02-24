@@ -54,7 +54,7 @@ $this->registerJs($this->render('_script.js'));
                 <?= 'Sales Date: ' . Html::getAttributeValue($model, 'Date') ?> <i class="fa fa-calendar"></i>
             </a>
         </div>
-        <div class="box box-info box-comments collapsed-box">
+        <div class="box box-info box-comments with-border">
             <div class="box-header with-border">
                 <i class="fa fa-shopping-cart text-orange"></i>
                 <h3 class="box-title">Customer & Payments</h3>   
@@ -84,7 +84,7 @@ $this->registerJs($this->render('_script.js'));
                     <?= Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;']) ?>
                 </div>
             </div>
-            <div class="box-footer">
+            <div class="box-footer box-comments">
                 <div class="pull-right">
                 <?=
                 Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'])
