@@ -57,7 +57,7 @@ $this->registerJs($this->render('_script.js'));
         <div class="box box-info box-comments collapsed-box">
             <div class="box-header with-border">
                 <i class="fa fa-shopping-cart text-orange"></i>
-                <h3 class="box-title">Customer</h3>   
+                <h3 class="box-title">Customer & Payments</h3>   
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse">
                         <i class="fa fa-plus"></i>
@@ -70,22 +70,9 @@ $this->registerJs($this->render('_script.js'));
                 <?= ''//$form->field($model, 'branch_id')->dropDownList(Branch::selectOptions()) ?>
                                 </div>-->
                 <div class="col-lg-12">
-                    <?= $form->field($model, 'vendor_name')->textInput([])->label('Customer')->label(false) ?>
+                    <?= $form->field($model, 'vendor_name')->textInput([])->label('Customer') ?>
                     <?= $form->field($model, 'vendor_id')->hiddenInput()->label(false) ?>
                 </div>
-            </div>
-        </div>
-        <div class="box box-info box-comments  collapsed-box">
-            <div class="box-header with-border">
-                <i class="fa fa-money"></i>
-                <h3 class="box-title">Payment</h3>   
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                        <i class="fa fa-plus"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="box-body">
                 <div class="col-lg-6">
                     <?= $form->field($payment, 'payment_type')->dropDownList($payment::enums('METHOD_', ['prompt' => '--'])) ?>
                 </div>
