@@ -146,7 +146,7 @@ class GlHeader extends \yii\db\ActiveRecord {
         $link = null;
         switch ((int) $this->reff_type) {
             case (int) self::REFF_GOODS_MOVEMENT:
-                $link = ($this->invoice != null) ? Html::a($this->gMovement->number, ['/inventory/gm-manual/view', 'id' => $this->reff_id]) : '';
+                $link = ($this->gMovement != null) ? Html::a($this->gMovement->number, ['/inventory/gm-manual/view', 'id' => $this->reff_id]) : '';
                 break;
             case (int) self::REFF_INVOICE:
                 $link = ($this->invoice != null) ? Html::a($this->invoice->number, ['/accounting/invoice/view', 'id' => $this->reff_id]) : '';
@@ -156,10 +156,6 @@ class GlHeader extends \yii\db\ActiveRecord {
         }
         //echo $this->reff_type.'vs'.self::REFF_INVOICE;
         return $link;
-    }
-
-    public function getReffLink() {
-        return $this->getLogical('status', 'REFF_');
     }
 
     public function validateDualEntri($attribute) {

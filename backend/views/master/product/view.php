@@ -31,10 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'options' => ['class' => 'table table-hover'],
         'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
         'attributes' => [
-            'id',
+            //'id',
             'code',
             'name',
-            'nmStatus',
             [
                 'label' => 'Product Group',
                 'value' => $model->group->name
@@ -42,7 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Category',
                 'value' => $model->category->name
-            ]
+            ],
+            'Edition',
+            'stockable:boolean'
         ],
     ])
     ?>
@@ -54,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'options' => ['class' => 'table table-hover'],
         'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
         'attributes' => [
+            'nmStatus',
             'created_at:datetime',
             'created_by',
             'updated_at:datetime',

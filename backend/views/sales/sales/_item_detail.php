@@ -16,7 +16,8 @@ use backend\models\master\Uom;
 <td >
     <?=
     Html::activeTextInput($model, "[$key]price", ['class' => 'form-control',
-        'data-field' => 'price', 'size' => 8, 'id' => false, 'required' => true])
+        'data-field' => 'price', 'size' => 8, 'id' => false, 'required' => true,
+        'readonly' => true])
     ?>
 </td>
 <td >
@@ -30,4 +31,13 @@ use backend\models\master\Uom;
     Html::activeDropDownList($model, "[$key]uom_id", Uom::selectOptions(), ['class' => 'form-control',
         'data-field' => 'uom_id', 'id' => false])
     ?>
+</td>
+<td>
+    <?=
+    Html::activeTextInput($model, "[$key]discount", ['class' => 'form-control',
+        'data-field' => 'discount', 'size' => 5, 'id' => false, 'required' => false])
+    ?>
+</td>
+<td>
+    <span data-field="totalLine"><?= Html::getAttributeValue($model, "[$key]totalLine") ?></span>
 </td>
