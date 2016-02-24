@@ -8,14 +8,14 @@ use yii\base\ModelEvent;
 use yii\db\AfterSaveEvent;
 
 /**
- * Description of StatusChangeBehavior
+ * Description of StateChangeBehavior
  *
  * @property ActiveRecord $owner
  *
  * @author Misbahul D Munir <misbahuldmunir@gmail.com>
  * @since 1.0
  */
-class StatusChangeBehavior extends Behavior
+class StateChangeBehavior extends Behavior
 {
     const BEFORE = 'before';
     const AFTER = 'after';
@@ -44,7 +44,7 @@ class StatusChangeBehavior extends Behavior
      * @var array
      */
     public $states = [];
-    private $_status = true;
+    private $_status;
 
     public function events()
     {
@@ -56,7 +56,7 @@ class StatusChangeBehavior extends Behavior
         ];
     }
 
-    public function getStatusChanged()
+    public function getStateChanged()
     {
         return $this->_status;
     }
@@ -71,7 +71,7 @@ class StatusChangeBehavior extends Behavior
             $this->whenInsert != self::BEFORE && $event->name == ActiveRecord::EVENT_BEFORE_INSERT) {
             return;
         }
-        if ($event->name == ActiveRecord::EVENT_BEFORE_INSERT) {
+        if ($this->_status === null) {
             $this->_status = true;
         }
         $model = $this->owner;

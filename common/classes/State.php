@@ -16,31 +16,35 @@ use yii\base\InvalidCallException;
  */
 class State extends Object
 {
-    const COOKIE_NAME = '_d_state_id';
-
-    private $_id;
+    private $_key;
     private $_states;
 
     /**
      * @var Cache
      */
     public $cache = 'cache';
+    public $cookieKey = 'dee_state_id';
 
     protected function buildKey()
     {
-        if ($this->_id === null) {
-            $key = md5(microtime(true)) . mt_rand(0, 1000000);
-            $this->_id = Yii::$app->request->cookies->getValue(self::COOKIE_NAME, $key);
-            /* @var $response \yii\web\Response */
-            $cookie = new \yii\web\Cookie([
-                'name' => self::COOKIE_NAME,
-                'value' => $this->_id,
-                'expire' => time() + 30 * 24 * 3600,
-            ]);
-            Yii::$app->response->cookies->add($cookie);
-            $this->_states['id'] = $this->_id;
+        if ($this->_key === null) {
+            if (Yii::$app instanceof \yii\web\Application) {
+                $key = md5(microtime(true) . mt_rand(0, 1000000));
+                $id = Yii::$app->request->cookies->getValue($this->cookieKey, $key);
+
+                $cookie = new Cookie([
+                    'name' => $this->cookieKey,
+                    'value' => $id,
+                    'expire' => time() + 30 * 24 * 3600,
+                ]);
+                Yii::$app->response->cookies->add($cookie);
+            } else {
+                $id = md5(Yii::$app->basePath);
+            }
+            $this->_states['id'] = $id;
+            $this->_key = [__CLASS__, Yii::$app->id, $id];
         }
-        return [__CLASS__, $this->_id];
+        return $this->_key;
     }
 
     protected function initState()
@@ -57,11 +61,7 @@ class State extends Object
     public function get($name)
     {
         $this->initState();
-        if (array_key_exists($name, $this->_states)) {
-            return $this->_states[$name];
-        } else {
-            return $this->_states[$name] = null;
-        }
+        return array_key_exists($name, $this->_states) ? $this->_states[$name] : null;
     }
 
     public function __get($name)

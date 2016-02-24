@@ -149,10 +149,23 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
             'FOREIGN KEY ([[payment_id]]) REFERENCES {{%payment}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
             'FOREIGN KEY ([[invoice_id]]) REFERENCES {{%invoice}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
             ], $tableOptions);
+
+        $this->createTable('{{%payment_method}}', [
+            'id' => Schema::TYPE_PK,
+            'branch_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'method' => Schema::TYPE_STRING . '(32) NOT NULL',
+            'coa_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            // history column
+            'created_at' => Schema::TYPE_INTEGER,
+            'created_by' => Schema::TYPE_INTEGER,
+            'updated_at' => Schema::TYPE_INTEGER,
+            'updated_by' => Schema::TYPE_INTEGER,
+            ], $tableOptions);
     }
 
     public function safeDown()
     {
+        $this->dropTable('{{%payment_method}}');
         $this->dropTable('{{%payment_dtl}}');
         $this->dropTable('{{%payment}}');
         $this->dropTable('{{%invoice_dtl}}');

@@ -11,9 +11,9 @@ use yii\filters\VerbFilter;
 use backend\models\master\Product;
 use backend\models\master\Vendor;
 use yii\base\UserException;
-use backend\models\accounting\Invoice;
 use backend\models\accounting\Payment;
 use common\classes\Helper;
+use yii\db\Query;
 
 /**
  * SalesController implements the CRUD actions for Sales model.
@@ -68,7 +68,7 @@ class SalesXController extends Controller
     public function actionCreate()
     {
         $profile = Yii::$app->profile;
-        if(!isset($profile->branch_id,$profile->warehouse_id)){
+        if (!isset($profile->branch_id, $profile->warehouse_id)) {
             return $this->redirect(['config']);
         }
         $model = new Sales();
@@ -170,6 +170,50 @@ class SalesXController extends Controller
         return $this->render('config', [
                 'model' => $model
         ]);
+    }
+
+    public function actionMaster()
+    {
+        $result = [];
+        Yii::$app->response->format = 'js';
+        
+        $products = [];
+        $query_product = (new Query())
+            ->select(['p.id', 'p.code', 'p.name', 'pu.uom_id', 'uom_name' => 'u.name', 'pu.isi'])
+            ->from(['p' => '{{%product}}'])
+            ->innerJoin(['pu' => '{{%product_uom}}'], '[[pu.product_id]]=[[p.id]]')
+            ->innerJoin(['u' => '{{%uom}}'], '[[u.id]]=[[pu.uom_id]]')
+            ->orderBy(['p.id' => SORT_ASC, 'pu.isi' => SORT_ASC]);
+        foreach ($query_product->all() as $row) {
+            $id = $row['id'];
+            if (!isset($products[$id])) {
+                $products[$id] = [
+                    'id' => $id,
+                    'code' => $row['code'],
+                    'name' => $row['name'],
+                ];
+            }
+            $products[$id]['uoms'][$row['uom_id']] = [
+                'id' => $row['uom_id'],
+                'name' => $row['uom_name'],
+                'isi' => $row['isi']
+            ];
+        }
+        $result['products'] = $products;
+
+        $barcodes = [];
+        $query_barcode = (new Query())
+            ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
+            ->from('{{%product_child}}')
+            ->union((new Query())
+            ->select(['lower(code)', 'id'])
+            ->from('{{%product}}'));
+        foreach ($query_barcode->all() as $row) {
+            $barcodes[$row['barcode']] = $row['id'];
+        }
+        $result['barcodes'] = $barcodes;
+
+        return 'var masters = ' . json_encode($result) . ';';
     }
 
     /**

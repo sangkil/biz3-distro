@@ -2,8 +2,10 @@
 
 use yii\helpers\Html;
 use backend\models\master\Uom;
+use backend\models\sales\SalesDtl;
 
 /* @var $this yii\web\View */
+/* @var $model SalesDtl */
 ?>
 <td >
     <span class="serial"></span>

@@ -29,14 +29,22 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
+        'response' => [
+            'formatters' => [
+                'js' => [
+                    'class' => 'yii\web\HtmlResponseFormatter',
+                    'contentType' => 'text/javascript'
+                ]
+            ]
+        ]
+    /*
+      'urlManager' => [
+      'enablePrettyUrl' => true,
+      'showScriptName' => false,
+      'rules' => [
+      ],
+      ],
+     */
     ],
     'params' => $params,
 ];

@@ -20,6 +20,7 @@ use backend\models\master\Cogs;
  * @property double $total_release
  *
  * @property Sales $sales
+ * @property Product $product
  */
 class SalesDtl extends \yii\db\ActiveRecord
 {

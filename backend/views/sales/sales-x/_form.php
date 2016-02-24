@@ -20,6 +20,7 @@ $opts = json_encode([
 
 $this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
+$this->registerJsFile(Url::to(['master']));
 ?>
 
 <div class="sales-form">

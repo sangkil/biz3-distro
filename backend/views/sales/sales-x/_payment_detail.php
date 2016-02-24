@@ -13,6 +13,7 @@ use backend\models\accounting\Payment;
 </td>
 <td>
     <?= Html::activeTextInput($model, "[$key]items[0][value]", ['id' => false,
-        'data-field' => 'payment_value', 'class' => 'form-control', 'readonly' => true])
+        'data-field' => 'payment_value', 'class' => 'form-control'])
     ?>
 </td>
+<td><a class="btn" data-action="delete"><span class="glyphicon glyphicon-minus"></span></a></td>

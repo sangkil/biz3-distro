@@ -12,7 +12,10 @@ use mdm\widgets\TabularInput;
 ?>
 <div class="row">
     <div class="col-md-6">
-        <?= $form->field($model, 'value')->textInput(['readonly' => true, 'style' => 'width:40%;','name'=>'']) ?>
+        <div class="form-group field-sales-value required">
+            <label class="control-label">Value</label>
+            <input type="text" style="width:40%;" readonly="" class="form-control" id="payment-value">
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -28,6 +31,10 @@ use mdm\widgets\TabularInput;
         </table>
     </div>
     <div class="col-md-6">
+        <div class="form-group field-sales-value required">
+            <label class="control-label">Total</label>
+            <input type="text" style="width:40%;" readonly="" class="form-control" id="payment-total">
+        </div>
         <table class="table table-striped">
             <?=
             TabularInput::widget([
