@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Object;
 use yii\caching\Cache;
 use yii\di\Instance;
+use yii\web\Cookie;
 use yii\base\InvalidCallException;
 
 /**
