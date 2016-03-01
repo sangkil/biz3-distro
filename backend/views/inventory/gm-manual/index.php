@@ -12,14 +12,18 @@ use backend\models\master\Warehouse;
 $this->title = 'Movement';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="goods-movement-index">
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Create Movement', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
+<div class="col-lg-12">
+    <div class='btn-group pull-right'>
+        <?= Html::button('New Good Movement', ['class' => 'btn bg-aqua', 'type' => 'button']) ?>        
+        <?= Html::button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', ['class' => 'btn btn-default dropdown-toggle', 'aria-expanded' => false, 'type' => 'button', 'data-toggle' => 'dropdown']) ?>
+        <ul class="dropdown-menu" role="menu">
+            <li><?= Html::a('Receive', ['create', 'GoodsMovement[type]' => $searchModel::TYPE_RECEIVE]) ?></li>
+            <li><?= Html::a('Issue', ['create', 'GoodsMovement[type]' => $searchModel::TYPE_ISSUE]) ?></li>            
+        </ul>        
+    </div>
+</div>
+<br><br>
+<div class="col-lg-12 goods-movement-index">
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,

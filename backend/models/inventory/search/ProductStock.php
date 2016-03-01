@@ -12,6 +12,7 @@ use backend\models\inventory\ProductStock as ProductStockModel;
  */
 class ProductStock extends ProductStockModel
 {
+
     /**
      * @inheritdoc
      */
@@ -19,6 +20,7 @@ class ProductStock extends ProductStockModel
     {
         return [
             [['warehouse_id', 'product_id', 'qty', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['name', 'code'], 'safe'],
         ];
     }
 
@@ -41,14 +43,15 @@ class ProductStock extends ProductStockModel
     public function search($params)
     {
         $query = ProductStockModel::find();
-        $query->select(['product_stock.*','product.*','warehouse.*']);
-        $query->joinWith(['product','warehouse']);
+        $query->select(['product_stock.*', 'product.*', 'warehouse.*']);
+        $query->joinWith(['product', 'warehouse']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         $this->load($params);
+
         if (!$this->validate()) {
             $query->where('1=0');
             return $dataProvider;
@@ -63,6 +66,9 @@ class ProductStock extends ProductStockModel
             'updated_at' => $this->updated_at,
             'updated_by' => $this->updated_by,
         ]);
+
+        $query->andWhere(['like', 'lower(product.name)', strtolower($this->name)]);
+        $query->andWhere(['like', 'lower(product.code)', strtolower($this->code)]);
 
         return $dataProvider;
     }

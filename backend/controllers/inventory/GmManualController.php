@@ -70,6 +70,7 @@ class GmManualController extends Controller
     public function actionCreate()
     {
         $model = new GoodsMovement();
+        $model->load(Yii::$app->request->get());
 
         $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {

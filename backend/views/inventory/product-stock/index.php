@@ -33,27 +33,30 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'label' => 'Code',
-                'attribute' => 'product.code'
+                'attribute' => 'product.code',
+                'filter' => Html::textInput('ProductStock[code]', $searchModel->code, array('class' => 'form-control'))
             ],
             [
                 'label' => 'Product',
-                'attribute' => 'product.name'
+                'format'=>'html',
+                'value'=> 'product.name',
+                'filter' => Html::textInput('ProductStock[name]', $searchModel->name, array('class' => 'form-control'))
             ],
             [
-                'attribute'=>'qty',
-                'filter' =>false
+                'attribute' => 'qty',
+                'filter' => false
             ],
 //            [
 //                'attribute' => 'product.created_at',
 //                'format'=>'datetime',
 //                'filter' =>false
 //            ],
-        //'created_by',
-        // 'updated_at',
-        // 'updated_by',
-        //['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]);
-    ?>
+            //'created_by',
+            // 'updated_at',
+            // 'updated_by',
+            //['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]);
+        ?>
 
 </div>

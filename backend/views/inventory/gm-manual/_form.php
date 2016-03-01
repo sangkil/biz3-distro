@@ -16,7 +16,7 @@ JuiAsset::register($this);
 $opts = json_encode([
     'product_url' => Url::to(['product-list']),
     'vendor_url' => Url::to(['vendor-list']),
-        ]);
+    ]);
 
 $this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
@@ -25,22 +25,25 @@ $this->registerJs($this->render('_script.js'));
 <div class="goods-movement-form">
     <?= Html::errorSummary($model, ['class' => 'alert alert-danger alert-dismissible']); ?>
     <?php $form = ActiveForm::begin(); ?>
-    <div class="col-md-4">
-        <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:40%;']) ?>
-        <?= $form->field($model, 'type')->dropDownList(GoodsMovement::enums('TYPE_'), ['style' => 'width:60%;']) ?>
-        <?= $form->field($model, 'warehouse_id')->dropDownList(Warehouse::selectOptions(), ['style' => 'width:60%;']) ?>
+    <div class="col-md-3">
+        <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:60%;']) ?>
+        <?= ''//$form->field($model, 'type')->dropDownList(GoodsMovement::enums('TYPE_'), ['style' => 'width:60%;']) ?>
+        <?= $form->field($model, 'warehouse_id')->dropDownList(Warehouse::selectOptions()) ?>
     </div>
     <div class="col-md-4">
         <?=
         $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
             'dateFormat' => 'dd-MM-yyyy',
-            'options' => ['class' => 'form-control', 'style' => 'width:40%;']
+            'options' => ['class' => 'form-control', 'style' => 'width:60%;']
         ])
         ?>
         <?= $form->field($model, 'vendor_name')->textInput(['required' => true]) ?>
         <?= Html::activeHiddenInput($model, 'vendor_id') ?>
 
-        <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+    </div>
+    <div class="col-lg-5">
+
+        <?= $form->field($model, 'description')->textArea(['maxlength' => true]) ?>
 
     </div>
     <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
@@ -49,7 +52,8 @@ $this->registerJs($this->render('_script.js'));
             <li><a href="#notes" data-toggle="tab" aria-expanded="false">Notes</a></li>
             <li class="pull-right">
                 <?=
-                Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'])
+                Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success'
+                            : 'btn btn-primary'])
                 ?>
             </li>
         </ul>

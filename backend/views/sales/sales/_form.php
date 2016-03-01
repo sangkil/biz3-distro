@@ -74,7 +74,7 @@ $this->registerJs($this->render('_script.js'));
                     <?= $form->field($model, 'vendor_id')->hiddenInput()->label(false) ?>
                 </div>
                 <div class="col-lg-6">
-                    <?= $form->field($payment, 'payment_type')->dropDownList($payment::enums('METHOD_', ['prompt' => '--'])) ?>
+                    <?= $form->field($payment, 'payment_method')->dropDownList($payment::enums('METHOD_', ['prompt' => '--'])) ?>
                 </div>
                 <div class="col-lg-4">
                     <?= Html::label('Value') ?>
