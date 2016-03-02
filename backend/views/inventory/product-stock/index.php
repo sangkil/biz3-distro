@@ -34,16 +34,19 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Code',
                 'attribute' => 'product.code',
-                'filter' => Html::textInput('ProductStock[code]', $searchModel->code, array('class' => 'form-control'))
+                'filter' => Html::textInput('ProductStock[product_code]', $searchModel->product_code, array('class' => 'form-control'))
             ],
             [
                 'label' => 'Product',
                 'format'=>'html',
                 'value'=> 'product.name',
-                'filter' => Html::textInput('ProductStock[name]', $searchModel->name, array('class' => 'form-control'))
+                'filter' => Html::textInput('ProductStock[product_name]', $searchModel->product_name, array('class' => 'form-control'))
             ],
             [
                 'attribute' => 'qty',
+                'value'=>  function ($model){
+                    return $model->movement->type;// ($model->movement->type == 10)?$model->qty:(-1*$model->qty);
+                },
                 'filter' => false
             ],
 //            [

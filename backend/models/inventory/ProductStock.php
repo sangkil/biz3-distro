@@ -21,8 +21,8 @@ use backend\models\master\Warehouse;
  */
 class ProductStock extends \yii\db\ActiveRecord
 {
-    public $code;
-    public $name;
+    public $product_code;
+    public $product_name;
     
     /**
      * @inheritdoc

@@ -128,7 +128,9 @@ class m160201_050040_create_table_inventory extends \yii\db\Migration
             'time' => Schema::TYPE_INTEGER,
             'warehouse_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'product_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'qty_before' => Schema::TYPE_FLOAT . ' NOT NULL',
             'qty' => Schema::TYPE_FLOAT . ' NOT NULL',
+            'movement_id' => Schema::TYPE_INTEGER,
             // constrain
             'PRIMARY KEY ([[time]], [[warehouse_id]], [[product_id]])',
             ], $tableOptions);

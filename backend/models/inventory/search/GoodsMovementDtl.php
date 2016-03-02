@@ -41,7 +41,10 @@ class GoodsMovementDtl extends GoodsMovementDtlModel
      */
     public function search($params)
     {
-        $query = GoodsMovementDtlModel::find();
+        $query = GoodsMovementDtlModel::find()
+            ->select(['goods_movement_dtl.*','product.*'])
+            ->with(['product','uom','movement'])
+            ->joinWith(['product']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

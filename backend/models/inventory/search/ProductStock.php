@@ -20,7 +20,7 @@ class ProductStock extends ProductStockModel
     {
         return [
             [['warehouse_id', 'product_id', 'qty', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['name', 'code'], 'safe'],
+            [['product_name', 'product_code'], 'safe'],
         ];
     }
 
@@ -67,8 +67,8 @@ class ProductStock extends ProductStockModel
             'updated_by' => $this->updated_by,
         ]);
 
-        $query->andWhere(['like', 'lower(product.name)', strtolower($this->name)]);
-        $query->andWhere(['like', 'lower(product.code)', strtolower($this->code)]);
+        $query->andWhere(['like', 'lower(product.name)', strtolower($this->product_name)]);
+        $query->andWhere(['like', 'lower(product.code)', strtolower($this->product_code)]);
 
         return $dataProvider;
     }
