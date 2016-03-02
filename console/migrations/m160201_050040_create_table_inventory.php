@@ -125,7 +125,7 @@ class m160201_050040_create_table_inventory extends \yii\db\Migration
             ], $tableOptions);
 
         $this->createTable('{{%product_stock_history}}', [
-            'time' => Schema::TYPE_INTEGER,
+            'time' => Schema::TYPE_FLOAT,
             'warehouse_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'product_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'qty_movement' => Schema::TYPE_FLOAT . ' NOT NULL',
