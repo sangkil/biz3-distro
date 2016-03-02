@@ -17,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::button('New Good Movement', ['class' => 'btn bg-aqua', 'type' => 'button']) ?>        
         <?= Html::button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', ['class' => 'btn btn-default dropdown-toggle', 'aria-expanded' => false, 'type' => 'button', 'data-toggle' => 'dropdown']) ?>
         <ul class="dropdown-menu" role="menu">
-            <li><?= Html::a('Receive', ['create', 'GoodsMovement[type]' => $searchModel::TYPE_RECEIVE]) ?></li>
-            <li><?= Html::a('Issue', ['create', 'GoodsMovement[type]' => $searchModel::TYPE_ISSUE]) ?></li>            
+            <li><?= Html::a('Receive', ['create', 'type' => $searchModel::TYPE_RECEIVE]) ?></li>
+            <li><?= Html::a('Issue', ['create', 'type' => $searchModel::TYPE_ISSUE]) ?></li>
         </ul>        
     </div>
 </div>
