@@ -157,7 +157,9 @@ class GoodsMovement extends \yii\db\ActiveRecord
     {
         // update stock
         $wh_id = $this->warehouse_id;
+        $mv_id = $this->id;
         $factor = $this->type == self::TYPE_RECEIVE ? 1 : -1;
+        $command = Yii::$app->db->createCommand();
         foreach ($this->items as $item) {
             $product_id = $item->product_id;
             $pu = ProductUom::findOne(['product_id' => $product_id, 'uom_id' => $item->uom_id]);
@@ -168,7 +170,14 @@ class GoodsMovement extends \yii\db\ActiveRecord
             } else {
                 $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
             }
-            if (!$ps->save(false)) {
+            if (!$ps->save(false) || !$command->insert('{{%product_stock_history}}', [
+                    'time' => microtime(true),
+                    'warehouse_id' => $wh_id,
+                    'product_id' => $product_id,
+                    'qty_movement' => $qty,
+                    'qty_current' => $ps->qty,
+                    'movement_id' => $mv_id,
+                ])->execute()) {
                 return false;
             }
         }
@@ -183,7 +192,9 @@ class GoodsMovement extends \yii\db\ActiveRecord
     {
         // update stock
         $wh_id = $this->warehouse_id;
+        $mv_id = $this->id;
         $factor = $this->type == self::TYPE_RECEIVE ? -1 : 1;
+        $command = Yii::$app->db->createCommand();
         foreach ($this->items as $item) {
             $product_id = $item->product_id;
             $pu = ProductUom::findOne(['product_id' => $product_id, 'uom_id' => $item->uom_id]);
@@ -194,7 +205,14 @@ class GoodsMovement extends \yii\db\ActiveRecord
             } else {
                 $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
             }
-            if (!$ps->save(false)) {
+            if (!$ps->save(false) || !$command->insert('{{%product_stock_history}}', [
+                    'time' => microtime(true),
+                    'warehouse_id' => $wh_id,
+                    'product_id' => $product_id,
+                    'qty_movement' => $qty,
+                    'qty_current' => $ps->qty,
+                    'movement_id' => $mv_id,
+                ])->execute()) {
                 return false;
             }
         }
