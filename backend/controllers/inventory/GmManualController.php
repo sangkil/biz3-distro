@@ -67,10 +67,10 @@ class GmManualController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($type = null)
     {
         $model = new GoodsMovement();
-        $model->load(Yii::$app->request->get());
+        $model->type = $type;
 
         $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {
