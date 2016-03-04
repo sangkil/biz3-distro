@@ -3,7 +3,6 @@
 namespace common\classes;
 
 use yii\base\Model;
-use ReflectionClass;
 
 /**
  * Description of Helper
@@ -13,6 +12,8 @@ use ReflectionClass;
  */
 class Helper
 {
+    public static $classes;
+
     /**
      * Populates a set of models with the data from end user.
      * This method is mainly used to collect tabular data input.
@@ -35,7 +36,7 @@ class Helper
     public static function createMultiple($class, $data, $formName = null, &$origin = [], $keys = null, $scenario = null)
     {
         if ($formName === null) {
-            $reflector = new ReflectionClass($class);
+            $reflector = new \ReflectionClass($class);
             $formName = $reflector->getShortName();
         }
         if ($formName != '') {

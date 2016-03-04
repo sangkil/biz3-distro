@@ -94,6 +94,44 @@ class GmManualController extends Controller
     }
 
     /**
+     * Creates a new GoodsMovement model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreateFromReff($type, $id)
+    {
+        if (($reff = GoodsMovement::getReference($type, $id)) !== false) {
+            list($reffModel, $fields, $items, $reff) = $reff;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $model = new GoodsMovement($fields);
+        $model->date = date('Y-m-d');
+        $model->items = $items;
+        if ($model->load(Yii::$app->request->post())) {
+            $model->status = GoodsMovement::STATUS_DRAFT;
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->items = Yii::$app->request->post('GoodsMovementDtl', []);
+                if ($model->save()) {
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } catch (\Exception $exc) {
+                $transaction->rollBack();
+                throw $exc;
+            }
+            $transaction->rollBack();
+        }
+        return $this->render('create-from-reff', [
+                'model' => $model,
+                'reffModel' => $reffModel,
+                'reff' => $reff,
+        ]);
+    }
+
+    /**
      * Updates an existing GoodsMovement model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id

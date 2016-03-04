@@ -21,6 +21,7 @@
         "bower-asset/adminlte": "*",
         "bower-asset/fontawesome": "*",
         "deesoft/yii2-console": "~1.0",
+        "deesoft/yii2-tools": "~1.0",
         "mdmsoft/yii2-autonumber": "~1.0",
         "mdmsoft/yii2-format-converter": "~1.0",
         "mdmsoft/yii2-widgets": "~1.0",

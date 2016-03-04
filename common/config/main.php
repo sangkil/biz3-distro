@@ -3,13 +3,13 @@ return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         'cache' => [
-            'class' => 'common\classes\DbCache',
+            'class' => 'dee\tools\DbCache',
         ],
         'session' => [
-            'class' => 'common\classes\DbSession',
+            'class' => 'dee\tools\DbSession',
         ],
         'profile' => [
-            'class' => 'common\classes\State'
+            'class' => 'dee\tools\State'
         ]
     ],
 ];

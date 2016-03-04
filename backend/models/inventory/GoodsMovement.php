@@ -266,7 +266,78 @@ class GoodsMovement extends \yii\db\ActiveRecord
         }
         return false;
     }
+    public static $references;
 
+    /**
+     *
+     * @param int $type
+     * @param int $id
+     * @return array Description
+     */
+    public static function getReference($type, $id)
+    {
+        $reff = static::$references[$type];
+        $class = $reff['class'];
+        if (isset($reff['onlyStatus'])) {
+            $key = ['id' => $id, 'status' => $reff['onlyStatus']];
+        } else {
+            $key = $id;
+        }
+        $reffModel = $class::findOne($key);
+        if ($reffModel === null) {
+            return false;
+        }
+
+        $fields = [
+            'reff_type' => $type,
+            'reff_id' => $id,
+            'type' => $reff['type'],
+        ];
+        // vendor
+        if (isset($reff['vendor'])) {
+            $fields['vendor_id'] = $reffModel->{$reff['vendor']};
+        }
+        // vendor
+        if (isset($reff['warehouse'])) {
+            $fields['warehouse_id'] = $reffModel->{$reff['warehouse']};
+        }
+        // items
+        $items = [];
+        if (isset($reff['items'])) {
+            $reffItems = $reffModel->{$reff['items']};
+            foreach ($reffItems as $rItem) {
+                $item = [];
+                foreach ($reff['itemField'] as $to => $from) {
+                    $item[$to] = $rItem[$from];
+                }
+                $items[] = $item;
+            }
+        }
+
+        return[$reffModel, $fields, $items, $reff];
+    }
+
+    /**
+     * Execute before child save. If return false, child not saved
+     * @param GoodsMovementDtl $child
+     * @return boolean Description
+     */
+    public function beforeRSave($child)
+    {
+        return $child->qty != 0;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        return parent::save($runValidation, $attributeNames) && $this->stateChanged;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return[
@@ -281,7 +352,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
             'yii\behaviors\BlameableBehavior',
             'yii\behaviors\TimestampBehavior',
             [
-                'class' => 'common\classes\StateChangeBehavior',
+                'class' => 'dee\tools\StateChangeBehavior',
                 'states' => [
                     [null, self::STATUS_RELEASED, 'doApply'],
                     [self::STATUS_DRAFT, self::STATUS_RELEASED, 'doApply'],
@@ -292,3 +363,5 @@ class GoodsMovement extends \yii\db\ActiveRecord
         ];
     }
 }
+
+GoodsMovement::$references = require('mv_reference.php');

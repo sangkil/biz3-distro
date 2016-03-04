@@ -13,7 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="sales-create">
 
     <?= $this->render('_form', [
-        'model' => $model, 'payment'=>$payment
+        'model' => $model, 
+        'payments'=>$payments
     ]) ?>
 
 </div>

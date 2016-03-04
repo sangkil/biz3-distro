@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e570ecb4515fb5abd5787d7bcaaecb75",
-    "content-hash": "c7b35e2784f8c984489f5cdaeac9a679",
+    "hash": "31c3610362d3ac723aefd1c498dae14a",
+    "content-hash": "bcc00ed76fb0d9e2ea919f2a4c51fc7b",
     "packages": [
         {
             "name": "bower-asset/adminlte",
@@ -51,8 +51,7 @@
                 "responsive",
                 "template",
                 "theme"
-            ],
-            "time": "2016-01-18 15:45:30"
+            ]
         },
         {
             "name": "bower-asset/bootstrap",
@@ -138,8 +137,7 @@
                 "MIT",
                 "CC-BY-3.0"
             ],
-            "description": "Font Awesome",
-            "time": "2016-01-27 21:19:20"
+            "description": "Font Awesome"
         },
         {
             "name": "bower-asset/jquery",
@@ -415,6 +413,53 @@
                 "yii2"
             ],
             "time": "2016-02-22 03:00:49"
+        },
+        {
+            "name": "deesoft/yii2-tools",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deesoft/yii2-tools.git",
+                "reference": "db21f1c16a2d552e428a45e6dc37f0d8d336cf44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deesoft/yii2-tools/zipball/db21f1c16a2d552e428a45e6dc37f0d8d336cf44",
+                "reference": "db21f1c16a2d552e428a45e6dc37f0d8d336cf44",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bootstrap": "dee\\tools\\Bootstrap",
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "dee\\tools\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Misbahul Munir",
+                    "email": "misbahuldmunir@gmail.com"
+                }
+            ],
+            "description": "Yii2 application tools",
+            "keywords": [
+                "event",
+                "state",
+                "yii2"
+            ],
+            "time": "2016-03-03 01:22:49"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -706,12 +751,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "5add6a5282ff8ba471cd1de37f054670f4b1430a"
+                "reference": "ffb3f5d7c1cab5f182f566fbfc820390ac291d60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/5add6a5282ff8ba471cd1de37f054670f4b1430a",
-                "reference": "5add6a5282ff8ba471cd1de37f054670f4b1430a",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/ffb3f5d7c1cab5f182f566fbfc820390ac291d60",
+                "reference": "ffb3f5d7c1cab5f182f566fbfc820390ac291d60",
                 "shasum": ""
             },
             "require": {
@@ -792,7 +837,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2016-02-24 07:05:29"
+            "time": "2016-03-02 18:45:51"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -1072,12 +1117,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "66ea6b0334813292af03ffbb8c0ee6beee65fd89"
+                "reference": "416a132083aa6f19a6ac42ae0b31fdb26159e72f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/66ea6b0334813292af03ffbb8c0ee6beee65fd89",
-                "reference": "66ea6b0334813292af03ffbb8c0ee6beee65fd89",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/416a132083aa6f19a6ac42ae0b31fdb26159e72f",
+                "reference": "416a132083aa6f19a6ac42ae0b31fdb26159e72f",
                 "shasum": ""
             },
             "require": {
@@ -1114,7 +1159,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2016-02-23 15:32:04"
+            "time": "2016-02-29 14:07:32"
         },
         {
             "name": "phpspec/php-diff",
@@ -1201,12 +1246,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-debug.git",
-                "reference": "e9a3f9dfdbaba482e958a9ef81c72a3dbb1ae419"
+                "reference": "e196aa3fe1717ceb8b0027b6a12d7de340a2b7d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/e9a3f9dfdbaba482e958a9ef81c72a3dbb1ae419",
-                "reference": "e9a3f9dfdbaba482e958a9ef81c72a3dbb1ae419",
+                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/e196aa3fe1717ceb8b0027b6a12d7de340a2b7d0",
+                "reference": "e196aa3fe1717ceb8b0027b6a12d7de340a2b7d0",
                 "shasum": ""
             },
             "require": {
@@ -1240,7 +1285,7 @@
                 "debugger",
                 "yii2"
             ],
-            "time": "2016-02-24 10:22:23"
+            "time": "2016-02-25 14:59:15"
         },
         {
             "name": "yiisoft/yii2-faker",

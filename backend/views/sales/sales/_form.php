@@ -4,9 +4,10 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use backend\models\sales\Sales;
-use backend\models\master\Branch;
 use yii\jui\JuiAsset;
 use yii\helpers\Url;
+use mdm\widgets\TabularInput;
+use backend\models\accounting\Payment;
 
 /* @var $this View */
 /* @var $model Sales */
@@ -20,6 +21,8 @@ $opts = json_encode([
 
 $this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
+$this->registerJsFile(Url::to(['master']));
+$payment = new \backend\models\accounting\Payment();
 ?>
 
 <div class="sales-form">
@@ -83,6 +86,14 @@ $this->registerJs($this->render('_script.js'));
                 <div class="col-lg-2" style="padding-left: 0px;">
                     <?= Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;']) ?>
                 </div>
+                <?= TabularInput::widget([
+                    'id'=>'payment_dtl',
+                    'allModels' => $payments,
+                    'modelClass' => Payment::className(),
+                    'options' => ['tag' => 'div'],
+                    'itemOptions' => ['tag' => 'div','class'=>'col-lg-12'],
+                    'itemView' => '_payment_dtl',
+                ])?>
             </div>
             <div class="box-footer box-comments">
                 <div class="col-lg-12">
