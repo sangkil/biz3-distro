@@ -274,6 +274,7 @@ class SalesController extends Controller
         $response = Yii::$app->response;
         $response->format = 'json';
         return Product::find()
+                ->with(['prices'])
                 ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
                 ->orFilterWhere(['like', 'lower([[name]])', strtolower($term)])
                 ->limit(10)->asArray()->all();

@@ -43,7 +43,7 @@ use backend\models\sales\SalesDtl;
             </td>
             <td colspan="3"></td>            
             <td>
-                <input id="global-discount" class="form-control" placeholder="Global Discount">
+<!--                <input id="global-discount" class="form-control" placeholder="Global Discount">-->
             </td>
         </tr>
     </thead>
