@@ -170,7 +170,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
             } else {
                 $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
             }
-            if (!$ps->save(false) || !$command->insert('{{%product_stock_history}}', [
+            if (!$ps->save(false) || !$ps->refresh() || !$command->insert('{{%product_stock_history}}', [
                     'time' => microtime(true),
                     'warehouse_id' => $wh_id,
                     'product_id' => $product_id,
@@ -205,7 +205,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
             } else {
                 $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
             }
-            if (!$ps->save(false) || !$command->insert('{{%product_stock_history}}', [
+            if (!$ps->save(false) || !$ps->refresh() || !$command->insert('{{%product_stock_history}}', [
                     'time' => microtime(true),
                     'warehouse_id' => $wh_id,
                     'product_id' => $product_id,
