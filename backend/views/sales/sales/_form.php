@@ -4,10 +4,9 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use backend\models\sales\Sales;
+use backend\models\master\Branch;
 use yii\jui\JuiAsset;
 use yii\helpers\Url;
-use mdm\widgets\TabularInput;
-use backend\models\accounting\Payment;
 
 /* @var $this View */
 /* @var $model Sales */
@@ -44,7 +43,7 @@ $payment = new \backend\models\accounting\Payment();
             </div>
         </div>
     </div>
-    <div class="col-md-4">        
+    <div class="col-md-4">
         <div class="small-box bg-aqua box-comments">
             <div class="inner">
                 <h3><span id="sales-value-text">Rp0</span>&nbsp;</h3>
@@ -85,7 +84,7 @@ $payment = new \backend\models\accounting\Payment();
                                 </div>-->
                 <div class="col-lg-12">
                     <?= $form->field($model, 'vendor_name')->textInput([])->label('Customer') ?>
-                    <?= $form->field($model, 'vendor_id')->hiddenInput()->label(false) ?>  
+                    <?= $form->field($model, 'vendor_id')->hiddenInput()->label(false) ?>
                 </div>
                 <div id="payment-form" class="hidden">
                     <?= \yii\bootstrap\Html::hiddenInput('payment-value', 0, ['id' => 'payment-value']) ?>
@@ -118,14 +117,6 @@ $payment = new \backend\models\accounting\Payment();
                         <?= Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;', 'id'=>'payment-add']) ?>
                     </div>
                 </div>
-                <?= TabularInput::widget([
-                    'id'=>'payment_dtl',
-                    'allModels' => $payments,
-                    'modelClass' => Payment::className(),
-                    'options' => ['tag' => 'div'],
-                    'itemOptions' => ['tag' => 'div','class'=>'col-lg-12'],
-                    'itemView' => '_payment_dtl',
-                ])?>
             </div>
             <div class="box-footer box-comments hidden" id="payment-completion">
                 <div class="col-lg-12">
