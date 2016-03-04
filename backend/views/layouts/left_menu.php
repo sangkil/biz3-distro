@@ -98,7 +98,7 @@ use yii\helpers\Url;
                         <a href="#"><i class="fa fa-check"></i> Stock Mangmt<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
                             <li><a href="<?= Url::to(['/inventory/product-stock']); ?>"><i class="fa fa-check"></i> Stocks</a></li>
-                            <li><a href="<?= Url::to(['/inventory/product-stock-history']); ?>"><i class="fa fa-check"></i> Stocks History</a></li>
+                            <li><a href="<?= Url::to(['/inventory/stock-history']); ?>"><i class="fa fa-check"></i> Stocks History</a></li>
                             <li><a href="#"><i class="fa fa-check"></i> Total Opname</a></li>
                             <li><a href="#"><i class="fa fa-check"></i> Stock Adjustment</a></li>                           
                         </ul>
