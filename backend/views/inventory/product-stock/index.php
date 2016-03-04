@@ -38,15 +38,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'label' => 'Product',
-                'format'=>'html',
-                'value'=> 'product.name',
+                'format' => 'html',
+                'value' => 'product.name',
                 'filter' => Html::textInput('ProductStock[product_name]', $searchModel->product_name, array('class' => 'form-control'))
             ],
             [
                 'attribute' => 'qty',
-                'value'=>  function ($model){
-                    return $model->movement->type;// ($model->movement->type == 10)?$model->qty:(-1*$model->qty);
-                },
+//                'value' => function ($model) {
+//                    return ($model->movement->type == 10) ? $model->qty : (-1 * $model->qty);
+//                },
                 'filter' => false
             ],
 //            [
@@ -54,12 +54,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'format'=>'datetime',
 //                'filter' =>false
 //            ],
-            //'created_by',
-            // 'updated_at',
-            // 'updated_by',
-            //['class' => 'yii\grid\ActionColumn'],
-            ],
-        ]);
-        ?>
+        //'created_by',
+        // 'updated_at',
+        // 'updated_by',
+        //['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]);
+    ?>
 
 </div>

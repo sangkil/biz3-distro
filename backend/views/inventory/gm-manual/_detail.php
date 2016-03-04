@@ -12,15 +12,21 @@ use backend\models\inventory\GoodsMovementDtl;
 <table class="table table-hover">
     <thead>
         <tr>
-            <th style="width: 10%">#</th>
+            <th style="width: 5%">#</th>
             <th>
                 Product Name
             </th>
-            <th class="items" style="width: 25%">
+            <th class="items" style="width: 20%">
+                Cost
+            </th>
+            <th class="items" style="width: 15%">
                 Qty
             </th>
-            <th style="width: 20%">
+            <th style="width: 15%">
                 Uom
+            </th>
+            <th style="width: 15%">
+                Total Line
             </th>
         </tr>
         <tr>

@@ -207,6 +207,33 @@ class Invoice extends \yii\db\ActiveRecord
         return false;
     }
 
+    public function getNmReffType()
+    {
+        return $this->getLogical('reff_type', 'REFF_');
+    }
+
+    public function getReffNumber()
+    {
+        $link = null;
+        switch ((int) $this->reff_type) {
+            case (int) self::REFF_GOODS_MOVEMENT:
+                $link = ($this->gMovement != null) ? Html::a($this->gMovement->number, ['/inventory/gm-manual/view', 'id' => $this->reff_id])
+                        : '';
+                break;
+            default:
+                break;
+        }
+        //echo $this->reff_type.'vs'.self::REFF_INVOICE;
+        return $link;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGMovement() {
+        return $this->hasOne(\backend\models\inventory\GoodsMovement::className(), ['id' => 'reff_id'])->where(['reff_type' => self::REFF_GOODS_MOVEMENT]);
+    }
+
     public function behaviors()
     {
         return[
