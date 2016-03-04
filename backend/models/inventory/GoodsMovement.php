@@ -166,11 +166,11 @@ class GoodsMovement extends \yii\db\ActiveRecord
             $qty = $factor * $item->qty * ($pu ? $pu->isi : 1);
             $ps = ProductStock::findOne(['product_id' => $product_id, 'warehouse_id' => $wh_id]);
             if ($ps) {
-                $ps->qty = new Expression('[[qty]] + :added', [':added' => $qty]);
+                $ps->qty += $qty;
             } else {
                 $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
             }
-            if (!$ps->save(false) || !$ps->refresh() || !$command->insert('{{%product_stock_history}}', [
+            if (!$ps->save(false) || !$command->insert('{{%product_stock_history}}', [
                     'time' => microtime(true),
                     'warehouse_id' => $wh_id,
                     'product_id' => $product_id,
@@ -201,11 +201,11 @@ class GoodsMovement extends \yii\db\ActiveRecord
             $qty = $factor * $item->qty * ($pu ? $pu->isi : 1);
             $ps = ProductStock::findOne(['product_id' => $product_id, 'warehouse_id' => $wh_id]);
             if ($ps) {
-                $ps->qty = new Expression('[[qty]] + :added', [':added' => $qty]);
+                $ps->qty += $qty;
             } else {
                 $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
             }
-            if (!$ps->save(false) || !$ps->refresh() || !$command->insert('{{%product_stock_history}}', [
+            if (!$ps->save(false) || !$command->insert('{{%product_stock_history}}', [
                     'time' => microtime(true),
                     'warehouse_id' => $wh_id,
                     'product_id' => $product_id,
