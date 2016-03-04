@@ -4,30 +4,28 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\sales\search\PriceCategory */
+/* @var $model app\models\inventory\search\ProductStockHistory */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="price-category-search">
+<div class="product-stock-history-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?= $form->field($model, 'time') ?>
 
-    <?= $form->field($model, 'name') ?>
+    <?= $form->field($model, 'warehouse_id') ?>
 
-    <?= $form->field($model, 'formula') ?>
+    <?= $form->field($model, 'product_id') ?>
 
-    <?= $form->field($model, 'created_at') ?>
+    <?= $form->field($model, 'qty_movement') ?>
 
-    <?= $form->field($model, 'created_by') ?>
+    <?= $form->field($model, 'qty_current') ?>
 
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <?php // echo $form->field($model, 'updated_by') ?>
+    <?php // echo $form->field($model, 'movement_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
