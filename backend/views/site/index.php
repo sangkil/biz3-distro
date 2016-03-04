@@ -1,5 +1,4 @@
 <?php
-
 /* @var $this yii\web\View */
 
 $this->title = 'SangkilBiz3-Distro';
@@ -25,7 +24,7 @@ $this->title = 'SangkilBiz3-Distro';
                     ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
                     fugiat nulla pariatur.</p>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+                <p><a class="btn btn-default" href="#">Get Started &raquo;</a></p>
             </div>
             <div class="col-lg-4">
                 <h2>Purchase Management</h2>
@@ -35,7 +34,7 @@ $this->title = 'SangkilBiz3-Distro';
                     ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
                     fugiat nulla pariatur.</p>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+                <p><a class="btn btn-default" href="#">Get Started &raquo;</a></p>
             </div>
             <div class="col-lg-4">
                 <h2>Inventory</h2>
@@ -45,7 +44,7 @@ $this->title = 'SangkilBiz3-Distro';
                     ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
                     fugiat nulla pariatur.</p>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                <p><a class="btn btn-default" href="#">Get Started &raquo;</a></p>
             </div>
             <div class="col-lg-4">
                 <h2>Sales</h2>
@@ -55,7 +54,7 @@ $this->title = 'SangkilBiz3-Distro';
                     ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
                     fugiat nulla pariatur.</p>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                <p><a class="btn btn-default" href="#">Get Started &raquo;</a></p>
             </div>
             <div class="col-lg-4">
                 <h2>Finance & Accounting</h2>
@@ -65,7 +64,7 @@ $this->title = 'SangkilBiz3-Distro';
                     ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
                     fugiat nulla pariatur.</p>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                <p><a class="btn btn-default" href="#">Get Started &raquo;</a></p>
             </div>
         </div>
 
