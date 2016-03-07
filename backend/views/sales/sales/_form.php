@@ -7,6 +7,7 @@ use backend\models\sales\Sales;
 use backend\models\master\Branch;
 use yii\jui\JuiAsset;
 use yii\helpers\Url;
+use mdm\widgets\TabularInput;
 
 /* @var $this View */
 /* @var $model Sales */
@@ -89,21 +90,26 @@ $payment = new \backend\models\accounting\Payment();
                 <div id="payment-form" class="hidden">
                     <?= \yii\bootstrap\Html::hiddenInput('payment-value', 0, ['id' => 'payment-value']) ?>
                     <div class="grid-view col-lg-12 hidden" id="payment-grid">
-                        <table class="table table-striped bg-green">
+                        <table class="table table-striped">
                             <thead>
-                                <tr>
+                                <tr class="bg-green">
+                                    <th>#</th>
                                     <th>Payment Type</th>
                                     <th>Value</th>
-                                    <th>Remain</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr style="color:#000;">
-                                    <td>Cash</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                            </tbody>
+                            <?=
+                            TabularInput::widget([
+                                'id' => 'payment-grid-dtl',
+                                //'allModels' => $model->items,
+                                //'modelClass' => SalesDtl::className(),
+                                'options' => ['tag' => 'tbody'],
+                                'itemOptions' => ['tag' => 'tr'],
+                                'itemView' => '_paiment_dtl',
+                                'clientOptions' => [
+                                ]
+                            ])
+                            ?>
                         </table>
                     </div>
                     <div class="col-lg-6">
@@ -111,10 +117,13 @@ $payment = new \backend\models\accounting\Payment();
                     </div>
                     <div class="col-lg-4">
                         <?= Html::label('Value') ?>
-                        <?= Html::textInput('payment[items][value]', '', ['class' => 'form-control','id'=>'payment-items-value']) ?>
+                        <?=
+                        Html::textInput('payment[items][value]', '', ['class' => 'form-control',
+                            'id' => 'payment-items-value'])
+                        ?>
                     </div>
                     <div class="col-lg-2" style="padding-left: 0px;">
-                        <?= Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;', 'id'=>'payment-add']) ?>
+                        <?= Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;', 'id' => 'payment-add']) ?>
                     </div>
                 </div>
             </div>
@@ -122,7 +131,7 @@ $payment = new \backend\models\accounting\Payment();
                 <div class="col-lg-12">
                     <?=
                     Html::submitButton($model->isNewRecord ? 'Complete' : '', ['class' => $model->isNewRecord ? 'btn btn-success'
-                                : 'btn btn-primary','id'=>'submit-btn'])
+                                : 'btn btn-primary', 'id' => 'submit-btn'])
                     ?></div>
             </div>
         </div>

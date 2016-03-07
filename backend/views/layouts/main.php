@@ -33,7 +33,7 @@ AppAsset::register($this);
                             <i class="fa fa-angle-left"></i>
                             <i class="fa fa-angle-right"></i>
                         </a>
-                        &nbsp;
+                        &nbsp;e
                         <?= $this->title ?>
                     </h1>
                     <?=

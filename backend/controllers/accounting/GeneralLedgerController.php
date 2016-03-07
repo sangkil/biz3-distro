@@ -12,9 +12,11 @@ use yii\filters\VerbFilter;
 /**
  * GeneralLedgerController implements the CRUD actions for GlHeader model.
  */
-class GeneralLedgerController extends Controller {
+class GeneralLedgerController extends Controller
+{
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -30,12 +32,13 @@ class GeneralLedgerController extends Controller {
      * Lists all GlHeader models.
      * @return mixed
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $searchModel = new GlHeaderSearch();
         $dataProvider = $searchModel->searchDtl(Yii::$app->request->queryParams);
         return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -44,9 +47,10 @@ class GeneralLedgerController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return $this->render('view', [
-                    'model' => $this->findModel($id),
+                'model' => $this->findModel($id),
         ]);
     }
 
@@ -55,7 +59,8 @@ class GeneralLedgerController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $dPost = Yii::$app->request->post();
         $model = new GlHeader();
         $model->reff_type = '0';
@@ -100,7 +105,8 @@ class GeneralLedgerController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreateByTemplate() {
+    public function actionCreateByTemplate()
+    {
         $dPost = Yii::$app->request->post();
         $model = new GlHeader();
         $model->reff_type = '0';
@@ -160,7 +166,8 @@ class GeneralLedgerController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
@@ -193,7 +200,7 @@ class GeneralLedgerController extends Controller {
             }
         }
         return $this->render('update', [
-                    'model' => $model,
+                'model' => $model,
         ]);
     }
 
@@ -203,7 +210,8 @@ class GeneralLedgerController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -215,7 +223,8 @@ class GeneralLedgerController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionReverse($id) {
+    public function actionReverse($id)
+    {
         $oldGl = $this->findModel($id);
         $trans = \Yii::$app->db->beginTransaction();
         try {
@@ -236,7 +245,7 @@ class GeneralLedgerController extends Controller {
             $newGl->number = null;
             $newGl->description = 'Reverse of ' . $oldGl->number;
             $newGl->glDetails = $newDtls;
-            
+
             $newGl->created_at = null;
             $newGl->created_by = null;
             $newGl->updated_at = null;
@@ -244,6 +253,8 @@ class GeneralLedgerController extends Controller {
 
             if ($newGl->save()) {
                 $oldGl->status = $oldGl::STATUS_CANCELED;
+                $oldGl->reff_type = $oldGl::REFF_JOURNAL;
+                $oldGl->reff_id = $newGl->id;
                 $oldGl->description = $oldGl->description . ' canceled by ' . $newGl->number;
                 if ($oldGl->save()) {
                     $trans->commit();
@@ -267,7 +278,8 @@ class GeneralLedgerController extends Controller {
      * @return GlHeader the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
         if (($model = GlHeader::find()->where('id=:did', [':did' => $id])->with(['glDetails', 'glDetails.coa'])->one()) !== null) {
             return $model;
         } else {
@@ -275,24 +287,25 @@ class GeneralLedgerController extends Controller {
         }
     }
 
-    public function actionListCoa($term = '') {
+    public function actionListCoa($term = '')
+    {
         $response = Yii::$app->response;
         $response->format = 'json';
         $coaList = \backend\models\accounting\Coa::find()
-                        ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                        ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-                        ->codeOrdered()->asArray()->limit(10);
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+                ->codeOrdered()->asArray()->limit(10);
 
         return $coaList->all();
     }
 
-    public function actionJournalTemplates($term = '') {
+    public function actionJournalTemplates($term = '')
+    {
         $response = Yii::$app->response;
         $response->format = 'json';
         $glTemplates = \backend\models\accounting\EntriSheet::find()
-                        ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                        ->orderBy('name ASC')->limit(10);
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orderBy('name ASC')->limit(10);
         return $glTemplates->all();
     }
-
 }

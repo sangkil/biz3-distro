@@ -76,8 +76,11 @@ $('#detail-grid').on('change', ':input', function () {
 
 $('#payment-add').on('click', function () {
     $('#payment-grid').removeClass('hidden');
-
-    alert('show completion while payment-value >= sales-value');
+    var $row = $('#payment-grid-dtl').mdmTabularInput('addRow');
+    
+    /*
+     * if (total payment >= total belanja){}
+     */
     $('#payment-completion').removeClass('hidden');
 });
 
