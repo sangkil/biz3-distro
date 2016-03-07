@@ -231,6 +231,8 @@ class GeneralLedgerController extends Controller {
                 $newDtls[] = $ndtl;
             }
             $newGl->status = $newGl::STATUS_CANCELED;
+            $newGl->reff_type = $newGl::REFF_JOURNAL;
+            $newGl->reff_id = $oldGl->id;
             $newGl->number = null;
             $newGl->description = 'Reverse of ' . $oldGl->number;
             $newGl->glDetails = $newDtls;

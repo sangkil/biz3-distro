@@ -44,6 +44,7 @@ class GlHeader extends \yii\db\ActiveRecord {
     const REFF_PAYMENT = 50;
     const REFF_SALES = 60;
     const REFF_SALES_RETURN = 61;
+    const REFF_JOURNAL = 70;
 
     //const REFF_NOTHING = 90;
 
@@ -134,6 +135,13 @@ class GlHeader extends \yii\db\ActiveRecord {
         return $this->hasOne(\backend\models\accounting\Invoice::className(), ['id' => 'reff_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getJournal() {
+        return $this->hasOne(self::className(), ['id' => 'reff_id']);
+    }
+
     public function getNmStatus() {
         return $this->getLogical('status', 'STATUS_');
     }
@@ -151,10 +159,14 @@ class GlHeader extends \yii\db\ActiveRecord {
             case (int) self::REFF_INVOICE:
                 $link = ($this->invoice != null) ? Html::a($this->invoice->number, ['/accounting/invoice/view', 'id' => $this->reff_id]) : '';
                 break;
+            case (int) self::REFF_JOURNAL:
+                $link = ($this->journal != null) ? Html::a($this->journal->number, ['/accounting/general-ledger/view', 'id' => $this->reff_id]) : '';
+                break;
+
             default:
                 break;
         }
-        //echo $this->reff_type.'vs'.self::REFF_INVOICE;
+        //echo $this->reff_type.'vs'.self::REFF_JOURNAL;
         return $link;
     }
 
