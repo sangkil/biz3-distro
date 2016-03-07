@@ -10,13 +10,18 @@ $('#input-product').autocomplete({
         $("#input-product").val('');
 
         var $row = $('#detail-grid').mdmTabularInput('addRow');
+        var $itemPrice = 0;
+
         $row.find(':input[data-field="product_id"]').val(ui.item.id);
         $row.find('span[data-field="product"]').text(ui.item.name);
-        $row.find(':input[data-field="price"]').val(ui.item.prices[0].price);
         $row.find(':input[data-field="qty"]').focus();
+        if (typeof ui.item.prices[0] !== 'undefined') {
+            $itemPrice = ui.item.prices[0].price;
+        }
+        $row.find(':input[data-field="price"]').val($itemPrice);
 
         $row.find(':input[data-field="qty"]').on('blur', function () {
-            $row.find('span[data-field="totalLine"]').text(ui.item.prices[0].price * $row.find(':input[data-field="qty"]').val());
+            $row.find('span[data-field="totalLine"]').text($itemPrice * $row.find(':input[data-field="qty"]').val());
             return false;
         });
 
@@ -71,11 +76,10 @@ $('#detail-grid').on('change', ':input', function () {
 
 $('#payment-add').on('click', function () {
     $('#payment-grid').removeClass('hidden');
-    
+
     alert('show completion while payment-value >= sales-value');
     $('#payment-completion').removeClass('hidden');
 });
-
 
 
 function calculate() {

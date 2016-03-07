@@ -17,26 +17,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="price-index">
 
-                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-            <?= GridView::widget([
+
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => ['class' => 'table table-hover'],
         'filterModel' => $searchModel,
         'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-
-                    'product_id',
-            'price_category_id',
+            ['class' => 'yii\grid\SerialColumn'],
+            'product.name',
+            'priceCategory.name',
             'price',
             'created_at',
             'created_by',
             // 'updated_at',
             // 'updated_by',
-
-        ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn'],
         ],
-        ]); ?>
-    
+    ]);
+    ?>
+
 </div>

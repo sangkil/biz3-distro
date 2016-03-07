@@ -88,8 +88,8 @@ $payment = new \backend\models\accounting\Payment();
                 </div>
                 <div id="payment-form" class="hidden">
                     <?= \yii\bootstrap\Html::hiddenInput('payment-value', 0, ['id' => 'payment-value']) ?>
-                    <div class="col-lg-12">
-                        <table class="grid-view hidden" id="payment-grid">
+                    <div class="grid-view col-lg-12 hidden" id="payment-grid">
+                        <table class="table table-striped bg-green">
                             <thead>
                                 <tr>
                                     <th>Payment Type</th>
@@ -98,7 +98,7 @@ $payment = new \backend\models\accounting\Payment();
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr style="color:#000;">
                                     <td>Cash</td>
                                     <td>0</td>
                                     <td>0</td>
@@ -122,7 +122,7 @@ $payment = new \backend\models\accounting\Payment();
                 <div class="col-lg-12">
                     <?=
                     Html::submitButton($model->isNewRecord ? 'Complete' : '', ['class' => $model->isNewRecord ? 'btn btn-success'
-                                : 'btn btn-primary'])
+                                : 'btn btn-primary','id'=>'submit-btn'])
                     ?></div>
             </div>
         </div>
