@@ -127,10 +127,6 @@ $('#sales-vendor_name')
         .appendTo(ul);
 };
 
-$("form").submit(function (event) {
-    event.preventDefault();
-});
-
 $('#detail-grid').on('change', function () {
     calculate();
 });
@@ -148,10 +144,10 @@ $('#btn-payment-add').on('click', function () {
     $row.find('[data-field="value"]').val($('#inp-payment-value').val());
 });
 
-$('#payment-grid-dtl').on('change',function (){
-    setTimeout(function (){
+$('#payment-grid-dtl').on('change', function () {
+    setTimeout(function () {
         calculatePayment();
-    },100);    
+    }, 100);
 });
 
 function calculatePayment() {
@@ -162,7 +158,7 @@ function calculatePayment() {
     });
     $('#payment-value').val(total_paid);
     var total_sales = $('#sales-value').val() * 1;
-    if (total_sales > total_paid) {
+    if (total_sales > total_paid || total_paid == 0) {
         $('#inp-payment-value').val(total_sales - total_paid);
         $('#payment-completion').addClass('hidden');
     } else {
@@ -193,7 +189,7 @@ function calculate() {
     }
 
     var total_paid = $('#payment-value').val() * 1;
-    if (total_sales > total_paid) {
+    if (total_sales > total_paid || total_paid == 0) {
         $('#inp-payment-value').val(total_sales - total_paid);
         $('#payment-completion').addClass('hidden');
     } else {
