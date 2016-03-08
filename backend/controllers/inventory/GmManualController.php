@@ -62,6 +62,19 @@ class GmManualController extends Controller
         ]);
     }
 
+        /**
+     * Displays a single GoodsMovement model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionPrint($id)
+    {
+        $this->layout = 'print';
+        return $this->render('cetak', [
+                'model' => $this->findModel($id),
+        ]);
+    }
+
     /**
      * Creates a new GoodsMovement model.
      * If creation is successful, the browser will be redirected to the 'view' page.

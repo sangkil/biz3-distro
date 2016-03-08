@@ -48,5 +48,5 @@ $('#listPO').on('show.bs.modal', function (event) {
     var modal = $(this);
     var title = button.data('title');
     modal.find('.modal-title').html(title);
-    modal.find('.modal-body').html('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;&nbsp;PO List Loading ...');
+    modal.find('.modal-body').html('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;&nbsp;Loading ...');
 });

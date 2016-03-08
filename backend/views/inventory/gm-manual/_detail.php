@@ -42,7 +42,7 @@ use yii\helpers\Html;
                         Html::button('<i class="fa fa-download"></i>&nbsp;From PO-Items', ['class' => 'btn btn-warning',
                             'data-toggle' => "modal",
                             'data-target' => "#listPO",
-//                            'data-title' => "Detail Data"
+                            'data-title' => "PO List"
                             ]);
                         ?> 
                     </span>

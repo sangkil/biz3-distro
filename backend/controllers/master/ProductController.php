@@ -13,9 +13,11 @@ use yii\filters\VerbFilter;
 /**
  * ProductController implements the CRUD actions for Product model.
  */
-class ProductController extends Controller {
+class ProductController extends Controller
+{
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -30,14 +32,39 @@ class ProductController extends Controller {
      * Lists all Product models.
      * @return mixed
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
         ]);
+    }
+
+    /**
+     * Lists all Product models.
+     * @return mixed
+     */
+    public function actionCsvDownload()
+    {
+        $searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams['params']);
+        $dataProvider->pagination = false;
+
+        header('Content-Type: application/excel');
+        header('Content-Disposition: attachment; filename="product.csv"');
+        
+
+        $fp = fopen('php://output', 'w');
+        $i =1;
+        foreach ($dataProvider->models as $row) {            
+            fputcsv($fp, [$i, $row->code,$row->name],chr(9));
+            $i++;
+        }
+        fclose($fp);
+        return false; //$this->render('download');
     }
 
     /**
@@ -45,9 +72,10 @@ class ProductController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return $this->render('view', [
-                    'model' => $this->findModel($id),
+                'model' => $this->findModel($id),
         ]);
     }
 
@@ -56,7 +84,8 @@ class ProductController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $model = new Product();
         $dPost = Yii::$app->request->post();
         if ($model->load($dPost)) {
@@ -94,7 +123,7 @@ class ProductController extends Controller {
             }
         } else {
             return $this->render('create', [
-                        'model' => $model,
+                    'model' => $model,
             ]);
         }
     }
@@ -105,7 +134,8 @@ class ProductController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = $this->findModel($id);
         $dPost = Yii::$app->request->post();
         if ($model->load($dPost)) {
@@ -195,7 +225,7 @@ class ProductController extends Controller {
             }
         }
         return $this->render('create', [
-                    'model' => $model,
+                'model' => $model,
         ]);
     }
 
@@ -205,7 +235,8 @@ class ProductController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -218,7 +249,8 @@ class ProductController extends Controller {
      * @return Product the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
         if (($model = Product::findOne($id)) !== null) {
             return $model;
         } else {
@@ -226,7 +258,8 @@ class ProductController extends Controller {
         }
     }
 
-    protected function findProUom($product_id, $uom_id) {
+    protected function findProUom($product_id, $uom_id)
+    {
         if (($model = ProductUom::findOne(['product_id' => $product_id, 'uom_id' => $uom_id])) !== null) {
             return $model;
         } else {
@@ -234,12 +267,13 @@ class ProductController extends Controller {
         }
     }
 
-    protected function findProChild($product_id, $barcode) {
-        if (($model = \backend\models\master\ProductChild::findOne(['product_id' => $product_id, 'barcode' => $barcode])) !== null) {
+    protected function findProChild($product_id, $barcode)
+    {
+        if (($model = \backend\models\master\ProductChild::findOne(['product_id' => $product_id, 'barcode' => $barcode]))
+            !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
 }
