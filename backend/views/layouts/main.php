@@ -32,9 +32,8 @@ AppAsset::register($this);
                         <a href="#" data-toggle="offcanvas" role="button">
                             <i class="fa fa-angle-left"></i>
                             <i class="fa fa-angle-right"></i>
-                        </a>
-                        &nbsp;e
-                        <?= $this->title ?>
+                        </a>                        
+                        <?= '&nbsp;'.$this->title ?>
                     </h1>
                     <?=
                     Breadcrumbs::widget([

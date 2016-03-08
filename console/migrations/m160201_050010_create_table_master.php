@@ -227,7 +227,8 @@ class m160201_050010_create_table_master extends \yii\db\Migration
 
         $this->createTable('{{%cogs}}', [
             'product_id' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'cogs' => Schema::TYPE_FLOAT . ' NOT NULL',
+            'cogs' => Schema::TYPE_FLOAT . ' NOT NULL',          
+            'last_purchase_price' => Schema::TYPE_FLOAT,
             // history column
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,

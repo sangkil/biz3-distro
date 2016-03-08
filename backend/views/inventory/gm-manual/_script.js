@@ -13,7 +13,7 @@ $('#input-product').autocomplete({
         $row.find(':input[data-field="product_id"]').val(ui.item.id);
         $row.find('span[data-field="product"]').text(ui.item.name);
         $row.find(':input[data-field="qty"]').focus();
-        
+
         return false;
     }
 })
@@ -25,20 +25,28 @@ $('#input-product').autocomplete({
 
 $('#goodsmovement-vendor_name')
     .autocomplete({
-    minLength: 1,
-    source: biz.vendor_url,
-    focus: function (event, ui) {
-        $("#goodsmovement-vendor_name").val(ui.item.name);
-        return false;
-    },
-    select: function (event, ui) {
-        $("#goodsmovement-vendor_name").val(ui.item.name);
-        $('#goodsmovement-vendor_id').val(ui.item.id);
-        return false;
-    }
-})
+        minLength: 1,
+        source: biz.vendor_url,
+        focus: function (event, ui) {
+            $("#goodsmovement-vendor_name").val(ui.item.name);
+            return false;
+        },
+        select: function (event, ui) {
+            $("#goodsmovement-vendor_name").val(ui.item.name);
+            $('#goodsmovement-vendor_id').val(ui.item.id);
+            return false;
+        }
+    })
     .autocomplete("instance")._renderItem = function (ul, item) {
     return $("<li>")
         .append("<a>" + item.code + "<br>" + item.name + "</a>")
         .appendTo(ul);
 };
+
+$('#listPO').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var modal = $(this);
+    var title = button.data('title');
+    modal.find('.modal-title').html(title);
+    modal.find('.modal-body').html('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;&nbsp;PO List Loading ...');
+});
