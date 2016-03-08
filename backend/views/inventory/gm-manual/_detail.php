@@ -39,7 +39,7 @@ use yii\helpers\Html;
                     <input id="input-product" class="form-control" placeholder='Search Product..'>
                     <span class="input-group-btn">
                         <?=
-                        Html::button('<i class="fa fa-download"></i>&nbsp;PO-Item', ['class' => 'btn btn-warning',
+                        Html::button('<i class="fa fa-download"></i>&nbsp;From PO-Items', ['class' => 'btn btn-warning',
                             'data-toggle' => "modal",
                             'data-target' => "#listPO",
 //                            'data-title' => "Detail Data"

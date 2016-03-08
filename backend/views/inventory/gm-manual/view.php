@@ -77,13 +77,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
-                'attribute' => 'product.name',
-                'header' => 'Product'
+                'attribute' => 'product.code',
+                'header' => 'Code'
             ],
-            'product.name',
+            [
+                'attribute' => 'product.name',
+                'header' => 'Product Name'
+            ],
+            [
+                'attribute' => 'cogs',
+                'header' => 'Cost'
+            ],
             'qty',
             [
-                'attribute' => 'uom.name',
+                'attribute' => 'uom.code',
                 'header' => 'Uom'
             ],
         ]
