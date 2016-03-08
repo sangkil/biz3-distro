@@ -18,16 +18,16 @@ class SampleDataController extends Controller
      * @var string the default command action.
      */
     public $defaultAction = 'create';
-    
+
     /**
      * Create sample data
      */
     public function actionCreate()
     {
-        if(!Console::confirm('Are you sure you want to create sample data. Old data will be lose')){
+        if (!Console::confirm('Are you sure you want to create sample data. Old data will be lose')) {
             return self::EXIT_CODE_NORMAL;
         }
-        
+
         $tableOptions = null;
         if (Yii::$app->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
@@ -47,6 +47,8 @@ class SampleDataController extends Controller
         $command->delete('{{%vendor}}')->execute();
 
         $command->delete('{{%product_uom}}')->execute();
+        $command->delete('{{%price}}')->execute();
+        $command->delete('{{%price_category}}')->execute();
         $command->delete('{{%product_child}}')->execute();
         $command->delete('{{%product}}')->execute();
         $command->delete('{{%product_group}}')->execute();
@@ -55,6 +57,7 @@ class SampleDataController extends Controller
         $command->delete('{{%uom}}')->execute();
 
         $command->delete('{{%coa}}')->execute();
+        $command->delete('{{%payment_method}}')->execute();
 
         // orgn
         $rows = require $sampleDir . '/orgn.php';
@@ -129,6 +132,20 @@ class SampleDataController extends Controller
         $command->resetSequence('{{%product_group}}')->execute();
         Console::endProgress();
 
+        // price category
+        $rows = require $sampleDir . '/price_category.php';
+        $total = count($rows);
+        echo "\ninsert table {{%price_category}}\n";
+        Console::startProgress(0, $total);
+        $pc_ids = [];
+        foreach ($rows as $i => $row) {
+            $pc_ids[] = $row[0];
+            $command->insert('{{%price_category}}', $this->toAssoc($row, ['id', 'name']))->execute();
+            Console::updateProgress($i + 1, $total);
+        }
+        $command->resetSequence('{{%price_category}}')->execute();
+        Console::endProgress();
+
         // product
         $rows = require $sampleDir . '/product.php';
         $total = count($rows);
@@ -148,6 +165,14 @@ class SampleDataController extends Controller
             } catch (Exception $exc) {
                 echo 'Error: ' . $exc->getMessage() . "\n";
             }
+
+            // price
+            $batch = [];
+            $price = mt_rand(95, 150) * 1000;
+            foreach ($pc_ids as $pc_id) {
+                $batch[] = [$row['id'], $pc_id, $price - $pc_id * 3000];
+            }
+            $command->batchInsert('{{%price}}', ['product_id', 'price_category_id', 'price'], $batch)->execute();
             Console::updateProgress($i + 1, $total);
         }
         $command->resetSequence('{{%product}}')->execute();
@@ -182,16 +207,35 @@ class SampleDataController extends Controller
         }
         $command->resetSequence('{{%coa}}')->execute();
         Console::endProgress();
+
+        // coa
+        $rows = require $sampleDir . '/payment_method.php';
+        $total = count($rows);
+        echo "\ninsert table {{%payment_method}}\n";
+        Console::startProgress(0, $total);
+        foreach ($rows as $i => $row) {
+            $command->insert('{{%payment_method}}', $this->toAssoc($row, ['id', 'branch_id',
+                    'method', 'coa_id']))->execute();
+            Console::updateProgress($i + 1, $total);
+        }
+        $command->resetSequence('{{%payment_method}}')->execute();
+        Console::endProgress();
     }
 
-    protected function toAssoc($array, $fields)
+    protected function toAssoc($array, $fields, $time = true)
     {
         $result = [];
         foreach ($fields as $i => $field) {
             $result[$field] = $array[$i];
         }
+        if ($time) {
+            return array_merge([
+                'created_at' => time(),
+                'created_by' => 1,
+                'updated_at' => time(),
+                'updated_by' => 1,
+                ], $result);
+        }
         return $result;
     }
-
-    
 }
