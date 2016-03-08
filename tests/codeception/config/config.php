@@ -14,7 +14,7 @@ return [
     ],
     'components' => [
         'db' => [
-            'dsn' => 'mysql:host=localhost;dbname=yii2_advanced_tests',
+            'dsn' => 'sqlite:' . dirname(__DIR__) . '/_output/test.sqlite',
         ],
         'mailer' => [
             'useFileTransport' => true,
