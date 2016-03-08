@@ -23,6 +23,7 @@ use mdm\behaviors\ar\RelationTrait;
  * @property integer $updated_by
  *
  * @property PaymentDtl[] $items
+ * @property PaymentMethod $paymentMethod
  * @property Invoice[] $invoices
  * @property Vendor $vendor
  */
@@ -143,6 +144,14 @@ class Payment extends \yii\db\ActiveRecord
     public function getVendor()
     {
         return $this->hasOne(Vendor::className(), ['id' => 'vendor_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPaymentMethod()
+    {
+        return $this->hasOne(PaymentMethod::className(), ['id' => 'payment_method']);
     }
 
     public function behaviors()

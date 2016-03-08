@@ -153,12 +153,12 @@ class GoodsMovement extends \yii\db\ActiveRecord
      *
      * @return boolean
      */
-    public function doApply()
+    public function updateStock($factor)
     {
         // update stock
         $wh_id = $this->warehouse_id;
         $mv_id = $this->id;
-        $factor = $this->type == self::TYPE_RECEIVE ? 1 : -1;
+        $factor = $factor * ($this->type == self::TYPE_RECEIVE ? 1 : -1);
         $command = Yii::$app->db->createCommand();
         foreach ($this->items as $item) {
             $product_id = $item->product_id;
@@ -166,46 +166,11 @@ class GoodsMovement extends \yii\db\ActiveRecord
             $qty = $factor * $item->qty * ($pu ? $pu->isi : 1);
             $ps = ProductStock::findOne(['product_id' => $product_id, 'warehouse_id' => $wh_id]);
             if ($ps) {
-                $ps->qty += $qty;
+                $ps->qty = new Expression('[[qty]] + :added', [':added' => $qty]);
             } else {
                 $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
             }
-            if (!$ps->save(false) || !$command->insert('{{%product_stock_history}}', [
-                    'time' => microtime(true),
-                    'warehouse_id' => $wh_id,
-                    'product_id' => $product_id,
-                    'qty_movement' => $qty,
-                    'qty_current' => $ps->qty,
-                    'movement_id' => $mv_id,
-                ])->execute()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function doRevert()
-    {
-        // update stock
-        $wh_id = $this->warehouse_id;
-        $mv_id = $this->id;
-        $factor = $this->type == self::TYPE_RECEIVE ? -1 : 1;
-        $command = Yii::$app->db->createCommand();
-        foreach ($this->items as $item) {
-            $product_id = $item->product_id;
-            $pu = ProductUom::findOne(['product_id' => $product_id, 'uom_id' => $item->uom_id]);
-            $qty = $factor * $item->qty * ($pu ? $pu->isi : 1);
-            $ps = ProductStock::findOne(['product_id' => $product_id, 'warehouse_id' => $wh_id]);
-            if ($ps) {
-                $ps->qty += $qty;
-            } else {
-                $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
-            }
-            if (!$ps->save(false) || !$command->insert('{{%product_stock_history}}', [
+            if (!$ps->save(false) || !$ps->refresh() || !$command->insert('{{%product_stock_history}}', [
                     'time' => microtime(true),
                     'warehouse_id' => $wh_id,
                     'product_id' => $product_id,
@@ -354,10 +319,10 @@ class GoodsMovement extends \yii\db\ActiveRecord
             [
                 'class' => 'dee\tools\StateChangeBehavior',
                 'states' => [
-                    [null, self::STATUS_RELEASED, 'doApply'],
-                    [self::STATUS_DRAFT, self::STATUS_RELEASED, 'doApply'],
-                    [self::STATUS_RELEASED, self::STATUS_DRAFT, 'doRevert'],
-                    [self::STATUS_RELEASED, null, 'doRevert'],
+                    [null, self::STATUS_RELEASED, 'updateStock', 1],
+                    [self::STATUS_DRAFT, self::STATUS_RELEASED, 'updateStock', 1],
+                    [self::STATUS_RELEASED, self::STATUS_DRAFT, 'updateStock', -1],
+                    [self::STATUS_RELEASED, null, 'updateStock', -1],
                 ]
             ]
         ];

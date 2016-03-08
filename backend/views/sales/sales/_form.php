@@ -4,10 +4,11 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use backend\models\sales\Sales;
-use backend\models\master\Branch;
 use yii\jui\JuiAsset;
 use yii\helpers\Url;
 use mdm\widgets\TabularInput;
+use backend\models\accounting\Payment;
+use backend\models\accounting\PaymentMethod;
 
 /* @var $this View */
 /* @var $model Sales */
@@ -15,18 +16,16 @@ use mdm\widgets\TabularInput;
 
 JuiAsset::register($this);
 $opts = json_encode([
-    'product_url' => Url::to(['product-list']),
-    'vendor_url' => Url::to(['vendor-list']),
+    'price_category' => '1',
     ]);
 
 $this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
 $this->registerJsFile(Url::to(['master']));
-$payment = new \backend\models\accounting\Payment();
+$branch_id = Yii::$app->profile->branch_id;
 ?>
 
 <div class="sales-form">
-
     <?php $form = ActiveForm::begin(); ?>
 
     <?= Html::errorSummary($model, ['class' => 'alert alert-danger alert-dismissible']) ?>
@@ -81,14 +80,14 @@ $payment = new \backend\models\accounting\Payment();
             <div class="box-body with-border">
                 <!--                <div class="col-lg-5">
                 <?= $form->field($model, 'number')->textInput(['readonly' => true]) ?>
-                <?= ''//$form->field($model, 'branch_id')->dropDownList(Branch::selectOptions()) ?>
+                <?= ''//$form->field($model, 'branch_id')->dropDownList(Branch::selectOptions())  ?>
                                 </div>-->
                 <div class="col-lg-12">
                     <?= $form->field($model, 'vendor_name')->textInput([])->label('Customer') ?>
                     <?= $form->field($model, 'vendor_id')->hiddenInput()->label(false) ?>
                 </div>
                 <div id="payment-form" class="hidden">
-                    <?= \yii\bootstrap\Html::hiddenInput('payment-value', 0, ['id' => 'payment-value']) ?>
+                    <?= Html::hiddenInput('payment-value', 0, ['id' => 'payment-value']) ?>
                     <div class="grid-view col-lg-12 hidden" id="payment-grid">
                         <table class="table table-striped">
                             <thead>
@@ -101,11 +100,11 @@ $payment = new \backend\models\accounting\Payment();
                             <?=
                             TabularInput::widget([
                                 'id' => 'payment-grid-dtl',
-                                //'allModels' => $model->items,
-                                //'modelClass' => SalesDtl::className(),
+                                'allModels' => $payments,
+                                'modelClass' => Payment::className(),
                                 'options' => ['tag' => 'tbody'],
                                 'itemOptions' => ['tag' => 'tr'],
-                                'itemView' => '_paiment_dtl',
+                                'itemView' => '_payment_dtl',
                                 'clientOptions' => [
                                 ]
                             ])
@@ -113,17 +112,22 @@ $payment = new \backend\models\accounting\Payment();
                         </table>
                     </div>
                     <div class="col-lg-6">
-                        <?= $form->field($payment, 'payment_method')->dropDownList($payment::enums('METHOD_', ['prompt' => '--'])) ?>
+                        <?= Html::label('Method') ?>
+                        <?=
+                        Html::dropDownList('', '', PaymentMethod::selectOptions($branch_id), [
+                            'class' => 'form-control', 'id' => 'inp-payment-method'])
+                        ?>
                     </div>
                     <div class="col-lg-4">
                         <?= Html::label('Value') ?>
                         <?=
-                        Html::textInput('payment[items][value]', '', ['class' => 'form-control',
-                            'id' => 'payment-items-value'])
+                        Html::textInput('', '', ['class' => 'form-control',
+                            'id' => 'inp-payment-value'])
                         ?>
                     </div>
                     <div class="col-lg-2" style="padding-left: 0px;">
-                        <?= Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;', 'id' => 'payment-add']) ?>
+                        <?= Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;',
+                            'id' => 'btn-payment-add']) ?>
                     </div>
                 </div>
             </div>
@@ -136,5 +140,5 @@ $payment = new \backend\models\accounting\Payment();
             </div>
         </div>
     </div>
-    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
 </div>

@@ -15,7 +15,6 @@ use backend\models\accounting\Payment;
 use common\classes\Helper;
 use yii\db\Query;
 
-
 /**
  * SalesController implements the CRUD actions for Sales model.
  */
@@ -183,26 +182,35 @@ class SalesController extends Controller
 
         $products = [];
         $query_product = (new Query())
-            ->select(['p.id', 'p.code', 'p.name', 'pu.uom_id', 'uom_name' => 'u.name', 'pu.isi'])
-            ->from(['p' => '{{%product}}'])
-            ->innerJoin(['pu' => '{{%product_uom}}'], '[[pu.product_id]]=[[p.id]]')
-            ->innerJoin(['u' => '{{%uom}}'], '[[u.id]]=[[pu.uom_id]]')
-            ->orderBy(['p.id' => SORT_ASC, 'pu.isi' => SORT_ASC]);
+            ->select(['id', 'code', 'name'])
+            ->from(['{{%product}}']);
         foreach ($query_product->all() as $row) {
-            $id = $row['id'];
-            if (!isset($products[$id])) {
-                $products[$id] = [
-                    'id' => $id,
-                    'code' => $row['code'],
-                    'name' => $row['name'],
-                ];
-            }
-            $products[$id]['uoms'][$row['uom_id']] = [
+            $products[$row['id']] = $row;
+        }
+
+        // product uoms
+        $query_uom = (new Query())
+            ->select(['p_id' => 'pu.product_id', 'pu.uom_id', 'u.name', 'pu.isi'])
+            ->from(['pu' => '{{%product_uom}}'])
+            ->innerJoin(['u' => 'uom'], '[[u.id]]=[[pu.uom_id]]')
+            ->orderBy(['pu.product_id' => SORT_ASC, 'pu.isi' => SORT_ASC]);
+        foreach ($query_uom->all() as $row) {
+            $products[$row['p_id']]['uoms'][$row['uom_id']] = [
                 'id' => $row['uom_id'],
-                'name' => $row['uom_name'],
+                'name' => $row['name'],
                 'isi' => $row['isi']
             ];
         }
+
+        // product prices
+        $query_price = (new Query())
+            ->select(['product_id', 'price_category_id', 'price'])
+            ->from(['{{%price}}'])
+            ->orderBy(['product_id' => SORT_ASC, 'price_category_id' => SORT_ASC]);
+        foreach ($query_price->all() as $row) {
+            $products[$row['product_id']]['prices'][$row['price_category_id']] = $row['price'];
+        }
+
         $result['products'] = $products;
 
         $barcodes = [];
@@ -216,6 +224,14 @@ class SalesController extends Controller
             $barcodes[$row['barcode']] = $row['id'];
         }
         $result['barcodes'] = $barcodes;
+
+        // customer
+        $query_vendor = (new Query())
+            ->select(['id', 'code', 'name'])
+            ->from('{{%vendor}}')
+            ->where(['type' => Vendor::TYPE_CUSTOMER]);
+
+        $result['vendors'] = $query_vendor->all();
 
         return 'var masters = ' . json_encode($result) . ';';
     }
