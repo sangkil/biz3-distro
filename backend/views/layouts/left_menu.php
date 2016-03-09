@@ -53,7 +53,7 @@ use yii\helpers\Url;
                         <ul class="treeview-menu">
                             <li><a href="<?= Url::to(['/master/product']); ?>"><i class="fa fa-check"></i> Product</a></li>
                             <li><a href="<?= Url::to(['/master/uom']); ?>"><i class="fa fa-check"></i> Uom</a></li>
-                            <li><a href="<?= Url::to(['/master/groups']); ?>"><i class="fa fa-check"></i> Group</a></li>
+                            <li><a href="<?= Url::to(['/master/product-group']); ?>"><i class="fa fa-check"></i> Group</a></li>
                             <li><a href="<?= Url::to(['/master/category']); ?>"><i class="fa fa-check"></i> Category</a></li>
                         </ul>
                     </li>
@@ -69,7 +69,14 @@ use yii\helpers\Url;
                 <ul class="treeview-menu">
                     <li><a href="<?= Url::to(['/sales/sales/create']); ?>"><i class="fa fa-check"></i> Sales Order</a></li>
                     <li><a href="#"><i class="fa fa-check"></i> Sales Return</a></li>
-                    <li><a href="#"><i class="fa fa-check"></i> Sales Journey</a></li>                    
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-check"></i> Price Mngnt<i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?= Url::to(['/sales/price-category']); ?>"><i class="fa fa-check"></i> Pricing Category</a></li>
+                            <li><a href="<?= Url::to(['/sales/price']); ?>"><i class="fa fa-check"></i> Sales Pricing</a></li>
+
+                        </ul>
+                    </li>
                 </ul>
             </li>  
             <li class="treeview">
