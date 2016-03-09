@@ -42,9 +42,11 @@ class GoodsMovement extends \yii\db\ActiveRecord
     const STATUS_DRAFT = 10;
     const STATUS_RELEASED = 20;
     const STATUS_CANCELED = 90;
+
     // type movement
     const TYPE_RECEIVE = 10;
     const TYPE_ISSUE = 20;
+    
     //document reff type
     const REFF_PURCH = 10;
     const REFF_PURCH_RETURN = 11;
@@ -225,7 +227,6 @@ class GoodsMovement extends \yii\db\ActiveRecord
                 ];
             }
             $invoice->value = $total;
-
             $invoice->items = $items;
             return $invoice;
         }
@@ -322,6 +323,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
                     [null, self::STATUS_RELEASED, 'updateStock', 1],
                     [self::STATUS_DRAFT, self::STATUS_RELEASED, 'updateStock', 1],
                     [self::STATUS_RELEASED, self::STATUS_DRAFT, 'updateStock', -1],
+                    [self::STATUS_RELEASED, self::STATUS_CANCELED, 'updateStock', -1],
                     [self::STATUS_RELEASED, null, 'updateStock', -1],
                 ]
             ]

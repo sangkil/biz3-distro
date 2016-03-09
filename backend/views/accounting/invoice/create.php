@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\accounting\Invoice */
 
-$this->title = $model->nmType.' Invoice';
+$this->title = ucfirst(strtolower($model->nmType)).' Invoice';
 $this->params['breadcrumbs'][] = ['label' => 'Invoices', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

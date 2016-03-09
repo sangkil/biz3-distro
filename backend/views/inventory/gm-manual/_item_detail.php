@@ -35,5 +35,5 @@ use backend\models\master\Uom;
     ?>
 </td>
 <td style="text-align: right;">
-    <span data-field="total_line">0</span>
+    <span data-field="totalLine">0</span>
 </td>

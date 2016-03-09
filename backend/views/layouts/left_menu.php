@@ -88,9 +88,11 @@ use yii\helpers\Url;
                     <li>
                         <a href="#"><i class="fa fa-check"></i> Goods Receipt<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
-                            <li><a href="<?= Url::to(['/inventory/gm-manual']); ?>"><i class="fa fa-check"></i> From Supplier</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> Transfer</a></li>
-                            <li><a href="#"><i class="fa fa-check"></i> Purchase Return</a></li>                           
+                            <li><?= Html::a('<i class="fa fa-check"></i>&nbsp;Receive', ['/inventory/gm-manual', 'GoodsMovement[type]' => backend\models\inventory\GoodsMovement::TYPE_RECEIVE]) ?>
+                                <!--<a href="<?= Url::to(['/inventory/gm-manual','type' => \backend\models\inventory\GoodsMovement::TYPE_RECEIVE]); ?>"><i class="fa fa-check"></i> From Supplier</a>-->
+                            </li>
+                            <li><a href="#"><i class="fa fa-check"></i>&nbsp;Transfer</a></li>
+                            <li><a href="#"><i class="fa fa-check"></i>&nbsp;Purchase Return</a></li>
                         </ul>
                     </li>
                     <li>

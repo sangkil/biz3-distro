@@ -18,7 +18,7 @@ use yii\helpers\Html;
                 Product Name
             </th>
             <th class="items" style="width: 20%">
-                Cost
+                LastCost/pcs
             </th>
             <th class="items" style="width: 15%">
                 Qty
@@ -48,6 +48,9 @@ use yii\helpers\Html;
                     </span>
                 </div>
             </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <th><span class="pull-right" id="total"></span></th>
         </tr>
     </thead>
     <tbody>
