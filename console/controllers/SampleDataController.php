@@ -28,14 +28,8 @@ class SampleDataController extends Controller
             return self::EXIT_CODE_NORMAL;
         }
 
-        $tableOptions = null;
-        if (Yii::$app->db->driverName === 'mysql') {
-            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
-        }
-
         $command = Yii::$app->db->createCommand();
-        $sampleDir = Yii::getAlias('@console/migrations/samples');
+        $sampleDir = __DIR__ . '/samples';
 
         // TRUNCATE TABLE
         $command->delete('{{%product_stock}}')->execute();
@@ -47,6 +41,7 @@ class SampleDataController extends Controller
         $command->delete('{{%vendor}}')->execute();
 
         $command->delete('{{%product_uom}}')->execute();
+        $command->delete('{{%cogs}}')->execute();
         $command->delete('{{%price}}')->execute();
         $command->delete('{{%price_category}}')->execute();
         $command->delete('{{%product_child}}')->execute();
@@ -173,6 +168,15 @@ class SampleDataController extends Controller
                 $batch[] = [$row['id'], $pc_id, $price - $pc_id * 3000];
             }
             $command->batchInsert('{{%price}}', ['product_id', 'price_category_id', 'price'], $batch)->execute();
+
+            // cogs
+            $command->insert('{{%cogs}}', [
+                'product_id' => $row['id'],
+                'cogs' => $price * 0.65,
+                'last_purchase_price' => $price - 20000,
+                'created_at' => time(),
+                'created_by' => 1,
+            ])->execute();
             Console::updateProgress($i + 1, $total);
         }
         $command->resetSequence('{{%product}}')->execute();
@@ -232,8 +236,6 @@ class SampleDataController extends Controller
             return array_merge([
                 'created_at' => time(),
                 'created_by' => 1,
-                'updated_at' => time(),
-                'updated_by' => 1,
                 ], $result);
         }
         return $result;
