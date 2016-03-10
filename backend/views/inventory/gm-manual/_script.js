@@ -1,3 +1,23 @@
+$(document).ready(function () {
+    var total_val = 0.0;
+    $('#detail-grid > tr').each(function () {
+        var $row = $(this).closest('#detail-grid > tr');
+        var $itemCost = $row.find(':input[data-field="cogs"]').val();
+        var $product_id = $row.find(':input[data-field="product_id"]').val();
+
+        $row.find('[data-field="uom_id"] > option').each(function () {
+            var $op = $(this);
+            if (masters.products[$product_id].uoms[$op.val()]) {
+                $op.attr('data-isi', masters.products[$product_id].uoms[$op.val()].isi);
+            } else {
+                $op.remove();
+            }
+        });
+        total_val += $itemCost * $row.find(':input[data-field="qty"]').val() * $row.find('select > :selected').data('isi');
+    });
+    $('#total').text(total_val);
+});
+
 function getCost(id) {
     if (masters.products[id] && masters.products[id].cost) {
         var price = masters.products[id].cost;
@@ -128,12 +148,9 @@ function calculate() {
     var total_val = 0.0;
     $('#detail-grid > tr').each(function () {
         var $row = $(this).closest('#detail-grid > tr');
-        var itemCost = $row.find(':input[data-field="cogs"]').val();
-        var $isi = $row.find('select > :selected').data('isi');
+        var $itemCost = $row.find(':input[data-field="cogs"]').val();
 
-        $row.find('span[data-field="totalLine"]').text();
-
-        total_val += itemCost * $row.find(':input[data-field="qty"]').val() * $isi;
+        total_val += $itemCost * $row.find(':input[data-field="qty"]').val() * $row.find('select > :selected').data('isi');
     });
     $('#total').text(total_val);
 }
