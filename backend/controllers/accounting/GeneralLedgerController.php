@@ -8,6 +8,8 @@ use backend\models\accounting\search\GlHeader as GlHeaderSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\classes\Helper;
+use backend\models\accounting\GlTemplate;
 
 /**
  * GeneralLedgerController implements the CRUD actions for GlHeader model.
@@ -73,7 +75,7 @@ class GeneralLedgerController extends Controller
                 $model->glDetails = Yii::$app->request->post('GlDetail', []);
                 if ($model->save()) {
                     $transaction->commit();
-                    \Yii::$app->getSession()->setFlash('success', $model->number . ' succesfully created');
+                    Yii::$app->getSession()->setFlash('success', $model->number . ' succesfully created');
                     return $this->redirect(['view', 'id' => $model->id]);
                 } else {
                     foreach ($model->getErrors() as $dkey => $vald) {
@@ -113,42 +115,20 @@ class GeneralLedgerController extends Controller
         $model->status = $model::STATUS_RELEASED;
         $model->date = date('Y-m-d');
         $dPost = Yii::$app->request->post();
-
+        $templates = [];
         if ($model->load($dPost)) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 //entri details from templates
-                $newDtls = [];
-                $templates = Yii::$app->request->post('glTemplate', []);
-                foreach ($templates as $value) {
-                    $dtl_template = \backend\models\accounting\EntriSheet::findOne($value['id']);
-                    foreach ($dtl_template->entriSheetDtls as $ddtl) {
-                        $ndtl = new \backend\models\accounting\GlDetail();
-                        $ndtl->coa_id = $ddtl->coa_id;
-                        $ndtl->header_id = null;
-                        $ndtl->amount = ($ddtl->dk == $ddtl::DK_CREDIT) ? -1 * $value['amount'] : $value['amount'];
-                        $newDtls[] = $ndtl;
-                    }
-                }
-                $model->glDetails = $newDtls;
+                $templates = Helper::createMultiple(GlTemplate::className(), $dPost);
+                $model->addFromTemplate($templates);
                 if ($model->save()) {
                     $transaction->commit();
                     \Yii::$app->getSession()->setFlash('success', $model->number . ' succesfully created');
                     return $this->redirect(['view', 'id' => $model->id]);
                 } else {
-                    foreach ($model->getErrors() as $dkey => $vald) {
-                        if ($vald[0] == 'Related error') {
-                            foreach ($model->getRelatedErrors() as $dkey => $valr) {
-                                foreach ($valr as $tkey => $valt) {
-                                    \Yii::$app->getSession()->setFlash('error', $valt);
-                                }
-                                break;
-                            }
-                        } else {
-                            \Yii::$app->getSession()->setFlash('error', $vald[0]);
-                            break;
-                        }
-                    }
+                    $errors = $model->firstErrors;
+                    Yii::$app->getSession()->setFlash('error', reset($errors));
                     $transaction->rollback();
                 }
             } catch (Exception $e) {
@@ -157,7 +137,7 @@ class GeneralLedgerController extends Controller
             }
         }
 
-        return $this->render('create-by-template', ['model' => $model]);
+        return $this->render('create-by-template', ['model' => $model,'templates'=>$templates]);
     }
 
     /**

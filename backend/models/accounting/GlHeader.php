@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "gl_header".
@@ -27,11 +28,11 @@ use yii\helpers\Html;
  * @property GlDetail[] $glDetails
  * @property AccPeriode $periode
  */
-class GlHeader extends \yii\db\ActiveRecord {
+class GlHeader extends \yii\db\ActiveRecord
+{
 
     use \mdm\converter\EnumTrait,
         \mdm\behaviors\ar\RelationTrait;
-
     const STATUS_DRAFT = 10;
     const STATUS_RELEASED = 20;
     const STATUS_CANCELED = 30;
@@ -51,19 +52,22 @@ class GlHeader extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'gl_header';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['glDetails', 'date', 'periode_id', 'branch_id', 'reff_type', 'description', 'status'], 'required'],
             [['number'], 'autonumber', 'format' => 'GL' . date('Ym') . '.?', 'digit' => 4],
             [['date', 'GlDate'], 'safe'],
-            [['periode_id', 'branch_id', 'reff_type', 'reff_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['periode_id', 'branch_id', 'reff_type', 'reff_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'],
+                'integer'],
             [['number'], 'string', 'max' => 16],
             [['description'], 'string', 'max' => 255],
             [['glDetails'], 'validateDualEntri'],
@@ -75,7 +79,8 @@ class GlHeader extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'number' => 'Number',
@@ -94,73 +99,108 @@ class GlHeader extends \yii\db\ActiveRecord {
     }
 
     /**
+     *
+     * @param GlTemplate[] $templates
+     */
+    public function addFromTemplate($templates = [])
+    {
+        $items = $this->glDetails;
+        foreach ($templates as $template) {
+            /* @var $es EntriSheet */
+            $es = $template->getEs();
+            $items[] = [
+                'coa_id' => $es->d_coa_id,
+                'amount' => $template->amount,
+            ];
+            $items[] = [
+                'coa_id' => $es->k_coa_id,
+                'amount' => -1 * $template->amount,
+            ];
+        }
+        $this->glDetails = $items;
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGlDetails() {
+    public function getGlDetails()
+    {
         return $this->hasMany(GlDetail::className(), ['header_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function setGlDetails($value) {
+    public function setGlDetails($value)
+    {
         $this->loadRelated('glDetails', $value);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPeriode() {
+    public function getPeriode()
+    {
         return $this->hasOne(AccPeriode::className(), ['id' => 'periode_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBranch() {
+    public function getBranch()
+    {
         return $this->hasOne(\backend\models\master\Branch::className(), ['id' => 'branch_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGMovement() {
+    public function getGMovement()
+    {
         return $this->hasOne(\backend\models\inventory\GoodsMovement::className(), ['id' => 'reff_id'])->where(['reff_type' => self::REFF_GOODS_MOVEMENT]);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getInvoice() {
+    public function getInvoice()
+    {
         return $this->hasOne(\backend\models\accounting\Invoice::className(), ['id' => 'reff_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getJournal() {
+    public function getJournal()
+    {
         return $this->hasOne(self::className(), ['id' => 'reff_id']);
     }
 
-    public function getNmStatus() {
+    public function getNmStatus()
+    {
         return $this->getLogical('status', 'STATUS_');
     }
 
-    public function getNmReffType() {
+    public function getNmReffType()
+    {
         return $this->getLogical('reff_type', 'REFF_');
     }
 
-    public function getReffNumber() {
+    public function getReffNumber()
+    {
         $link = null;
         switch ((int) $this->reff_type) {
             case (int) self::REFF_GOODS_MOVEMENT:
-                $link = ($this->gMovement != null) ? Html::a($this->gMovement->number, ['/inventory/gm-manual/view', 'id' => $this->reff_id]) : '';
+                $link = ($this->gMovement != null) ? Html::a($this->gMovement->number, ['/inventory/gm-manual/view', 'id' => $this->reff_id])
+                        : '';
                 break;
             case (int) self::REFF_INVOICE:
-                $link = ($this->invoice != null) ? Html::a($this->invoice->number, ['/accounting/invoice/view', 'id' => $this->reff_id]) : '';
+                $link = ($this->invoice != null) ? Html::a($this->invoice->number, ['/accounting/invoice/view', 'id' => $this->reff_id])
+                        : '';
                 break;
             case (int) self::REFF_JOURNAL:
-                $link = ($this->journal != null) ? Html::a($this->journal->number, ['/accounting/general-ledger/view', 'id' => $this->reff_id]) : '';
+                $link = ($this->journal != null) ? Html::a($this->journal->number, ['/accounting/general-ledger/view', 'id' => $this->reff_id])
+                        : '';
                 break;
 
             default:
@@ -170,7 +210,8 @@ class GlHeader extends \yii\db\ActiveRecord {
         return $link;
     }
 
-    public function validateDualEntri($attribute) {
+    public function validateDualEntri($attribute)
+    {
         if ($this->$attribute != null) {
             $totAmount = 0;
             foreach ($this->$attribute as $valc) {
@@ -182,13 +223,15 @@ class GlHeader extends \yii\db\ActiveRecord {
         }
     }
 
-    public function validateOpenPeriode($attribute) {
+    public function validateOpenPeriode($attribute)
+    {
         if ($this->$attribute->status != AccPeriode::STATUS_OPEN) {
             $this->addError($attribute, "Accounting Periode has been closed");
         }
     }
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             [
                 'class' => 'mdm\converter\DateConverter',
@@ -202,5 +245,4 @@ class GlHeader extends \yii\db\ActiveRecord {
             ['class' => BlameableBehavior::className()]
         ];
     }
-
 }

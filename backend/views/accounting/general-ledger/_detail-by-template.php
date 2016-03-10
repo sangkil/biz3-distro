@@ -4,42 +4,52 @@ use yii\helpers\Html;
 use yii\jui\JuiAsset;
 use yii\helpers\Url;
 use yii\web\View;
+use mdm\widgets\TabularInput;
+use backend\models\accounting\GlTemplate;
 
 JuiAsset::register($this);
 $opts = json_encode([
     'tmplate_url' => Url::to(['journal-templates']),
-        ]);
+    ]);
 
 $this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script-by-template.js'));
+
+$detailFunc = function ($model, $key) {
+    $result = Html::activeHiddenInput($model, "[$key]id", ['data-field' => 'id']);
+    $result .= Html::tag('td', Html::tag('span', Html::getAttributeValue($model, "[$key]es[name]"), ['data-field' => 'name']));
+    $result .= Html::tag('td', Html::activeTextInput($model, "[$key]amount", ['data-field' => 'amount', 'class' => 'form-control']));
+    $result .= Html::tag('td', Html::tag('a', '<i class="fa fa-minus"></i>'), ['data-action' => 'delete']);
+    return $result;
+}
 ?>
 
 <div class="col-lg-12 no-padding no-margin">
     <table class="table table-hover" id="table-templates">
-        <?php
-        $inputArea = Html::beginTag('thead');
-        $inputArea .= Html::beginTag('tr');
-        $inputArea .= Html::tag('th', 'Template');
-        $inputArea .= Html::tag('th', 'Amount', ['style' => 'width:16%;']);
-        $inputArea .= Html::tag('th', '#', ['style' => 'width:5%;']);
-        $inputArea .= Html::endTag('tr');
-        $inputArea .= Html::beginTag('tr');
-        $inputArea .= Html::tag('td', Html::hiddenInput('did', '', ['id' => 'did']) . Html::textInput('dname', '', ['id' => 'dname', 'class' => 'form-control']));
-        $inputArea .= Html::tag('td', Html::textInput('damount', '', ['id' => 'damount', 'class' => 'form-control']));
-        $inputArea .= Html::tag('td', Html::a('<i class="fa fa-plus"></i>', '#', ['id' => 'journal_add', 'class' => 'btn btn-default text-green']));
-        $inputArea .= Html::endTag('tr');
-        $inputArea .= Html::endTag('thead');
-        echo $inputArea;
+        <thead>
+            <tr>
+                <th>Template</th>
+                <th>Amount</th>
+                <th style="width: 5%">#</th>
+            </tr>
+            <tr>
+                <th><input type="hidden" id="inp-template-id">
+                    <input class="form-control" id="inp-template"></th>
+                <th><input class="form-control" id="inp-amount"></th>
+                <th ><a class="btn btn-default text-green" id="add-template"><i class="fa fa-plus"></i></a></th>
+            </tr>
+        </thead>
+        <?=
+        TabularInput::widget([
+            'id' => 'template-grid',
+            'allModels' => $templates,
+            'modelClass' => GlTemplate::className(),
+            'options' => ['tag' => 'tbody'],
+            'itemOptions' => ['tag' => 'tr'],
+            'itemView' => $detailFunc,
+            'clientOptions' => [
+            ]
+        ])
         ?>
-        <tbody>
-            <?php
-            $displayArea = Html::beginTag('tr',['class'=>'row-template' , 'style'=>'display:none;']);
-            $displayArea .= Html::tag('td', '', ['data-field' => 'iid']);
-            $displayArea .= Html::tag('td', '', ['data-field'=>'iamount']);
-            $displayArea .= Html::tag('td', Html::a('<i class="fa fa-minus"></i>', '#', ['id' => 'journal_min', 'class' => 'btn btn-minus btn-default text-red']));
-            $displayArea .= Html::endTag('tr');     
-            echo $displayArea;
-            ?>
-        </tbody>
     </table>
 </div>

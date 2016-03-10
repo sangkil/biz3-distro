@@ -9,14 +9,16 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\models\accounting\GlHeader;
-use backend\models\accounting\GlDetail;
+use backend\models\accounting\Coa;
 
 /**
  * JournalTemplateController implements the CRUD actions for EntriSheet model.
  */
-class JournalTemplateController extends Controller {
+class JournalTemplateController extends Controller
+{
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -31,13 +33,14 @@ class JournalTemplateController extends Controller {
      * Lists all EntriSheet models.
      * @return mixed
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $searchModel = new EntriSheetSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -46,9 +49,10 @@ class JournalTemplateController extends Controller {
      * @param string $id
      * @return mixed
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return $this->render('view', [
-                    'model' => $this->findModel($id),
+                'model' => $this->findModel($id),
         ]);
     }
 
@@ -57,40 +61,15 @@ class JournalTemplateController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $model = new EntriSheet();
-        if ($model->load(Yii::$app->request->post())) {
-            $transaction = Yii::$app->db->beginTransaction();
-            try {
-                $model->entriSheetDtls = Yii::$app->request->post('EntriSheetDtl', []);
-                if ($model->save()) {
-                    $transaction->commit();
-                    // \Yii::$app->getSession()->setFlash('success', ' succesfully created');
-                    return $this->redirect(['view', 'id' => $model->id]);
-                } else {
-                    foreach ($model->getErrors() as $dkey => $vald) {
-                        if ($vald[0] == 'Related error') {
-                            foreach ($model->getRelatedErrors() as $dkey => $valr) {
-                                foreach ($valr as $tkey => $valt) {
-                                    \Yii::$app->getSession()->setFlash('error', $valt);
-                                }
-                                break;
-                            }
-                        } else {
-                            \Yii::$app->getSession()->setFlash('error', $vald[0]);
-                            break;
-                        }
-                    }
-                    $transaction->rollback();
-                }
-            } catch (Exception $e) {
-                $transaction->rollback();
-                throw $e;
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
-                    'model' => $model,
+                'model' => $model,
         ]);
     }
 
@@ -100,40 +79,15 @@ class JournalTemplateController extends Controller {
      * @param string $id
      * @return mixed
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $transaction = Yii::$app->db->beginTransaction();
-            try {
-                $model->entriSheetDtls = Yii::$app->request->post('EntriSheetDtl', []);
-                if ($model->save()) {
-                    $transaction->commit();
-                    // \Yii::$app->getSession()->setFlash('success', $model->number . ' succesfully updated');
-                    return $this->redirect(['view', 'id' => $model->id]);
-                } else {
-                    foreach ($model->getErrors() as $dkey => $vald) {
-                        if ($vald[0] == 'Related error') {
-                            foreach ($model->getRelatedErrors() as $dkey => $valr) {
-                                foreach ($valr as $tkey => $valt) {
-                                    \Yii::$app->getSession()->setFlash('error', $valt);
-                                }
-                                break;
-                            }
-                        } else {
-                            \Yii::$app->getSession()->setFlash('error', $vald[0]);
-                            break;
-                        }
-                    }
-                    $transaction->rollback();
-                }
-            } catch (Exception $e) {
-                $transaction->rollback();
-                throw $e;
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
         return $this->render('update', [
-                    'model' => $model,
+                'model' => $model,
         ]);
     }
 
@@ -143,10 +97,20 @@ class JournalTemplateController extends Controller {
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionMaster()
+    {
+        Yii::$app->getResponse()->format = 'js';
+        $masters = [
+            'coas' => Coa::find()->codeOrdered()->asArray()->all()
+        ];
+        return 'var masters = ' . json_encode($masters) . ';';
     }
 
     /**
@@ -156,7 +120,8 @@ class JournalTemplateController extends Controller {
      * @return EntriSheet the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
         if (($model = EntriSheet::findOne($id)) !== null) {
             return $model;
         } else {
@@ -164,18 +129,20 @@ class JournalTemplateController extends Controller {
         }
     }
 
-    public function actionListCoa($term = '') {
+    public function actionListCoa($term = '')
+    {
         $response = Yii::$app->response;
         $response->format = 'json';
         $coaList = \backend\models\accounting\Coa::find()
-                        ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                        ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-                        ->codeOrdered()->asArray()->limit(10);
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+                ->codeOrdered()->asArray()->limit(10);
 
         return $coaList->all();
     }
 
-    public function actionTestEntriJournal() {
+    public function actionTestEntriJournal()
+    {
         $model = new EntriSheet();
         $dPost = Yii::$app->request->post();
         if (!empty($dPost)) {
@@ -200,16 +167,15 @@ class JournalTemplateController extends Controller {
             $newGl->branch_id = 1;
             $newGl->description = $model->name;
             $newGl->glDetails = $newDtls;
-            
-            if(!$newGl->save()){
+
+            if (!$newGl->save()) {
 //                print_r($newGl->getErrors());
 //                print_r($newGl->getRelatedErrors());
                 return $this->redirect(['/accounting/general-ledger/view', 'id' => $model->id]);
             }
         }
         return $this->render('test', [
-                    'model' => $model,
+                'model' => $model,
         ]);
     }
-
 }

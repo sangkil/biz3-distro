@@ -26,7 +26,10 @@ use backend\models\master\Branch;
         <?= $form->field($model, 'periode_id')->dropDownList(backend\models\accounting\AccPeriode::selectOptions(), ['style' => 'width:40%;']) ?>
     </div>
     <div class="col-lg-4">      
-        <?= $form->field($model, 'status')->dropDownList($model::enums('STATUS_'), ['prompt' => '-- select status--', 'style' => 'width:40%']) ?>
+        <?=
+        $form->field($model, 'status')->dropDownList($model::enums('STATUS_'), ['prompt' => '-- select status--',
+            'style' => 'width:40%'])
+        ?>
         <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
     </div>
     <div class="nav-tabs-justified col-lg-12" style="margin-top: 20px;">
@@ -34,12 +37,15 @@ use backend\models\master\Branch;
             <li class="active"><a href="#items" data-toggle="tab" aria-expanded="false">Items</a></li>
             <li><a href="#notes" data-toggle="tab" aria-expanded="false">Notes</a></li>        
             <li class="pull-right">    
-                <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                <?=
+                Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success'
+                            : 'btn btn-primary'])
+                ?>
             </li>             
         </ul> 
         <div class="tab-content" >
             <div class="tab-pane active" id="items">
-                <?= $this->render('_detail-by-template', ['model' => $model]) ?>
+                <?= $this->render('_detail-by-template', ['model' => $model, 'templates' => $templates]) ?>
             </div>
             <div class="tab-pane" id="notes">
                 <?= '' ?>

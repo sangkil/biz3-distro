@@ -36,7 +36,11 @@ class CoaQuery extends \yii\db\ActiveQuery
     {
         return $this->andWhere(['is not','parent_id',null]);
     }
-    
+
+    /**
+     * 
+     * @return static
+     */
     public function codeOrdered()
     {
         return $this->orderBy(['code'=>SORT_ASC]);

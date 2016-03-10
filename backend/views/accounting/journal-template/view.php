@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
+            'code',
             'name'
         ],
     ])
@@ -51,28 +52,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="tab-content" >
         <div class="tab-pane active" id="items">
             <table class="table table-hover">
-                <?php
-                $inputArea = Html::beginTag('thead');
-                $inputArea .= Html::beginTag('tr');
-                $inputArea .= Html::tag('th', 'Code', ['style' => 'width:20%;']);
-                $inputArea .= Html::tag('th', 'Account Name');
-                $inputArea .= Html::tag('th', 'D/K');
-                $inputArea .= Html::endTag('tr');
-                $inputArea .= Html::endTag('thead');
-                echo $inputArea;
-                ?>
-                <?=
-                TabularInput::widget([
-                    'id' => 'detail-grid',
-                    'allModels' => $model->entriSheetDtls,
-                    'modelClass' => EntriSheetDtl::className(),
-                    'options' => ['tag' => 'tbody'],
-                    'itemOptions' => ['tag' => 'tr'],
-                    'itemView' => '_item_view',
-                    'clientOptions' => [
-                    ]
-                ])
-                ?>
+                <thead>
+            <tr>
+                <th>D/K</th>
+                <th style="width: 20%">Code</th>
+                <th>Account Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-key="d">
+                <td>Debit</td>
+                <td ><?= Html::getAttributeValue($model, 'dCoa[code]')?></td>
+                <td><?= Html::getAttributeValue($model, 'dCoa[name]')?></td>
+            </tr>
+            <tr data-key="k">
+                <td>Kredit</td>
+                <td ><?= Html::getAttributeValue($model, 'kCoa[code]')?></td>
+                <td><?= Html::getAttributeValue($model, 'kCoa[name]')?></td>
+            </tr>
+        </tbody>
             </table>
         </div>
         <div class="tab-pane" id="notes">
