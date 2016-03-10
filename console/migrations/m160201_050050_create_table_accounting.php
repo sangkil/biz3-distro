@@ -47,7 +47,8 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
             ], $tableOptions);
 //
         $this->createTable('{{%entri_sheet}}', [
-            'id' => Schema::TYPE_STRING . '(16) NOT NULL',
+            'id' => Schema::TYPE_PK,
+            'code' => Schema::TYPE_STRING . '(16) NOT NULL',
             'name' => Schema::TYPE_STRING . '(64)',
             'd_coa_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'k_coa_id' => Schema::TYPE_INTEGER . ' NOT NULL',
@@ -57,7 +58,6 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
             'updated_at' => Schema::TYPE_INTEGER,
             'updated_by' => Schema::TYPE_INTEGER,
             // constrain
-            'PRIMARY KEY ([[id]])',
             'FOREIGN KEY ([[d_coa_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
             'FOREIGN KEY ([[k_coa_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
             ], $tableOptions);
