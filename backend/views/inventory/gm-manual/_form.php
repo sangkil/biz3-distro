@@ -13,13 +13,13 @@ use yii\web\View;
 /* @var $form ActiveForm */
 
 JuiAsset::register($this);
-$opts = json_encode([
-    'product_url' => Url::to(['product-list']),
-    'vendor_url' => Url::to(['vendor-list']),
-    ]);
+JuiAsset::register($this);
+$opts = json_encode([]);
 
 $this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
+$this->registerJsFile(Url::to(['master']));
+$branch_id = Yii::$app->profile->branch_id;
 ?>
 
 <div class="goods-movement-form">

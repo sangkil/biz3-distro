@@ -8,10 +8,10 @@ use backend\models\master\Uom;
 <td>
     <span class="serial"></span>
     <a data-action="delete" title="Delete" href="#"><span class="glyphicon glyphicon-trash"></span></a>
-        <?=
-        Html::activeHiddenInput($model, "[$key]product_id", ['class' => 'form-control',
-            'data-field' => 'product_id', 'id' => false])
-        ?>
+    <?=
+    Html::activeHiddenInput($model, "[$key]product_id", ['class' => 'form-control',
+        'data-field' => 'product_id', 'id' => false])
+    ?>
 </td>
 <td>
     <span data-field="product"><?= Html::getAttributeValue($model, "[$key]product[name]") ?></span>
@@ -35,5 +35,8 @@ use backend\models\master\Uom;
     ?>
 </td>
 <td style="text-align: right;">
-    <span data-field="total_line">0</span>
+    <span data-field="totalLine"><?=
+    (Html::getAttributeValue($model, "[$key]cogs")
+        * Html::getAttributeValue($model, "[$key]qty")
+        * 1) ?></span>
 </td>

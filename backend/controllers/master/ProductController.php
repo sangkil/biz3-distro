@@ -60,11 +60,11 @@ class ProductController extends Controller
         $fp = fopen('php://output', 'w');
         $i =1;
         foreach ($dataProvider->models as $row) {            
-            fputcsv($fp, [$i, $row->code,$row->name],chr(9));
+            fputcsv($fp, [$i, $row->code,$row->name,$row->group->name, $row->category->name],chr(9));
             $i++;
         }
         fclose($fp);
-        return false; //$this->render('download');
+        return false;
     }
 
     /**

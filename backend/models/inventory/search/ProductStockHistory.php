@@ -45,6 +45,7 @@ class ProductStockHistory extends ProductStockHistoryModel
         $query = ProductStockHistoryModel::find();
         $query->select(['product_stock_history.*', 'product.*', 'warehouse.*']);
         $query->joinWith(['product', 'warehouse']);
+        $query->orderBy(['product.name'=>SORT_ASC,'time'=>SORT_ASC ]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

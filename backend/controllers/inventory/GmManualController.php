@@ -8,9 +8,9 @@ use backend\models\inventory\search\GoodsMovement as GoodsMovementSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use backend\models\master\Product;
 use backend\models\master\Vendor;
 use yii\base\UserException;
+use yii\db\Query;
 
 /**
  * GmManualController implements the CRUD actions for GoodsMovement model.
@@ -236,7 +236,7 @@ class GmManualController extends Controller
             throw new UserException('Tidak bisa dirollback');
         }
         $model->scenario = GoodsMovement::SCENARIO_CHANGE_STATUS;
-        $model->status = GoodsMovement::STATUS_DRAFT;
+        $model->status = GoodsMovement::STATUS_CANCELED;
         $transaction = Yii::$app->db->beginTransaction();
         try {
             if ($model->save()) {
@@ -251,14 +251,75 @@ class GmManualController extends Controller
         }
     }
 
-    public function actionProductList($term = '')
+//    public function actionProductList($term = '')
+//    {
+//        $response = Yii::$app->response;
+//        $response->format = 'json';
+//        return Product::find()
+//                ->with(['cogs'])
+//                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+//                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+//                ->asArray()->limit(10)->all();
+//    }
+
+    public function actionMaster()
     {
-        $response = Yii::$app->response;
-        $response->format = 'json';
-        return Product::find()
-                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-                ->asArray()->limit(10)->all();
+        $result = [];
+        Yii::$app->response->format = 'js';
+
+        $products = [];
+        $query_product = (new Query())
+            ->select(['id', 'code', 'name'])
+            ->from(['{{%product}}']);
+        foreach ($query_product->all() as $row) {
+            $products[$row['id']] = $row;
+        }
+
+        // product uoms
+        $query_uom = (new Query())
+            ->select(['p_id' => 'pu.product_id', 'pu.uom_id', 'u.name', 'pu.isi'])
+            ->from(['pu' => '{{%product_uom}}'])
+            ->innerJoin(['u' => 'uom'], '[[u.id]]=[[pu.uom_id]]')
+            ->orderBy(['pu.product_id' => SORT_ASC, 'pu.isi' => SORT_ASC]);
+        foreach ($query_uom->all() as $row) {
+            $products[$row['p_id']]['uoms'][$row['uom_id']] = [
+                'id' => $row['uom_id'],
+                'name' => $row['name'],
+                'isi' => $row['isi']
+            ];
+        }
+
+        // product prices
+        $query_cost = (new Query())
+            ->select(['product_id', 'last_purchase_price', 'cogs'])
+            ->from(['{{%cogs}}']);
+        foreach ($query_cost->all() as $row) {
+            $products[$row['product_id']]['cost'] = $row['last_purchase_price'];
+        }
+        
+        $result['products'] = $products;
+
+        $barcodes = [];
+        $query_barcode = (new Query())
+            ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
+            ->from('{{%product_child}}')
+            ->union((new Query())
+            ->select(['lower(code)', 'id'])
+            ->from('{{%product}}'));
+        foreach ($query_barcode->all() as $row) {
+            $barcodes[$row['barcode']] = $row['id'];
+        }
+        $result['barcodes'] = $barcodes;
+
+        // customer
+        $query_vendor = (new Query())
+            ->select(['id', 'code', 'name'])
+            ->from('{{%vendor}}')
+            ->where(['type' => Vendor::TYPE_CUSTOMER]);
+
+        $result['vendors'] = $query_vendor->all();
+
+        return 'var masters = ' . json_encode($result) . ';';
     }
 
     public function actionVendorList($term = '')

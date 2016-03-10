@@ -8,7 +8,7 @@ use backend\models\inventory\GoodsMovement;
 /* @var $this yii\web\View */
 /* @var $model GoodsMovement */
 
-$this->title = $model->nmType.' #'.$model->number;
+$this->title = $model->nmType . ' #' . $model->number;
 $this->params['breadcrumbs'][] = ['label' => 'Goods Movements', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -37,24 +37,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
             <?php elseif ($model->status == GoodsMovement::STATUS_RELEASED): ?>
                 <?=
-                Html::a('Rollback', ['rollback', 'id' => $model->id], [
-                    'class' => 'btn btn-danger',
+                Html::a('Cancel', ['rollback', 'id' => $model->id], [
+                    'class' => 'btn btn-warning',
                     'data' => [
                         'confirm' => 'Are you sure you want to rollback this item?',
                         'method' => 'post',
                     ],
                 ])
                 ?>
-                <?=
-                Html::a('<i class="fa fa-print"></i>', ['print', 'id' => $model->id], [
+            <?php endif; ?>
+            <?=
+            (!$model->isNewRecord) ? Html::a('<i class="fa fa-print"></i>', ['print', 'id' => $model->id], [
                     'class' => 'btn btn-default',
-                    'target' => 'new',
+                    'target' => '_blank',
                     'data' => [
                         'method' => 'post',
                     ],
-                ])
-                ?>
-            <?php endif; ?>
+                ]) : '';
+            ?>
         </p>
     </div>
     <div class="col-lg-6">
