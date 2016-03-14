@@ -20,6 +20,7 @@ class ProductStockHistory extends \yii\db\ActiveRecord
 {
     public $product_code;
     public $product_name;
+    public $goods_movement_number;
 
     /**
      * @inheritdoc
@@ -70,5 +71,13 @@ class ProductStockHistory extends \yii\db\ActiveRecord
     public function getWarehouse()
     {
         return $this->hasOne(Warehouse::className(), ['id' => 'warehouse_id']);
+    }
+
+        /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGoodsmovements()
+    {
+        return $this->hasOne(\backend\models\inventory\GoodsMovement::className(), ['id' => 'movement_id']);
     }
 }

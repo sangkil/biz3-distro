@@ -6,17 +6,12 @@ use backend\models\inventory\GoodsMovement;
 use backend\models\master\Warehouse;
 use yii\jui\JuiAsset;
 use yii\helpers\Url;
-use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $model GoodsMovement */
 /* @var $form ActiveForm */
 
 JuiAsset::register($this);
-JuiAsset::register($this);
-$opts = json_encode([]);
-
-$this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
 $this->registerJsFile(Url::to(['master']));
 $branch_id = Yii::$app->profile->branch_id;

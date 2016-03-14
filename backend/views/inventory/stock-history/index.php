@@ -53,15 +53,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'width:10%;text-align:center;'],
             ],
             [
-                'attribute'=>'time',
-                'format'=>'datetime',
+                'attribute' => 'time',
+                'format' => 'datetime',
                 'filter' => false,
                 'contentOptions' => ['style' => 'width:10%;'],
             ],
-        // 'movement_id',
-        //['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]);
-    ?>
+            [
+                'attribute' => 'movement_id',
+                'format'=>'raw',
+                'value' => function($model) {
+                    return \yii\bootstrap\Html::a($model->goodsmovements->number, ['/inventory/gm-manual/view', 'id' => $model->movement_id]);
+                },
+                'filter' => Html::textInput('ProductStockHistory[goods_movement_number]', $searchModel->goods_movement_number, array('class' => 'form-control'))
+            ]
+            ,
+            //['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]);
+        ?>
 
 </div>

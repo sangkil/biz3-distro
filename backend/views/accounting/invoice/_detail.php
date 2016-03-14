@@ -27,12 +27,21 @@ use backend\models\accounting\InvoiceDtl;
             </th>
         </tr>
         <tr>
-            <td colspan="5">
-                <div class="input-group" style="width:100%;">
-                    <span class="input-group-addon">
-                        <i class="fa fa-search"></i>
-                    </span>
-                    <input id="input-product" class="form-control" placeholder="Search Product..">
+            <td colspan="3">
+                <div class="input-group" style="width: 100%; z-index: ">
+                    <div class="input-group-btn">
+                        <!--<button type="button" class="btn btn-default" id="selected_type"><i class="fa fa-search"></i></button>-->
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-field="search_type" data-value="10" data-placehold="Search by item code/name" class="searchtype">Item Detail</a></li>
+                            <li><a href="#" data-field="search_type" data-value="20" data-placehold="Search by goods movement number" class="searchtype">Goods Movements</a></li>
+                            <li><a href="#" data-field="search_type" data-value="30" data-placehold="Search by sales number" class="searchtype">Sales</a></li>
+                        </ul>
+                    </div>
+                    <input id="input-product" data-field="item_search" class="form-control" placeholder="Search by item code/name" style="z-index: 0;">
                 </div>
             </td>
         </tr>

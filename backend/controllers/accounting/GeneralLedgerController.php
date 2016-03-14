@@ -233,8 +233,8 @@ class GeneralLedgerController extends Controller
 
             if ($newGl->save()) {
                 $oldGl->status = $oldGl::STATUS_CANCELED;
-                $oldGl->reff_type = $oldGl::REFF_JOURNAL;
-                $oldGl->reff_id = $newGl->id;
+//                $oldGl->reff_type = $oldGl::REFF_JOURNAL;
+//                $oldGl->reff_id = $newGl->id;
                 $oldGl->description = $oldGl->description . ' canceled by ' . $newGl->number;
                 if ($oldGl->save()) {
                     $trans->commit();
