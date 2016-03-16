@@ -29,7 +29,7 @@ class SampleDataController extends Controller
         }
 
         $command = Yii::$app->db->createCommand();
-        $sampleDir = __DIR__ . '/samples';
+        $sampleDir = __DIR__ . '/samples/a4sport';
 
         // TRUNCATE TABLE
         $command->delete('{{%product_stock}}')->execute();
@@ -147,9 +147,12 @@ class SampleDataController extends Controller
         echo "\ninsert table {{%product}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
-            $row = $this->toAssoc($row, ['id', 'group_id', 'category_id', 'code', 'name', 'status']);
+            $row = $this->toAssoc($row, ['id', 'group_id', 'category_id', 'code', 'name', 'status','stockable']);
             $command->insert('{{%product}}', $row)->execute();
+            
             // barcode
+            /*
+             * Skip for test
             $batch = [];
             for ($j = 0; $j < 3; $j++) {
                 $rand = mt_rand(1000000, 9999999) . mt_rand(100000, 999999);
@@ -160,28 +163,50 @@ class SampleDataController extends Controller
             } catch (Exception $exc) {
                 echo 'Error: ' . $exc->getMessage() . "\n";
             }
+             *
+             */
 
             // price
+            /*
+             * Skip for test
             $batch = [];
             $price = mt_rand(95, 150) * 1000;
             foreach ($pc_ids as $pc_id) {
                 $batch[] = [$row['id'], $pc_id, $price - $pc_id * 3000];
             }
             $command->batchInsert('{{%price}}', ['product_id', 'price_category_id', 'price'], $batch)->execute();
+             */
 
             // cogs
+            /*
+             * Skip for test
             $command->insert('{{%cogs}}', [
                 'product_id' => $row['id'],
                 'cogs' => $price * 0.65,
                 'last_purchase_price' => $price - 20000,
                 'created_at' => time(),
                 'created_by' => 1,
-            ])->execute();
+            ])->execute();            
+             *
+             */
             Console::updateProgress($i + 1, $total);
         }
         $command->resetSequence('{{%product}}')->execute();
         Console::endProgress();
 
+        // price
+        $rows = require $sampleDir . '/price.php';
+        $total = count($rows);
+        echo "\ninsert table {{%price}}\n";
+        Console::startProgress(0, $total);
+        foreach ($rows as $i => $row) {
+            $pc_ids[] = $row[0];
+            $command->insert('{{%price}}', $this->toAssoc($row, ['product_id', 'price_category_id', 'price']))->execute();
+            Console::updateProgress($i + 1, $total);
+        }
+        //$command->resetSequence('{{%price}}')->execute();
+        Console::endProgress();
+        
         // uom
         $rows = require $sampleDir . '/uom.php';
         $total = count($rows);

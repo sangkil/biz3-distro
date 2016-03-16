@@ -5,21 +5,25 @@ use yii\bootstrap\ActiveForm;
 use backend\models\accounting\Invoice;
 use yii\jui\JuiAsset;
 use yii\helpers\Url;
-use yii\web\View;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model Invoice */
 /* @var $form ActiveForm */
 
-JuiAsset::register($this);
-$opts = json_encode([
-    'product_url' => Url::to(['product-list']),
-    'vendor_url' => Url::to(['vendor-list']),
-        ]);
+//JuiAsset::register($this);
+//$opts = json_encode([
+//    'product_url' => Url::to(['product-list']),
+//    'vendor_url' => Url::to(['vendor-list']),
+//    ]);
+//
+//$this->registerJs("var biz = $opts;", View::POS_HEAD);
+//$this->registerJs($this->render('_script.js'));
 
-$this->registerJs("var biz = $opts;", View::POS_HEAD);
+JuiAsset::register($this);
 $this->registerJs($this->render('_script.js'));
+$this->registerJsFile(Url::to(['master']));
+$branch_id = Yii::$app->profile->branch_id;
 ?>
 
 <div class="invoice-form">
@@ -31,8 +35,8 @@ $this->registerJs($this->render('_script.js'));
         <div class="col-md-3">
             <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:40%;'])->label('Inv Number') ?>
             <?=
-            (!$model->isNewRecord) ? $form->field($model->vendor, 'name')->textInput(['id' => 'invoice-vendor_name', 'required' => true])->label('Vendor Name') :
-                    $form->field($model, 'vendor_name')->textInput()
+            (!$model->isNewRecord) ? $form->field($model->vendor, 'name')->textInput(['id' => 'invoice-vendor_name', 'required' => true])->label('Vendor Name') 
+                : $form->field($model, 'vendor_name')->textInput(['id' => 'invoice-vendor_name', 'required' => true])
             ?>
             <?= $form->field($model, 'vendor_id')->hiddenInput()->label(false) ?>
         </div>
@@ -51,7 +55,7 @@ $this->registerJs($this->render('_script.js'));
             ?>
         </div>
         <div class="col-md-2">
-            <?= $form->field($model, 'reff_type')->dropDownList($model::enums('REFF_',['prompt'=>'--'])) ?>
+            <?= $form->field($model, 'reff_type')->dropDownList($model::enums('REFF_'), ['prompt' => '']) ?>
             <?= $form->field($model, 'reff_id')->textInput() ?>
         </div>
         <div class="col-md-5">
@@ -64,7 +68,8 @@ $this->registerJs($this->render('_script.js'));
                 <li><a href="#notes" data-toggle="tab" aria-expanded="false">Notes</a></li>
                 <li class="pull-right">
                     <?=
-                    Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'])
+                    Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success'
+                                : 'btn btn-primary'])
                     ?>
                 </li>
             </ul>

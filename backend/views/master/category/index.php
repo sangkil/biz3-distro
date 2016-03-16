@@ -11,7 +11,7 @@ $this->title = 'Categories';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>
-    <?= Html::a('Create Category', ['create'], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Create Category', ['create'], ['class' => 'btn btn-default']) ?>
 </p>
 <br>
 

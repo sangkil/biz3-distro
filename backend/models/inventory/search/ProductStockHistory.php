@@ -20,7 +20,7 @@ class ProductStockHistory extends ProductStockHistoryModel
         return [
             [['time', 'qty_movement', 'qty_current'], 'number'],
             [['warehouse_id', 'product_id', 'movement_id'], 'integer'],
-            [['product_name', 'product_code'], 'safe'],
+            [['product_name', 'product_code','goods_movement_number'], 'safe'],
         ];
     }
 
@@ -43,8 +43,8 @@ class ProductStockHistory extends ProductStockHistoryModel
     public function search($params)
     {
         $query = ProductStockHistoryModel::find();
-        $query->select(['product_stock_history.*', 'product.*', 'warehouse.*']);
-        $query->joinWith(['product', 'warehouse']);
+        $query->select(['product_stock_history.*', 'product.*', 'warehouse.*', 'goods_movement.number']);
+        $query->joinWith(['product', 'warehouse','goodsmovements']);
         $query->orderBy(['product.name'=>SORT_ASC,'time'=>SORT_ASC ]);
 
         $dataProvider = new ActiveDataProvider([
@@ -67,6 +67,7 @@ class ProductStockHistory extends ProductStockHistoryModel
         ]);
         $query->andWhere(['like', 'lower(product.name)', strtolower($this->product_name)]);
         $query->andWhere(['like', 'lower(product.code)', strtolower($this->product_code)]);
+        $query->andWhere(['like', 'lower(goods_movement.number)', strtolower($this->goods_movement_number)]);
 
         return $dataProvider;
     }

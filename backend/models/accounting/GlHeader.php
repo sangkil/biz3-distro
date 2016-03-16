@@ -169,6 +169,14 @@ class GlHeader extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return String
+     */
+    public function getHyperlink()
+    {
+        return Html::a($this->number, ['/accounting/general-ledger/view', 'id' => $this->id]);
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getJournal()

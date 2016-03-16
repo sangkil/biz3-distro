@@ -11,7 +11,7 @@ $this->title = 'Uoms';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>
-    <?= Html::a('Create Uom', ['create'], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Create Uom', ['create'], ['class' => 'btn btn-default']) ?>
 </p>
 <br>
 
@@ -26,8 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
-
-                    'id',
+            //'id',
             'code',
             'name',
             'created_at',
