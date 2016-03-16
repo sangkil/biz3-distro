@@ -34,7 +34,7 @@ class Payment extends \yii\db\ActiveRecord
         RelationTrait;
     // status payment
     const STATUS_DRAFT = 10;
-    const STATUS_APPLIED = 20;
+    const STATUS_RELEASED = 20;
     const STATUS_CLOSE = 90;
     // type payment
     const TYPE_SUPLIER = 10;

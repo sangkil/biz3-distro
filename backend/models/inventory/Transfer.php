@@ -30,7 +30,7 @@ class Transfer extends \yii\db\ActiveRecord
         \mdm\behaviors\ar\RelationTrait;
     // status transfer
     const STATUS_DRAFT = 10;
-    const STATUS_APPLIED = 20;
+    const STATUS_RELEASED = 20;
     const STATUS_CLOSE = 90;
 
     /**

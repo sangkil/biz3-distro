@@ -62,7 +62,7 @@ class GmManualController extends Controller
         ]);
     }
 
-        /**
+    /**
      * Displays a single GoodsMovement model.
      * @param integer $id
      * @return mixed
@@ -113,15 +113,17 @@ class GmManualController extends Controller
      */
     public function actionCreateFromReff($type, $id)
     {
-        if (($reff = GoodsMovement::getReference($type, $id)) !== false) {
-            list($reffModel, $fields, $items, $reff) = $reff;
+        $model = new GoodsMovement([
+            'reff_type' => $type,
+            'reff_id' => $id,
+        ]);
+        if (($reff = $model->updateFromRference()) !== false) {
+            list($reffModel, $reff) = $reff;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-
-        $model = new GoodsMovement($fields);
         $model->date = date('Y-m-d');
-        $model->items = $items;
+
         if ($model->load(Yii::$app->request->post())) {
             $model->status = GoodsMovement::STATUS_DRAFT;
             $transaction = Yii::$app->db->beginTransaction();
@@ -296,7 +298,7 @@ class GmManualController extends Controller
         foreach ($query_cost->all() as $row) {
             $products[$row['product_id']]['cost'] = $row['last_purchase_price'];
         }
-        
+
         $result['products'] = $products;
 
         $barcodes = [];

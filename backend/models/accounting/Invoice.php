@@ -193,7 +193,7 @@ class Invoice extends \yii\db\ActiveRecord
                 'date' => date('Y-m-d')
                 ], $options, ['items' => []]);
             $payment->vendor_id = $this->vendor_id;
-            $payment->status = Payment::STATUS_APPLIED;
+            $payment->status = Payment::STATUS_RELEASED;
             $payment->type = $this->type;
             $items = [
                 [

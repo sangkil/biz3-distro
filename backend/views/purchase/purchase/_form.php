@@ -13,13 +13,11 @@ use yii\helpers\Url;
 /* @var $form ActiveForm */
 
 JuiAsset::register($this);
-$opts = json_encode([
-    'product_url' => Url::to(['list-product']),
-    'vendor_url' => Url::to(['list-vendor']),
-    ]);
+$opts = json_encode([]);
 
 $this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
+$this->registerJsFile(Url::to(['master']));
 ?>
 
 <div class="purchase-form">

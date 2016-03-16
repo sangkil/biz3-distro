@@ -73,7 +73,7 @@ class SalesXController extends Controller
         }
         $model = new Sales();
 
-        $model->status = Sales::STATUS_APPLIED;
+        $model->status = Sales::STATUS_RELEASED;
         $model->date = date('Y-m-d');
         $error = false;
         $payments = [];
@@ -100,7 +100,7 @@ class SalesXController extends Controller
                                 ];
                                 foreach ($payments as $payment) {
                                     $payment->attributes = $paymentData;
-                                    $payment->status = Payment::STATUS_APPLIED;
+                                    $payment->status = Payment::STATUS_RELEASED;
 
                                     $payItems = $payment->items;
                                     $payItems[0]->invoice_id = $invoice->id;

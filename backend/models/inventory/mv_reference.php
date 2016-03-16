@@ -4,15 +4,11 @@ return [
     10 => [
         'name' => 'Purchase',
         'class' => 'backend\models\purchase\Purchase',
-        'action' => '/purcahse/purchase/view',
+        'action' => '/purchase/purchase/view',
         'type' => 10,
         'onlyStatus' => 20,
-        'items' => 'items',
-        'itemField' => [
-            'product_id' => 'product_id',
-            'uom_id' => 'uom_id',
-            'value' => 'price'
-        ],
+        'vendor'=>'vendor_id',
+        'items' => 'generateReceive',
     ],
     // sales
     60 => [
