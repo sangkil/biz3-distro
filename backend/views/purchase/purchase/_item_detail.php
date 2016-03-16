@@ -19,6 +19,12 @@ use backend\models\master\Uom;
         'data-field' => 'qty', 'size' => 5, 'id' => false, 'required' => true])
     ?>
 </td>
+<td >
+    <?=
+    Html::activeTextInput($model, "[$key]price", ['class' => 'form-control',
+        'data-field' => 'price', 'size' => 9, 'id' => false, 'required' => true])
+    ?>
+</td>
 <td>
     <?=
     Html::activeDropDownList($model, "[$key]uom_id", Uom::selectOptions(), ['class' => 'form-control',

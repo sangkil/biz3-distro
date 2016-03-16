@@ -42,11 +42,9 @@ class GoodsMovement extends \yii\db\ActiveRecord
     const STATUS_DRAFT = 10;
     const STATUS_RELEASED = 20;
     const STATUS_CANCELED = 90;
-
     // type movement
     const TYPE_RECEIVE = 10;
     const TYPE_ISSUE = 20;
-    
     //document reff type
     const REFF_PURCH = 10;
     const REFF_PURCH_RETURN = 11;
@@ -60,6 +58,10 @@ class GoodsMovement extends \yii\db\ActiveRecord
     const SCENARIO_CHANGE_STATUS = 'change_status';
 
     public $vendor_name;
+    /**
+     * @var array
+     */
+    public static $references;
 
     /**
      * @inheritdoc
@@ -232,16 +234,12 @@ class GoodsMovement extends \yii\db\ActiveRecord
         }
         return false;
     }
-    public static $references;
 
-    /**
-     *
-     * @param int $type
-     * @param int $id
-     * @return array Description
-     */
-    public static function getReference($type, $id)
+    public function getReference($withItems = true)
     {
+        $type = $this->reff_type;
+        $id = $this->reff_id;
+
         $reff = static::$references[$type];
         $class = $reff['class'];
         if (isset($reff['onlyStatus'])) {
@@ -254,33 +252,46 @@ class GoodsMovement extends \yii\db\ActiveRecord
             return false;
         }
 
-        $fields = [
-            'reff_type' => $type,
-            'reff_id' => $id,
-            'type' => $reff['type'],
-        ];
+        // items
+        $items = false;
+        if ($withItems && isset($reff['items'])) {
+            $items = call_user_func([$reffModel, $reff['items']]);
+        }
+        return[$reffModel, $reff, $items];
+    }
+
+    /**
+     * Update information from reference
+     * @return boolean
+     */
+    public function updateFromReference()
+    {
+        if (($reff = $this->getReference()) === false) {
+            return false;
+        }
+        list($reffModel, $reff, $items) = $reff;
+
+        $this->type = $reff['type'];
         // vendor
         if (isset($reff['vendor'])) {
-            $fields['vendor_id'] = $reffModel->{$reff['vendor']};
+            $this->vendor_id = $reffModel->{$reff['vendor']};
         }
-        // vendor
+        // warehouse
         if (isset($reff['warehouse'])) {
-            $fields['warehouse_id'] = $reffModel->{$reff['warehouse']};
-        }
-        // items
-        $items = [];
-        if (isset($reff['items'])) {
-            $reffItems = $reffModel->{$reff['items']};
-            foreach ($reffItems as $rItem) {
-                $item = [];
-                foreach ($reff['itemField'] as $to => $from) {
-                    $item[$to] = $rItem[$from];
-                }
-                $items[] = $item;
-            }
+            $this->warehouse_id = $reffModel->{$reff['warehouse']};
         }
 
-        return[$reffModel, $fields, $items, $reff];
+        // items
+        if ($items !== false) {
+            $records = [];
+            foreach ($items as $i => $item) {
+                $records[$i] = new GoodsMovementDtl();
+                $records[$i]->sisa = $item['qty'];
+                $records[$i]->attributes = $item;
+            }
+            $this->populateRelation('items', $records);
+        }
+        return[$reffModel, $reff, $items];
     }
 
     /**

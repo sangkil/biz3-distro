@@ -35,7 +35,7 @@ class Sales extends \yii\db\ActiveRecord
         \mdm\behaviors\ar\RelationTrait;
     // status movement
     const STATUS_DRAFT = 10;
-    const STATUS_APPLIED = 20;
+    const STATUS_RELEASED = 20;
     const STATUS_CLOSE = 90;
 
     public $vendor_name;
@@ -132,7 +132,7 @@ class Sales extends \yii\db\ActiveRecord
      */
     public function createMovement($options = [], $data = null)
     {
-        if ($this->status == self::STATUS_APPLIED) {
+        if ($this->status == self::STATUS_RELEASED) {
             $movement = new GoodsMovement();
             $movement->attributes = array_merge([
                 'date' => date('Y-m-d'),

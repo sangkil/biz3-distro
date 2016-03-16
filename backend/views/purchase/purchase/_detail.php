@@ -19,6 +19,9 @@ use backend\models\purchase\PurchaseDtl;
             <th class="items" style="width: 25%">
                 Qty
             </th>
+            <th class="items" style="width: 25%">
+                Price
+            </th>
             <th style="width: 20%">
                 Uom
             </th>

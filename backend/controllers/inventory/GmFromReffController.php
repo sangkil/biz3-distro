@@ -1,10 +1,10 @@
 <?php
 
-namespace backend\controllers\purchase;
+namespace backend\controllers\inventory;
 
 use Yii;
-use backend\models\purchase\Purchase;
-use backend\models\purchase\search\Purchase as PurchaseSearch;
+use backend\models\inventory\GoodsMovement;
+use backend\models\inventory\search\GoodsMovement as GoodsMovementSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -13,9 +13,9 @@ use yii\base\UserException;
 use yii\db\Query;
 
 /**
- * PurchaseController implements the CRUD actions for Purchase model.
+ * GmManualController implements the CRUD actions for GoodsMovement model.
  */
-class PurchaseController extends Controller
+class GmFromReffController extends Controller
 {
 
     public function behaviors()
@@ -26,20 +26,23 @@ class PurchaseController extends Controller
                 'actions' => [
                     'delete' => ['post'],
                     'confirm' => ['post'],
-                    'reject' => ['post'],
+                    'rollback' => ['post'],
                 ],
             ],
         ];
     }
 
     /**
-     * Lists all Purchase models.
+     * Lists all GoodsMovement models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PurchaseSearch();
+        $searchModel = new GoodsMovementSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $query = $dataProvider->query;
+        $query->with('warehouse');
 
         return $this->render('index', [
                 'searchModel' => $searchModel,
@@ -48,7 +51,7 @@ class PurchaseController extends Controller
     }
 
     /**
-     * Displays a single Purchase model.
+     * Displays a single GoodsMovement model.
      * @param integer $id
      * @return mixed
      */
@@ -60,20 +63,41 @@ class PurchaseController extends Controller
     }
 
     /**
-     * Creates a new Purchase model.
+     * Displays a single GoodsMovement model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionPrint($id)
+    {
+        $this->layout = 'print';
+        return $this->render('cetak', [
+                'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new GoodsMovement model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($type, $id)
     {
-        $model = new Purchase();
-
-        $model->status = Purchase::STATUS_DRAFT;
+        $model = new GoodsMovement([
+            'reff_type' => $type,
+            'reff_id' => $id,
+        ]);
+        if (($reff = $model->updateFromReference()) !== false) {
+            list($reffModel, $reff) = $reff;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        
         $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {
+            $model->status = GoodsMovement::STATUS_DRAFT;
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                $model->items = Yii::$app->request->post('PurchaseDtl', []);
+                $model->items = Yii::$app->request->post('GoodsMovementDtl', []);
                 if ($model->save()) {
                     $transaction->commit();
                     return $this->redirect(['view', 'id' => $model->id]);
@@ -86,11 +110,13 @@ class PurchaseController extends Controller
         }
         return $this->render('create', [
                 'model' => $model,
+                'reffModel' => $reffModel,
+                'reff' => $reff,
         ]);
     }
 
     /**
-     * Updates an existing Purchase model.
+     * Updates an existing GoodsMovement model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -98,16 +124,18 @@ class PurchaseController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($model->status != Purchase::STATUS_DRAFT) {
+        if ($model->status != GoodsMovement::STATUS_DRAFT) {
             throw new UserException('Tidak bisa diupdate');
         }
-        if ($model->vendor) {
-            $model->vendor_name = $model->vendor->name;
+        if (($reff = $model->getReference()) !== false) {
+            list($reffModel, $reff) = $reff;
+        } else {
+            throw new NotFoundHttpException('The reference page does not exist.');
         }
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                $model->items = Yii::$app->request->post('PurchaseDtl', []);
+                $model->items = Yii::$app->request->post('GoodsMovementDtl', []);
                 if ($model->save()) {
                     $transaction->commit();
                     return $this->redirect(['view', 'id' => $model->id]);
@@ -120,39 +148,42 @@ class PurchaseController extends Controller
         }
         return $this->render('update', [
                 'model' => $model,
+                'reffModel' => $reffModel,
+                'reff' => $reff,
         ]);
     }
 
+    /**
+     * Deletes an existing GoodsMovement model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->status != GoodsMovement::STATUS_DRAFT) {
+            throw new UserException('Tidak bisa didelete');
+        }
+        $model->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Deletes an existing GoodsMovement model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
     public function actionConfirm($id)
     {
         $model = $this->findModel($id);
-        if ($model->status != Purchase::STATUS_DRAFT) {
-            throw new UserException('Tidak bisa direlease');
+        if ($model->status != GoodsMovement::STATUS_DRAFT) {
+            throw new UserException('Tidak bisa diconfirm');
         }
-        $model->scenario = Purchase::SCENARIO_CHANGE_STATUS;
-        $model->status = Purchase::STATUS_RELEASED;
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            if ($model->save()) {
-                // update stock internaly via beforeUpdate
-                $transaction->commit();
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-            $transaction->rollBack();
-        } catch (\Exception $exc) {
-            $transaction->rollBack();
-            throw $exc;
-        }
-    }
-
-    public function actionReject($id)
-    {
-        $model = $this->findModel($id);
-        if ($model->status != Purchase::STATUS_RELEASED) {
-            throw new UserException('Tidak bisa direlease');
-        }
-        $model->scenario = Purchase::SCENARIO_CHANGE_STATUS;
-        $model->status = Purchase::STATUS_CANCELED;
+        $model->scenario = GoodsMovement::SCENARIO_CHANGE_STATUS;
+        $model->status = GoodsMovement::STATUS_RELEASED;
         $transaction = Yii::$app->db->beginTransaction();
         try {
             if ($model->save()) {
@@ -168,32 +199,53 @@ class PurchaseController extends Controller
     }
 
     /**
-     * Deletes an existing Purchase model.
+     * Deletes an existing GoodsMovement model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionRollback($id)
     {
         $model = $this->findModel($id);
-        if ($model->status != Purchase::STATUS_DRAFT) {
-            throw new UserException('Tidak bisa didelete');
+        if ($model->status != GoodsMovement::STATUS_RELEASED) {
+            throw new UserException('Tidak bisa dirollback');
         }
-        $model->delete();
-
-        return $this->redirect(['index']);
+        $model->scenario = GoodsMovement::SCENARIO_CHANGE_STATUS;
+        $model->status = GoodsMovement::STATUS_CANCELED;
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->save()) {
+                // update stock internaly via beforeUpdate
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            $transaction->rollBack();
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            throw $exc;
+        }
     }
+
+//    public function actionProductList($term = '')
+//    {
+//        $response = Yii::$app->response;
+//        $response->format = 'json';
+//        return Product::find()
+//                ->with(['cogs'])
+//                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+//                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+//                ->asArray()->limit(10)->all();
+//    }
 
     public function actionMaster()
     {
         $result = [];
-        Yii::$app->getResponse()->format = 'js';
+        Yii::$app->response->format = 'js';
 
         $products = [];
         $query_product = (new Query())
-            ->select(['p.id', 'p.code', 'p.name', 'price' => 'c.last_purchase_price'])
-            ->from(['p' => '{{%product}}'])
-            ->leftJoin(['c' => '{{%cogs}}'], '[[p.id]]=[[c.product_id]]');
+            ->select(['id', 'code', 'name'])
+            ->from(['{{%product}}']);
         foreach ($query_product->all() as $row) {
             $products[$row['id']] = $row;
         }
@@ -210,6 +262,14 @@ class PurchaseController extends Controller
                 'name' => $row['name'],
                 'isi' => $row['isi']
             ];
+        }
+
+        // product prices
+        $query_cost = (new Query())
+            ->select(['product_id', 'last_purchase_price', 'cogs'])
+            ->from(['{{%cogs}}']);
+        foreach ($query_cost->all() as $row) {
+            $products[$row['product_id']]['cost'] = $row['last_purchase_price'];
         }
 
         $result['products'] = $products;
@@ -230,23 +290,33 @@ class PurchaseController extends Controller
         $query_vendor = (new Query())
             ->select(['id', 'code', 'name'])
             ->from('{{%vendor}}')
-            ->where(['type' => Vendor::TYPE_SUPPLIER]);
+            ->where(['type' => Vendor::TYPE_CUSTOMER]);
 
         $result['vendors'] = $query_vendor->all();
 
         return 'var masters = ' . json_encode($result) . ';';
     }
 
+    public function actionVendorList($term = '')
+    {
+        $response = Yii::$app->response;
+        $response->format = 'json';
+        return Vendor::find()
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+                ->limit(10)->asArray()->all();
+    }
+
     /**
-     * Finds the Purchase model based on its primary key value.
+     * Finds the GoodsMovement model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Purchase the loaded model
+     * @return GoodsMovement the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Purchase::findOne($id)) !== null) {
+        if (($model = GoodsMovement::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -28,13 +28,24 @@ use backend\models\master\Vendor;
  */
 class Purchase extends \yii\db\ActiveRecord
 {
+
     use \mdm\converter\EnumTrait,
         \mdm\behaviors\ar\RelationTrait;
-
     // status movement
     const STATUS_DRAFT = 10;
-    const STATUS_APPLIED = 20;
-    const STATUS_CLOSE = 90;
+    const STATUS_RELEASED = 20;
+    const STATUS_CANCELED = 90;
+    //document reff type
+    const REFF_PURCH = 10;
+    const REFF_PURCH_RETURN = 11;
+    const REFF_GOODS_MOVEMENT = 20;
+    const REFF_TRANSFER = 30;
+    //const REFF_INVOICE = 40;
+    //const REFF_PAYMENT = 50;
+    const REFF_SALES = 60;
+    const REFF_SALES_RETURN = 61;
+    // scenario
+    const SCENARIO_CHANGE_STATUS = 'change_status';
 
     public $vendor_name;
 
@@ -54,10 +65,10 @@ class Purchase extends \yii\db\ActiveRecord
         return [
             [['vendor_id', 'branch_id', 'Date', 'value', 'status'], 'required'],
             [['vendor_id', 'branch_id', 'status'], 'integer'],
-            [['vendor_name'], 'safe'],
+            [['vendor_name', 'vendor_id', 'date'], 'safe'],
             [['number'], 'autonumber', 'format' => 'PU' . date('Ymd') . '.?', 'digit' => 4],
-            [['items'], 'required'],
-            [['items'], 'relationUnique', 'targetAttributes' => 'product_id'],
+            [['items'], 'required', 'except' => self::SCENARIO_CHANGE_STATUS],
+            [['items'], 'relationUnique', 'targetAttributes' => 'product_id', 'except' => self::SCENARIO_CHANGE_STATUS],
             [['value', 'discount'], 'number'],
             [['number'], 'string', 'max' => 16],
         ];
@@ -122,6 +133,33 @@ class Purchase extends \yii\db\ActiveRecord
         return $this->getLogical('status', 'STATUS_');
     }
 
+    public function updateStatus()
+    {
+        return true;
+    }
+
+    public function generateReceive()
+    {
+        $queryGR = (new \yii\db\Query())
+            ->select(['gmd.product_id', 'total' => 'sum(gmd.qty)'])
+            ->from(['gm' => '{{%goods_movement}}'])
+            ->innerJoin(['gmd' => '{{%goods_movement_dtl}}'], '[[gmd.movement_id]]=[[gm.id]]')
+            ->where(['gm.status' => 20, 'gm.reff_type' => 10, 'gm.reff_id' => $this->id])
+            ->groupBy(['gmd.product_id']);
+        $queryItem = (new \yii\db\Query())
+            ->select(['pd.product_id', 'pd.price', 'pd.qty', 'pd.uom_id', 'g.total'])
+            ->from(['pd' => '{{%purchase_dtl}}'])
+            ->leftJoin(['g' => $queryGR], '[[g.product_id]]=[[pd.product_id]]')
+            ->where(['pd.purchase_id' => $this->id]);
+        $items = [];
+        foreach ($queryItem->all() as $item) {
+            $item['qty'] = $item['qty'] - $item['total'];
+            $item['cogs'] = $item['price'];
+            $items[] = $item;
+        }
+        return $items;
+    }
+
     public function behaviors()
     {
         return[
@@ -135,6 +173,16 @@ class Purchase extends \yii\db\ActiveRecord
             ],
             'yii\behaviors\BlameableBehavior',
             'yii\behaviors\TimestampBehavior',
+            [
+                'class' => 'dee\tools\StateChangeBehavior',
+                'states' => [
+                    [null, self::STATUS_RELEASED, 'updateStatus', 1],
+                    [self::STATUS_DRAFT, self::STATUS_RELEASED, 'updateStatus', 1],
+                    [self::STATUS_RELEASED, self::STATUS_DRAFT, 'updateStatus', -1],
+                    [self::STATUS_RELEASED, self::STATUS_CANCELED, 'updateStatus', -1],
+                    [self::STATUS_RELEASED, null, 'updateStatus', -1],
+                ]
+            ],
         ];
     }
 }

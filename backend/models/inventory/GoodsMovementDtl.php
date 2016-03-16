@@ -21,6 +21,7 @@ use backend\models\master\Uom;
  */
 class GoodsMovementDtl extends \yii\db\ActiveRecord
 {
+    public $sisa;
     /**
      * @inheritdoc
      */
