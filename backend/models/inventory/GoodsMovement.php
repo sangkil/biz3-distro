@@ -235,7 +235,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return false;
     }
 
-    public function getReference()
+    public function getReference($withItems = true)
     {
         $type = $this->reff_type;
         $id = $this->reff_id;
@@ -254,12 +254,8 @@ class GoodsMovement extends \yii\db\ActiveRecord
 
         // items
         $items = false;
-        if (isset($reff['items'])) {
+        if ($withItems && isset($reff['items'])) {
             $items = call_user_func([$reffModel, $reff['items']]);
-            foreach ($items as $i => $item) {
-                $items[$i] = new GoodsMovementDtl();
-                $items[$i]->attributes = $item;
-            }
         }
         return[$reffModel, $reff, $items];
     }
@@ -287,7 +283,13 @@ class GoodsMovement extends \yii\db\ActiveRecord
 
         // items
         if ($items !== false) {
-            $this->populateRelation('items', $items);
+            $records = [];
+            foreach ($items as $i => $item) {
+                $records[$i] = new GoodsMovementDtl();
+                $records[$i]->sisa = $item['qty'];
+                $records[$i]->attributes = $item;
+            }
+            $this->populateRelation('items', $records);
         }
         return[$reffModel, $reff, $items];
     }
