@@ -11,7 +11,15 @@ $this->title = 'Prices';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>
-    <?= Html::a('Create Price', ['create'], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Create', ['create'], ['class' => 'btn btn-default']) ?>
+    <?=
+    Html::a('<i class="fa fa-download"></i>', ['csv-download', 'params'=>$_GET], [
+        'class' => 'btn btn-default', 'title'=>'CSV Download', 'target'=>'new',
+        'data' => [
+            'method' => 'post',
+        ],
+    ])
+    ?>
 </p>
 <br>
 
