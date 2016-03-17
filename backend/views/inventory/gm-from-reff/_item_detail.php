@@ -7,12 +7,14 @@ use yii\helpers\Html;
 <td>
     <span class="serial"></span>
     <?= Html::activeHiddenInput($model, "[$key]product_id", ['id' => false]); ?>
+    <?= Html::activeHiddenInput($model, "[$key]productUom[isi]", ['id' => false, 'data-field' => 'isi']); ?>
+    <?= Html::activeHiddenInput($model, "[$key]cogs", ['id' => false, 'data-field' => 'cogs']); ?>
 </td>
 <td>
     <span data-field="product"><?= Html::getAttributeValue($model, "[$key]product[name]") ?></span>
 </td>
 <td>
-    <?= Html::getAttributeValue($model, "[$key]cogs"); ?>
+    <span data-field="price"><?= Html::getAttributeValue($model, "[$key]cogs"); ?></span>
 </td>
 <td>
     <?= Html::getAttributeValue($model, "[$key]sisa"); ?>

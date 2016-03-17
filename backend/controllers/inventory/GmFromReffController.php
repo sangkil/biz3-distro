@@ -234,17 +234,6 @@ class GmFromReffController extends Controller
         }
     }
 
-//    public function actionProductList($term = '')
-//    {
-//        $response = Yii::$app->response;
-//        $response->format = 'json';
-//        return Product::find()
-//                ->with(['cogs'])
-//                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-//                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-//                ->asArray()->limit(10)->all();
-//    }
-
     public function actionMaster()
     {
         $result = [];
