@@ -46,7 +46,7 @@ $branch_id = Yii::$app->profile->branch_id;
     <div class="col-md-4">
         <div class="small-box bg-aqua box-comments">
             <div class="inner">
-                <?= Html::activeHiddenInput($model, 'value')?>
+                <?= Html::activeHiddenInput($model, 'value') ?>
                 <h3><span id="sales-value-text">Rp0</span>&nbsp;</h3>
                 <p><span id="sales-qty-text">0 Items</span></p>
                 <input type="hidden" id="sales-qty">
@@ -88,7 +88,7 @@ $branch_id = Yii::$app->profile->branch_id;
                 </div>
                 <div id="payment-form" class="hidden">
                     <?= Html::hiddenInput('payment-value', 0, ['id' => 'payment-value']) ?>
-                    <div class="grid-view col-lg-12<?= count($payments)?'':' hidden'?>" id="payment-grid">
+                    <div class="grid-view col-lg-12<?= count($payments) ? '' : ' hidden' ?>" id="payment-grid">
                         <table class="table table-striped">
                             <thead>
                                 <tr class="bg-green">
@@ -111,24 +111,27 @@ $branch_id = Yii::$app->profile->branch_id;
                             ?>
                         </table>
                     </div>
-                    <div class="col-lg-6">
-                        <?= Html::label('Method') ?>
-                        <?=
-                        Html::dropDownList('', '', PaymentMethod::selectOptions($branch_id), [
-                            'class' => 'form-control', 'id' => 'inp-payment-method'])
-                        ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= Html::label('Value') ?>
-                        <?=
-                        Html::textInput('', '', ['class' => 'form-control',
-                            'id' => 'inp-payment-value'])
-                        ?>
-                    </div>
-                    <div class="col-lg-2" style="padding-left: 0px;">
-                        <?= Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;',
-                            'id' => 'btn-payment-add'])
-                        ?>
+                    <div class="col-lg-12" id="payment-input-panel">
+                        <div class="col-lg-6">
+                            <?= Html::label('Method') ?>
+                            <?=
+                            Html::dropDownList('', '', PaymentMethod::selectOptions($branch_id), [
+                                'class' => 'form-control', 'id' => 'inp-payment-method'])
+                            ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= Html::label('Value') ?>
+                            <?=
+                            Html::textInput('', '', ['class' => 'form-control',
+                                'id' => 'inp-payment-value'])
+                            ?>
+                        </div>
+                        <div class="col-lg-2" style="padding-left: 0px;">
+                            <?=
+                            Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;',
+                                'id' => 'btn-payment-add'])
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>
