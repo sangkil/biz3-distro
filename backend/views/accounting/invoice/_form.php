@@ -22,7 +22,7 @@ use yii\widgets\DetailView;
 
 JuiAsset::register($this);
 $this->registerJs($this->render('_script.js'));
-$this->registerJsFile(Url::to(['master']));
+$this->registerJsFile(Url::to(['master','type'=>$model->type]));
 $branch_id = Yii::$app->profile->branch_id;
 ?>
 
