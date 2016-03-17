@@ -58,20 +58,20 @@ class InvoiceController extends Controller
         $model_journal = new \backend\models\accounting\GlHeader;
         $model = $this->findModel($id);
 
-//        $newDtls = [];
-//        $ndtl = new \backend\models\accounting\GlDetail();
-//        $ndtl->coa_id = 9;
-//        $ndtl->header_id = null;
-//        $ndtl->amount = $model->value;
-//        $newDtls[] = $ndtl;
-//
-//        $ndtl = new \backend\models\accounting\GlDetail();
-//        $ndtl->coa_id = 12;
-//        $ndtl->header_id = null;
-//        $ndtl->amount = $model->value *-1;
-//        $newDtls[] = $ndtl;
-//
-//        $model_journal->glDetails = $newDtls;
+        $newDtls = [];
+        $ndtl = new \backend\models\accounting\GlDetail();
+        $ndtl->coa_id = 9;
+        $ndtl->header_id = null;
+        $ndtl->amount = $model->value;
+        $newDtls[] = $ndtl;
+
+        $ndtl = new \backend\models\accounting\GlDetail();
+        $ndtl->coa_id = 12;
+        $ndtl->header_id = null;
+        $ndtl->amount = $model->value *-1;
+        $newDtls[] = $ndtl;
+
+        $model_journal->glDetails = $newDtls;
 
         return $this->render('view', [
                 'model' => $model,
@@ -87,7 +87,8 @@ class InvoiceController extends Controller
     public function actionCreate()
     {
         $model = new Invoice();
-        $model->load(Yii::$app->request->get());
+        $dgets = Yii::$app->request->get();
+        $model->load($dgets);
         $model->reff_type = ($model->type == $model::TYPE_INCOMING) ? $model::REFF_PURCH : null;
         $model->reff_type = ($model->type == $model::TYPE_OUTGOING) ? $model::REFF_SALES : $model->reff_type;
 
@@ -95,6 +96,29 @@ class InvoiceController extends Controller
         $model->date = date('Y-m-d');
         $model->due_date = date('Y-m-d', time() + 30 * 24 * 3600);
         $model->value = 0;
+
+        if (isset($dgets['goodsMovement']['id'])) {
+            $gmv = \backend\models\inventory\GoodsMovement::find()
+                ->where(['=', 'id', $dgets['goodsMovement']['id']])
+                ->with(['vendor'])
+                ->one();
+            $model->reff_type = $model::REFF_GOODS_MOVEMENT;
+            $model->reff_id = $gmv->id;
+            $model->vendor_id = $gmv->vendor_id;
+            $model->vendor_name = $gmv->vendor->name;
+            $gmItems = [];
+            $subtotal = 0;
+            foreach ($gmv->items as $rvalue) {
+                $ditem = new \backend\models\accounting\InvoiceDtl();
+                $ditem->item_id = $rvalue->product_id;
+                $ditem->qty = $rvalue->qty;
+                $ditem->item_value = $rvalue->cogs;
+                $subtotal += ($rvalue->qty * $rvalue->cogs);
+                $gmItems[] = $ditem;
+            }
+            $model->value = $subtotal;
+            $model->items = $gmItems;
+        }
 
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
@@ -365,7 +389,6 @@ class InvoiceController extends Controller
             ->from('{{%vendor}}');
 
         ($type !== null) ? $query_vendor->where(['type' => [$type, Vendor::TYPE_INTERN]]) : '';
-
         $result['vendors'] = $query_vendor->all();
 
         return 'var masters = ' . json_encode($result) . ';';

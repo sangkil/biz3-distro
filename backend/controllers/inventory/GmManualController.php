@@ -57,8 +57,9 @@ class GmManualController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
         return $this->render('view', [
-                'model' => $this->findModel($id),
+                'model' => $model,
         ]);
     }
 
@@ -224,7 +225,7 @@ class GmManualController extends Controller
 //                ->asArray()->limit(10)->all();
 //    }
 
-    public function actionMaster()
+    public function actionMaster($type = null)
     {
         $result = [];
         Yii::$app->response->format = 'js';
@@ -273,26 +274,26 @@ class GmManualController extends Controller
         }
         $result['barcodes'] = $barcodes;
 
-        // customer
+        // vendors
         $query_vendor = (new Query())
             ->select(['id', 'code', 'name'])
-            ->from('{{%vendor}}')
-            ->where(['type' => Vendor::TYPE_CUSTOMER]);
+            ->from('{{%vendor}}');
 
+        ($type !== null) ? $query_vendor->where(['type' => [$type, Vendor::TYPE_INTERN]]) : '';
         $result['vendors'] = $query_vendor->all();
 
         return 'var masters = ' . json_encode($result) . ';';
     }
 
-    public function actionVendorList($term = '')
-    {
-        $response = Yii::$app->response;
-        $response->format = 'json';
-        return Vendor::find()
-                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-                ->limit(10)->asArray()->all();
-    }
+//    public function actionVendorList($term = '')
+//    {
+//        $response = Yii::$app->response;
+//        $response->format = 'json';
+//        return Vendor::find()
+//                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+//                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+//                ->limit(10)->asArray()->all();
+//    }
 
     /**
      * Finds the GoodsMovement model based on its primary key value.

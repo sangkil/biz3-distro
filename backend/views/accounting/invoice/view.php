@@ -83,6 +83,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value',
                 'description',
                 [                      // the owner name of the model
+                    'label' => 'Reff Number',
+                    'format' => 'raw',
+                    'value' => $model->reffNumber
+                ],
+                [                      // the owner name of the model
                     'label' => 'Status',
                     'format' => 'raw',
                     'value' => ($model->status == $model::STATUS_DRAFT) ? '<span class="badge bg-yellow">' . $model->nmStatus . '</span>'

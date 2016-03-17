@@ -4,6 +4,7 @@ namespace backend\models\accounting;
 
 use Yii;
 use backend\models\master\Vendor;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "invoice".
@@ -212,6 +213,14 @@ class Invoice extends \yii\db\ActiveRecord
         return $this->getLogical('reff_type', 'REFF_');
     }
 
+    /**
+     * @return String
+     */
+    public function getHyperlink()
+    {
+        return Html::a($this->number, ['/accounting/invoice/view', 'id' => $this->id]);
+    }
+
     public function getReffNumber()
     {
         $link = null;
@@ -220,18 +229,28 @@ class Invoice extends \yii\db\ActiveRecord
                 $link = ($this->gMovement != null) ? Html::a($this->gMovement->number, ['/inventory/gm-manual/view', 'id' => $this->reff_id])
                         : '';
                 break;
+            case (int) self::REFF_INVOICE:
+                $link = ($this->invoice != null) ? Html::a($this->invoice->number, ['/accounting/invoice/view', 'id' => $this->reff_id])
+                        : '';
+                break;
+            case (int) self::REFF_JOURNAL:
+                $link = ($this->journal != null) ? Html::a($this->journal->number, ['/accounting/general-ledger/view', 'id' => $this->reff_id])
+                        : '';
+                break;
+
             default:
                 break;
         }
-        //echo $this->reff_type.'vs'.self::REFF_INVOICE;
+        //echo $this->reff_type.'vs'.self::REFF_JOURNAL;
         return $link;
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGMovement() {
-        return $this->hasOne(\backend\models\inventory\GoodsMovement::className(), ['id' => 'reff_id'])->where(['reff_type' => self::REFF_GOODS_MOVEMENT]);
+    public function getGMovement()
+    {
+        return $this->hasOne(\backend\models\inventory\GoodsMovement::className(), ['id' => 'reff_id']);
     }
 
     public function behaviors()

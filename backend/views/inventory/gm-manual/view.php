@@ -37,13 +37,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
             <?php elseif ($model->status == GoodsMovement::STATUS_RELEASED): ?>
                 <?=
-                Html::a('Cancel', ['rollback', 'id' => $model->id], [
-                    'class' => 'btn btn-warning',
-                    'data' => [
-                        'confirm' => 'Are you sure you want to rollback this item?',
-                        'method' => 'post',
-                    ],
-                ])
+                ($model->invoice == null || $model->invoice->status == \backend\models\accounting\Invoice::STATUS_CANCELED) ? Html::a('Cancel', ['rollback', 'id' => $model->id], [
+                        'class' => 'btn btn-warning',
+                        'data' => [
+                            'confirm' => 'Are you sure you want to rollback this item?',
+                            'method' => 'post',
+                        ],
+                    ]) : '' . '&nbsp;'
+                ?>
+                <?=
+                ($model->invoice == null) ?
+                    Html::a('Post', ['accounting/invoice/create', 'Invoice[type]' => 10, 'goodsMovement[id]' => $model->id], [
+                        'class' => 'btn btn-success',
+//                    'data' => [
+//                        'method' => 'get',
+//                    ],
+                    ]) : ''
                 ?>
             <?php endif; ?>
             <?=
@@ -90,7 +99,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => 'Warehouse'
                 ],
                 //'description',
-                'nmStatus',
+                //'nmStatus',
+                [                      // the owner name of the model
+                    'label' => 'Status',
+                    'attribute' => 'nmStatus',
+                    'format' => 'raw',
+                    'value' => ($model->status == $model::STATUS_DRAFT) ? '<span class="badge bg-yellow">' . $model->nmStatus . '</span>'
+                            : (($model->status == $model::STATUS_CANCELED) ? '<span class="badge bg-red">' . $model->nmStatus . '</span>'
+                                : '<span class="badge bg-green">' . $model->nmStatus . '</span>')
+                ],
             ],
         ])
         ?>

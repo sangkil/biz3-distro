@@ -144,6 +144,14 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return $this->hasOne(Vendor::className(), ['id' => 'vendor_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInvoice()
+    {
+        return $this->hasOne(Invoice::className(), ['reff_id'=>'id'])->where(['reff_type' => self::REFF_GOODS_MOVEMENT]);
+    }
+
     public function getNmType()
     {
         return $this->getLogical('type', 'TYPE_');
