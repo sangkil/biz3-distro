@@ -9,6 +9,7 @@ use backend\models\master\ProductUom;
 use backend\models\master\ProductStock;
 use backend\models\accounting\Invoice;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "goods_movement".
@@ -283,13 +284,23 @@ class GoodsMovement extends \yii\db\ActiveRecord
 
         // items
         if ($items !== false) {
-            $records = [];
+            $oldItems = ArrayHelper::index($this->items, 'product_id');
+            $isNew = empty($oldItems);
             foreach ($items as $i => $item) {
-                $records[$i] = new GoodsMovementDtl();
-                $records[$i]->sisa = $item['qty'];
-                $records[$i]->attributes = $item;
+                $pid = $item['product_id'];
+                if (isset($oldItems[$pid])) {
+                    $items[$i] = $oldItems[$pid];
+                } else {
+                    $items[$i] = new GoodsMovementDtl();
+                    $items[$i]->attributes = $item;
+                    if (!$isNew) {
+                        $items[$i]->qty = '';
+                    }
+                }
+                $items[$i]->sisa = $item['qty'];
             }
-            $this->populateRelation('items', $records);
+
+            $this->populateRelation('items', $items);
         }
         return[$reffModel, $reff, $items];
     }

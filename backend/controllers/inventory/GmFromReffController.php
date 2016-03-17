@@ -57,8 +57,16 @@ class GmFromReffController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        if (($reff = $model->getReference(false)) !== false) {
+            list($reffModel, $reff) = $reff;
+        } else {
+            throw new NotFoundHttpException('The reference page does not exist.');
+        }
         return $this->render('view', [
-                'model' => $this->findModel($id),
+                'model' => $model,
+                'reffModel' => $reffModel,
+                'reff' => $reff,
         ]);
     }
 
@@ -91,7 +99,7 @@ class GmFromReffController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-        
+
         $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {
             $model->status = GoodsMovement::STATUS_DRAFT;
@@ -127,7 +135,7 @@ class GmFromReffController extends Controller
         if ($model->status != GoodsMovement::STATUS_DRAFT) {
             throw new UserException('Tidak bisa diupdate');
         }
-        if (($reff = $model->getReference()) !== false) {
+        if (($reff = $model->updateFromReference()) !== false) {
             list($reffModel, $reff) = $reff;
         } else {
             throw new NotFoundHttpException('The reference page does not exist.');

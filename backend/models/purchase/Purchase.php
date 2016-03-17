@@ -5,6 +5,7 @@ namespace backend\models\purchase;
 use Yii;
 use backend\models\master\Branch;
 use backend\models\master\Vendor;
+use backend\models\inventory\GoodsMovement;
 
 /**
  * This is the model class for table "purchase".
@@ -128,6 +129,15 @@ class Purchase extends \yii\db\ActiveRecord
         return $this->hasOne(Vendor::className(), ['id' => 'vendor_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMovements()
+    {
+        return $this->hasMany(GoodsMovement::className(), ['reff_id' => 'id'])
+            ->onCondition(['reff_type'=>10]);
+    }
+
     public function getNmStatus()
     {
         return $this->getLogical('status', 'STATUS_');
@@ -153,7 +163,7 @@ class Purchase extends \yii\db\ActiveRecord
             ->where(['pd.purchase_id' => $this->id]);
         $items = [];
         foreach ($queryItem->all() as $item) {
-            $item['qty'] = $item['qty'] - $item['total'];
+            $item['qty'] -= $item['total'];
             $item['cogs'] = $item['price'];
             $items[] = $item;
         }

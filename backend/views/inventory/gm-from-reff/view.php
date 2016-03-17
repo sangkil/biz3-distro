@@ -10,6 +10,12 @@ use backend\models\inventory\GoodsMovement;
 
 $this->title = $model->nmType . ' #' . $model->number;
 $this->params['breadcrumbs'][] = ['label' => 'Goods Movements', 'url' => ['index']];
+if (isset($reff['action'])) {
+    $this->params['breadcrumbs'][] = [
+        'label' => $reffModel->number,
+        'url' => [$reff['action'], 'id' => $reffModel->id]
+    ];
+}
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="goods-movement-view">
