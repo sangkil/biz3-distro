@@ -106,6 +106,30 @@ class PriceController extends Controller
         return $this->redirect(['index']);
     }
 
+        /**
+     * Lists all Product models.
+     * @return mixed
+     */
+    public function actionCsvDownload()
+    {
+        $searchModel = new PriceSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams['params']);
+
+        $dataProvider->pagination = false;
+
+        header('Content-Type: application/excel');
+        header('Content-Disposition: attachment; filename="product_price.csv"');
+
+        $fp = fopen('php://output', 'w');
+        $i =1;
+        foreach ($dataProvider->models as $row) {
+            fputcsv($fp, [$i, $row->product->code,$row->product->name,$row->price],chr(9));
+            $i++;
+        }
+        fclose($fp);
+        return false;
+    }
+
     /**
      * Finds the Price model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

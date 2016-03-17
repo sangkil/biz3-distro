@@ -19,6 +19,8 @@ use Yii;
  */
 class Cogs extends \yii\db\ActiveRecord
 {
+    public $product_code;
+    public $product_name;
     /**
      * @inheritdoc
      */
