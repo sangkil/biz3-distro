@@ -359,11 +359,12 @@ class InvoiceController extends Controller
         }
         $result['barcodes'] = $barcodes;
 
-        // customer
+        // vendors
         $query_vendor = (new Query())
             ->select(['id', 'code', 'name'])
             ->from('{{%vendor}}')
-            ->where(['type' => Vendor::TYPE_CUSTOMER]);
+            //->where(['type' => Vendor::TYPE_CUSTOMER])
+            ;
 
         $result['vendors'] = $query_vendor->all();
 
