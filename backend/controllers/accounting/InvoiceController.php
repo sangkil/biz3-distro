@@ -364,7 +364,7 @@ class InvoiceController extends Controller
             ->select(['id', 'code', 'name'])
             ->from('{{%vendor}}');
 
-        ($type!==null)?$query_vendor->where(['type' => [$type, Vendor::TYPE_INTERN]]):'';
+        ($type !== null) ? $query_vendor->where(['type' => [$type, Vendor::TYPE_INTERN]]) : '';
 
         $result['vendors'] = $query_vendor->all();
 
