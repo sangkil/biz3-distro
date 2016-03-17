@@ -24,6 +24,9 @@ use yii\behaviors\BlameableBehavior;
  */
 class Price extends \yii\db\ActiveRecord {
 
+    public $product_code;
+    public $product_name;
+
     /**
      * @inheritdoc
      */

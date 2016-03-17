@@ -3,6 +3,7 @@
 namespace backend\models\sales;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "price_category".
@@ -20,6 +21,7 @@ use Yii;
  */
 class PriceCategory extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -71,5 +73,10 @@ class PriceCategory extends \yii\db\ActiveRecord
     public function getProducts()
     {
         return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('price', ['price_category_id' => 'id']);
+    }
+
+    public static function selectOptions()
+    {
+        return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
     }
 }
