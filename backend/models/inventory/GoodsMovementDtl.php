@@ -36,9 +36,9 @@ class GoodsMovementDtl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'uom_id', 'qty'], 'required'],
+            [['product_id', 'uom_id', ], 'required'],
             [['movement_id', 'product_id', 'uom_id'], 'integer'],
-            [['qty', 'value', 'cogs'], 'number'],
+            [['qty', 'value', 'cogs', 'sisa'], 'number'],
         ];
     }
 

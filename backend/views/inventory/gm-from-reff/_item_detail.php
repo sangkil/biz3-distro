@@ -15,9 +15,12 @@ use yii\helpers\Html;
     <?= Html::getAttributeValue($model, "[$key]cogs"); ?>
 </td>
 <td>
+    <?= Html::getAttributeValue($model, "[$key]sisa"); ?>
+</td>
+<td>
     <?=
     Html::activeTextInput($model, "[$key]qty", ['class' => 'form-control',
-        'data-field' => 'qty', 'size' => 5, 'id' => false, 'required' => true])
+        'data-field' => 'qty', 'size' => 5, 'id' => false])
     ?>
 </td>
 <td>

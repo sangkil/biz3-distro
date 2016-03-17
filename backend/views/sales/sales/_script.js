@@ -161,9 +161,11 @@ function calculatePayment() {
     if (total_sales > total_paid || total_paid == 0) {
         $('#inp-payment-value').val(total_sales - total_paid);
         $('#payment-completion').addClass('hidden');
+        $('#payment-input-panel').removeClass('hidden');
     } else {
         $('#inp-payment-value').val('');
         $('#payment-completion').removeClass('hidden');
+        $('#payment-input-panel').addClass('hidden');
     }
 }
 
@@ -192,8 +194,10 @@ function calculate() {
     if (total_sales > total_paid || total_paid == 0) {
         $('#inp-payment-value').val(total_sales - total_paid);
         $('#payment-completion').addClass('hidden');
+        $('#payment-input-panel').removeClass('hidden');
     } else {
         $('#inp-payment-value').val('');
         $('#payment-completion').removeClass('hidden');
+        $('#payment-input-panel').addClass('hidden');
     }
 }

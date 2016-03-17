@@ -17,16 +17,19 @@ use yii\helpers\Html;
             <th>
                 Product Name
             </th>
-            <th class="items" style="width: 20%">
+            <th class="items" style="width: 10%">
                 LastCost/pcs
             </th>
-            <th class="items" style="width: 15%">
+            <th class="items" style="width: 7%">
+                Sisa
+            </th>
+            <th class="items" style="width: 10%">
                 Qty
             </th>
-            <th style="width: 15%">
+            <th style="width: 10%">
                 Uom
             </th>
-            <th style="width: 15%">
+            <th style="width: 10%">
                 Total Line
             </th>
         </tr>
