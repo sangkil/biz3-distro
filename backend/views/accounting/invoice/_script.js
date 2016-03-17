@@ -59,7 +59,7 @@ var countTotal = function () {
     $('#invoice-value').val($tot);
 };
 
-function getCost(source,id) {
+function getCost(source, id) {
     if (source[id] && source[id].cost) {
         var cost = source[id].cost;
         return cost;
@@ -111,7 +111,7 @@ var acomplt = function ($input_id) {
                     }
                 });
                 response(result);
-            };            
+            };
             dselect = function (event, ui) {
                 $('#invoice-vendor_id').val(ui.item.id);
                 return false;
@@ -134,12 +134,12 @@ var acomplt = function ($input_id) {
             $row.find('span[data-field="item"]').text(ui.item.name);
             $row.find(':input[data-field="item_value"]').val(getCost(masters.products, ui.item.id));
             $row.find(':input[data-field="qty"]').focus();
-            
+
             return false;
         }
     }).autocomplete("instance")._renderItem = function (ul, item) {
         return $("<li>")
-            .append("<a>" + item.code + "<br>" + item.name + "</a>")
+            .append('<a>' + item.code + '&nbsp;' + item.name + '</a>')
             .appendTo(ul);
     };
 };

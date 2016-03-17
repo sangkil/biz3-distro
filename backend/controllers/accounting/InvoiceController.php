@@ -310,7 +310,7 @@ class InvoiceController extends Controller
         return $coaList->all();
     }
 
-    public function actionMaster()
+    public function actionMaster($type = null)
     {
         $result = [];
         Yii::$app->response->format = 'js';
@@ -359,11 +359,12 @@ class InvoiceController extends Controller
         }
         $result['barcodes'] = $barcodes;
 
-        // customer
+        // vendors
         $query_vendor = (new Query())
             ->select(['id', 'code', 'name'])
-            ->from('{{%vendor}}')
-            ->where(['type' => Vendor::TYPE_CUSTOMER]);
+            ->from('{{%vendor}}');
+
+        ($type !== null) ? $query_vendor->where(['type' => [$type, Vendor::TYPE_INTERN]]) : '';
 
         $result['vendors'] = $query_vendor->all();
 

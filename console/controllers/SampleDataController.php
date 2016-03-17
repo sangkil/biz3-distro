@@ -204,9 +204,20 @@ class SampleDataController extends Controller
             $command->insert('{{%price}}', $this->toAssoc($row, ['product_id', 'price_category_id', 'price']))->execute();
             Console::updateProgress($i + 1, $total);
         }
-        //$command->resetSequence('{{%price}}')->execute();
         Console::endProgress();
-        
+
+        // cogs
+        $rows = require $sampleDir . '/cogs.php';
+        $total = count($rows);
+        echo "\ninsert table {{%cogs}}\n";
+        Console::startProgress(0, $total);
+        foreach ($rows as $i => $row) {
+            $pc_ids[] = $row[0];
+            $command->insert('{{%cogs}}', $this->toAssoc($row, ['product_id', 'cogs', 'last_purchase_price']))->execute();
+            Console::updateProgress($i + 1, $total);
+        }
+        Console::endProgress();
+
         // uom
         $rows = require $sampleDir . '/uom.php';
         $total = count($rows);
@@ -237,7 +248,7 @@ class SampleDataController extends Controller
         $command->resetSequence('{{%coa}}')->execute();
         Console::endProgress();
 
-        // coa
+        // payment method
         $rows = require $sampleDir . '/payment_method.php';
         $total = count($rows);
         echo "\ninsert table {{%payment_method}}\n";
