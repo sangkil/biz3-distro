@@ -6,6 +6,7 @@ use backend\assets\AppAsset;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 ?>
@@ -19,10 +20,18 @@ AppAsset::register($this);
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-
-    <body class="skin-yellow sidebar-mini sidebar-collapse">
+    <body class="skin-red sidebar-mini sidebar-collapse">
         <?php $this->beginBody() ?>
-        <div class="wrapper"> 
+        <div class="wrapper">
+            <header class="main-header">
+                <!-- Logo -->
+                <a href="<?= Url::to(['/site/index']); ?>" class="logo">
+                    <!-- mini logo for sidebar mini 50x50 pixels -->
+                    <span class="logo-mini"><b>A</b>4</span>
+                    <!-- logo for regular state and mobile devices -->
+                    <span class="logo-lg"><b>A4</b>Sport</span>
+                </a>
+            </header>
             <?php
             require 'left_menu.php';
             ?>
@@ -33,16 +42,15 @@ AppAsset::register($this);
                             <i class="fa fa-angle-left"></i>
                             <i class="fa fa-angle-right"></i>
                         </a>                        
-                        <?= '&nbsp;'.$this->title ?>
+                        <?= '&nbsp;' . $this->title ?>
                     </h1>
                     <?=
                     Breadcrumbs::widget([
-                        'homeLink' => ['label' => Yii::t('yii', 'Home'),'url' => Yii::$app->homeUrl,'template'=>'<li><i class="fa fa-home"></i>&nbsp;{link}</li>'],
+                        'homeLink' => ['label' => Yii::t('yii', 'Home'), 'url' => Yii::$app->homeUrl, 'template' => '<li><i class="fa fa-home"></i>&nbsp;{link}</li>'],
                         'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                     ])
                     ?>
                 </section>
-
                 <section class="content">
                     <?= Alert::widget() ?>
                     <?= $content ?>

@@ -11,27 +11,31 @@ use yii\helpers\Url;
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <!-- Sidebar user panel -->
-        <div class="user-panel">
-            <div class="pull-left image">
-                <?php echo Html::img('@web/../../vendor/bower/adminlte/dist/img/user2-160x160.jpg', ['class' => 'img-circle', 'alt' => 'User Image']); ?>
+        <?php if (!Yii::$app->user->isGuest): ?>
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <?php
+                    echo Html::img('@web/../../vendor/bower/adminlte/dist/img/user2-160x160.jpg', ['class' => 'img-circle',
+                        'alt' => 'User Image']);
+                    ?>
+                </div>
+                <div class="pull-left info">
+                    <p><?= (Yii::$app->user->isGuest) ? 'Guest' : Yii::$app->user->identity->username ?></p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
             </div>
-            <div class="pull-left info">
-                <p><?= (Yii::$app->user->isGuest) ? 'Guest' : Yii::$app->user->identity->username ?></p>
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-            </div>
-        </div>
-        <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search..."/>
-                <span class="input-group-btn">
-                    <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-                </span>
-            </div>
-        </form>
-        <!-- /.search form -->
-        <!-- sidebar menu: : style can be found in sidebar.less -->
-
+            <!-- search form -->
+            <form action="#" method="get" class="sidebar-form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search..."/>
+                    <span class="input-group-btn">
+                        <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </form>
+            <!-- /.search form -->
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+        <?php endif; ?>
 
         <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
@@ -89,7 +93,7 @@ use yii\helpers\Url;
                         <a href="#"><i class="fa fa-check"></i> Goods Receipt<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
                             <li><?= Html::a('<i class="fa fa-check"></i>&nbsp;Receive', ['/inventory/gm-manual', 'GoodsMovement[type]' => backend\models\inventory\GoodsMovement::TYPE_RECEIVE]) ?>
-                                <!--<a href="<?= Url::to(['/inventory/gm-manual','type' => \backend\models\inventory\GoodsMovement::TYPE_RECEIVE]); ?>"><i class="fa fa-check"></i> From Supplier</a>-->
+                                <!--<a href="<?= Url::to(['/inventory/gm-manual', 'type' => \backend\models\inventory\GoodsMovement::TYPE_RECEIVE]); ?>"><i class="fa fa-check"></i> From Supplier</a>-->
                             </li>
                             <li><a href="#"><i class="fa fa-check"></i>&nbsp;Transfer</a></li>
                             <li><a href="#"><i class="fa fa-check"></i>&nbsp;Purchase Return</a></li>
@@ -185,29 +189,17 @@ use yii\helpers\Url;
                     </li>
                 </ul>
             </li>
+            <li class="treeview">
+                <a href="<?= Url::to(['/site/index']); ?>"><i class="fa fa-key text-danger"></i> <span>Auth</span></a>
+                <ul class="treeview-menu">
+                    <?php if (Yii::$app->user->isGuest): ?>
+                        <li><a href="<?= Url::to(['/site/login']); ?>"><i class="fa fa-unlock"></i> Login</a></li>
+                    <?php else: ?>
+                        <li><a href="<?= Url::to(['/site/logout']); ?>"><i class="fa fa-lock"></i> Logout</a></li>
+                    <?php endif; ?>
+                </ul>
+            </li>
         </ul>
-        <?php
-//        $menuCallback = function($menu) {
-//            $item = [
-//                'label' => $menu['name'],
-//                'url' => MenuHelper::parseRoute($menu['route']),
-//            ];
-//            if (!empty($menu['data'])) {
-//                $item['icon'] = 'fa ' . $menu['data'];
-//            } else {
-//                $item['icon'] = 'fa fa-angle-double-right';
-//            }
-//            if ($menu['children'] != []) {
-//                $item['items'] = $menu['children'];
-//            }
-//            return $item;
-//        };
-//
-//        $items = MenuHelper::getAssignedMenu(Yii::$app->user->id, null, $menuCallback);
-//        echo SideMenu::widget([
-//            'items' => $items,
-//        ]);
-        ?>
     </section>
     <!-- /.sidebar -->
 </aside>

@@ -106,6 +106,7 @@ class InvoiceController extends Controller
             $model->reff_id = $gmv->id;
             $model->vendor_id = $gmv->vendor_id;
             $model->vendor_name = $gmv->vendor->name;
+            $model->description = 'GR Invoice';
             $gmItems = [];
             $subtotal = 0;
             foreach ($gmv->items as $rvalue) {

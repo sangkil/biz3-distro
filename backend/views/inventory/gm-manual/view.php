@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="goods-movement-view">
     <div class="col-lg-12">
         <p class="pull-right">
+            <?= (!$model->isNewRecord) ? Html::a('Create New', ['create', 'type' => $model->type],['class'=>'btn btn-default']) :'' ?>
             <?php if ($model->status == GoodsMovement::STATUS_DRAFT): ?>
                 <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
                 <?=
@@ -37,7 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
             <?php elseif ($model->status == GoodsMovement::STATUS_RELEASED): ?>
                 <?=
-                ($model->invoice == null || $model->invoice->status == \backend\models\accounting\Invoice::STATUS_CANCELED) ? Html::a('Cancel', ['rollback', 'id' => $model->id], [
+                ($model->invoice == null || $model->invoice->status == \backend\models\accounting\Invoice::STATUS_CANCELED)
+                        ? Html::a('Cancel', ['rollback', 'id' => $model->id], [
                         'class' => 'btn btn-warning',
                         'data' => [
                             'confirm' => 'Are you sure you want to rollback this item?',
