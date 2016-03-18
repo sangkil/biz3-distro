@@ -76,7 +76,7 @@ class Invoice extends \yii\db\ActiveRecord
             [['type', 'vendor_id', 'reff_type', 'reff_id', 'status'], 'integer'],
             [['value', 'tax_value'], 'number'],
             [['vendor_name', 'date', 'due_date'], 'safe'],
-            [['number'], 'autonumber', 'format' => 'IV' . date('Ym') . '.?', 'digit' => 4],
+            [['number'], 'autonumber', 'format' => 'IV' . date('Y') . '.?', 'digit' => 4],
             [['items'], 'relationUnique', 'targetAttributes' => ['item_type', 'item_id']],
             [['description', 'tax_type'], 'string', 'max' => 64],
         ];

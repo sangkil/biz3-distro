@@ -60,7 +60,7 @@ class Payment extends \yii\db\ActiveRecord
     {
         return [
             [['Date', 'type', 'payment_method', 'vendor_id', 'status'], 'required'],
-            [['number'], 'autonumber', 'format' => 'PY' . date('Ymd') . '.?', 'digit' => 4],
+            [['number'], 'autonumber', 'format' => 'PY' . date('Y') . '.?', 'digit' => 4],
             [['vendor_name', 'date'], 'safe'],
             [['items'], 'required'],
             [['items'], 'checkVendorAndType'],

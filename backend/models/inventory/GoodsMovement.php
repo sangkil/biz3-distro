@@ -79,7 +79,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
     {
         return [
             [['warehouse_id', 'Date', 'type', 'status'], 'required'],
-            [['number'], 'autonumber', 'format' => 'GM' . date('Ymd') . '.?', 'digit' => 4],
+            [['number'], 'autonumber', 'format' => 'GM' . date('Y') . '.?', 'digit' => 4],
             [['warehouse_id', 'type', 'reff_type', 'reff_id', 'vendor_id', 'status'], 'integer'],
             [['items'], 'required', 'except' => self::SCENARIO_CHANGE_STATUS],
             [['vendor_name', 'vendor_id', 'date'], 'safe'],

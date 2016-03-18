@@ -48,7 +48,7 @@ class Transfer extends \yii\db\ActiveRecord
     {
         return [
             [['branch_id', 'branch_dest_id', 'Date', 'status'], 'required'],
-            [['number'], 'autonumber', 'format' => 'IT' . date('Ymd') . '.?', 'digit' => 4],
+            [['number'], 'autonumber', 'format' => 'IT' . date('Y') . '.?', 'digit' => 4],
             [['branch_id', 'branch_dest_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['items'], 'required',],
             [['items'], 'relationUnique', 'targetAttributes' => 'product_id',],

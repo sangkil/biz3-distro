@@ -64,7 +64,7 @@ class GlHeader extends \yii\db\ActiveRecord
     {
         return [
             [['glDetails', 'date', 'periode_id', 'branch_id', 'reff_type', 'description', 'status'], 'required'],
-            [['number'], 'autonumber', 'format' => 'GL' . date('Ym') . '.?', 'digit' => 4],
+            [['number'], 'autonumber', 'format' => 'GL' . date('Y') . '.?', 'digit' => 4],
             [['date', 'GlDate'], 'safe'],
             [['periode_id', 'branch_id', 'reff_type', 'reff_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'],
                 'integer'],
