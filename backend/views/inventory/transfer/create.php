@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model backend\models\inventory\Transfer */
 
 $this->title = 'Create Transfer';
-$this->params['breadcrumbs'][] = ['label' => 'Transfer', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Transfers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transfer-create">

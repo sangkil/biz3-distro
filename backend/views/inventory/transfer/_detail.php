@@ -9,7 +9,7 @@ use backend\models\inventory\TransferDtl;
 /* @var $model Transfer */
 ?>
 
-<table class="table table-hover">
+<table class="table table-striped">
     <thead>
         <tr>
             <th style="width: 10%">#</th>
@@ -24,8 +24,8 @@ use backend\models\inventory\TransferDtl;
             </th>
         </tr>
         <tr>
-            <td colspan="2">                
-                <div class="input-group">
+            <td colspan="2">
+                <div class="input-group" style="width:100%;">
                     <span class="input-group-addon">
                         <i class="fa fa-search"></i>
                     </span>
@@ -34,18 +34,16 @@ use backend\models\inventory\TransferDtl;
             </td>
         </tr>
     </thead>
-    <tbody>
-        <?=
-        TabularInput::widget([
-            'id' => 'detail-grid',
-            'allModels' => $model->items,
-            'modelClass' => TransferDtl::className(),
-            'options' => ['tag' => 'tbody'],
-            'itemOptions' => ['tag' => 'tr'],
-            'itemView' => '_item_detail',
-            'clientOptions' => [
-            ]
-        ])
-        ?>
-    </tbody>
+    <?=
+    TabularInput::widget([
+        'id' => 'detail-grid',
+        'allModels' => $model->items,
+        'modelClass' => TransferDtl::className(),
+        'options' => ['tag' => 'tbody'],
+        'itemOptions' => ['tag' => 'tr'],
+        'itemView' => '_item_detail',
+        'clientOptions' => [
+        ]
+    ])
+    ?>
 </table>

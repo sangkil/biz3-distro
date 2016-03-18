@@ -13,17 +13,20 @@ use backend\models\master\Branch;
 $this->title = 'Transfer';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<p class='pull-right'>
+    <?= Html::a('Create Transfer', ['create'], ['class' => 'btn btn-default']) ?>
+</p>
+<br>
+
 <div class="transfer-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Transfer', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
+        'tableOptions' => ['class' => 'table table-hover'],
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
@@ -38,21 +41,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'branchDest.name',
                 'filter' => Branch::selectOptions(),
             ],
-            'date',
             [
-                'attribute' => 'status',
-                'value' => 'nmStatus',
-                'filter' => Transfer::enums('STATUS_')
+                'attribute'=>'Date',
             ],
-            // 'reff_type',
-            // 'reff_id',
-            // 'vendor_id',
-            // 'description',
-            // 'status',
-            // 'created_at',
-            // 'created_by',
-            // 'updated_at',
-            // 'updated_by',
+            [
+                'attribute'=>'status',
+                'value'=>'nmStatus',
+                'filter'=>  Transfer::enums('STATUS_')
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]);

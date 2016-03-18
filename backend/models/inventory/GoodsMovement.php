@@ -47,14 +47,16 @@ class GoodsMovement extends \yii\db\ActiveRecord
     const TYPE_RECEIVE = 10;
     const TYPE_ISSUE = 20;
     //document reff type
+    const REFF_SELF = 20;
     const REFF_PURCH = 10;
     const REFF_PURCH_RETURN = 11;
     const REFF_GOODS_MOVEMENT = 20;
     const REFF_TRANSFER = 30;
-    //const REFF_INVOICE = 40;
-    //const REFF_PAYMENT = 50;
+    const REFF_INVOICE = 40;
+    const REFF_PAYMENT = 50;
     const REFF_SALES = 60;
     const REFF_SALES_RETURN = 61;
+    const REFF_JOURNAL = 70;
     // scenario
     const SCENARIO_CHANGE_STATUS = 'change_status';
 

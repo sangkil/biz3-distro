@@ -8,14 +8,15 @@ use backend\models\inventory\search\Transfer as TransferSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use backend\models\master\Product;
 use yii\base\UserException;
+use yii\db\Query;
 
 /**
  * TransferController implements the CRUD actions for Transfer model.
  */
 class TransferController extends Controller
 {
+
     public function behaviors()
     {
         return [
@@ -23,6 +24,8 @@ class TransferController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'confirm' => ['post'],
+                    'reject' => ['post'],
                 ],
             ],
         ];
@@ -38,8 +41,8 @@ class TransferController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -51,7 +54,7 @@ class TransferController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                'model' => $this->findModel($id),
         ]);
     }
 
@@ -64,9 +67,9 @@ class TransferController extends Controller
     {
         $model = new Transfer();
 
+        $model->status = Transfer::STATUS_DRAFT;
         $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {
-            $model->status = Transfer::STATUS_DRAFT;
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->items = Yii::$app->request->post('TransferDtl', []);
@@ -94,7 +97,6 @@ class TransferController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         if ($model->status != Transfer::STATUS_DRAFT) {
             throw new UserException('Tidak bisa diupdate');
         }
@@ -117,6 +119,50 @@ class TransferController extends Controller
         ]);
     }
 
+    public function actionConfirm($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->status != Transfer::STATUS_DRAFT) {
+            throw new UserException('Tidak bisa direlease');
+        }
+        $model->scenario = Transfer::SCENARIO_CHANGE_STATUS;
+        $model->status = Transfer::STATUS_RELEASED;
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->save()) {
+                // update stock internaly via beforeUpdate
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            $transaction->rollBack();
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            throw $exc;
+        }
+    }
+
+    public function actionReject($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->status != Transfer::STATUS_RELEASED) {
+            throw new UserException('Tidak bisa direlease');
+        }
+        $model->scenario = Transfer::SCENARIO_CHANGE_STATUS;
+        $model->status = Transfer::STATUS_CANCELED;
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->save()) {
+                // update stock internaly via beforeUpdate
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            $transaction->rollBack();
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            throw $exc;
+        }
+    }
+
     /**
      * Deletes an existing Transfer model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -125,19 +171,58 @@ class TransferController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if ($model->status != Transfer::STATUS_DRAFT) {
+            throw new UserException('Tidak bisa didelete');
+        }
+        $model->delete();
 
         return $this->redirect(['index']);
     }
 
-    public function actionProductList($term = '')
+    public function actionMaster()
     {
-        $response = Yii::$app->response;
-        $response->format = 'json';
-        return Product::find()
-                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-                ->asArray()->limit(10)->all();
+        $result = [];
+        Yii::$app->getResponse()->format = 'js';
+
+        $products = [];
+        $query_product = (new Query())
+            ->select(['p.id', 'p.code', 'p.name', 'price' => 'c.last_purchase_price'])
+            ->from(['p' => '{{%product}}'])
+            ->leftJoin(['c' => '{{%cogs}}'], '[[p.id]]=[[c.product_id]]');
+        foreach ($query_product->all() as $row) {
+            $products[$row['id']] = $row;
+        }
+
+        // product uoms
+        $query_uom = (new Query())
+            ->select(['p_id' => 'pu.product_id', 'pu.uom_id', 'u.name', 'pu.isi'])
+            ->from(['pu' => '{{%product_uom}}'])
+            ->innerJoin(['u' => 'uom'], '[[u.id]]=[[pu.uom_id]]')
+            ->orderBy(['pu.product_id' => SORT_ASC, 'pu.isi' => SORT_ASC]);
+        foreach ($query_uom->all() as $row) {
+            $products[$row['p_id']]['uoms'][$row['uom_id']] = [
+                'id' => $row['uom_id'],
+                'name' => $row['name'],
+                'isi' => $row['isi']
+            ];
+        }
+
+        $result['products'] = $products;
+
+        $barcodes = [];
+        $query_barcode = (new Query())
+            ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
+            ->from('{{%product_child}}')
+            ->union((new Query())
+            ->select(['lower(code)', 'id'])
+            ->from('{{%product}}'));
+        foreach ($query_barcode->all() as $row) {
+            $barcodes[$row['barcode']] = $row['id'];
+        }
+        $result['barcodes'] = $barcodes;
+
+        return 'var masters = ' . json_encode($result) . ';';
     }
 
     /**

@@ -37,6 +37,7 @@ class GlHeader extends \yii\db\ActiveRecord
     const STATUS_RELEASED = 20;
     const STATUS_CANCELED = 30;
     //document reff type
+    const REFF_SELF = 70;
     const REFF_PURCH = 10;
     const REFF_PURCH_RETURN = 11;
     const REFF_GOODS_MOVEMENT = 20;

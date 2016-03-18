@@ -19,11 +19,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'number') ?>
 
+    <?= $form->field($model, 'vendor_id') ?>
+
     <?= $form->field($model, 'branch_id') ?>
 
-    <?= $form->field($model, 'branch_dest_id') ?>
-
     <?= $form->field($model, 'date') ?>
+
+    <?php // echo $form->field($model, 'value') ?>
+
+    <?php // echo $form->field($model, 'discount') ?>
 
     <?php // echo $form->field($model, 'status') ?>
 

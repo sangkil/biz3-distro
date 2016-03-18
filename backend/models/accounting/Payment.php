@@ -42,6 +42,17 @@ class Payment extends \yii\db\ActiveRecord
     // payment method
     const METHOD_CASH = 10;
     const METHOD_BANK = 20;
+    //document reff type
+    const REFF_SELF = 50;
+    const REFF_PURCH = 10;
+    const REFF_PURCH_RETURN = 11;
+    const REFF_GOODS_MOVEMENT = 20;
+    const REFF_TRANSFER = 30;
+    const REFF_INVOICE = 40;
+    const REFF_PAYMENT = 50;
+    const REFF_SALES = 60;
+    const REFF_SALES_RETURN = 61;
+    const REFF_JOURNAL = 70;
 
     public $vendor_name;
 

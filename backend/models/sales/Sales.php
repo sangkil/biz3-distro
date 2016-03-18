@@ -37,6 +37,17 @@ class Sales extends \yii\db\ActiveRecord
     const STATUS_DRAFT = 10;
     const STATUS_RELEASED = 20;
     const STATUS_CLOSE = 90;
+    //document reff type
+    const REFF_SELF = 60;
+    const REFF_PURCH = 10;
+    const REFF_PURCH_RETURN = 11;
+    const REFF_GOODS_MOVEMENT = 20;
+    const REFF_TRANSFER = 30;
+    const REFF_INVOICE = 40;
+    const REFF_PAYMENT = 50;
+    const REFF_SALES = 60;
+    const REFF_SALES_RETURN = 61;
+    const REFF_JOURNAL = 70;
 
     public $vendor_name;
 

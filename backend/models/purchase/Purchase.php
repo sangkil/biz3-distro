@@ -6,6 +6,7 @@ use Yii;
 use backend\models\master\Branch;
 use backend\models\master\Vendor;
 use backend\models\inventory\GoodsMovement;
+use yii\db\Query;
 
 /**
  * This is the model class for table "purchase".
@@ -37,14 +38,16 @@ class Purchase extends \yii\db\ActiveRecord
     const STATUS_RELEASED = 20;
     const STATUS_CANCELED = 90;
     //document reff type
+    const REFF_SELF = 10;
     const REFF_PURCH = 10;
     const REFF_PURCH_RETURN = 11;
     const REFF_GOODS_MOVEMENT = 20;
     const REFF_TRANSFER = 30;
-    //const REFF_INVOICE = 40;
-    //const REFF_PAYMENT = 50;
+    const REFF_INVOICE = 40;
+    const REFF_PAYMENT = 50;
     const REFF_SALES = 60;
     const REFF_SALES_RETURN = 61;
+    const REFF_JOURNAL = 70;
     // scenario
     const SCENARIO_CHANGE_STATUS = 'change_status';
 
@@ -135,7 +138,7 @@ class Purchase extends \yii\db\ActiveRecord
     public function getMovements()
     {
         return $this->hasMany(GoodsMovement::className(), ['reff_id' => 'id'])
-            ->onCondition(['reff_type'=>10]);
+                ->andOnCondition(['reff_type' => self::REFF_SELF]);
     }
 
     public function getNmStatus()
@@ -150,13 +153,13 @@ class Purchase extends \yii\db\ActiveRecord
 
     public function generateReceive()
     {
-        $queryGR = (new \yii\db\Query())
+        $queryGR = (new Query())
             ->select(['gmd.product_id', 'total' => 'sum(gmd.qty)'])
             ->from(['gm' => '{{%goods_movement}}'])
             ->innerJoin(['gmd' => '{{%goods_movement_dtl}}'], '[[gmd.movement_id]]=[[gm.id]]')
-            ->where(['gm.status' => 20, 'gm.reff_type' => 10, 'gm.reff_id' => $this->id])
+            ->where(['gm.status' => 20, 'gm.reff_type' => self::REFF_SELF, 'gm.reff_id' => $this->id])
             ->groupBy(['gmd.product_id']);
-        $queryItem = (new \yii\db\Query())
+        $queryItem = (new Query())
             ->select(['pd.product_id', 'pd.price', 'pd.qty', 'pd.uom_id', 'g.total'])
             ->from(['pd' => '{{%purchase_dtl}}'])
             ->leftJoin(['g' => $queryGR], '[[g.product_id]]=[[pd.product_id]]')

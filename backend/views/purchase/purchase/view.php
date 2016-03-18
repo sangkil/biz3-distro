@@ -15,52 +15,52 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="goods-movement-view">
     <div class="col-lg-12">
         <p class="pull-right">
-        <?= Html::a('Create New', ['create'], ['class' => 'btn btn-default']) ?>
-        <?php
-        if ($model->status == Purchase::STATUS_DRAFT) {
-            echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']);
-        }
-        ?>
-        <?php
-        if ($model->status == Purchase::STATUS_DRAFT) {
-            echo Html::a('Delete', ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => 'Are you sure you want to delete this item?',
-                    'method' => 'post',
-                ],
-            ]);
-        }
-        ?>
-        <?php
-        if ($model->status == Purchase::STATUS_DRAFT) {
-            echo Html::a('Confirm', ['confirm', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => 'Are you sure you want to confirm this item?',
-                    'method' => 'post',
-                ],
-            ]);
-        }
-        ?>
-        <?php
-        if ($model->status == Purchase::STATUS_RELEASED) {
-            echo Html::a('Create GR', ['inventory/gm-from-reff/create','type'=>10, 'id' => $model->id], [
-                'class' => 'btn btn-success',
-            ]);
-        }
-        ?>
-        <?php
-        if ($model->status == Purchase::STATUS_RELEASED) {
-            echo Html::a('Cancel', ['reject', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => 'Are you sure you want to cancel this item?',
-                    'method' => 'post',
-                ],
-            ]);
-        }
-        ?>
+            <?= Html::a('Create New', ['create'], ['class' => 'btn btn-default']) ?>
+            <?php
+            if ($model->status == Purchase::STATUS_DRAFT) {
+                echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']);
+            }
+            ?>
+            <?php
+            if ($model->status == Purchase::STATUS_DRAFT) {
+                echo Html::a('Delete', ['delete', 'id' => $model->id], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => 'Are you sure you want to delete this item?',
+                        'method' => 'post',
+                    ],
+                ]);
+            }
+            ?>
+            <?php
+            if ($model->status == Purchase::STATUS_DRAFT) {
+                echo Html::a('Confirm', ['confirm', 'id' => $model->id], [
+                    'class' => 'btn btn-primary',
+                    'data' => [
+                        'confirm' => 'Are you sure you want to confirm this item?',
+                        'method' => 'post',
+                    ],
+                ]);
+            }
+            ?>
+            <?php
+            if ($model->status == Purchase::STATUS_RELEASED) {
+                echo Html::a('Create GR', ['inventory/gm-from-reff/create', 'type' => Purchase::REFF_SELF, 'id' => $model->id], [
+                    'class' => 'btn btn-success',
+                ]);
+            }
+            ?>
+            <?php
+            if ($model->status == Purchase::STATUS_RELEASED) {
+                echo Html::a('Cancel', ['reject', 'id' => $model->id], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => 'Are you sure you want to cancel this item?',
+                        'method' => 'post',
+                    ],
+                ]);
+            }
+            ?>
         </p>
     </div>
     <div class="col-lg-6">
@@ -150,18 +150,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['class' => 'yii\grid\SerialColumn'],
                         [
                             'header' => 'Number',
-                            'value' => function($model){
-                                return Html::a($model->number, ['inventory/gm-from-reff/view','id'=>$model->id]);
+                            'value' => function($model) {
+                                return Html::a($model->number, ['inventory/gm-from-reff/view', 'id' => $model->id]);
                             },
-                            'format'=>'raw'
-                        ],
-                        [
-                            'header' => 'Status',
-                            'attribute' => 'nmStatus'
+                                'format' => 'raw'
+                            ],
+                            [
+                                'header' => 'Status',
+                                'attribute' => 'nmStatus'
+                            ]
                         ]
-                    ]
-                ])
-                ?>
+                    ])
+                    ?>
             </div>
         </div>
     </div>

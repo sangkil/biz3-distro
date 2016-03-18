@@ -5,18 +5,15 @@ use backend\models\master\Uom;
 
 /* @var $this yii\web\View */
 ?>
-<td>
+<td >
     <span class="serial"></span>
     <a data-action="delete" title="Delete" href="#"><span class="glyphicon glyphicon-trash"></span></a>
-    <?=
-    Html::activeHiddenInput($model, "[$key]product_id", ['class' => 'form-control',
-        'data-field' => 'product_id', 'id' => false])
-    ?>
+        <?= Html::activeHiddenInput($model, "[$key]product_id", ['data-field' => 'product_id', 'id' => false]) ?>
 </td>
 <td>
     <span data-field="product"><?= Html::getAttributeValue($model, "[$key]product[name]") ?></span>
 </td>
-<td class="items">
+<td >
     <?=
     Html::activeTextInput($model, "[$key]qty", ['class' => 'form-control',
         'data-field' => 'qty', 'size' => 5, 'id' => false, 'required' => true])
@@ -28,4 +25,3 @@ use backend\models\master\Uom;
         'data-field' => 'uom_id', 'id' => false])
     ?>
 </td>
-
