@@ -5,6 +5,7 @@ namespace backend\models\inventory;
 use Yii;
 use backend\models\master\Product;
 use backend\models\master\Uom;
+use backend\models\master\ProductUom;
 
 /**
  * This is the model class for table "goods_movement_dtl".
@@ -22,6 +23,7 @@ use backend\models\master\Uom;
 class GoodsMovementDtl extends \yii\db\ActiveRecord
 {
     public $sisa;
+
     /**
      * @inheritdoc
      */
@@ -36,7 +38,7 @@ class GoodsMovementDtl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'uom_id', ], 'required'],
+            [['product_id', 'uom_id',], 'required'],
             [['movement_id', 'product_id', 'uom_id'], 'integer'],
             [['qty', 'value', 'cogs', 'sisa'], 'number'],
         ];
@@ -79,5 +81,13 @@ class GoodsMovementDtl extends \yii\db\ActiveRecord
     public function getUom()
     {
         return $this->hasOne(Uom::className(), ['id' => 'uom_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProductUom()
+    {
+        return $this->hasOne(ProductUom::className(), ['product_id' => 'product_id', 'uom_id' => 'uom_id']);
     }
 }
