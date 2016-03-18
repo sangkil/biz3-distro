@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) : ''
             ?>
             <?=
-            ($model->status == $model::STATUS_POSTED && $model->journals == null) ? Html::a('Revert', ['revert', 'id' => $model->id], [
+            ($model->status == $model::STATUS_RELEASED && $model->journals == null) ? Html::a('Revert', ['revert', 'id' => $model->id], [
                     'class' => 'btn btn-warning',
                     'data' => [
                         'confirm' => 'Are you sure you want to revert this Invoice?',
