@@ -39,7 +39,7 @@ class Invoice extends \yii\db\ActiveRecord
         \mdm\behaviors\ar\RelationTrait;
     // status invoice
     const STATUS_DRAFT = 10;
-    const STATUS_POSTED = 20;
+    const STATUS_RELEASED = 20;
     const STATUS_CANCELED = 90;
     // type invoice
     const TYPE_INCOMING = 10;
