@@ -11,12 +11,7 @@ use yii\widgets\ActiveForm;
 <div class="entri-sheet-form">
     <?php $form = ActiveForm::begin(); ?>
     <div class="col-lg-6">
-        <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
-
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-    </div>
-    <div class="col-lg-6">
-        
     </div>
     <div class="nav-tabs-justified col-lg-12" style="margin-top: 20px;">
         <ul class="nav nav-tabs">
