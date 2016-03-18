@@ -201,7 +201,7 @@ class InvoiceController extends Controller
         $model = $this->findModel($id);
         $glDtl = Yii::$app->request->post('GlDetail', []);
 
-        $model->status = Invoice::STATUS_POSTED;
+        $model->status = Invoice::STATUS_RELEASED;
         $transaction = Yii::$app->db->beginTransaction();
         try {
             if ($model->save()) {

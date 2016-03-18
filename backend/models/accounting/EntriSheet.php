@@ -44,8 +44,7 @@ class EntriSheet extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code', 'd_coa_id', 'k_coa_id'], 'required'],
-            [['code'], 'string', 'max' => 16],
+            [['d_coa_id', 'k_coa_id'], 'required'],
             [['name'], 'string', 'max' => 64],
             [['coa_kredit', 'coa_debit'], 'safe'],
         ];

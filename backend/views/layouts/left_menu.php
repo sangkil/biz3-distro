@@ -134,7 +134,14 @@ use yii\helpers\Url;
                         </ul>
                     </li>
                     <li><a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> Journals</a></li>
-                    <li><a href="#"><i class="fa fa-check"></i> General Ledger</a></li>               
+                    <li>
+                        <a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> Journals<i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?= Url::to(['/accounting/general-ledger/create']); ?>"><i class="fa fa-check"></i> Manual Journal</a></li>
+                            <li><a href="<?= Url::to(['/accounting/journal-template']); ?>"><i class="fa fa-check"></i> Journal Template</a></li>
+                        </ul>
+                    </li>
+                    <!--<li><a href="#"><i class="fa fa-check"></i> General Ledger</a></li>-->
                     <li>
                         <a href="#"><i class="fa fa-check"></i> Invoices<i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
