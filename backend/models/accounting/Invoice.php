@@ -229,15 +229,9 @@ class Invoice extends \yii\db\ActiveRecord
                 $link = ($this->gMovement != null) ? Html::a($this->gMovement->number, ['/inventory/gm-manual/view', 'id' => $this->reff_id])
                         : '';
                 break;
-            case (int) self::REFF_JOURNAL:
-                $link = ($this->journal != null) ? Html::a($this->journal->number, ['/accounting/general-ledger/view', 'id' => $this->reff_id])
-                        : '';
-                break;
-
             default:
                 break;
         }
-        //echo $this->reff_type.'vs'.self::REFF_JOURNAL;
         return $link;
     }
 
