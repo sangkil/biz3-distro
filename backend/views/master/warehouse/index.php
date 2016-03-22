@@ -30,13 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
             //'id'
             'code',
             'name',
-            [
-                'header' => 'Branch',
-                'attribute' => 'branch_id',
-                'value' => 'branch.name',
-                'format'=>'raw',
-                'filter' => \backend\models\master\Branch::selectOptions()
-            ],
             //'created_at',
             // 'created_by',
             // 'updated_at',

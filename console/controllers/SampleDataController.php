@@ -84,7 +84,7 @@ class SampleDataController extends Controller
         echo "\ninsert table {{%warehouse}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
-            $command->insert('{{%warehouse}}', $this->toAssoc($row, ['id', 'branch_id', 'code', 'name']))->execute();
+            $command->insert('{{%warehouse}}', $this->toAssoc($row, ['id', 'code', 'name']))->execute();
             Console::updateProgress($i + 1, $total);
         }
         $command->resetSequence('{{%warehouse}}')->execute();

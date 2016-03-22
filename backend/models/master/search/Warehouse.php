@@ -18,7 +18,7 @@ class Warehouse extends WarehouseModel
     public function rules()
     {
         return [
-            [['id', 'branch_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['code', 'name'], 'safe'],
         ];
     }
@@ -56,7 +56,6 @@ class Warehouse extends WarehouseModel
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'branch_id' => $this->branch_id,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,
             'updated_at' => $this->updated_at,

@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Html::a('Create', ['create'], ['class' => 'btn btn-default']) ?>
     <?=
     Html::a('<i class="fa fa-download"></i>', ['csv-download', 'id' => $searchModel->id, 'params'=>$_GET], [
-        'class' => 'btn btn-default', 'title'=>'CSV Download', 'target'=>'new',
+        'class' => 'btn btn-default', 'title'=>'CSV Download', //'target'=>'new',
         'data' => [
             'method' => 'post',
         ],
