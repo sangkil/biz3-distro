@@ -42,8 +42,7 @@ class Warehouse extends WarehouseModel
     public function search($params)
     {
         $query = WarehouseModel::find();
-        $query->with(['branch']);
-
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
