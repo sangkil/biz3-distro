@@ -44,7 +44,6 @@ class m160201_050010_create_table_master extends \yii\db\Migration
 
         $this->createTable('{{%warehouse}}', [
             'id' => Schema::TYPE_PK,
-            'branch_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'code' => Schema::TYPE_STRING . '(4) NOT NULL',
             'name' => Schema::TYPE_STRING . '(32) NOT NULL',
             // history column
@@ -52,8 +51,6 @@ class m160201_050010_create_table_master extends \yii\db\Migration
             'created_by' => Schema::TYPE_INTEGER,
             'updated_at' => Schema::TYPE_INTEGER,
             'updated_by' => Schema::TYPE_INTEGER,
-            // constrain
-            'FOREIGN KEY ([[branch_id]]) REFERENCES {{%branch}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
             ], $tableOptions);
 
         $this->createTable('{{%product_group}}', [
@@ -85,8 +82,8 @@ class m160201_050010_create_table_master extends \yii\db\Migration
             'code' => Schema::TYPE_STRING . '(13) NOT NULL',
             'name' => Schema::TYPE_STRING . '(64) NOT NULL',
             'status' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'edition' => Schema::TYPE_DATE ,
-            'stockable'=> Schema::TYPE_BOOLEAN .' DEFAULT TRUE',
+            'edition' => Schema::TYPE_DATE,
+            'stockable' => Schema::TYPE_BOOLEAN . ' DEFAULT TRUE',
             // history column
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,
@@ -227,7 +224,7 @@ class m160201_050010_create_table_master extends \yii\db\Migration
 
         $this->createTable('{{%cogs}}', [
             'product_id' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'cogs' => Schema::TYPE_FLOAT . ' NOT NULL',          
+            'cogs' => Schema::TYPE_FLOAT . ' NOT NULL',
             'last_purchase_price' => Schema::TYPE_FLOAT,
             // history column
             'created_at' => Schema::TYPE_INTEGER,
