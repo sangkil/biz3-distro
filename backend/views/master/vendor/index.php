@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>'nmStatus',
                 'filter'=>  Vendor::enums('STATUS_')
             ],
-            // 'created_at',
+            'created_at:datetime',
             // 'created_by',
             // 'updated_at',
             // 'updated_by',

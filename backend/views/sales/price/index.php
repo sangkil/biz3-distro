@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use Yii;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\sales\search\Price */
@@ -13,8 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <p class='pull-right'>
     <?= Html::a('Create', ['create'], ['class' => 'btn btn-default']) ?>
     <?=
-    Html::a('<i class="fa fa-download"></i>', ['csv-download', 'params'=>$_GET], [
-        'class' => 'btn btn-default', 'title'=>'CSV Download', //'target'=>'new',
+    Html::a('<i class="fa fa-download"></i>', ['csv-download', 'params' => $_GET], [
+        'class' => 'btn btn-default', 'title' => 'CSV Download', //'target'=>'new',
         'data' => [
             'method' => 'post',
         ],
@@ -47,19 +48,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'product.name',
                 'filter' => Html::textInput('Price[product_name]', $searchModel->product_name, array('class' => 'form-control'))
             ],
-
             [
-                'attribute'=>'price_category_id',
+                'attribute' => 'price_category_id',
                 'value' => 'priceCategory.name',
                 'format' => 'raw',
                 'filter' => backend\models\sales\PriceCategory::selectOptions()
             ],
-            'price',
-            //'created_at',
-            //'created_by',
-            // 'updated_at',
-            // 'updated_by',
-            //['class' => 'yii\grid\ActionColumn'],
+            [
+                'attribute' => 'price',
+                'format'=>['decimal',0],
+                //'format'=>'Currency'
+                //'value'=> \Yii::app()->numberFormatter->formatCurrency($data->price, "IDR")
+            ],
+        //'created_at',
+        //'created_by',
+        // 'updated_at',
+        // 'updated_by',
+        //['class' => 'yii\grid\ActionColumn'],
         ],
     ]);
     ?>

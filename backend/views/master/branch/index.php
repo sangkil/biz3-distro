@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>'orgn.name',
                 'filter'=>  \backend\models\master\Orgn::selectOptions()
             ],
-            //'created_at',
+            'created_at:datetime',
             // 'created_by',
             // 'updated_at',
             // 'updated_by',
