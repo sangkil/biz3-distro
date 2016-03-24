@@ -52,15 +52,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'price_category_id',
                 'value' => 'priceCategory.name',
                 'format' => 'raw',
-                'filter' => backend\models\sales\PriceCategory::selectOptions()
+                'filter' => backend\models\sales\PriceCategory::selectOptions(),
+                'enableSorting' => false,
             ],
             [
                 'attribute' => 'price',
-                'format'=>['decimal',0],
-                //'format'=>'Currency'
-                //'value'=> \Yii::app()->numberFormatter->formatCurrency($data->price, "IDR")
+                'format' => ['decimal', 0],
+                'contentOptions' => ['style' => 'text-align:right;width:15%;']
             ],
-        //'created_at',
+            [
+                'attribute' => 'created_at',
+                'format'=>'datetime',
+                'contentOptions' => ['style' => 'text-align:center; width:20%;'],
+                'enableSorting' => false,
+                'filter'=>false
+            ],
+            
         //'created_by',
         // 'updated_at',
         // 'updated_by',

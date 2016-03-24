@@ -87,11 +87,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => $model->nmReffType.'/'.$model->reffNumber
                 ],
-//                [                      // the owner name of the model
-//                    'label' => 'Reff Number',
-//                    'format' => 'raw',
-//                    'value' => $model->reffNumber
-//                ],
                 [                      // the owner name of the model
                     'label' => 'Status',
                     'format' => 'raw',
@@ -123,11 +118,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'options' => ['class' => 'table'],
                     'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
                     'attributes' => [
-                        [                      // the owner name of the model
-                            'label' => 'Reff Number',
-                            'format' => 'raw',
-                            'value' => $model->reffNumber
-                        ],
                         'created_by',
                         'created_by',
                         'created_at:datetime',

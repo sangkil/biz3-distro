@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <?=
                 ($model->invoice == null) ?
-                    Html::a('Post', ['accounting/invoice/create', 'Invoice[type]' => 10, 'goodsMovement[id]' => $model->id], [
+                    Html::a('Create Invoice', ['accounting/invoice/create', 'Invoice[type]' => 10, 'goodsMovement[id]' => $model->id], [
                         'class' => 'btn btn-success',
 //                    'data' => [
 //                        'method' => 'get',
@@ -102,6 +102,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 //'description',
                 //'nmStatus',
+                [                      // the owner name of the model
+                    'label' => 'Invoice',
+                    'format' => 'raw',
+                    'value' => ($model->invoice != null) ? Html::a($model->invoice->number, ['/accounting/invoice/view', 'id' => $model->invoice->id]):'',
+                    'visible'=> ($model->invoice != null)
+                ],
                 [                      // the owner name of the model
                     'label' => 'Status',
                     'attribute' => 'nmStatus',

@@ -58,8 +58,8 @@ class ProductStockHistory extends ProductStockHistoryModel
         }
 
         $query->andFilterWhere([
-            'time' => $this->time,
-            'warehouse_id' => $this->warehouse_id,
+            'product_stock_history.time' => $this->time,
+            'product_stock_history.warehouse_id' => $this->warehouse_id,
             'product_id' => $this->product_id,
             'qty_movement' => $this->qty_movement,
             'qty_current' => $this->qty_current,

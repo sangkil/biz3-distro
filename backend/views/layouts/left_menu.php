@@ -6,6 +6,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use backend\models\master\Branch;
 ?>
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -25,22 +26,24 @@ use yii\helpers\Url;
                 </div>
             </div>
             <!-- search form -->
-            <form action="#" method="get" class="sidebar-form">
-                <div class="input-group">
+            <form action="#" method="post" class="sidebar-form">
+<!--                <div class="input-group">
                     <input type="text" name="q" class="form-control" placeholder="Search..."/>
                     <span class="input-group-btn">
                         <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
                     </span>
-                </div>
+                </div>-->
+                    <?= Html::dropDownList('activeBrach', '', Branch::selectOptions(), ['class' => 'form-control',
+                        'prompt' => '== Active Branch ==', 'onchange' => 'submit()']) ?>
             </form>
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
-        <?php endif; ?>
+<?php endif; ?>
 
         <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
 
-            <?php if (!Yii::$app->user->isGuest): ?>
+<?php if (!Yii::$app->user->isGuest): ?>
                 <li>
                     <a href="<?= Url::to(['/site/index']); ?>"><i class="fa fa-dashboard active"></i> <span>Dashboard</span></a>
                 </li>
@@ -197,15 +200,15 @@ use yii\helpers\Url;
                         </li>
                     </ul>
                 </li>
-            <?php endif; ?>
+<?php endif; ?>
             <li class="treeview">
                 <a href="<?= Url::to(['/site/index']); ?>"><i class="fa fa-key text-danger"></i> <span>Auth Control</span></a>
                 <ul class="treeview-menu">
                     <?php if (Yii::$app->user->isGuest): ?>
                         <li><a href="<?= Url::to(['/site/login']); ?>"><i class="fa fa-unlock"></i> Login</a></li>
-                    <?php else: ?>
+                        <?php else: ?>
                         <li><a href="<?= Url::to(['/site/logout']); ?>"><i class="fa fa-lock"></i> Logout</a></li>
-                        <?php endif; ?>
+<?php endif; ?>
                 </ul>
             </li>
         </ul>
