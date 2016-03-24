@@ -11,6 +11,15 @@ return [
         'vendor'=>'vendor_id',
         'items' => 'generateReceive',
     ],
+    // Movement
+    20 => [
+        'name' => 'Issue',
+        'class' => 'backend\models\inventory\GoodsMovement',
+        'action' => '/inventory/gm-manual/view',
+        'type' => GoodsMovement::TYPE_RECEIVE,
+        'onlyStatus' => 20,
+        'items' => 'generateReceiveFromIssueTransfer',
+    ],
     // transfer
     30 => [
         'name' => 'Transfer',
