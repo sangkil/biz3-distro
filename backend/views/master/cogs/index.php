@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'cogs',
             'last_purchase_price',
-            //'created_at',
+            'created_at:datetime',
             //'created_by',
             // 'updated_at',
             // 'updated_by',

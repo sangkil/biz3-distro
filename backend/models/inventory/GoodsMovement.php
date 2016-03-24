@@ -8,6 +8,7 @@ use backend\models\master\Vendor;
 use backend\models\master\ProductUom;
 use backend\models\master\ProductStock;
 use backend\models\accounting\Invoice;
+use backend\models\accounting\GlHeader;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
@@ -61,6 +62,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
     const SCENARIO_CHANGE_STATUS = 'change_status';
 
     public $vendor_name;
+
     /**
      * @var array
      */
@@ -122,6 +124,18 @@ class GoodsMovement extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTotalValue()
+    {
+        $totValue = 0;
+        foreach ($this->items as $itemDtl) {
+            $totValue += $itemDtl->qty * $itemDtl->cogs;
+        }
+        return $totValue;
+    }
+
+    /**
      *
      * @param array $value
      */
@@ -151,7 +165,16 @@ class GoodsMovement extends \yii\db\ActiveRecord
      */
     public function getInvoice()
     {
-        return $this->hasOne(Invoice::className(), ['reff_id'=>'id'])->where(['reff_type' => self::REFF_GOODS_MOVEMENT]);
+        return $this->hasOne(Invoice::className(), ['reff_id' => 'id'])->where(['reff_type' => self::REFF_GOODS_MOVEMENT]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getJournals()
+    {
+        return $this->hasMany(GlHeader::className(), ['reff_id' => 'id'])->where(['reff_type' => GlHeader::REFF_GOODS_MOVEMENT])->andFilterWhere(['<>',
+                'status', GlHeader::STATUS_CANCELED]);
     }
 
     public function getNmType()
@@ -195,6 +218,54 @@ class GoodsMovement extends \yii\db\ActiveRecord
                 ])->execute()) {
                 return false;
             }
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function postGL($factor)
+    {
+        /*
+         * Header Journal
+         */
+        $model_journal = new \backend\models\accounting\GlHeader;
+        $model_journal->periode_id = \backend\models\accounting\AccPeriode::find()->active()->one()->id;
+        $model_journal->date = date('Y-m-d');
+        $model_journal->status = \backend\models\accounting\GlHeader::STATUS_RELEASED;
+        $model_journal->reff_type = \backend\models\accounting\GlHeader::REFF_GOODS_MOVEMENT;
+        $model_journal->reff_id = $this->id;
+        $model_journal->branch_id = (isset(Yii::$app->profile->branch_id)) ? Yii::$app->profile->branch_id : -1;
+
+        $esheet = ($factor == 1) ? \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES001'])->one()
+                : \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES001'])->one();
+        $model_journal->description = $esheet->name;
+
+        /*
+         * Detail Journal
+         */
+        $newDtls = [];
+
+        $ndtl = new \backend\models\accounting\GlDetail();
+        $ndtl->coa_id = $esheet->d_coa_id;
+        $ndtl->header_id = null;
+        $ndtl->amount = $this->totalValue;
+        $newDtls[] = $ndtl;
+
+        $ndtl1 = new \backend\models\accounting\GlDetail();
+        $ndtl1->coa_id = $esheet->k_coa_id;
+        $ndtl1->header_id = null;
+        $ndtl1->amount = $this->totalValue * -1;
+        $newDtls[] = $ndtl1;
+
+        $model_journal->glDetails = $newDtls;
+
+        if (!$model_journal->save()) {
+            print_r($model_journal->getErrors());
+            print_r($model_journal->getRelatedErrors());
+            return false;
         }
         return true;
     }
@@ -375,9 +446,13 @@ class GoodsMovement extends \yii\db\ActiveRecord
                 'states' => [
                     [null, self::STATUS_RELEASED, 'updateStock', 1],
                     [self::STATUS_DRAFT, self::STATUS_RELEASED, 'updateStock', 1],
+                    [self::STATUS_DRAFT, self::STATUS_RELEASED, 'postGL', 1],
                     [self::STATUS_RELEASED, self::STATUS_DRAFT, 'updateStock', -1],
+                    [self::STATUS_RELEASED, self::STATUS_DRAFT, 'postGL', -1],
                     [self::STATUS_RELEASED, self::STATUS_CANCELED, 'updateStock', -1],
+                    [self::STATUS_RELEASED, self::STATUS_CANCELED, 'postGL', -1],
                     [self::STATUS_RELEASED, null, 'updateStock', -1],
+                    [self::STATUS_RELEASED, null, 'postGL', -1],
                 ]
             ]
         ];

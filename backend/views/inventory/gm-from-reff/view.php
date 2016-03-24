@@ -54,8 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php endif; ?>
             <?=
             (!$model->isNewRecord) ? Html::a('<i class="fa fa-print"></i>', ['print', 'id' => $model->id], [
-                    'class' => 'btn btn-default',
-                    'target' => '_blank',
+                    'class' => 'btn btn-default',//'target' => '_blank',
                     'data' => [
                         'method' => 'post',
                     ],

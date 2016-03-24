@@ -59,6 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'width:10%;'],
             ],
             [
+                'label' => 'Goods Movement Reff',
                 'attribute' => 'movement_id',
                 'format'=>'raw',
                 'value' => function($model) {

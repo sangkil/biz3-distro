@@ -20,7 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
@@ -28,7 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'id',
+            //'id',
+            'code',
             'name',
             'created_at',
             'created_by',

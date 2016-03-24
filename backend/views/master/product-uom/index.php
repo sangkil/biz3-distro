@@ -29,8 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'product_id',
             'uom_id',
             'isi',
-            'created_at',
-            'created_by',
+            'created_at:datetime',
+            //'created_by',
             // 'updated_at',
             // 'updated_by',
 

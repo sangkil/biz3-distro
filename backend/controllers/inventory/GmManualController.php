@@ -57,9 +57,11 @@ class GmManualController extends Controller
      */
     public function actionView($id)
     {
+        $model_journal = new \backend\models\accounting\GlHeader;
         $model = $this->findModel($id);
         return $this->render('view', [
                 'model' => $model,
+                'model_journal' => (!empty($model->journals)) ? $model->journals[0] : $model_journal
         ]);
     }
 
@@ -284,7 +286,6 @@ class GmManualController extends Controller
 
         return 'var masters = ' . json_encode($result) . ';';
     }
-
 //    public function actionVendorList($term = '')
 //    {
 //        $response = Yii::$app->response;

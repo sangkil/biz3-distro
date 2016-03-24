@@ -45,6 +45,7 @@ class EntriSheet extends \yii\db\ActiveRecord
     {
         return [
             [['d_coa_id', 'k_coa_id'], 'required'],
+            [['code'], 'autonumber', 'format' => 'ES' .'?', 'digit' => 3],
             [['name'], 'string', 'max' => 64],
             [['coa_kredit', 'coa_debit'], 'safe'],
         ];

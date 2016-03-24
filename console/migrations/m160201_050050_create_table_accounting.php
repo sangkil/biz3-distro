@@ -30,7 +30,7 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
             'updated_at' => Schema::TYPE_INTEGER,
             'updated_by' => Schema::TYPE_INTEGER,
             // constrain
-            'FOREIGN KEY ([[parent_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
+            'FOREIGN KEY ([[parent_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE RESTRICT ON UPDATE CASCADE',
             ], $tableOptions);
 
         $this->createTable('{{%acc_periode}}', [
@@ -58,8 +58,8 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
             'updated_at' => Schema::TYPE_INTEGER,
             'updated_by' => Schema::TYPE_INTEGER,
             // constrain
-            'FOREIGN KEY ([[d_coa_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
-            'FOREIGN KEY ([[k_coa_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
+            'FOREIGN KEY ([[d_coa_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE RESTRICT ON UPDATE CASCADE',
+            'FOREIGN KEY ([[k_coa_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE RESTRICT ON UPDATE CASCADE',
             ], $tableOptions);
 
         $this->createTable('{{%gl_header}}', [
@@ -88,7 +88,7 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
             'amount' => Schema::TYPE_FLOAT . ' NOT NULL',
             // constrain
             'FOREIGN KEY ([[header_id]]) REFERENCES {{%gl_header}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
-            'FOREIGN KEY ([[coa_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
+            'FOREIGN KEY ([[coa_id]]) REFERENCES {{%coa}} ([[id]]) ON DELETE RESTRICT ON UPDATE CASCADE',
             ], $tableOptions);
 
         $this->createTable('{{%invoice}}', [

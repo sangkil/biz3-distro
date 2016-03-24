@@ -51,7 +51,7 @@ AppAsset::register($this);
                     ])
                     ?>
                 </section>
-                <section class="content">
+                <section class="content" style="overflow-x: auto;">
                     <?= Alert::widget() ?>
                     <?= $content ?>
                 </section>
