@@ -33,6 +33,12 @@ class SampleDataController extends Controller
 
         // TRUNCATE TABLE
         $command->delete('{{%product_stock}}')->execute();
+        $command->delete('{{%gl_detail}}')->execute();
+        $command->delete('{{%gl_header}}')->execute();
+        $command->delete('{{%goods_movement_dtl}}')->execute();
+        $command->delete('{{%goods_movement}}')->execute();
+        $command->delete('{{%invoice_dtl}}')->execute();
+        $command->delete('{{%invoice}}')->execute();
 
         $command->delete('{{%warehouse}}')->execute();
         $command->delete('{{%branch}}')->execute();
@@ -50,7 +56,8 @@ class SampleDataController extends Controller
         $command->delete('{{%category}}')->execute();
 
         $command->delete('{{%uom}}')->execute();
-
+        
+        $command->delete('{{%entri_sheet}}')->execute();
         $command->delete('{{%coa}}')->execute();
         $command->delete('{{%payment_method}}')->execute();
 
@@ -246,6 +253,18 @@ class SampleDataController extends Controller
             Console::updateProgress($i + 1, $total);
         }
         $command->resetSequence('{{%coa}}')->execute();
+        Console::endProgress();
+
+        // entrisheet
+        $rows = require $sampleDir . '/entri_sheet.php';
+        $total = count($rows);
+        echo "\ninsert table {{%entri_sheet}}\n";
+        Console::startProgress(0, $total);
+        foreach ($rows as $i => $row) {
+            $command->insert('{{%entri_sheet}}', $this->toAssoc($row, ['id', 'code', 'name', 'd_coa_id', 'k_coa_id']))->execute();
+            Console::updateProgress($i + 1, $total);
+        }
+        $command->resetSequence('{{%entri_sheet}}')->execute();
         Console::endProgress();
 
         // payment method

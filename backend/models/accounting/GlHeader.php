@@ -158,7 +158,7 @@ class GlHeader extends \yii\db\ActiveRecord
      */
     public function getGMovement()
     {
-        return $this->hasOne(\backend\models\inventory\GoodsMovement::className(), ['id' => 'reff_id'])->where(['reff_type' => self::REFF_GOODS_MOVEMENT]);
+        return $this->hasOne(\backend\models\inventory\GoodsMovement::className(), ['id' => 'reff_id']);
     }
 
     /**
@@ -175,14 +175,6 @@ class GlHeader extends \yii\db\ActiveRecord
     public function getHyperlink()
     {
         return Html::a($this->number, ['/accounting/general-ledger/view', 'id' => $this->id]);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getJournal()
-    {
-        return $this->hasOne(self::className(), ['id' => 'reff_id']);
     }
 
     public function getNmStatus()

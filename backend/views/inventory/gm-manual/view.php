@@ -15,7 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="goods-movement-view">
     <div class="col-lg-12">
         <p class="pull-right">
-            <?= (!$model->isNewRecord) ? Html::a('Create New', ['create', 'type' => $model->type],['class'=>'btn btn-default']) :'' ?>
+            <?=
+            (!$model->isNewRecord) ? Html::a('Create New', ['create', 'type' => $model->type], ['class' => 'btn btn-default'])
+                    : ''
+            ?>
             <?php if ($model->status == GoodsMovement::STATUS_DRAFT): ?>
                 <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
                 <?=
@@ -102,13 +105,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 //'description',
                 //'nmStatus',
-                [                      // the owner name of the model
+                [// the owner name of the model
                     'label' => 'Invoice',
                     'format' => 'raw',
-                    'value' => ($model->invoice != null) ? Html::a($model->invoice->number, ['/accounting/invoice/view', 'id' => $model->invoice->id]):'',
-                    'visible'=> ($model->invoice != null)
+                    'value' => ($model->invoice != null) ? Html::a($model->invoice->number, ['/accounting/invoice/view',
+                            'id' => $model->invoice->id]) : '',
+                    'visible' => ($model->invoice != null)
                 ],
-                [                      // the owner name of the model
+                [// the owner name of the model
                     'label' => 'Status',
                     'attribute' => 'nmStatus',
                     'format' => 'raw',
@@ -123,10 +127,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#item" data-toggle="tab" aria-expanded="false">Items</a></li>
-            <li><a href="#notes" data-toggle="tab" aria-expanded="false">Notes</a></li>
+            <?php if ((!empty($model->journals))): ?>
+                <li><a href="#journals" data-toggle="tab" aria-expanded="false">Journals</a></li>
+            <?php endif; ?>
+            <li><a href = "#notes" data-toggle = "tab" aria-expanded = "false">Notes</a></li>
         </ul>
-        <div class="tab-content" >
-            <div class="tab-pane active" id="item">
+        <div class = "tab-content" >
+            <div class = "tab-pane active" id = "item">
                 <?=
                 GridView::widget([
                     'dataProvider' => new yii\data\ActiveDataProvider([
@@ -158,6 +165,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ])
                 ?>
+            </div>
+            <div class="tab-pane" id="journals">
+                <?= $this->render('_form_journal', ['model_journal' => $model_journal]) ?>
             </div>
             <div class="tab-pane" id="notes">
                 <?=
