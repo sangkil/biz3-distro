@@ -21,6 +21,6 @@ use yii\helpers\Html;
     <?=
     Html::activeTextInput($model, "[$key]items[0][value]", [
         'id' => false, 'data-field' => 'value', 'readonly' => true,
-        'style' => ['text-align' => 'right']])
+        'style' => ['text-align' => 'right'],'class'=>'form-control'])
     ?>
 </td>

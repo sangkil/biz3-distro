@@ -59,7 +59,7 @@ $branch_id = Yii::$app->profile->branch_id;
             <?= $form->field($model, 'reff_id')->textInput() ?>
         </div>
         <div class="col-md-5">
-            <?= $form->field($model, 'value')->textInput(['required' => true, 'style' => 'width:40%;']) ?>
+            <?= $form->field($model, 'value')->textInput(['required' => true, 'style' => 'width:40%;', 'readonly'=>true]) ?>
             <?= $form->field($model, 'description')->textInput() ?>
         </div>
         <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">

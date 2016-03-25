@@ -18,7 +18,7 @@ use Yii;
  */
 class PaymentMethod extends \yii\db\ActiveRecord
 {
-
+    public $coa_name;
     /**
      * @inheritdoc
      */
@@ -54,6 +54,22 @@ class PaymentMethod extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBranch()
+    {
+        return $this->hasOne(\backend\models\master\Branch::className(), ['id' => 'branch_id']);
+    }
+
+        /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCoa()
+    {
+        return $this->hasOne(\backend\models\accounting\Coa::className(), ['id' => 'coa_id']);
     }
 
     public static function selectOptions($branch_id = null)

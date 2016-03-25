@@ -23,6 +23,7 @@ $this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
 $this->registerJsFile(Url::to(['master']));
 $branch_id = Yii::$app->profile->branch_id;
+
 ?>
 
 <div class="sales-form">
@@ -111,7 +112,7 @@ $branch_id = Yii::$app->profile->branch_id;
                             ?>
                         </table>
                     </div>
-                    <div class="col-lg-12" id="payment-input-panel">
+                    <div id="payment-input-panel">
                         <div class="col-lg-6">
                             <?= Html::label('Method') ?>
                             <?=
@@ -144,5 +145,5 @@ $branch_id = Yii::$app->profile->branch_id;
             </div>
         </div>
     </div>
-<?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); ?>
 </div>

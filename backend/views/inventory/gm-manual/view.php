@@ -79,6 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => '<tr><th style="width:30%;">{label}</th><td>{value}</td></tr>',
             'attributes' => [
                 'number',
+                'Date',
                 [
                     'attribute' => 'nmType',
                     'label' => 'Movement Type'
@@ -98,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['class' => 'table'],
             'template' => '<tr><th style="width:30%;">{label}</th><td>{value}</td></tr>',
             'attributes' => [
-                'Date',
+                'totalValue',
                 [
                     'attribute' => 'warehouse.name',
                     'label' => 'Warehouse'
@@ -127,9 +128,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#item" data-toggle="tab" aria-expanded="false">Items</a></li>
-            <?php if ((!empty($model->journals))): ?>
-                <li><a href="#journals" data-toggle="tab" aria-expanded="false">Journals</a></li>
-            <?php endif; ?>
             <li><a href = "#notes" data-toggle = "tab" aria-expanded = "false">Notes</a></li>
         </ul>
         <div class = "tab-content" >
@@ -162,12 +160,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'uom.code',
                             'header' => 'Uom'
                         ],
+                        [
+                            'header' => 'Total Line',
+                            'value'=> function ($model){
+                                return $model->cogs * $model->qty * $model->productUom->isi;
+                            }
+                        ],
                     ]
                 ])
                 ?>
-            </div>
-            <div class="tab-pane" id="journals">
-                <?= $this->render('_form_journal', ['model_journal' => $model_journal]) ?>
             </div>
             <div class="tab-pane" id="notes">
                 <?=
