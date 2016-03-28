@@ -40,8 +40,16 @@ $('#detail-grid').on('keypress', ':input', function (e) {
 
 $('#detail-grid').on('blur', ':input[data-field="qty"]', function () {
     var $row = $(this).closest('#detail-grid > tr');
-    var itemPrice = $row.find(':input[data-field="price"]').val();
-    $row.find('span[data-field="totalLine"]').text(itemPrice * $row.find(':input[data-field="qty"]').val());
+    var itemPrice = $row.find(':input[data-field="price"]').val();    
+    var isi = $row.find('[data-field="uom_id"] > :selected').data('isi');
+    $row.find('span[data-field="totalLine"]').text(itemPrice * $row.find(':input[data-field="qty"]').val() * isi);
+});
+
+$('#detail-grid').on('change', ':input[data-field="uom_id"]', function () {
+    var $row = $(this).closest('#detail-grid > tr');
+    var itemPrice = $row.find(':input[data-field="price"]').val();    
+    var isi = $row.find('[data-field="uom_id"] > :selected').data('isi');
+    $row.find('span[data-field="totalLine"]').text(itemPrice * $row.find(':input[data-field="qty"]').val() * isi);
 });
 
 $('#detail-grid').on('initRow', function (e, $row) {

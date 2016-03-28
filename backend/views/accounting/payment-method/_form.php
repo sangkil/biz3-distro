@@ -17,7 +17,11 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'method')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'coa_id')->dropDownList(backend\models\accounting\Coa::selectOptions(), ['style' => 'width:80%;']) ?>
-  
+
+    <?= $form->field($model, 'coa_id_potongan')->dropDownList(backend\models\accounting\Coa::selectOptions(), ['style' => 'width:80%;']) ?>
+
+    <?= $form->field($model, 'potongan')->textInput(['maxlength' => true,'style' => 'width:30%;']) ?>
+
     <div class="form-group">
         <?=
         Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success'

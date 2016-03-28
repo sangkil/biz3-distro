@@ -32,7 +32,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'branch_id',
             'method',
-            'coa_id',
+            [
+                'label'=>'Acc Penampung',
+                'attribute'=>'coa.code'
+            ],
+            'potongan',
+            [
+                'label'=>'Acc Potongan',
+                'attribute'=>'coaPotongan.code'
+            ],
             'created_at',
             'created_by',
             'updated_at',

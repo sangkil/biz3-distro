@@ -145,10 +145,19 @@ class SalesController extends Controller
                                         $payItems = $payment->items;
                                         $ndtl = new \backend\models\accounting\GlDetail();
                                         $ndtl->coa_id = $payment->paymentMethod->coa_id;
-                                        $ndtl->header_id = null;
-                                        $ndtl->amount = $payItems[0]->value;
-                                        $toPayment += $payItems[0]->value;
+                                        $ndtl->header_id = null;                                        
+                                        $ndtl->amount = $payItems[0]->value - ($payment->paymentMethod->potongan * $payItems[0]->value);
+                                        $toPayment += $ndtl->amount;
                                         $glDtls[] = $ndtl;
+
+                                        if ($payment->paymentMethod->potongan > 0) {
+                                            $ndtl2 = new \backend\models\accounting\GlDetail();
+                                            $ndtl2->coa_id = $payment->paymentMethod->coa_id_potongan;
+                                            $ndtl2->header_id = null;
+                                            $ndtl2->amount = $payment->paymentMethod->potongan * $payItems[0]->value;
+                                            $toPayment += $ndtl2->amount;
+                                            $glDtls[] = $ndtl2;
+                                        }
                                     }
 
                                     //Kredit Penjualan
@@ -158,26 +167,28 @@ class SalesController extends Controller
                                     $ndtl->amount = $toPayment * -1;
                                     $glDtls[] = $ndtl;
 
+                                    /*
+                                     * Sum total detail
+                                     * Belum dikalikan dengan qty uom isi
+                                     */
+                                    $tcogs = 0;
+                                    foreach ($model->items as $item) {
+                                        $tcogs += $item->cogs * $item->qty * $item->productUom->isi;
+                                    }
+
                                     //Debit HPP
                                     $ndtl = new \backend\models\accounting\GlDetail();
                                     $ndtl->coa_id = 19; //hardcode id_coa for hpp
                                     $ndtl->header_id = null;
-                                    $ndtl->amount = 0;
+                                    $ndtl->amount = $tcogs; //isi dengan total cogs
                                     $glDtls[] = $ndtl;
 
                                     //Kredit Persediaan
                                     $ndtl = new \backend\models\accounting\GlDetail();
-                                    $ndtl->coa_id = 31; //hardcode id_coa for persediaan
+                                    $ndtl->coa_id = 32; //hardcode id_coa for persediaan
                                     $ndtl->header_id = null;
-                                    $ndtl->amount = 0 * -1;
+                                    $ndtl->amount = $tcogs * -1; //isi dengan total cogs
                                     $glDtls[] = $ndtl;
-
-                                    $tval = 0;
-                                    foreach ($glDtls as $value) {
-                                        echo $value->amount . '<br>';
-                                        $tval += $value->amount;
-                                    }
-                                    echo $tval;
 
                                     $gl->glDetails = $glDtls;
                                     if (!$gl->save()) {
