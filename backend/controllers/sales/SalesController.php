@@ -128,7 +128,7 @@ class SalesController extends Controller
                                 if ($success) {
                                     //GL Header
                                     $gl = new \backend\models\accounting\GlHeader;
-                                    $gl->periode_id = \backend\models\accounting\AccPeriode::find()->active()->one()->id;
+                                    $gl->periode_id = $this->findPeriode();
                                     $gl->date = date('Y-m-d');
                                     $gl->status = \backend\models\accounting\GlHeader::STATUS_RELEASED;
                                     $gl->reff_type = \backend\models\accounting\GlHeader::REFF_SALES;
@@ -384,6 +384,15 @@ class SalesController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    protected function findPeriode()
+    {
+        if (($model = \backend\models\accounting\AccPeriode::find()->active()->one()) !== null) {
+            return $model->id;
+        } else {
+            throw new NotFoundHttpException('Active Periode not exist.');
         }
     }
 }
