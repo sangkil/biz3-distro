@@ -64,9 +64,9 @@ return[
                     ['label' => 'Closing', 'icon' => 'check', 'url' => ['/accounting/acc-periode/close']],
                 ],
             ],
-            ['label' => 'Journals', 'icon' => 'check', 'url' => ['/accounting/general-ledger'],
+            ['label' => 'General Journals', 'icon' => 'check', 'url' => ['/accounting/general-ledger'],
                 'items' => [
-                    ['label' => 'Manual Journal', 'icon' => 'check', 'url' => ['/accounting/general-ledger/create']],
+                    ['label' => 'Journal', 'icon' => 'check', 'url' => ['/accounting/general-ledger/index']],
                     ['label' => 'Journal Template', 'icon' => 'check', 'url' => ['/accounting/journal-template']],
                 ],
             ],
