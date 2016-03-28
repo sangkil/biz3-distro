@@ -101,21 +101,24 @@ class GlHeader extends \yii\db\ActiveRecord
 
     /**
      *
-     * @param GlTemplate[] $templates
+     * @param array $templates
      */
-    public function addFromTemplate($templates = [])
+    public function addFromTemplate($templates = [], $desc = false)
     {
         $items = $this->glDetails;
-        foreach ($templates as $template) {
+        foreach ($templates as $code => $amount) {
             /* @var $es EntriSheet */
-            $es = $template->getEs();
+            $es = EntriSheet::findOne(['code' => $code]);
+            if ($desc) {
+                $this->description .= "\n" . $es->name;
+            }
             $items[] = [
                 'coa_id' => $es->d_coa_id,
-                'amount' => $template->amount,
+                'amount' => $amount,
             ];
             $items[] = [
                 'coa_id' => $es->k_coa_id,
-                'amount' => -1 * $template->amount,
+                'amount' => -1 * $amount,
             ];
         }
         $this->glDetails = $items;

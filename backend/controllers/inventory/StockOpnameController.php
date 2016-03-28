@@ -67,6 +67,7 @@ class StockOpnameController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
+                $model->status = StockOpname::STATUS_DRAFT;
                 $model->file = UploadedFile::getInstance($model, 'file');
                 if ($model->save()) {
                     if ($model->file) {
@@ -100,11 +101,10 @@ class StockOpnameController extends Controller
                 $transaction->rollBack();
                 throw $exc;
             }
-        } else {
-            return $this->render('create', [
-                    'model' => $model,
-            ]);
         }
+        return $this->render('create', [
+                'model' => $model,
+        ]);
     }
 
     protected function getBarcodes()
@@ -152,6 +152,62 @@ class StockOpnameController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Confirm an existing StockOpname model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionConfirm($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->status != StockOpname::STATUS_DRAFT) {
+            throw new UserException('Tidak bisa diconfirm');
+        }
+
+        $model->status = StockOpname::STATUS_RELEASED;
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->save()) {
+                // update stock internaly via beforeUpdate
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            $transaction->rollBack();
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            throw $exc;
+        }
+    }
+
+    /**
+     * Confirm an existing StockOpname model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionCancel($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->status != StockOpname::STATUS_RELEASED) {
+            throw new UserException('Tidak bisa dicancel');
+        }
+
+        $model->status = StockOpname::STATUS_CANCELED;
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->save()) {
+                // update stock internaly via beforeUpdate
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            $transaction->rollBack();
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            throw $exc;
+        }
     }
 
     /**

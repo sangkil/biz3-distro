@@ -3,6 +3,7 @@
 namespace backend\models\inventory;
 
 use Yii;
+use backend\models\master\search\Product;
 
 /**
  * This is the model class for table "{{%stock_opname_dtl}}".
@@ -56,5 +57,10 @@ class StockOpnameDtl extends \yii\db\ActiveRecord
     public function getOpname()
     {
         return $this->hasOne(StockOpname::className(), ['id' => 'opname_id']);
+    }
+
+    public function getProduct()
+    {
+        return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
 }
