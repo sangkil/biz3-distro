@@ -15,32 +15,35 @@ use Yii;
  * @property Coa $coa
  * @property GlHeader $header
  */
-class GlDetail extends \yii\db\ActiveRecord {
+class GlDetail extends \yii\db\ActiveRecord
+{
 
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'gl_detail';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['coa_id', 'amount'], 'required'],
             [['header_id', 'coa_id'], 'integer'],
             [['amount', 'debit', 'credit'], 'number'],
             [['coa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Coa::className(), 'targetAttribute' => ['coa_id' => 'id']],
-            [['header_id'], 'exist', 'skipOnError' => true, 'targetClass' => GlHeader::className(), 'targetAttribute' => ['header_id' => 'id']],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'header_id' => 'Header ID',
@@ -52,36 +55,40 @@ class GlDetail extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCoa() {
+    public function getCoa()
+    {
         return $this->hasOne(Coa::className(), ['id' => 'coa_id']);
     }
 
-    public function setDebit($value) {
+    public function setDebit($value)
+    {
         if ($value > 0) {
             $this->amount = $value;
         }
     }
 
-    public function getDebit() 
+    public function getDebit()
     {
         return ($this->amount >= 0) ? $this->amount : null;
     }
 
-    public function setCredit($value) {
+    public function setCredit($value)
+    {
         if ($value > 0) {
             $this->amount = -1 * $value;
         }
     }
 
-    public function getCredit() {
+    public function getCredit()
+    {
         return ($this->amount < 0) ? -1 * $this->amount : null;
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getHeader() {
+    public function getHeader()
+    {
         return $this->hasOne(GlHeader::className(), ['id' => 'header_id']);
     }
-
 }

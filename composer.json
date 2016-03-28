@@ -26,6 +26,7 @@
         "mdmsoft/yii2-format-converter": "~1.0",
         "mdmsoft/yii2-widgets": "~1.0",
         "mdmsoft/yii2-ar-behaviors": "~1.0",
+        "mdmsoft/yii2-upload-file": "~1.0",
         "yiisoft/yii2-jui": "*"
     },
     "require-dev": {

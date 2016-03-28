@@ -56,7 +56,7 @@ class SampleDataController extends Controller
         $command->delete('{{%category}}')->execute();
 
         $command->delete('{{%uom}}')->execute();
-        
+
         $command->delete('{{%entri_sheet}}')->execute();
         $command->delete('{{%coa}}')->execute();
         $command->delete('{{%payment_method}}')->execute();
@@ -154,46 +154,46 @@ class SampleDataController extends Controller
         echo "\ninsert table {{%product}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
-            $row = $this->toAssoc($row, ['id', 'group_id', 'category_id', 'code', 'name', 'status','stockable']);
+            $row = $this->toAssoc($row, ['id', 'group_id', 'category_id', 'code', 'name', 'status', 'stockable']);
             $command->insert('{{%product}}', $row)->execute();
-            
+
             // barcode
             /*
              * Skip for test
-            $batch = [];
-            for ($j = 0; $j < 3; $j++) {
-                $rand = mt_rand(1000000, 9999999) . mt_rand(100000, 999999);
-                $batch[] = [$rand, $row['id']];
-            }
-            try {
-                $command->batchInsert('{{%product_child}}', ['barcode', 'product_id'], $batch)->execute();
-            } catch (Exception $exc) {
-                echo 'Error: ' . $exc->getMessage() . "\n";
-            }
+              $batch = [];
+              for ($j = 0; $j < 3; $j++) {
+              $rand = mt_rand(1000000, 9999999) . mt_rand(100000, 999999);
+              $batch[] = [$rand, $row['id']];
+              }
+              try {
+              $command->batchInsert('{{%product_child}}', ['barcode', 'product_id'], $batch)->execute();
+              } catch (Exception $exc) {
+              echo 'Error: ' . $exc->getMessage() . "\n";
+              }
              *
              */
 
             // price
             /*
              * Skip for test
-            $batch = [];
-            $price = mt_rand(95, 150) * 1000;
-            foreach ($pc_ids as $pc_id) {
-                $batch[] = [$row['id'], $pc_id, $price - $pc_id * 3000];
-            }
-            $command->batchInsert('{{%price}}', ['product_id', 'price_category_id', 'price'], $batch)->execute();
+              $batch = [];
+              $price = mt_rand(95, 150) * 1000;
+              foreach ($pc_ids as $pc_id) {
+              $batch[] = [$row['id'], $pc_id, $price - $pc_id * 3000];
+              }
+              $command->batchInsert('{{%price}}', ['product_id', 'price_category_id', 'price'], $batch)->execute();
              */
 
             // cogs
             /*
              * Skip for test
-            $command->insert('{{%cogs}}', [
-                'product_id' => $row['id'],
-                'cogs' => $price * 0.65,
-                'last_purchase_price' => $price - 20000,
-                'created_at' => time(),
-                'created_by' => 1,
-            ])->execute();            
+              $command->insert('{{%cogs}}', [
+              'product_id' => $row['id'],
+              'cogs' => $price * 0.65,
+              'last_purchase_price' => $price - 20000,
+              'created_at' => time(),
+              'created_by' => 1,
+              ])->execute();
              *
              */
             Console::updateProgress($i + 1, $total);
@@ -294,5 +294,31 @@ class SampleDataController extends Controller
                 ], $result);
         }
         return $result;
+    }
+
+    public function actionStockOpname($warehouse)
+    {
+        $query = (new \yii\db\Query())
+            ->select(['p.code', 's.qty'])
+            ->from(['p' => '{{%product}}'])
+            ->innerJoin(['s' => '{{%product_stock}}'], '[[p.id]]=[[s.product_id]]')
+            ->where(['s.warehouse_id' => $warehouse]);
+
+        $codes = [];
+        mt_srand(time());
+        foreach ($query->all() as $row) {
+            $r = mt_rand(0, 25);
+            if ($r == 5) {
+                $row['qty'] ++;
+            } elseif ($r == 6 && $row['qty'] > 2) {
+                $row['qty'] --;
+            }
+            for ($i = 0; $i < $row['qty']; $i++) {
+                $codes[] = $row['code'];
+            }
+        }
+        $file = \Yii::getAlias('@runtime/so-' . time() . '.txt');
+        file_put_contents($file, implode("\n", $codes));
+        echo "Done... '$file' created\n";
     }
 }

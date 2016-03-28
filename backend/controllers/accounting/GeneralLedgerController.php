@@ -121,7 +121,12 @@ class GeneralLedgerController extends Controller
             try {
                 //entri details from templates
                 $templates = Helper::createMultiple(GlTemplate::className(), $dPost);
-                $model->addFromTemplate($templates);
+                $amounts = [];
+                /* @var $template GlTemplate */
+                foreach ($templates as $template) {
+                    $amounts[$template->es->code] = $template->amount;
+                }
+                $model->addFromTemplate($amounts, true);
                 if ($model->save()) {
                     $transaction->commit();
                     \Yii::$app->getSession()->setFlash('success', $model->number . ' succesfully created');
@@ -137,7 +142,7 @@ class GeneralLedgerController extends Controller
             }
         }
 
-        return $this->render('create-by-template', ['model' => $model,'templates'=>$templates]);
+        return $this->render('create-by-template', ['model' => $model, 'templates' => $templates]);
     }
 
     /**

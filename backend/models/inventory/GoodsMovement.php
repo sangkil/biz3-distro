@@ -83,7 +83,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
     {
         return [
             [['warehouse_id', 'Date', 'type', 'status'], 'required'],
-            [['number'], 'autonumber', 'format' => 'GM' . date('Y') . '.?', 'digit' => 4],
+            [['!number'], 'autonumber', 'format' => 'GM' . date('Y') . '.?', 'digit' => 4],
             [['warehouse_id', 'type', 'reff_type', 'reff_id', 'vendor_id', 'status'], 'integer'],
             [['items'], 'required', 'except' => self::SCENARIO_CHANGE_STATUS],
             [['vendor_name', 'vendor_id', 'date'], 'safe'],
@@ -384,6 +384,27 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return[$reffModel, $reff, $items];
     }
 
+    public function generateReceiveFromIssueTransfer()
+    {
+        $queryGM = (new Query())
+            ->select(['gmd.product_id', 'total' => 'sum(gmd.qty)'])
+            ->from(['gm' => '{{%goods_movement}}'])
+            ->innerJoin(['gmd' => '{{%goods_movement_dtl}}'], '[[gmd.movement_id]]=[[gm.id]]')
+            ->where(['gm.status' => 20, 'gm.reff_type' => self::REFF_SELF, 'gm.reff_id' => $this->id])
+            ->groupBy(['gmd.product_id']);
+        $queryItem = (new Query())
+            ->select(['md.product_id', 'md.cogs', 'md.qty', 'md.uom_id', 'g.total'])
+            ->from(['md' => '{{%goods_movement_dtl}}'])
+            ->leftJoin(['g' => $queryGM], '[[g.product_id]]=[[md.product_id]]')
+            ->where(['md.movement_id' => $this->id]);
+        $items = [];
+        foreach ($queryItem->all() as $item) {
+            $item['qty'] -= $item['total'];
+            $items[] = $item;
+        }
+        return $items;
+    }
+    
     /**
      * Execute before child save. If return false, child not saved
      * @param GoodsMovementDtl $child

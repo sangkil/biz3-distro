@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "31c3610362d3ac723aefd1c498dae14a",
-    "content-hash": "bcc00ed76fb0d9e2ea919f2a4c51fc7b",
+    "hash": "66a353ac9f6f3b3b0b89eb89970e210b",
+    "content-hash": "b0ec10463537c20019114cc0dd87d3b3",
     "packages": [
         {
             "name": "bower-asset/adminlte",
@@ -51,8 +51,7 @@
                 "responsive",
                 "template",
                 "theme"
-            ],
-            "time": "2016-01-18 15:45:30"
+            ]
         },
         {
             "name": "bower-asset/bootstrap",
@@ -138,8 +137,7 @@
                 "MIT",
                 "CC-BY-3.0"
             ],
-            "description": "Font Awesome",
-            "time": "2016-01-27 21:19:20"
+            "description": "Font Awesome"
         },
         {
             "name": "bower-asset/jquery",
@@ -649,6 +647,53 @@
             "time": "2016-02-04 11:14:58"
         },
         {
+            "name": "mdmsoft/yii2-upload-file",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mdmsoft/yii2-upload-file.git",
+                "reference": "62279504dadc55c404e7eb7ef501cd4b1043fb0a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mdmsoft/yii2-upload-file/zipball/62279504dadc55c404e7eb7ef501cd4b1043fb0a",
+                "reference": "62279504dadc55c404e7eb7ef501cd4b1043fb0a",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bootstrap": "mdm\\upload\\Bootstrap",
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "mdm\\upload\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Misbahul Munir",
+                    "email": "misbahuldmunir@gmail.com"
+                }
+            ],
+            "description": "Yii2 upload file tools",
+            "keywords": [
+                "file",
+                "upload",
+                "yii"
+            ],
+            "time": "2016-03-22 23:47:14"
+        },
+        {
             "name": "mdmsoft/yii2-widgets",
             "version": "dev-master",
             "source": {
@@ -753,12 +798,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "27d3c35e4d59dca24d4b3f30e529c01cdd679bde"
+                "reference": "438f2d2228b450fad76e022264b1d8e30ea12633"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/27d3c35e4d59dca24d4b3f30e529c01cdd679bde",
-                "reference": "27d3c35e4d59dca24d4b3f30e529c01cdd679bde",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/438f2d2228b450fad76e022264b1d8e30ea12633",
+                "reference": "438f2d2228b450fad76e022264b1d8e30ea12633",
                 "shasum": ""
             },
             "require": {
@@ -839,7 +884,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2016-03-22 22:13:25"
+            "time": "2016-03-25 20:39:29"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -1119,12 +1164,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "bb09cf8982f89b50bb8bc6c0f9e451353ad17065"
+                "reference": "68c0d749b7a9bb527a7b0d3226fa397f26005955"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/bb09cf8982f89b50bb8bc6c0f9e451353ad17065",
-                "reference": "bb09cf8982f89b50bb8bc6c0f9e451353ad17065",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/68c0d749b7a9bb527a7b0d3226fa397f26005955",
+                "reference": "68c0d749b7a9bb527a7b0d3226fa397f26005955",
                 "shasum": ""
             },
             "require": {
@@ -1161,7 +1206,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2016-03-22 20:16:49"
+            "time": "2016-03-24 17:39:55"
         },
         {
             "name": "phpspec/php-diff",
