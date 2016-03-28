@@ -162,14 +162,14 @@ class SalesController extends Controller
                                     $ndtl = new \backend\models\accounting\GlDetail();
                                     $ndtl->coa_id = 19; //hardcode id_coa for hpp
                                     $ndtl->header_id = null;
-                                    $ndtl->amount = $payItems[0]->value;
+                                    $ndtl->amount = 0;
                                     $glDtls[] = $ndtl;
 
                                     //Kredit Persediaan
                                     $ndtl = new \backend\models\accounting\GlDetail();
                                     $ndtl->coa_id = 31; //hardcode id_coa for persediaan
                                     $ndtl->header_id = null;
-                                    $ndtl->amount = $payItems[0]->value * -1;
+                                    $ndtl->amount = 0 * -1;
                                     $glDtls[] = $ndtl;
 
                                     $tval = 0;
