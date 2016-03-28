@@ -120,8 +120,73 @@ class SalesController extends Controller
                                     }
                                 } else {
                                     $success = false;
+                                    //seharusnya muncul cash back jika berlebih, bukan error
                                     $error = 'Total payment tidak sama dengan invoice';
                                 }
+
+                                //Create Jurnal
+                                if ($success) {
+                                    //GL Header
+                                    $gl = new \backend\models\accounting\GlHeader;
+                                    $gl->periode_id = \backend\models\accounting\AccPeriode::find()->active()->one()->id;
+                                    $gl->date = date('Y-m-d');
+                                    $gl->status = \backend\models\accounting\GlHeader::STATUS_RELEASED;
+                                    $gl->reff_type = \backend\models\accounting\GlHeader::REFF_SALES;
+                                    $gl->reff_id = $model->id;
+                                    $gl->description = 'Sales POS';
+                                    $gl->branch_id = (isset(Yii::$app->profile->branch_id)) ? Yii::$app->profile->branch_id
+                                            : -1;
+
+                                    //GL Detail
+                                    //Debit Payment
+                                    $glDtls = [];
+                                    $toPayment = 0;
+                                    foreach ($payments as $payment) {
+                                        $payItems = $payment->items;
+                                        $ndtl = new \backend\models\accounting\GlDetail();
+                                        $ndtl->coa_id = $payment->paymentMethod->coa_id;
+                                        $ndtl->header_id = null;
+                                        $ndtl->amount = $payItems[0]->value;
+                                        $toPayment += $payItems[0]->value;
+                                        $glDtls[] = $ndtl;
+                                    }
+
+                                    //Kredit Penjualan
+                                    $ndtl = new \backend\models\accounting\GlDetail();
+                                    $ndtl->coa_id = 16; //hardcode id_coa for penjualan
+                                    $ndtl->header_id = null;
+                                    $ndtl->amount = $toPayment * -1;
+                                    $glDtls[] = $ndtl;
+
+                                    //Debit HPP
+                                    $ndtl = new \backend\models\accounting\GlDetail();
+                                    $ndtl->coa_id = 19; //hardcode id_coa for hpp
+                                    $ndtl->header_id = null;
+                                    $ndtl->amount = $payItems[0]->value;
+                                    $glDtls[] = $ndtl;
+
+                                    //Kredit Persediaan
+                                    $ndtl = new \backend\models\accounting\GlDetail();
+                                    $ndtl->coa_id = 31; //hardcode id_coa for persediaan
+                                    $ndtl->header_id = null;
+                                    $ndtl->amount = $payItems[0]->value * -1;
+                                    $glDtls[] = $ndtl;
+
+                                    $tval = 0;
+                                    foreach ($glDtls as $value) {
+                                        echo $value->amount . '<br>';
+                                        $tval += $value->amount;
+                                    }
+                                    echo $tval;
+
+                                    $gl->glDetails = $glDtls;
+                                    if (!$gl->save()) {
+                                        print_r($gl->getErrors());
+                                        print_r($gl->getRelatedErrors());
+                                        $success = false;
+                                    }
+                                }
+
                                 if ($success) {
                                     $transaction->commit();
                                     return $this->redirect(['view', 'id' => $model->id]);

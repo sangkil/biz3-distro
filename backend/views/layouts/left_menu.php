@@ -10,7 +10,7 @@ use backend\models\master\Branch;
 ?>
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
+    <section class="sidebar ">
         <!-- Sidebar user panel -->
         <?php if (!Yii::$app->user->isGuest): ?>
             <div class="user-panel">
@@ -139,9 +139,9 @@ use backend\models\master\Branch;
                             </ul>
                         </li>
                         <li>
-                            <a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> Journals<i class="fa fa-angle-left pull-right"></i></a>
+                            <a href="<?= Url::to(['/accounting/general-ledger']); ?>"><i class="fa fa-check"></i> General Journals<i class="fa fa-angle-left pull-right"></i></a>
                             <ul class="treeview-menu">
-                                <li><a href="<?= Url::to(['/accounting/general-ledger/create']); ?>"><i class="fa fa-check"></i> Manual Journal</a></li>
+                                <li><a href="<?= Url::to(['/accounting/general-ledger/index']); ?>"><i class="fa fa-check"></i> Journals</a></li>
                                 <li><a href="<?= Url::to(['/accounting/journal-template']); ?>"><i class="fa fa-check"></i> Journal Template</a></li>
                             </ul>
                         </li>

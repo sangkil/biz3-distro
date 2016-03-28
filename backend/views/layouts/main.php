@@ -20,7 +20,7 @@ AppAsset::register($this);
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-    <body class="skin-red sidebar-mini sidebar-collapse">
+    <body class="skin-red sidebar-mini sidebar-collapse fixed">
         <?php $this->beginBody() ?>
         <div class="wrapper">
             <header class="main-header">
@@ -35,7 +35,7 @@ AppAsset::register($this);
             <?php
             require 'left_menu.php';
             ?>
-            <div class="content-wrapper" style="padding-top: 0px; background-color: white">
+            <div class="content-wrapper" style="padding-top: 0px; background-color: white;">
                 <section class="content-header" >
                     <h1> 
                         <a href="#" data-toggle="offcanvas" role="button">
