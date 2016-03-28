@@ -274,7 +274,7 @@ class SampleDataController extends Controller
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
             $command->insert('{{%payment_method}}', $this->toAssoc($row, ['id', 'branch_id',
-                    'method', 'coa_id']))->execute();
+                    'method', 'coa_id','potongan','coa_id_potongan']))->execute();
             Console::updateProgress($i + 1, $total);
         }
         $command->resetSequence('{{%payment_method}}')->execute();
