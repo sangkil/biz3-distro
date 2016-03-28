@@ -11,7 +11,7 @@ use common\widgets\SideNav;
 ?>
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
+    <section class="sidebar ">
         <!-- Sidebar user panel -->
         <?php if (!Yii::$app->user->isGuest): ?>
             <div class="user-panel">

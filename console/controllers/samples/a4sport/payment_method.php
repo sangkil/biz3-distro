@@ -1,12 +1,12 @@
 <?php
 return[
-    [1, 1, 'Tunai', 9],
-    [2, 1, 'Debit BNI', 10],
-    [3, 1, 'Kartu Kredit BCA', 14],
-    [4, 2, 'Tunai', 9],
-    [5, 2, 'Debit BNI', 10],
-    [6, 2, 'Kartu Kredit BCA', 14],
-    [7, 3, 'Tunai', 9],
-    [8, 3, 'Debit BNI', 10],
-    [9, 3, 'Kartu Kredit BCA', 14],
+    [1, 1, 'Tunai', 44, 0, null],
+    [2, 1, 'CC Mandiri', 40, 0.06, null],
+    [3, 1, 'CC BCA', 39, 0.05, null],
+    [4, 2, 'Tunai', 44, 0, null],
+    [5, 2, 'CC Mandiri', 40, 0.06, null],
+    [6, 2, 'CC BCA', 39, 0.05, null],
+    [7, 3, 'Tunai', 44, 0, null],
+    [8, 3, 'CC Mandiri', 40, 0.06, null],
+    [9, 3, 'CC BCA', 39, 0.05, null],
 ];

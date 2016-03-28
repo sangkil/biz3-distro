@@ -55,30 +55,30 @@ class InvoiceController extends Controller
      */
     public function actionView($id)
     {
-        $model_journal = new \backend\models\accounting\GlHeader;
+        //$model_journal = new \backend\models\accounting\GlHeader;
         $model = $this->findModel($id);
         $newDtls = [];
-        if ($model->reff_type == $model::REFF_GOODS_MOVEMENT) {
-            $esheet = \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES002'])->one();
-                                   
-            $ndtl = new \backend\models\accounting\GlDetail();
-            $ndtl->coa_id = $esheet->d_coa_id;
-            $ndtl->header_id = null;
-            $ndtl->amount = $model->value;
-            $newDtls[] = $ndtl;
-            
-            $ndtl1 = new \backend\models\accounting\GlDetail();
-            $ndtl1->coa_id = $esheet->k_coa_id;
-            $ndtl1->header_id = null;
-            $ndtl1->amount = $model->value * -1;
-            $newDtls[] = $ndtl1;
-
-            $model_journal->glDetails = $newDtls;
-        }
+//        if ($model->reff_type == $model::REFF_GOODS_MOVEMENT) {
+//            $esheet = \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES002'])->one();
+//
+//            $ndtl = new \backend\models\accounting\GlDetail();
+//            $ndtl->coa_id = $esheet->d_coa_id;
+//            $ndtl->header_id = null;
+//            $ndtl->amount = $model->value;
+//            $newDtls[] = $ndtl;
+//
+//            $ndtl1 = new \backend\models\accounting\GlDetail();
+//            $ndtl1->coa_id = $esheet->k_coa_id;
+//            $ndtl1->header_id = null;
+//            $ndtl1->amount = $model->value * -1;
+//            $newDtls[] = $ndtl1;
+//
+//            $model_journal->glDetails = $newDtls;
+//        }
 
         return $this->render('view', [
                 'model' => $model,
-                'model_journal' => (!empty($model->journals)) ? $model->journals[0] : $model_journal
+                //'model_journal' => (!empty($model->journals)) ? $model->journals[0] : $model_journal
         ]);
     }
 
@@ -220,26 +220,32 @@ class InvoiceController extends Controller
                 $gl->reff_id = $model->id;
                 $gl->status = $gl::STATUS_RELEASED;
                 $gl->date = date('Y-m-d');
+                
+                $esheet = \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES002'])->one();
+                $gl->description = $esheet->name;
+
+                /*
+                 * Detail Journal
+                 */
                 $newDtls = [];
 
-                $glDtl = Yii::$app->request->post('GlDetail', []);
-                foreach ($glDtl as $ddtl) {
-                    $ndtl = new \backend\models\accounting\GlDetail();
-                    $ndtl->coa_id = $ddtl['coa_id'];
-                    $ndtl->header_id = null;
-                    $ndtl->amount = ($ddtl['debit'] !== null || $ddtl['debit'] !== '') ? $ddtl['debit'] : 0;
-                    $ndtl->amount = ($ndtl->amount == 0) ? -1 * $ddtl['credit'] : $ndtl->amount;
-                    $newDtls[] = $ndtl;
-                }
+                $ndtl = new \backend\models\accounting\GlDetail();
+                $ndtl->coa_id = $esheet->d_coa_id;
+                $ndtl->header_id = null;
+                $ndtl->amount = $model->value;
+                $newDtls[] = $ndtl;
 
-                $gl->description = $model->description;
+                $ndtl1 = new \backend\models\accounting\GlDetail();
+                $ndtl1->coa_id = $esheet->k_coa_id;
+                $ndtl1->header_id = null;
+                $ndtl1->amount = $model->value * -1;
+                $newDtls[] = $ndtl1;
+
                 $gl->glDetails = $newDtls;
 
                 if ($gl->save()) {
                     $transaction->commit();
                 } else {
-//                    print_r($gl->getErrors());
-//                    print_r($gl->getRelatedErrors());
                     foreach ($gl->getErrors() as $dkey => $vald) {
                         if ($vald[0] == 'Related error') {
                             foreach ($gl->getRelatedErrors() as $dkey => $valr) {

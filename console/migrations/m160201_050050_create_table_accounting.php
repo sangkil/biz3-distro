@@ -155,6 +155,8 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
             'branch_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'method' => Schema::TYPE_STRING . '(32) NOT NULL',
             'coa_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'potongan' => Schema::TYPE_FLOAT . ' DEFAULT 0',
+            'coa_id_potongan' => Schema::TYPE_INTEGER,
             // history column
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,

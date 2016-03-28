@@ -19,7 +19,7 @@ class PaymentMethod extends PaymentMethodModel
     {
         return [
             [['id', 'branch_id', 'coa_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['method'], 'safe'],
+            [['method','coa_name'], 'safe'],
         ];
     }
 

@@ -101,16 +101,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="nav-tabs-justified col-lg-12">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#item" data-toggle="tab" aria-expanded="false">Items</a></li>
-            <li><a href="#journals" data-toggle="tab" aria-expanded="false">Journals</a></li>            
+            <!--<li><a href="#journals" data-toggle="tab" aria-expanded="false">Journals</a></li>-->
             <li><a href="#notes" data-toggle="tab" aria-expanded="false">Notes</a></li>            
         </ul>
         <div class="tab-content" >
             <div class="tab-pane active" id="item">
                 <?= $this->render('_detail_view', ['model' => $model]) ?>
             </div>
-            <div class="tab-pane" id="journals">
-                <?= $this->render('_form_journal', [ 'model_journal' => $model_journal, 'form'=>$form]) ?>
-            </div>
+<!--            <div class="tab-pane" id="journals">
+                <?= ''//$this->render('_form_journal', [ 'model_journal' => $model_journal, 'form'=>$form]) ?>
+            </div>-->
             <div class="tab-pane" id="notes">
                 <?=
                 DetailView::widget([

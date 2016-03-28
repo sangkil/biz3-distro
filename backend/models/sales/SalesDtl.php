@@ -6,6 +6,7 @@ use Yii;
 use backend\models\master\Product;
 use backend\models\master\Uom;
 use backend\models\master\Cogs;
+use backend\models\master\ProductUom;
 
 /**
  * This is the model class for table "sales_dtl".
@@ -93,4 +94,11 @@ class SalesDtl extends \yii\db\ActiveRecord {
         return ($this->qty * $this->price) * $post_discount;
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProductUom()
+    {
+        return $this->hasOne(ProductUom::className(), ['product_id' => 'product_id', 'uom_id' => 'uom_id']);
+    }
 }

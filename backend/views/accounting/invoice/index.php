@@ -13,10 +13,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="col-lg-12">
     <div class='btn-group pull-right'>
         <?= Html::button('New Invoice', ['class' => 'btn btn-default', 'type' => 'button']) ?>        
-        <?= Html::button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', ['class' => 'btn btn-default dropdown-toggle', 'aria-expanded' => false, 'type' => 'button', 'data-toggle' => 'dropdown']) ?>
+        <?=
+        Html::button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', ['class' => 'btn btn-default dropdown-toggle',
+            'aria-expanded' => false, 'type' => 'button', 'data-toggle' => 'dropdown'])
+        ?>
         <ul class="dropdown-menu" role="menu">
-            <li><?= Html::a('Incoming', ['create','Invoice[type]'=>$searchModel::TYPE_INCOMING]) ?></li>
-            <li><?= Html::a('Outgoing', ['create','Invoice[type]'=>$searchModel::TYPE_OUTGOING]) ?></li>            
+            <li><?= Html::a('Incoming', ['create', 'Invoice[type]' => $searchModel::TYPE_INCOMING]) ?></li>
+            <li><?= Html::a('Outgoing', ['create', 'Invoice[type]' => $searchModel::TYPE_OUTGOING]) ?></li>
         </ul>        
     </div>
 </div>
@@ -33,12 +36,27 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             //'id',
             'number',
-            'vendor.name',
-            'date',
-            'due_date',
+            [
+                'label' => 'Vendor Name',
+                'attribute' => 'vendor.name',
+            ],
+            [
+                'label' => 'Invoice Date',
+                'attribute' => 'Date',
+            ],
+            [
+                'label' => 'Time to Due',
+                'format' => 'raw',
+                'value' => function($model) {
+                    $d1 = new \DateTime($model->due_date);
+                    $d2 = new \DateTime(date('Y-m-d'));
+                    return $d1->diff($d2)->days . ' Days';
+                },
+                'filter' => $searchModel::enums('STATUS_')
+            ],
             [
                 'attribute' => 'type',
-                'value'=>'nmType',
+                'value' => 'nmType',
                 'filter' => $searchModel::enums('TYPE_')
             ],
             [
@@ -48,24 +66,24 @@ $this->params['breadcrumbs'][] = $this->title;
                     $temp = '';
                     $bgcolor = ($model->status == $model::STATUS_DRAFT) ? 'bg-yellow' : 'bg-green';
                     $bgcolor = ($model->status == $model::STATUS_CANCELED) ? 'bg-red' : $bgcolor;
-                    $temp .= Html::tag('td', Html::tag('span', $model->nmStatus, ['class' => "badge $bgcolor"]), ['style' => 'width:10%']);
+                    $temp .= Html::tag('span', $model->nmStatus, ['class' => "badge $bgcolor"]);
                     return $temp;
                 },
-                'filter' => $searchModel::enums('STATUS_')
+                    'filter' => $searchModel::enums('STATUS_')
+                ],
+                // 'reff_type',
+                // 'reff_id',
+                // 'description',
+                // 'value',
+                // 'tax_type',
+                // 'tax_value',
+                // 'created_at',
+                // 'created_by',
+                // 'updated_at',
+                // 'updated_by',
+                ['class' => 'yii\grid\ActionColumn'],
             ],
-            // 'reff_type',
-            // 'reff_id',
-            // 'description',
-            // 'value',
-            // 'tax_type',
-            // 'tax_value',
-            // 'created_at',
-            // 'created_by',
-            // 'updated_at',
-            // 'updated_by',
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]);
-    ?>
+        ]);
+        ?>
 
 </div>

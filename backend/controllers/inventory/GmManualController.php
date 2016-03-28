@@ -57,11 +57,9 @@ class GmManualController extends Controller
      */
     public function actionView($id)
     {
-        $model_journal = new \backend\models\accounting\GlHeader;
         $model = $this->findModel($id);
         return $this->render('view', [
-                'model' => $model,
-                'model_journal' => (!empty($model->journals)) ? $model->journals[0] : $model_journal
+                'model' => $model
         ]);
     }
 

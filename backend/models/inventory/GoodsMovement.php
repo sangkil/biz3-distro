@@ -130,7 +130,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
     {
         $totValue = 0;
         foreach ($this->items as $itemDtl) {
-            $totValue += $itemDtl->qty * $itemDtl->cogs;
+            $totValue += $itemDtl->qty * $itemDtl->cogs * $itemDtl->productUom->isi;
         }
         return $totValue;
     }
@@ -240,7 +240,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
         $model_journal->branch_id = (isset(Yii::$app->profile->branch_id)) ? Yii::$app->profile->branch_id : -1;
 
         $esheet = ($factor == 1) ? \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES001'])->one()
-                : \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES001'])->one();
+                : \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES003'])->one();
         $model_journal->description = $esheet->name;
 
         /*
@@ -263,8 +263,6 @@ class GoodsMovement extends \yii\db\ActiveRecord
         $model_journal->glDetails = $newDtls;
 
         if (!$model_journal->save()) {
-            print_r($model_journal->getErrors());
-            print_r($model_journal->getRelatedErrors());
             return false;
         }
         return true;
@@ -279,7 +277,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
     {
         if ($this->status == self::STATUS_RELEASED) {
             $oldInvoice = Invoice::findOne(['reff_type' => Invoice::REFF_GOODS_MOVEMENT,
-                    'reff_id' => $this->id, 'status' => Invoice::STATUS_POSTED]);
+                    'reff_id' => $this->id, 'status' => Invoice::STATUS_RELEASED]);
 
             if ($oldInvoice !== null) {
                 return false;
@@ -292,8 +290,8 @@ class GoodsMovement extends \yii\db\ActiveRecord
             $invoice->reff_type = Invoice::REFF_GOODS_MOVEMENT;
             $invoice->reff_id = $this->id;
             $invoice->vendor_id = $this->vendor_id;
-            $invoice->type = $this->type == self::TYPE_RECEIVE ? Invoice::TYPE_OUTGOING : Invoice::TYPE_INCOMING;
-            $invoice->status = Invoice::STATUS_POSTED;
+            $invoice->type = $this->type == self::TYPE_RECEIVE ? Invoice::TYPE_INCOMING : Invoice::TYPE_OUTGOING;
+            $invoice->status = Invoice::STATUS_RELEASED;
 
             $items = [];
             /* @var $item GoodsMovementDtl */

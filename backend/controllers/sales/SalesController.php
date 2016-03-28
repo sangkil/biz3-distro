@@ -120,8 +120,84 @@ class SalesController extends Controller
                                     }
                                 } else {
                                     $success = false;
+                                    //seharusnya muncul cash back jika berlebih, bukan error
                                     $error = 'Total payment tidak sama dengan invoice';
                                 }
+
+                                //Create Jurnal
+                                if ($success) {
+                                    //GL Header
+                                    $gl = new \backend\models\accounting\GlHeader;
+                                    $gl->periode_id = $this->findPeriode();
+                                    $gl->date = date('Y-m-d');
+                                    $gl->status = \backend\models\accounting\GlHeader::STATUS_RELEASED;
+                                    $gl->reff_type = \backend\models\accounting\GlHeader::REFF_SALES;
+                                    $gl->reff_id = $model->id;
+                                    $gl->description = 'Sales POS';
+                                    $gl->branch_id = (isset(Yii::$app->profile->branch_id)) ? Yii::$app->profile->branch_id
+                                            : -1;
+
+                                    //GL Detail
+                                    //Debit Payment
+                                    $glDtls = [];
+                                    $toPayment = 0;
+                                    foreach ($payments as $payment) {
+                                        $payItems = $payment->items;
+                                        $ndtl = new \backend\models\accounting\GlDetail();
+                                        $ndtl->coa_id = $payment->paymentMethod->coa_id;
+                                        $ndtl->header_id = null;                                        
+                                        $ndtl->amount = $payItems[0]->value - ($payment->paymentMethod->potongan * $payItems[0]->value);
+                                        $toPayment += $ndtl->amount;
+                                        $glDtls[] = $ndtl;
+
+                                        if ($payment->paymentMethod->potongan > 0) {
+                                            $ndtl2 = new \backend\models\accounting\GlDetail();
+                                            $ndtl2->coa_id = $payment->paymentMethod->coa_id_potongan;
+                                            $ndtl2->header_id = null;
+                                            $ndtl2->amount = $payment->paymentMethod->potongan * $payItems[0]->value;
+                                            $toPayment += $ndtl2->amount;
+                                            $glDtls[] = $ndtl2;
+                                        }
+                                    }
+
+                                    //Kredit Penjualan
+                                    $ndtl = new \backend\models\accounting\GlDetail();
+                                    $ndtl->coa_id = 16; //hardcode id_coa for penjualan
+                                    $ndtl->header_id = null;
+                                    $ndtl->amount = $toPayment * -1;
+                                    $glDtls[] = $ndtl;
+
+                                    /*
+                                     * Sum total detail
+                                     * Belum dikalikan dengan qty uom isi
+                                     */
+                                    $tcogs = 0;
+                                    foreach ($model->items as $item) {
+                                        $tcogs += $item->cogs * $item->qty * $item->productUom->isi;
+                                    }
+
+                                    //Debit HPP
+                                    $ndtl = new \backend\models\accounting\GlDetail();
+                                    $ndtl->coa_id = 19; //hardcode id_coa for hpp
+                                    $ndtl->header_id = null;
+                                    $ndtl->amount = $tcogs; //isi dengan total cogs
+                                    $glDtls[] = $ndtl;
+
+                                    //Kredit Persediaan
+                                    $ndtl = new \backend\models\accounting\GlDetail();
+                                    $ndtl->coa_id = 32; //hardcode id_coa for persediaan
+                                    $ndtl->header_id = null;
+                                    $ndtl->amount = $tcogs * -1; //isi dengan total cogs
+                                    $glDtls[] = $ndtl;
+
+                                    $gl->glDetails = $glDtls;
+                                    if (!$gl->save()) {
+                                        print_r($gl->getErrors());
+                                        print_r($gl->getRelatedErrors());
+                                        $success = false;
+                                    }
+                                }
+
                                 if ($success) {
                                     $transaction->commit();
                                     return $this->redirect(['view', 'id' => $model->id]);
@@ -319,6 +395,15 @@ class SalesController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    protected function findPeriode()
+    {
+        if (($model = \backend\models\accounting\AccPeriode::find()->active()->one()) !== null) {
+            return $model->id;
+        } else {
+            throw new NotFoundHttpException('Active Periode not exist.');
         }
     }
 }
