@@ -1,3 +1,4 @@
+$("#input-product").focus();
 
 var pc = biz.price_category + '';
 function getPrice(id) {
@@ -40,14 +41,14 @@ $('#detail-grid').on('keypress', ':input', function (e) {
 
 $('#detail-grid').on('blur', ':input[data-field="qty"]', function () {
     var $row = $(this).closest('#detail-grid > tr');
-    var itemPrice = $row.find(':input[data-field="price"]').val();    
+    var itemPrice = $row.find(':input[data-field="price"]').val();
     var isi = $row.find('[data-field="uom_id"] > :selected').data('isi');
     $row.find('span[data-field="totalLine"]').text(itemPrice * $row.find(':input[data-field="qty"]').val() * isi);
 });
 
 $('#detail-grid').on('change', ':input[data-field="uom_id"]', function () {
     var $row = $(this).closest('#detail-grid > tr');
-    var itemPrice = $row.find(':input[data-field="price"]').val();    
+    var itemPrice = $row.find(':input[data-field="price"]').val();
     var isi = $row.find('[data-field="uom_id"] > :selected').data('isi');
     $row.find('span[data-field="totalLine"]').text(itemPrice * $row.find(':input[data-field="qty"]').val() * isi);
 });
@@ -68,7 +69,7 @@ $('#detail-grid').on('initRow', function (e, $row) {
 });
 
 $('#input-product').autocomplete({
-    minLength: 0,
+    minLength: 2,
     source: function (request, response) {
         var result = [];
         var limit = 10;
@@ -85,6 +86,13 @@ $('#input-product').autocomplete({
         });
         response(result);
     },
+    open: function (event, ui){
+        var len = $('.ui-autocomplete > li').length;
+        if(len===1){
+            $("#input-product").val(ui.item[0].name);
+            return false;
+        }
+    },
     focus: function (event, ui) {
         $("#input-product").val(ui.item.name);
         return false;
@@ -93,8 +101,7 @@ $('#input-product').autocomplete({
         selectProduct(ui.item);
         return false;
     }
-})
-    .autocomplete("instance")._renderItem = function (ul, item) {
+}).autocomplete("instance")._renderItem = function (ul, item) {
     return $("<li>")
         .append("<a>" + item.code + "<br>" + item.name + "</a>")
         .appendTo(ul);

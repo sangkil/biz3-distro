@@ -125,6 +125,12 @@ class SalesController extends Controller
                                 }
 
                                 //Create Jurnal
+                                $coa_sales = [
+                                    'penjualan'=>16,
+                                    'persediaan'=>32,
+                                    'hpp'=>19
+                                ];
+                                
                                 if ($success) {
                                     //GL Header
                                     $gl = new \backend\models\accounting\GlHeader;
@@ -162,7 +168,7 @@ class SalesController extends Controller
 
                                     //Kredit Penjualan
                                     $ndtl = new \backend\models\accounting\GlDetail();
-                                    $ndtl->coa_id = 16; //hardcode id_coa for penjualan
+                                    $ndtl->coa_id = $coa_sales['penjualan']; //hardcode id_coa for penjualan
                                     $ndtl->header_id = null;
                                     $ndtl->amount = $toPayment * -1;
                                     $glDtls[] = $ndtl;
@@ -178,14 +184,14 @@ class SalesController extends Controller
 
                                     //Debit HPP
                                     $ndtl = new \backend\models\accounting\GlDetail();
-                                    $ndtl->coa_id = 19; //hardcode id_coa for hpp
+                                    $ndtl->coa_id = $coa_sales['hpp']; //hardcode id_coa for hpp
                                     $ndtl->header_id = null;
                                     $ndtl->amount = $tcogs; //isi dengan total cogs
                                     $glDtls[] = $ndtl;
 
                                     //Kredit Persediaan
                                     $ndtl = new \backend\models\accounting\GlDetail();
-                                    $ndtl->coa_id = 32; //hardcode id_coa for persediaan
+                                    $ndtl->coa_id = $coa_sales['persediaan']; //hardcode id_coa for persediaan
                                     $ndtl->header_id = null;
                                     $ndtl->amount = $tcogs * -1; //isi dengan total cogs
                                     $glDtls[] = $ndtl;
