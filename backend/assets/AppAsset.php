@@ -22,8 +22,10 @@ class AppAsset extends AssetBundle
         'css/biz3.css'
     ];
     public $js = [
+        'js/biz.js'
     ];
     public $depends = [
+        'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',       
         'app\assets\AdminLteAsset'
     ];

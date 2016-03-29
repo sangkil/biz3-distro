@@ -3,7 +3,6 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
 use common\models\LoginForm;
 use yii\filters\VerbFilter;
@@ -20,24 +19,10 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['login', 'logout', 'error', 'page'],
-                        'allow' => true,
-                    ],
-                    [
-                        'actions' => ['logout', 'index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                //'logout' => ['post'],
+                    'change-branch' => ['post'],
                 ],
             ],
         ];
@@ -84,5 +69,13 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionChangeBranch()
+    {
+        Yii::$app->getResponse()->format = 'json';
+        $branch = Yii::$app->getRequest()->post('branch');
+        Yii::$app->profile->branch_id = $branch;
+        return true;
     }
 }
