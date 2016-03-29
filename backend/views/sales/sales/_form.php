@@ -17,13 +17,13 @@ use backend\models\accounting\PaymentMethod;
 JuiAsset::register($this);
 $opts = json_encode([
     'price_category' => '1',
-    ]);
+    'reloadOnBranchChange' => true
+]);
 
-$this->registerJs("var biz = $opts;", View::POS_HEAD);
+$this->registerJs("yii.biz.prop($opts);");
 $this->registerJs($this->render('_script.js'));
 $this->registerJsFile(Url::to(['master']));
 $branch_id = Yii::$app->profile->branch_id;
-
 ?>
 
 <div class="sales-form">

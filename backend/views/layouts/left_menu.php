@@ -7,6 +7,8 @@
 use yii\helpers\Html;
 use backend\models\master\Branch;
 use common\widgets\SideNav;
+
+/* @var $this yii\web\View */
 ?>
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -26,12 +28,16 @@ use common\widgets\SideNav;
                 </div>
             </div>
             <!-- search form -->
-            <form action="#" method="get" class="sidebar-form">
-                <?=
-                Html::dropDownList('activeBrach', '', Branch::selectOptions(), ['class' => 'form-control',
-                    'prompt' => '== Active Branch ==', 'onchange' => 'submit()'])
-                ?>
-            </form>
+            <?= Html::beginForm(['/site/change-branch'], 'post', ['class'=>'sidebar-form'])?>
+<!--                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search..."/>
+                    <span class="input-group-btn">
+                        <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>-->
+                    <?= Html::dropDownList('activeBrach', Yii::$app->profile->branch_id, Branch::selectOptions(), ['class' => 'form-control',
+                        'prompt' => '== Active Branch ==', 'id' => 'select-branch']) ?>
+            <?= Html::endForm()?>
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
         <?php endif; ?>

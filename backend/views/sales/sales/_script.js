@@ -1,12 +1,18 @@
+var pc = yii.biz.prop('price_category') + '';
 $("#input-product").focus();
 
-var pc = biz.price_category + '';
 function getPrice(id) {
     if (masters.products[id] && masters.products[id].prices) {
         var prices = masters.products[id].prices;
         return prices[pc] ? prices[pc] : (prices['1'] ? prices['1'] : 0);
     }
     return 0;
+}
+
+function searchProductByCode(code) {
+    if (masters.barcodes[code] && masters.products[masters.barcodes[code]]) {
+        selectProduct(masters.products[masters.barcodes[code]]);
+    }
 }
 
 function selectProduct(item) {
@@ -59,6 +65,13 @@ $('#detail-grid').on('keypress', ':input', function (e) {
     }
 });
 
+$('#input-product').on('keydown', function (e) {
+    if (e.which == 113) {
+        $('#btn-payment-add').click();
+        return false;
+    }
+});
+
 $('#detail-grid').on('blur', ':input[data-field="qty"]', function () {
     var $row = $(this).closest('#detail-grid > tr');
     var itemPrice = $row.find(':input[data-field="price"]').val();
@@ -88,11 +101,8 @@ $('#detail-grid').on('initRow', function (e, $row) {
     }
 });
 
-$('#input-product').on('keydown', function (e) {
-    if (e.which == 113) {
-        $('#btn-payment-add').click();
-        return false;
-    }
+$('#input-product').change(function () {
+    searchProductByCode(this.value);
 });
 
 $('#input-product').autocomplete({
