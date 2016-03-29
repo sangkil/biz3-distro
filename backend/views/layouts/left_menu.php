@@ -5,7 +5,6 @@
  */
 
 use yii\helpers\Html;
-use yii\helpers\Url;
 use backend\models\master\Branch;
 use common\widgets\SideNav;
 ?>
@@ -27,23 +26,21 @@ use common\widgets\SideNav;
                 </div>
             </div>
             <!-- search form -->
-            <form action="#" method="post" class="sidebar-form">
-<!--                <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="Search..."/>
-                    <span class="input-group-btn">
-                        <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-                    </span>
-                </div>-->
-                    <?= Html::dropDownList('activeBrach', '', Branch::selectOptions(), ['class' => 'form-control',
-                        'prompt' => '== Active Branch ==', 'onchange' => 'submit()']) ?>
+            <form action="#" method="get" class="sidebar-form">
+                <?=
+                Html::dropDownList('activeBrach', '', Branch::selectOptions(), ['class' => 'form-control',
+                    'prompt' => '== Active Branch ==', 'onchange' => 'submit()'])
+                ?>
             </form>
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
-<?php endif; ?>
+        <?php endif; ?>
 
-    <?= SideNav::widget([
-        'items'=>  require '_item_menu.php',
-    ])?>
+        <?=
+        SideNav::widget([
+            'items' => require '_item_menu.php',
+        ])
+        ?>
     </section>
     <!-- /.sidebar -->
 </aside>

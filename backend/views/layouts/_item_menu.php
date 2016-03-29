@@ -15,6 +15,7 @@ return[
                     ['label' => 'Category', 'icon' => 'check', 'url' => ['/master/category']],
                 ],
             ],
+            ['label' => 'Vendors', 'icon' => 'check', 'url' => ['/master/vendor']],
         ],
     ],
     ['label' => 'Sales & Distribution', 'icon' => 'shopping-cart', 'iconOptions' => ['class' => 'text-orange'],

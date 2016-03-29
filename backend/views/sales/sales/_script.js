@@ -11,30 +11,50 @@ function getPrice(id) {
 
 function selectProduct(item) {
     $("#input-product").val('');
+    var $product_found = false;
 
-    var $row = $('#detail-grid').mdmTabularInput('addRow');
-    var itemPrice = getPrice(item.id);
+    //check product is exist?    
+    var $dgrid = $('#detail-grid');
+    var $dgrid_row = $('#detail-grid > tr');
+    var $a = '';
 
-    $row.find(':input[data-field="product_id"]').val(item.id);
-    $row.find('span[data-field="product"]').text(item.name);
-    $row.find(':input[data-field="qty"]').focus();
-
-    $row.find(':input[data-field="price"]').val(itemPrice);
-
-    $row.find('[data-field="uom_id"] > option').each(function () {
-        var $op = $(this);
-        if (item.uoms[$op.val()]) {
-            $op.attr('data-isi', item.uoms[$op.val()].isi);
-        } else {
-            $op.remove();
+    $dgrid_row.each(function () {
+        var $product_id = $(this).find(':input[data-field="product_id"]').val();
+        if (parseInt($product_id) === parseInt(item.id)) {
+            var $new_qty = parseInt($(this).find(':input[data-field="qty"]').val(), 10) + 1;
+            $(this).find(':input[data-field="qty"]').val($new_qty).focus().trigger({type: 'keypress', which: 13});
+            $product_found = true;
+            return false;
         }
     });
+
+    if (!$product_found) {
+        var $new_grid = $dgrid.mdmTabularInput('addRow');
+        var itemPrice = getPrice(item.id);
+
+        $new_grid.find(':input[data-field="product_id"]').val(item.id);
+        $new_grid.find('span[data-field="product"]').text(item.name);
+        $new_grid.find(':input[data-field="qty"]').val(1).focus();
+        $new_grid.find(':input[data-field="price"]').val(itemPrice);
+        $new_grid.find('[data-field="uom_id"] > option').each(function () {
+            var $op = $(this);
+            if (item.uoms[$op.val()]) {
+                $op.attr('data-isi', item.uoms[$op.val()].isi);
+            } else {
+                $op.remove();
+            }
+        });
+    }
 }
 
 $('#detail-grid').on('keypress', ':input', function (e) {
     if (e.which == 13) {
         $("#input-product").focus();
         calculate();
+        return false;
+    }
+    if (e.which == 113) {
+        $('#btn-payment-add').click();
         return false;
     }
 });
@@ -68,6 +88,13 @@ $('#detail-grid').on('initRow', function (e, $row) {
     }
 });
 
+$('#input-product').on('keydown', function (e) {
+    if (e.which == 113) {
+        $('#btn-payment-add').click();
+        return false;
+    }
+});
+
 $('#input-product').autocomplete({
     minLength: 2,
     source: function (request, response) {
@@ -86,11 +113,13 @@ $('#input-product').autocomplete({
         });
         response(result);
     },
-    open: function (event, ui){
-        var len = $('.ui-autocomplete > li').length;
-        if(len===1){
-            $("#input-product").val(ui.item[0].name);
-            return false;
+    open: function (event, ui) {
+        var li = $('.ui-autocomplete > li');
+        if (li.length === 1) {
+            $.each(li, function () {
+                $(this).click();
+                return false;
+            });
         }
     },
     focus: function (event, ui) {
@@ -181,6 +210,9 @@ function calculatePayment() {
         $('#inp-payment-value').val('');
         $('#payment-completion').removeClass('hidden');
         $('#payment-input-panel').addClass('hidden');
+        if (confirm('complete?')) {
+            $('#submit-btn').click();
+        }
     }
 }
 

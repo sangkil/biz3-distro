@@ -76,6 +76,8 @@ class SalesController extends Controller
 
         $model->status = Sales::STATUS_RELEASED;
         $model->date = date('Y-m-d');
+        $model->vendor_id = Sales::DEFAULT_VENDOR;
+        $model->vendor_name = 'Point of Sale';
         $error = false;
         $payments = [];
         if ($model->load(Yii::$app->request->post())) {
@@ -206,7 +208,8 @@ class SalesController extends Controller
 
                                 if ($success) {
                                     $transaction->commit();
-                                    return $this->redirect(['view', 'id' => $model->id]);
+                                    return $this->redirect(['create']);
+                                    //return $this->redirect(['view', 'id' => $model->id]);
                                 }
                             } else {
                                 if ($invoice) {

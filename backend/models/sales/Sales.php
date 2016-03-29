@@ -49,6 +49,9 @@ class Sales extends \yii\db\ActiveRecord
     const REFF_SALES_RETURN = 61;
     const REFF_JOURNAL = 70;
 
+    //hardcode pos vendor
+    const DEFAULT_VENDOR = 11;
+
     public $vendor_name;
 
     /**
