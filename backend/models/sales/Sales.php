@@ -6,7 +6,6 @@ use Yii;
 use backend\models\master\Branch;
 use backend\models\master\Vendor;
 use backend\models\inventory\GoodsMovement;
-use backend\models\inventory\GoodsMovementDtl;
 
 /**
  * This is the model class for table "sales".

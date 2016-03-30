@@ -9,18 +9,12 @@ use backend\models\master\Warehouse;
 /* @var $searchModel GoodsMovement */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Movement';
+$this->title = 'Goods Movement';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="col-lg-12">
     <div class='btn-group pull-right'>
-        <?= Html::button('New Good Movement', ['class' => 'btn bg-aqua', 'type' => 'button']) ?>        
-        <?= Html::button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', ['class' => 'btn btn-default dropdown-toggle',
-            'aria-expanded' => false, 'type' => 'button', 'data-toggle' => 'dropdown']) ?>
-        <ul class="dropdown-menu" role="menu">
-            <li><?= Html::a('Receive', ['create', 'type' => $searchModel::TYPE_RECEIVE]) ?></li>
-            <li><?= Html::a('Issue', ['create', 'type' => $searchModel::TYPE_ISSUE]) ?></li>
-        </ul>        
+        <?= ($searchModel->type == $searchModel::TYPE_RECEIVE || $searchModel->type == $searchModel::TYPE_ISSUE)? Html::a(($searchModel->type == $searchModel::TYPE_RECEIVE)?'New Receive':'New Issue', ['inventory/gm-manual/create','GoodsMovement[type]' => $searchModel->type], ['class' => 'btn btn-default']):'' ?>
     </div>
 </div>
 <br><br>

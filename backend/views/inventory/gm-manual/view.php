@@ -9,16 +9,17 @@ use backend\models\inventory\GoodsMovement;
 /* @var $model GoodsMovement */
 
 $this->title = $model->nmType . ' #' . $model->number;
+$this->title = 'Goods ' . ($model->nmType ? ucfirst(strtolower($model->nmType)) : 'Movement') . ' #' . $model->number;
 $this->params['breadcrumbs'][] = ['label' => 'Goods Movements', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="goods-movement-view">
     <div class="col-lg-12">
         <p class="pull-right">
-            <?=
-            (!$model->isNewRecord) ? Html::a('Create New', ['create', 'type' => $model->type], ['class' => 'btn btn-default'])
-                    : ''
-            ?>
+            <?= ($model->type == $model::TYPE_RECEIVE || $model->type == $model::TYPE_ISSUE)
+                    ? Html::a(($model->type == $model::TYPE_RECEIVE) ? 'New Receive' : 'New Issue', ['inventory/gm-manual/create',
+                    'GoodsMovement[type]' => $model->type], ['class' => 'btn btn-default']) : '' ?>
+
             <?php if ($model->status == GoodsMovement::STATUS_DRAFT): ?>
                 <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
                 <?=
@@ -162,7 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'header' => 'Total Line',
-                            'value'=> function ($model){
+                            'value' => function ($model) {
                                 return $model->cogs * $model->qty * $model->productUom->isi;
                             }
                         ],
