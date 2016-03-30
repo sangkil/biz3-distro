@@ -699,12 +699,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mdmsoft/yii2-widgets.git",
-                "reference": "286ee750cde2d0fc23272508067409e658e41ead"
+                "reference": "1bba12104ceebf5c9dff7c2e0639dccf9040cdf1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mdmsoft/yii2-widgets/zipball/286ee750cde2d0fc23272508067409e658e41ead",
-                "reference": "286ee750cde2d0fc23272508067409e658e41ead",
+                "url": "https://api.github.com/repos/mdmsoft/yii2-widgets/zipball/1bba12104ceebf5c9dff7c2e0639dccf9040cdf1",
+                "reference": "1bba12104ceebf5c9dff7c2e0639dccf9040cdf1",
                 "shasum": ""
             },
             "require": {
@@ -737,7 +737,7 @@
                 "widgets",
                 "yii"
             ],
-            "time": "2016-03-20 07:06:01"
+            "time": "2016-03-30 12:19:07"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -798,12 +798,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "438f2d2228b450fad76e022264b1d8e30ea12633"
+                "reference": "dd4ff9a40a8639bf3fc30b36d417871428c15130"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/438f2d2228b450fad76e022264b1d8e30ea12633",
-                "reference": "438f2d2228b450fad76e022264b1d8e30ea12633",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/dd4ff9a40a8639bf3fc30b36d417871428c15130",
+                "reference": "dd4ff9a40a8639bf3fc30b36d417871428c15130",
                 "shasum": ""
             },
             "require": {
@@ -884,7 +884,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2016-03-25 20:39:29"
+            "time": "2016-03-30 09:33:55"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -989,12 +989,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-jui.git",
-                "reference": "226ffd897b26965a357e187cdf67f6c2e43e3139"
+                "reference": "69cd9763b4807dbbce367d599dc615c5b8a8ef4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-jui/zipball/226ffd897b26965a357e187cdf67f6c2e43e3139",
-                "reference": "226ffd897b26965a357e187cdf67f6c2e43e3139",
+                "url": "https://api.github.com/repos/yiisoft/yii2-jui/zipball/69cd9763b4807dbbce367d599dc615c5b8a8ef4f",
+                "reference": "69cd9763b4807dbbce367d599dc615c5b8a8ef4f",
                 "shasum": ""
             },
             "require": {
@@ -1031,7 +1031,7 @@
                 "jQuery UI",
                 "yii2"
             ],
-            "time": "2016-03-21 19:14:08"
+            "time": "2016-03-29 21:32:13"
         },
         {
             "name": "yiisoft/yii2-swiftmailer",
@@ -1164,12 +1164,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "68c0d749b7a9bb527a7b0d3226fa397f26005955"
+                "reference": "8deb6343c80c4edf546a6fff01a2b05c7dc59ac4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/68c0d749b7a9bb527a7b0d3226fa397f26005955",
-                "reference": "68c0d749b7a9bb527a7b0d3226fa397f26005955",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/8deb6343c80c4edf546a6fff01a2b05c7dc59ac4",
+                "reference": "8deb6343c80c4edf546a6fff01a2b05c7dc59ac4",
                 "shasum": ""
             },
             "require": {
@@ -1206,7 +1206,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2016-03-24 17:39:55"
+            "time": "2016-03-29 16:49:43"
         },
         {
             "name": "phpspec/php-diff",

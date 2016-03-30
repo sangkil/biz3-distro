@@ -1,8 +1,10 @@
+var invoice_url = yii.biz.prop('invoice_url');
+var vendor_url = yii.biz.prop('vendor_url');
 
 $('#input-invoice').autocomplete({
     minLength: 0,
     source: function (req, callback) {
-        jQuery.get(biz.invoice_url, {
+        jQuery.get(invoice_url, {
             term: req.term,
             type: $('#payment-type').val(),
             vendor: $('#payment-vendor_id').val()
@@ -22,7 +24,7 @@ $('#input-invoice').autocomplete({
         }
         if ($('#payment-vendor_id').val() == '') {
             $('#payment-vendor_id').val(ui.item.vendor_id);
-            jQuery.get(biz.vendor_url, {id: ui.item.vendor_id}, function (data) {
+            jQuery.get(vendor_url, {id: ui.item.vendor_id}, function (data) {
                 if (data[0]) {
                     $('#payment-vendor_name').val(data[0].name);
                 }
@@ -47,7 +49,7 @@ $('#input-invoice').autocomplete({
 $('#payment-vendor_name')
     .autocomplete({
         minLength: 1,
-        source: biz.vendor_url,
+        source: vendor_url,
         focus: function (event, ui) {
             $("#payment-vendor_name").val(ui.item.name);
             return false;
