@@ -102,8 +102,8 @@ $branch_id = Yii::$app->profile->branch_id;
                             TabularInput::widget([
                                 'id' => 'payment-grid-dtl',
                                 'allModels' => $payments,
-                                'modelClass' => Payment::className(),
-                                'options' => ['tag' => 'tbody'],
+                                'model' => Payment::className(),
+                                'tag' => 'tbody',
                                 'itemOptions' => ['tag' => 'tr'],
                                 'itemView' => '_payment_dtl',
                                 'clientOptions' => [

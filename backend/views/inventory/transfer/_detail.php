@@ -38,8 +38,8 @@ use backend\models\inventory\TransferDtl;
     TabularInput::widget([
         'id' => 'detail-grid',
         'allModels' => $model->items,
-        'modelClass' => TransferDtl::className(),
-        'options' => ['tag' => 'tbody'],
+        'model' => TransferDtl::className(),
+        'tag' => 'tbody',
         'itemOptions' => ['tag' => 'tr'],
         'itemView' => '_item_detail',
         'clientOptions' => [

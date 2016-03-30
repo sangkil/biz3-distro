@@ -43,8 +43,8 @@ $detailFunc = function ($model, $key) {
         TabularInput::widget([
             'id' => 'template-grid',
             'allModels' => $templates,
-            'modelClass' => GlTemplate::className(),
-            'options' => ['tag' => 'tbody'],
+            'model' => GlTemplate::className(),
+            'tag' => 'tbody',
             'itemOptions' => ['tag' => 'tr'],
             'itemView' => $detailFunc,
             'clientOptions' => [

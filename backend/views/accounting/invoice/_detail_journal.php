@@ -50,8 +50,8 @@ $this->registerJs($this->render('_script_journal.js'));
     TabularInput::widget([
         'id' => 'detail-grid-journal',
         'allModels' => $model_journal->glDetails,
-        'modelClass' => GlDetail::className(),
-        'options' => ['tag' => 'tbody'],
+        'model' => GlDetail::className(),
+        'tag' => 'tbody',
         'itemOptions' => ['tag' => 'tr'],
         'itemView' => '_item_detail_journal',
         'clientOptions' => []

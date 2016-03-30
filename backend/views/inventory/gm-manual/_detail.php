@@ -58,8 +58,8 @@ use yii\helpers\Html;
         TabularInput::widget([
             'id' => 'detail-grid',
             'allModels' => $model->items,
-            'modelClass' => GoodsMovementDtl::className(),
-            'options' => ['tag' => 'tbody'],
+            'model' => GoodsMovementDtl::className(),
+            'tag' => 'tbody',
             'itemOptions' => ['tag' => 'tr'],
             'itemView' => '_item_detail',
             'clientOptions' => [
