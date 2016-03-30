@@ -18,7 +18,7 @@ return[
             ['label' => 'Vendors', 'icon' => 'check', 'url' => ['/master/vendor']],
         ],
     ],
-    ['label' => 'Sales & Distribution', 'icon' => 'shopping-cart', 'iconOptions' => ['class' => 'text-orange'],
+    ['label' => 'Sales', 'icon' => 'shopping-cart', 'iconOptions' => ['class' => 'text-orange'],
         'items' => [
             ['label' => 'Sales Order', 'icon' => 'check', 'url' => ['/sales/sales/create']],
             ['label' => 'Sales Return', 'icon' => 'check',],
@@ -32,20 +32,9 @@ return[
     ],
     ['label' => 'Warehouse Mangmnt', 'icon' => 'truck', 'iconOptions' => ['class' => 'text-success'],
         'items' => [
-            ['label' => 'Goods Receive', 'icon' => 'check',
-                'items' => [
-                    ['label' => 'Receive', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'type' => 10]],
-                    ['label' => 'Transfer', 'icon' => 'check', 'url' => ''],
-                    ['label' => 'Purchase Return', 'icon' => 'check', 'url' => ''],
-                ],
-            ],
-            ['label' => 'Goods Issue', 'icon' => 'check',
-                'items' => [
-                    ['label' => 'Issue', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'type' => 20]],
-                    ['label' => 'Surat Jalan', 'icon' => 'check', 'url' => ''],
-                    ['label' => 'Mutasi ke Gudang', 'icon' => 'check', 'url' => ''],
-                ],
-            ],
+            ['label' => 'Goods Receive', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 10]],
+            ['label' => 'Goods Issue', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 20]],
+            ['label' => 'Stock Transfer', 'icon' => 'check', 'url' => ['/inventory/transfer']],
             ['label' => 'Stock Management', 'icon' => 'check',
                 'items' => [
                     ['label' => 'Stock', 'icon' => 'check', 'url' => ['/inventory/product-stock']],

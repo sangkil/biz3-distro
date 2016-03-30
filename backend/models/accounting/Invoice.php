@@ -177,7 +177,8 @@ class Invoice extends \yii\db\ActiveRecord
             $this->_paid = (new \yii\db\Query())
                 ->from('{{%payment_dtl}} pd')
                 ->innerJoin('{{%payment}} p', '[[p.id]]=[[pd.payment_id]]')
-                ->where(['pd.invoice_id' => $this->id, 'p.status' => Payment::STATUS_CLOSE])
+                ->where(['pd.invoice_id' => $this->id])
+                ->andFilterWhere(['and', ['>=', 'p.status', (int)Payment::STATUS_RELEASED]])
                 ->sum('pd.value');
         }
         return $this->_paid;

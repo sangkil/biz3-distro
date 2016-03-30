@@ -173,6 +173,22 @@ class GlHeader extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSales()
+    {
+        return $this->hasOne(\backend\models\sales\Sales::className(), ['id' => 'reff_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getJournal()
+    {
+        return $this->hasOne(self::className(), ['id' => 'reff_id']);
+    }
+
+    /**
      * @return String
      */
     public function getHyperlink()
@@ -206,7 +222,10 @@ class GlHeader extends \yii\db\ActiveRecord
                 $link = ($this->journal != null) ? Html::a($this->journal->number, ['/accounting/general-ledger/view', 'id' => $this->reff_id])
                         : '';
                 break;
-
+            case (int) self::REFF_SALES:
+                $link = ($this->journal != null) ? Html::a($this->sales->number, ['/sales/sales/view', 'id' => $this->reff_id])
+                        : '';
+                break;
             default:
                 break;
         }

@@ -55,6 +55,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => $searchModel::enums('STATUS_')
             ],
             [
+                'label' => 'Invoice Value',
+                'attribute' => 'value',
+                'format' => ['decimal', 0],
+                'filter' => false,
+                'contentOptions' => ['style' => 'text-align:right;'],
+            ],
+            [
+                'label' => 'Paid',
+                'attribute' => 'paid',
+                'format' => ['decimal', 0],
+                'filter' => false,
+                'contentOptions' => ['style' => 'text-align:right;'],
+            ],
+            [
+                'label' => 'Remain',
+                'attribute' => 'sisa',
+                'format' => ['decimal', 0],
+                'filter' => false,
+                'contentOptions' => ['style' => 'text-align:right;'],
+            ],    
+            [
                 'attribute' => 'type',
                 'value' => 'nmType',
                 'filter' => $searchModel::enums('TYPE_')
@@ -70,11 +91,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $temp;
                 },
                     'filter' => $searchModel::enums('STATUS_')
-                ],
+            ],
                 // 'reff_type',
                 // 'reff_id',
                 // 'description',
-                // 'value',
                 // 'tax_type',
                 // 'tax_value',
                 // 'created_at',
