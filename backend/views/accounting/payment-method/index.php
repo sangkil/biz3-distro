@@ -43,8 +43,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->coa->code . ' - ' . $model->coa->name;
                 }
             ],
-            'potongan',
-            'coa_id_potongan',
+            [
+                'label' => 'Potongan',
+                'value' => function ($model) {
+                    return ($model->potongan > 0 ) ? $model->potongan * 100 . '%' : '-';
+                }
+            ],
+            [
+                'label' => 'Target Account Potongan',
+                'value' => function ($model) {
+                    return ($model->coaPotongan !== null) ? $model->coaPotongan->code . ' - ' . $model->coaPotongan->name
+                            : '-';
+                }
+            ],
             'created_at:datetime',
             // 'coa_id',
             // 'created_by',

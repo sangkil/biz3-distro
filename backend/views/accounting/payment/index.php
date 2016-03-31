@@ -17,29 +17,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="payment-index">
 
-                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-            <?= GridView::widget([
+
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => ['class' => 'table table-hover'],
         'filterModel' => $searchModel,
         'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-
-                    'id',
+            ['class' => 'yii\grid\SerialColumn'],
+            //'id',
             'number',
             'date',
-            'type',
-            'payment_method',
+            'nmType',
+            'paymentMethod.method',
             // 'status',
             // 'created_at',
             // 'created_by',
             // 'updated_at',
             // 'updated_by',
-
-        ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn'],
         ],
-        ]); ?>
-    
+    ]);
+    ?>
+
 </div>

@@ -30,15 +30,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             'number',
             [
+                'attribute'=>'branch_id',
+                'value'=>'branch.name',
+                'filter'=>  backend\models\master\Branch::selectOptions()
+            ],
+            [
                 'attribute'=>'vendor_id',
                 'value'=>'vendor.name',
             ],
             [
-                'attribute'=>'branch_id',
-                'value'=>'branch.name',
-            ],
-            [
                 'attribute'=>'Date',
+            ],
+
+            [
+                'attribute'=>'value',
+                'format'=>['decimal',0]
             ],
             [
                 'attribute'=>'status',

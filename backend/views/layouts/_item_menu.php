@@ -62,8 +62,8 @@ return[
             ],
             ['label' => 'Invoices', 'icon' => 'check',
                 'items' => [
-                    ['label' => 'Incoming', 'icon' => 'check', 'url' => ['/accounting/invoice', 'type' => 10]],
-                    ['label' => 'Outgoing', 'icon' => 'check', 'url' => ['/accounting/invoice', 'type' => 20]],
+                    ['label' => 'Incoming', 'icon' => 'check', 'url' => ['/accounting/invoice', 'invoice[type]' => 10]],
+                    ['label' => 'Outgoing', 'icon' => 'check', 'url' => ['/accounting/invoice', 'invoice[type]' => 20]],
                 ],
             ],
             ['label' => 'Payment', 'icon' => 'check',

@@ -219,10 +219,7 @@ function calculatePayment() {
     } else {
         $('#inp-payment-value').val('');
         $('#payment-completion').removeClass('hidden');
-        $('#payment-input-panel').addClass('hidden');
-        if (confirm('complete?')) {
-            $('#submit-btn').click();
-        }
+        $('#payment-input-panel').addClass('hidden');        
     }
 }
 

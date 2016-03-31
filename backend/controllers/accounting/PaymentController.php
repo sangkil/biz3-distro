@@ -67,6 +67,7 @@ class PaymentController extends Controller
 
         $model->status = Payment::STATUS_DRAFT;
         $model->date = date('Y-m-d');
+        
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {

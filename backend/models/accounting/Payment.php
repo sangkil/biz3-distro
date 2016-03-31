@@ -37,12 +37,9 @@ class Payment extends \yii\db\ActiveRecord
     const STATUS_RELEASED = 20;
     const STATUS_CLOSE = 90;
     // type payment
-    const TYPE_SUPLIER = 10;
-    const TYPE_CUSTOMER = 20;
-    // payment method
-    const METHOD_CASH = 10;
-    const METHOD_BANK = 20;
-    //document reff type
+    const TYPE_INCOMING = 10;
+    const TYPE_OUTGOING = 20;
+       //document reff type
     const REFF_SELF = 50;
     const REFF_PURCH = 10;
     const REFF_PURCH_RETURN = 11;
@@ -134,11 +131,6 @@ class Payment extends \yii\db\ActiveRecord
     public function getNmStatus()
     {
         return $this->getLogical('type', 'STATUS_');
-    }
-
-    public function getNmMethod()
-    {
-        return $this->getLogical('payment_method', 'METHOD_');
     }
 
     /**

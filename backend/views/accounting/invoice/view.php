@@ -18,13 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class='btn-group'>
                 <?= Html::button('New Invoice', ['class' => 'btn btn-default', 'type' => 'button']) ?>        
                 <?=
-                Html::button('<span class="caret"></span><span class="sr-only">Toggle Dropdown</span>', ['class' => 'btn btn-default dropdown-toggle',
-                    'aria-expanded' => false, 'type' => 'button', 'data-toggle' => 'dropdown'])
+                ($model->status >= $model::STATUS_RELEASED) ? Html::a('New Payment', ['/accounting/payment/create',
+                        'reff_id' => $model->id], ['class' => 'btn btn-success', 'type' => 'button']) : ''
                 ?>
-                <ul class="dropdown-menu" role="menu">
-                    <li><?= Html::a('Incoming', ['create', 'Invoice[type]' => $model::TYPE_INCOMING]) ?></li>
-                    <li><?= Html::a('Outgoing', ['create', 'Invoice[type]' => $model::TYPE_OUTGOING]) ?></li>            
-                </ul>        
             </div>
             <?=
             ($model->status == $model::STATUS_DRAFT) ? Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default'])
@@ -80,12 +76,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['class' => 'table'],
             'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
             'attributes' => [
-                'value',
+                [                      // the owner name of the model
+                    'label' => 'Amount',
+                    'attribute' => 'value',
+                    'format' => ['decimal', 0]
+                ],
                 'description',
                 [                      // the owner name of the model
                     'label' => 'Type/Number',
                     'format' => 'raw',
-                    'value' => $model->nmReffType.'/'.$model->reffNumber
+                    'value' => $model->nmReffType . '/' . $model->reffNumber
                 ],
                 [                      // the owner name of the model
                     'label' => 'Status',
@@ -101,16 +101,56 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="nav-tabs-justified col-lg-12">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#item" data-toggle="tab" aria-expanded="false">Items</a></li>
-            <!--<li><a href="#journals" data-toggle="tab" aria-expanded="false">Journals</a></li>-->
+            <li><a href="#payments" data-toggle="tab" aria-expanded="false">Payments</a></li>
             <li><a href="#notes" data-toggle="tab" aria-expanded="false">Notes</a></li>            
         </ul>
         <div class="tab-content" >
             <div class="tab-pane active" id="item">
                 <?= $this->render('_detail_view', ['model' => $model]) ?>
             </div>
-<!--            <div class="tab-pane" id="journals">
-                <?= ''//$this->render('_form_journal', [ 'model_journal' => $model_journal, 'form'=>$form]) ?>
-            </div>-->
+            <div class="tab-pane" id="payments">
+                <table border="0" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Paymnt Number</th>
+                            <th>Date</th>
+                            <th>Paymnt Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $i = 1;
+                        $tpyval = 0;
+                        foreach ($model->payments as $payment) {
+                            echo Html::beginTag('tr');
+                            echo '<td>' . $i . '</td>';
+                            echo '<td>' . $payment->number . '</td>';
+                            echo '<td>' . $payment->date . '</td>';
+                            echo Html::beginTag('td');
+                            $pyval = 0;
+                            foreach ($payment->items as $item) {
+                                $pyval += $item->value;
+                            }
+                            echo number_format($pyval, 0);
+                            echo Html::endTag('td');
+                            echo Html::endTag('tr');
+                            $tpyval += $pyval;
+                            $i++;
+                        }
+                        echo Html::beginTag('tr');
+                        echo '<td></td>';
+                        echo '<td></td>';
+                        echo '<td></td>';
+                        echo Html::beginTag('td');
+                        echo number_format($tpyval, 0);
+                        echo Html::endTag('td');
+                        echo Html::endTag('tr');
+                        ?>
+                    </tbody>
+                </table>
+
+            </div>
             <div class="tab-pane" id="notes">
                 <?=
                 DetailView::widget([

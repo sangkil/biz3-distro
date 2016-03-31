@@ -58,27 +58,9 @@ class InvoiceController extends Controller
         //$model_journal = new \backend\models\accounting\GlHeader;
         $model = $this->findModel($id);
         $newDtls = [];
-//        if ($model->reff_type == $model::REFF_GOODS_MOVEMENT) {
-//            $esheet = \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES002'])->one();
-//
-//            $ndtl = new \backend\models\accounting\GlDetail();
-//            $ndtl->coa_id = $esheet->d_coa_id;
-//            $ndtl->header_id = null;
-//            $ndtl->amount = $model->value;
-//            $newDtls[] = $ndtl;
-//
-//            $ndtl1 = new \backend\models\accounting\GlDetail();
-//            $ndtl1->coa_id = $esheet->k_coa_id;
-//            $ndtl1->header_id = null;
-//            $ndtl1->amount = $model->value * -1;
-//            $newDtls[] = $ndtl1;
-//
-//            $model_journal->glDetails = $newDtls;
-//        }
 
         return $this->render('view', [
-                'model' => $model,
-                //'model_journal' => (!empty($model->journals)) ? $model->journals[0] : $model_journal
+                'model' => $model
         ]);
     }
 

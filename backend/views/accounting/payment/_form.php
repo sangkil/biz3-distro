@@ -43,7 +43,7 @@ $this->registerJs($this->render('_script.js'));
         </div>
         <div class="col-md-4">
             <?=
-            $form->field($model, 'payment_method')->dropDownList(Payment::enums('METHOD_'), [
+            $form->field($model, 'payment_method')->dropDownList(\backend\models\accounting\PaymentMethod::selectOptions(\Yii::$app->profile->branch_id), [
                 'prompt' => '--Pilih payment method--', 'style' => 'width:60%;'])
             ?>
         </div>
@@ -60,7 +60,7 @@ $this->registerJs($this->render('_script.js'));
             </ul>
             <div class="tab-content" >
                 <div class="tab-pane active" id="item">
-<?= $this->render('_detail', ['model' => $model]) ?>
+                    <?= $this->render('_detail', ['model' => $model]) ?>
                 </div>
                 <div class="tab-pane" id="notes">
 
@@ -68,6 +68,6 @@ $this->registerJs($this->render('_script.js'));
             </div>
         </div>
     </div>
-<?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); ?>
 
 </div>
