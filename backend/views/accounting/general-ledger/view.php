@@ -114,8 +114,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     TabularInput::widget([
                         'id' => 'detail-grid',
                         'allModels' => $model->glDetails,
-                        'modelClass' => GlDetail::className(),
-                        'options' => ['tag' => 'tbody'],
+                        'model' => GlDetail::className(),
+                        'tag' => 'tbody',
                         'itemOptions' => ['tag' => 'tr'],
                         'itemView' => '_item_view',
                         'clientOptions' => [

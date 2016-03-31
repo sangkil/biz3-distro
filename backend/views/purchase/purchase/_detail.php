@@ -41,8 +41,8 @@ use backend\models\purchase\PurchaseDtl;
     TabularInput::widget([
         'id' => 'detail-grid',
         'allModels' => $model->items,
-        'modelClass' => PurchaseDtl::className(),
-        'options' => ['tag' => 'tbody'],
+        'model' => PurchaseDtl::className(),
+        'tag' => 'tbody',
         'itemOptions' => ['tag' => 'tr'],
         'itemView' => '_item_detail',
         'clientOptions' => [

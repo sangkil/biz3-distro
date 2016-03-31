@@ -41,8 +41,8 @@ use backend\models\sales\SalesDtl;
     TabularInput::widget([
         'id' => 'detail-grid',
         'allModels' => $model->items,
-        'modelClass' => SalesDtl::className(),
-        'options' => ['tag' => 'tbody'],
+        'model' => SalesDtl::className(),
+        'tag' => 'tbody',
         'itemOptions' => ['tag' => 'tr'],
         'itemView' => '_item_detail',
         'clientOptions' => [

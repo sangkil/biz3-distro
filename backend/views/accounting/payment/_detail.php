@@ -38,8 +38,8 @@ use backend\models\accounting\PaymentDtl;
     TabularInput::widget([
         'id' => 'detail-grid',
         'allModels' => $model->items,
-        'modelClass' => PaymentDtl::className(),
-        'options' => ['tag' => 'tbody'],
+        'model' => PaymentDtl::className(),
+        'tag' => 'tbody',
         'itemOptions' => ['tag' => 'tr'],
         'itemView' => '_item_detail',
         'clientOptions' => [

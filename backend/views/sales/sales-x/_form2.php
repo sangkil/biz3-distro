@@ -40,8 +40,8 @@ use mdm\widgets\TabularInput;
             TabularInput::widget([
                 'id' => 'payment-grid',
                 'allModels' => $payments,
-                'modelClass' => Payment::className(),
-                'options' => ['tag' => 'tbody'],
+                'model' => Payment::className(),
+                'tag' => 'tbody',
                 'itemOptions' => ['tag' => 'tr'],
                 'itemView' => '_payment_detail',
                 'clientOptions' => [

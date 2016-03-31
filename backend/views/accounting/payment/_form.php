@@ -17,7 +17,7 @@ $opts = json_encode([
     'vendor_url' => Url::to(['vendor-list']),
     ]);
 
-$this->registerJs("var biz = $opts;", View::POS_HEAD);
+$this->registerJs("yii.biz.prop($opts);");
 $this->registerJs($this->render('_script.js'));
 ?>
 

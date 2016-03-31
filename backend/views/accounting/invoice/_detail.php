@@ -50,8 +50,8 @@ use backend\models\accounting\InvoiceDtl;
     TabularInput::widget([
         'id' => 'detail-grid',
         'allModels' => $model->items,
-        'modelClass' => InvoiceDtl::className(),
-        'options' => ['tag' => 'tbody'],
+        'model' => InvoiceDtl::className(),
+        'tag' => 'tbody',
         'itemOptions' => ['tag' => 'tr'],
         'itemView' => '_item_detail',
         'clientOptions' => [

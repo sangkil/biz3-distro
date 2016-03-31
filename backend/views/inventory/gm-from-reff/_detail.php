@@ -40,7 +40,7 @@ use yii\helpers\Html;
             'id' => 'detail-grid',
             'allModels' => $model->items,
             'model' => GoodsMovementDtl::className(),
-            'options' => ['tag' => 'tbody'],
+            'tag' => 'tbody',
             'itemOptions' => ['tag' => 'tr'],
             'itemView' => '_item_detail',
             'clientOptions' => [

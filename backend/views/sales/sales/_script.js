@@ -17,7 +17,7 @@ function searchProductByCode(code) {
 
 function selectProduct(item) {
     $("#input-product").val('');
-    var $product_found = false;
+    var product_found = false;
 
     //check product is exist?    
     var $dgrid = $('#detail-grid');
@@ -25,22 +25,22 @@ function selectProduct(item) {
     var $a = '';
 
     $dgrid_row.each(function () {
-        var $product_id = $(this).find(':input[data-field="product_id"]').val();
-        if (parseInt($product_id) === parseInt(item.id)) {
-            var $new_qty = parseInt($(this).find(':input[data-field="qty"]').val(), 10) + 1;
-            $(this).find(':input[data-field="qty"]').val($new_qty).focus().trigger({type: 'keypress', which: 13});
-            $product_found = true;
+        var product_id = $(this).find(':input[data-field="product_id"]').val();
+        if (parseInt(product_id) === parseInt(item.id)) {
+            var new_qty = parseInt($(this).find(':input[data-field="qty"]').val(), 10) + 1;
+            $(this).find(':input[data-field="qty"]').val(new_qty).focus().trigger({type: 'keypress', which: 13});
+            product_found = true;
             return false;
         }
     });
 
-    if (!$product_found) {
+    if (!product_found) {
         var $new_grid = $dgrid.mdmTabularInput('addRow');
         var itemPrice = getPrice(item.id);
 
         $new_grid.find(':input[data-field="product_id"]').val(item.id);
         $new_grid.find('span[data-field="product"]').text(item.name);
-        $new_grid.find(':input[data-field="qty"]').val(1).focus();
+        $new_grid.find(':input[data-field="qty"]').val(1).focus().select();
         $new_grid.find(':input[data-field="price"]').val(itemPrice);
         $new_grid.find('[data-field="uom_id"] > option').each(function () {
             var $op = $(this);
@@ -106,7 +106,7 @@ $('#input-product').change(function () {
 });
 
 $('#input-product').autocomplete({
-    minLength: 2,
+    minLength: 0,
     source: function (request, response) {
         var result = [];
         var limit = 10;
