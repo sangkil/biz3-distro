@@ -37,8 +37,8 @@ class Payment extends \yii\db\ActiveRecord
     const STATUS_RELEASED = 20;
     const STATUS_CLOSE = 90;
     // type payment
-    const TYPE_INCOMING = 10;
-    const TYPE_OUTGOING = 20;
+    const TYPE_INCOMING = 20;
+    const TYPE_OUTGOING = 10;
        //document reff type
     const REFF_SELF = 50;
     const REFF_PURCH = 10;
@@ -81,8 +81,12 @@ class Payment extends \yii\db\ActiveRecord
     public function checkVendorAndType()
     {
         foreach ($this->items as $item) {
-            if ($item->invoice->vendor_id != $this->vendor_id || $item->invoice->type != $this->type) {
-                $this->addError('items', 'Vendor atau type invoice tidak sama dengan vendor atau type payment');
+            if ($item->invoice->vendor_id != $this->vendor_id) {
+                $this->addError('items', 'Vendor invoice tidak sama dengan vendor payment');
+                break;
+            }
+            if ($item->invoice->type != $this->type) {
+                $this->addError('items', 'Type invoice tidak sama dengan type payment');
                 break;
             }
         }
@@ -130,7 +134,7 @@ class Payment extends \yii\db\ActiveRecord
 
     public function getNmStatus()
     {
-        return $this->getLogical('type', 'STATUS_');
+        return $this->getLogical('status', 'STATUS_');
     }
 
     /**

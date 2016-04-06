@@ -17,9 +17,15 @@ use backend\models\accounting\PaymentDtl;
                 Invoice Number
             </th>
             <th class="items" style="width: 20%">
+                Date
+            </th>
+            <th class="items" style="width: 20%">
+                Time to Due
+            </th>
+            <th class="items">
                 Sisa
             </th>
-            <th style="width: 20%">
+            <th style="width: 20%; text-align: right;">
                 Value
             </th>
         </tr>

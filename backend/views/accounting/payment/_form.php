@@ -29,11 +29,7 @@ $this->registerJs($this->render('_script.js'));
     <div class="row">
         <div class="col-md-4">
             <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:40%;']) ?>
-            <?= $form->field($model, 'type')->dropDownList(Payment::enums('TYPE_'), ['style' => 'width:60%;']) ?>
-        </div>
-        <div class="col-md-4">
-            <?= $form->field($model, 'vendor_name')->textInput(['required' => true]) ?>
-            <?= Html::activeHiddenInput($model, 'vendor_id') ?>
+            <?= ''//$form->field($model, 'type')->dropDownList(Payment::enums('TYPE_'), ['style' => 'width:60%;']) ?>
             <?=
             $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
                 'dateFormat' => 'dd-MM-yyyy',
@@ -42,10 +38,14 @@ $this->registerJs($this->render('_script.js'));
             ?>
         </div>
         <div class="col-md-4">
+            <?= $form->field($model, 'vendor_name')->textInput(['required' => true]) ?>
+            <?= Html::activeHiddenInput($model, 'vendor_id') ?>
             <?=
             $form->field($model, 'payment_method')->dropDownList(\backend\models\accounting\PaymentMethod::selectOptions(\Yii::$app->profile->branch_id), [
                 'prompt' => '--Pilih payment method--', 'style' => 'width:60%;'])
             ?>
+        </div>
+        <div class="col-md-4">
         </div>
         <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
             <ul class="nav nav-tabs">

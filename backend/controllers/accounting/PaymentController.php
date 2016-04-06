@@ -61,12 +61,24 @@ class PaymentController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($invoice_id = null)
     {
         $model = new Payment();
+        $invoice = ($invoice_id != null)? \backend\models\accounting\Invoice::findOne($invoice_id):null;
 
-        $model->status = Payment::STATUS_DRAFT;
+        $model->status = Payment::STATUS_RELEASED;
         $model->date = date('Y-m-d');
+        $model->type = Payment::TYPE_OUTGOING;
+        
+        if($invoice!=null){
+           $model->vendor_id =  $invoice->vendor_id;
+           $model->vendor_name = $invoice->vendor->name;
+
+           $pay_item = new \backend\models\accounting\PaymentDtl();
+           $pay_item->invoice_id = $invoice_id;
+           $pay_item->value = $invoice->sisa;
+           $model->items = [$pay_item];
+        }
         
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();

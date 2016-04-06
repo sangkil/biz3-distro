@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class='btn-group'>
                 <?= Html::button('New Invoice', ['class' => 'btn btn-default', 'type' => 'button']) ?>        
                 <?=
-                ($model->status >= $model::STATUS_RELEASED) ? Html::a('New Payment', ['/accounting/payment/create',
+                ($model->status >= $model::STATUS_RELEASED && $model->sisa > 0) ? Html::a('Create Payment', ['/accounting/payment/create',
                         'invoice_id' => $model->id], ['class' => 'btn btn-success', 'type' => 'button']) : ''
                 ?>
             </div>
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) : ''
             ?>
             <?=
-            ($model->status == $model::STATUS_RELEASED && $model->journals == null) ? Html::a('Revert', ['revert', 'id' => $model->id], [
+            ($model->status == $model::STATUS_RELEASED && $model->journals == null && $model->payments == null) ? Html::a('Revert', ['revert', 'id' => $model->id], [
                     'class' => 'btn btn-warning',
                     'data' => [
                         'confirm' => 'Are you sure you want to revert this Invoice?',
@@ -115,7 +115,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <th>#</th>
                             <th>Paymnt Number</th>
                             <th>Date</th>
-                            <th>Paymnt Value</th>
+                            <th>Method</th>
+                            <th>Value</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -127,6 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             echo '<td>' . $i . '</td>';
                             echo '<td>' . $payment->number . '</td>';
                             echo '<td>' . $payment->date . '</td>';
+                            echo '<td>' . $payment->paymentMethod->method . '</td>';
                             echo Html::beginTag('td');
                             $pyval = 0;
                             foreach ($payment->items as $item) {
@@ -142,7 +144,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         echo '<td></td>';
                         echo '<td></td>';
                         echo '<td></td>';
-                        echo Html::beginTag('td');
+                        echo '<td></td>';
+                        echo Html::beginTag('td',['style'=>'font-weight:bold;']);
                         echo number_format($tpyval, 0);
                         echo Html::endTag('td');
                         echo Html::endTag('tr');

@@ -33,6 +33,7 @@ return[
     ['label' => 'Material Mangmnt', 'icon' => 'truck', 'iconOptions' => ['class' => 'text-success'],
         'items' => [
             ['label' => 'Goods Receive', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 10]],
+            ['label' => 'Goods Issue', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 20]],
             ['label' => 'Material Transfer', 'icon' => 'check', 'url' => ['/inventory/transfer']],
             ['label' => 'Stock Mangmnt', 'icon' => 'check',
                 'items' => [
