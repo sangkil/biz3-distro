@@ -263,6 +263,8 @@ class GoodsMovement extends \yii\db\ActiveRecord
         $model_journal->glDetails = $newDtls;
 
         if (!$model_journal->save()) {
+            print_r($model_journal->getErrors());
+            print_r($model_journal->getRelatedErrors());
             return false;
         }
         return true;

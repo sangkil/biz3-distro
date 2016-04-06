@@ -55,28 +55,14 @@ $branch_id = Yii::$app->profile->branch_id;
             <div class="icon">
                 <i class="fa fa-shopping-cart"></i>
             </div>
-            <a href="#" class="small-box-footer">
-                <?= 'Sales Date: ' . Html::getAttributeValue($model, 'Date') ?> <i class="fa fa-calendar"></i>
-            </a>
+            <!--<a href="#" class="small-box-footer">-->
+<!--                <?= ''//'Sales Date: ' . Html::getAttributeValue($model, 'Date') ?> <i class="fa fa-calendar"></i>-->
+            <!--</a>-->
         </div>
         <div class="box box-info box-comments with-border">
             <div class="box-header with-border">
                 <i class="fa fa-shopping-cart text-orange"></i>
                 <h3 class="box-title">Casier : <?= (Yii::$app->user->isGuest) ? 'Guest' : Yii::$app->user->identity->username ?></h3>
-                <div class="box-tools pull-right">
-                    <div class="button-group">
-                        <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <i class="fa fa-gear"></i></button>
-                        <ul class="dropdown-menu" role="menu">
-                            <div class="col-lg-12">
-                                <li>Active Branch</li>
-                                <li>Warehouse</li>
-                                <li class="divider"></li>
-                                <li>Something else here</li>
-                            </div>
-                        </ul>
-                    </div>
-                </div>
             </div>
             <div class="box-body with-border">
                 <!--                <div class="col-lg-5">

@@ -78,8 +78,9 @@ class SalesController extends Controller
         $model->status = Sales::STATUS_RELEASED;
         $model->date = date('Y-m-d');
         $model->vendor_id = Sales::DEFAULT_VENDOR;
-        $model->vendor_name = 'Point of Sale';
+        $model->vendor_name = $model->vendor->name;
         $error = false;
+        
         $payments = [];
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();

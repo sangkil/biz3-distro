@@ -20,7 +20,7 @@ return[
     ],
     ['label' => 'Sales', 'icon' => 'shopping-cart', 'iconOptions' => ['class' => 'text-orange'],
         'items' => [
-            ['label' => 'Sales Order', 'icon' => 'check', 'url' => ['/sales/sales/create']],
+            ['label' => 'Point of Sales', 'icon' => 'check', 'url' => ['/sales/sales/create']],
             ['label' => 'Sales Return', 'icon' => 'check',],
             ['label' => 'Price Mngnt', 'icon' => 'check',
                 'items' => [
@@ -30,19 +30,18 @@ return[
             ],
         ],
     ],
-    ['label' => 'Warehouse Mangmnt', 'icon' => 'truck', 'iconOptions' => ['class' => 'text-success'],
+    ['label' => 'Material Mangmnt', 'icon' => 'truck', 'iconOptions' => ['class' => 'text-success'],
         'items' => [
             ['label' => 'Goods Receive', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 10]],
-            ['label' => 'Goods Issue', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 20]],
-            ['label' => 'Stock Transfer', 'icon' => 'check', 'url' => ['/inventory/transfer']],
-            ['label' => 'Stock Management', 'icon' => 'check',
+            ['label' => 'Material Transfer', 'icon' => 'check', 'url' => ['/inventory/transfer']],
+            ['label' => 'Stock Mangmnt', 'icon' => 'check',
                 'items' => [
                     ['label' => 'Stock', 'icon' => 'check', 'url' => ['/inventory/product-stock']],
                     ['label' => 'Stock History', 'icon' => 'check', 'url' => ['/inventory/stock-history']],
-                    ['label' => 'Total Opname', 'icon' => 'check', 'url' => ''],
                     ['label' => 'Stock Adjustment', 'icon' => 'check', 'url' => ''],
                 ],
             ],
+            ['label' => 'Opname', 'icon' => 'check', 'url' => ''],
         ],
     ],
     ['label' => 'FI & Accounting', 'icon' => 'buysellads', 'iconOptions' => '',

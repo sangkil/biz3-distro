@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::button('New Invoice', ['class' => 'btn btn-default', 'type' => 'button']) ?>        
                 <?=
                 ($model->status >= $model::STATUS_RELEASED) ? Html::a('New Payment', ['/accounting/payment/create',
-                        'reff_id' => $model->id], ['class' => 'btn btn-success', 'type' => 'button']) : ''
+                        'invoice_id' => $model->id], ['class' => 'btn btn-success', 'type' => 'button']) : ''
                 ?>
             </div>
             <?=
