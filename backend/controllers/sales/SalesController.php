@@ -99,6 +99,7 @@ class SalesController extends Controller
                                 /* @var $payment Payment */
                                 $success = true;
                                 $total = 0;
+                                $invoiceTotal = $invoice->value;
                                 $paymentData = [
                                     'vendor_id' => $invoice->vendor_id,
                                     'date' => date('Y-m-d'),
@@ -110,10 +111,15 @@ class SalesController extends Controller
 
                                     $payItems = $payment->items;
                                     $payItems[0]->invoice_id = $invoice->id;
-                                    $total += $payItems[0]->value;
+                                    if ($invoiceTotal - $total >= $payItems[0]->value) {
+                                        $total += $payItems[0]->value;
+                                    }else{
+                                        $payItems[0]->value = $invoiceTotal - $total;
+                                        $total = $invoiceTotal;
+                                    }
                                     $payment->items = $payItems;
                                 }
-                                if ($invoice->value == $total) {
+                                if ($invoice->value >= $total) {
                                     foreach ($payments as $i => $payment) {
                                         if (!$payment->save()) {
                                             $success = false;
@@ -125,16 +131,16 @@ class SalesController extends Controller
                                 } else {
                                     $success = false;
                                     //seharusnya muncul cash back jika berlebih, bukan error
-                                    $error = 'Total payment tidak sama dengan invoice';
+                                    $error = 'Kurang bayar';
                                 }
 
                                 //Create Jurnal
                                 $coa_sales = [
-                                    'penjualan'=>16,
-                                    'persediaan'=>32,
-                                    'hpp'=>19
+                                    'penjualan' => 16,
+                                    'persediaan' => 32,
+                                    'hpp' => 19
                                 ];
-                                
+
                                 if ($success) {
                                     //GL Header
                                     $gl = new \backend\models\accounting\GlHeader;
@@ -155,7 +161,7 @@ class SalesController extends Controller
                                         $payItems = $payment->items;
                                         $ndtl = new \backend\models\accounting\GlDetail();
                                         $ndtl->coa_id = $payment->paymentMethod->coa_id;
-                                        $ndtl->header_id = null;                                        
+                                        $ndtl->header_id = null;
                                         $ndtl->amount = $payItems[0]->value - ($payment->paymentMethod->potongan * $payItems[0]->value);
                                         $toPayment += $ndtl->amount;
                                         $glDtls[] = $ndtl;

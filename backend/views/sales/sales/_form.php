@@ -96,6 +96,13 @@ $branch_id = Yii::$app->profile->branch_id;
                                 ]
                             ])
                             ?>
+                            <tfoot id="payback-panel" class="hidden">
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>Payback</td>
+                                    <td id="payback-value" style="text-align: right;"></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                     <div id="payment-input-panel">

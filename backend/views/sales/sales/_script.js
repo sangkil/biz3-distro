@@ -189,13 +189,22 @@ $('#detail-grid').on('change', ':input', function () {
     calculate();
 });
 
-$('#btn-payment-add').on('click', function () {
+function addPaymentRow(){
     $('#payment-grid').removeClass('hidden');
 
     var $row = $('#payment-grid-dtl').mdmTabularInput('addRow');
     $row.find('[data-field="method"]').val($('#inp-payment-method').val());
     $row.find('[data-field="t-method"]').text($('#inp-payment-method > :selected').text());
     $row.find('[data-field="value"]').val($('#inp-payment-value').val());
+}
+$('#btn-payment-add').on('click', function () {
+    addPaymentRow();
+});
+
+$('#inp-payment-value').keydown(function (e){
+    if(e.which == 13){
+        addPaymentRow();
+    }
 });
 
 $('#payment-grid-dtl').on('change', function () {
@@ -203,6 +212,25 @@ $('#payment-grid-dtl').on('change', function () {
         calculatePayment();
     }, 100);
 });
+
+function hideShowPanel(total_sales, total_paid){
+    if (total_sales > total_paid || total_paid == 0) {
+        $('#inp-payment-value').val(total_sales - total_paid);
+        $('#payment-completion').addClass('hidden');
+        $('#payment-input-panel').removeClass('hidden');
+        $('#payback-panel').addClass('hidden');
+    } else {
+        $('#inp-payment-value').val('');
+        $('#payment-completion').removeClass('hidden');
+        $('#payment-input-panel').addClass('hidden');
+        if (total_paid > total_sales) {
+            $('#payback-panel').removeClass('hidden');
+            $('#payback-value').text(total_paid - total_sales);
+        } else {
+            $('#payback-panel').addClass('hidden');
+        }
+    }
+}
 
 function calculatePayment() {
     var total_paid = 0.0;
@@ -212,15 +240,7 @@ function calculatePayment() {
     });
     $('#payment-value').val(total_paid);
     var total_sales = $('#sales-value').val() * 1;
-    if (total_sales > total_paid || total_paid == 0) {
-        $('#inp-payment-value').val(total_sales - total_paid);
-        $('#payment-completion').addClass('hidden');
-        $('#payment-input-panel').removeClass('hidden');
-    } else {
-        $('#inp-payment-value').val('');
-        $('#payment-completion').removeClass('hidden');
-        $('#payment-input-panel').addClass('hidden');        
-    }
+    hideShowPanel(total_sales, total_paid);
 }
 
 function calculate() {
@@ -245,13 +265,5 @@ function calculate() {
     }
 
     var total_paid = $('#payment-value').val() * 1;
-    if (total_sales > total_paid || total_paid == 0) {
-        $('#inp-payment-value').val(total_sales - total_paid);
-        $('#payment-completion').addClass('hidden');
-        $('#payment-input-panel').removeClass('hidden');
-    } else {
-        $('#inp-payment-value').val('');
-        $('#payment-completion').removeClass('hidden');
-        $('#payment-input-panel').addClass('hidden');
-    }
+    hideShowPanel(total_sales, total_paid);
 }
