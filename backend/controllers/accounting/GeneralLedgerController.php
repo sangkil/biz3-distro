@@ -37,6 +37,7 @@ class GeneralLedgerController extends Controller
     public function actionIndex()
     {
         $searchModel = new GlHeaderSearch();
+        $searchModel->branch_id = \Yii::$app->profile->branch_id;
         $dataProvider = $searchModel->searchDtl(Yii::$app->request->queryParams);
         return $this->render('index', [
                 'searchModel' => $searchModel,

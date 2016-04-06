@@ -223,7 +223,7 @@ class GlHeader extends \yii\db\ActiveRecord
                         : '';
                 break;
             case (int) self::REFF_SALES:
-                $link = ($this->journal != null) ? Html::a($this->sales->number, ['/sales/sales/view', 'id' => $this->reff_id])
+                $link = ($this->sales != null) ? Html::a($this->sales->number, ['/sales/sales/view', 'id' => $this->reff_id])
                         : '';
                 break;
             default:
