@@ -73,7 +73,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'number',
                 [
                     'attribute' => 'branch.name',
-                    'label' => 'Branch'
+                    'label' => 'Source'
+                ],
+                [
+                    'attribute' => 'branchDest.name',
+                    'label' => 'Destination'
                 ],
             ],
         ])
@@ -88,11 +92,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'attributes' => [
                 'Date',
                 [
-                    'attribute' => 'branchDest.name',
-                    'label' => 'Branch Destination'
+                    'label' => 'Status',
+                    'attribute' => 'nmStatus',
+                    'format' => 'raw',
+                    'value' => ($model->status == $model::STATUS_DRAFT) ? '<span class="badge bg-yellow">' . $model->nmStatus . '</span>'
+                            : (($model->status == $model::STATUS_CLOSED) ? '<span class="badge bg-red">' . $model->nmStatus . '</span>'
+                                : '<span class="badge bg-green">' . $model->nmStatus . '</span>')
                 ],
-                //'description',
-                'nmStatus',
             ],
         ])
         ?>
