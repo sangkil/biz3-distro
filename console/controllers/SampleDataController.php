@@ -37,12 +37,12 @@ class SampleDataController extends Controller
         $command->delete('{{%gl_header}}')->execute();
         $command->delete('{{%goods_movement_dtl}}')->execute();
         $command->delete('{{%goods_movement}}')->execute();
-
         $command->delete('{{%sales_dtl}}')->execute();
         $command->delete('{{%sales}}')->execute();
-
         $command->delete('{{%invoice_dtl}}')->execute();
         $command->delete('{{%invoice}}')->execute();
+        $command->delete('{{%payment_dtl}}')->execute();
+        $command->delete('{{%payment}}')->execute();
 
         $command->delete('{{%warehouse}}')->execute();
         $command->delete('{{%branch}}')->execute();
