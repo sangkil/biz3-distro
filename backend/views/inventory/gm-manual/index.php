@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="col-lg-12">
     <div class='btn-group pull-right'>
-        <?= ($searchModel->type == $searchModel::TYPE_RECEIVE || $searchModel->type == $searchModel::TYPE_ISSUE)? Html::a(($searchModel->type == $searchModel::TYPE_RECEIVE)?'New Receive':'New Issue', ['inventory/gm-manual/create','GoodsMovement[type]' => $searchModel->type], ['class' => 'btn btn-default']):'' ?>
+        <?= $searchModel->type ? Html::a(($searchModel->type == GoodsMovement::TYPE_RECEIVE)?'New Receive':'New Issue', ['inventory/gm-manual/create','type' => $searchModel->type], ['class' => 'btn btn-default']):'' ?>
     </div>
 </div>
 <br><br>

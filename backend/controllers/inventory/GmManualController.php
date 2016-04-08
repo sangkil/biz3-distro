@@ -41,6 +41,7 @@ class GmManualController extends Controller
         $searchModel = new GoodsMovementSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        /* @var $query \yii\db\Query */
         $query = $dataProvider->query;
         $query->with('warehouse');
 
@@ -84,7 +85,7 @@ class GmManualController extends Controller
     public function actionCreate($type = null)
     {
         $model = new GoodsMovement();
-        $model->load(Yii::$app->request->get());
+        $model->type = $type;
 
         $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {

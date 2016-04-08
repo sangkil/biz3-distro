@@ -6,6 +6,7 @@ use Yii;
 use backend\models\master\Branch;
 use backend\models\master\Vendor;
 use backend\models\inventory\GoodsMovement;
+use backend\models\accounting\GlHeader;
 
 /**
  * This is the model class for table "sales".
@@ -47,7 +48,6 @@ class Sales extends \yii\db\ActiveRecord
     const REFF_SALES = 60;
     const REFF_SALES_RETURN = 61;
     const REFF_JOURNAL = 70;
-
     //hardcode pos vendor
     const DEFAULT_VENDOR = 11;
 
@@ -135,6 +135,37 @@ class Sales extends \yii\db\ActiveRecord
     public function getNmStatus()
     {
         return $this->getLogical('status', 'STATUS_');
+    }
+
+    /**
+     * 
+     * @param GlHeader $model
+     */
+    public function createUpdateJournal($model = null)
+    {
+        if ($model === null) {
+            $model = new GlHeader([
+                'status' => GlHeader::STATUS_RELEASED,
+                'reff_type' => GlHeader::REFF_SALES,
+                'reff_id' => $this->id,
+                'date' => date('Y-m-d'),
+                'vendor_id' => $this->vendor_id,
+                'periode_id' => GlHeader::getActivePeriode(),
+                'branch_id' => $this->branch_id,
+            ]);
+        }
+
+        $tcogs = 0;
+        foreach ($this->items as $item) {
+            $tcogs += $item->cogs * $item->qty * $item->productUom->isi;
+        }
+        $model->addFromTemplate([
+            
+        ]);
+        $items = $model->glDetails;
+
+        $model->glDetails = $items;
+        return $model;
     }
 
     /**

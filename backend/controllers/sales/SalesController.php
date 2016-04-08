@@ -13,6 +13,7 @@ use backend\models\master\Vendor;
 use yii\base\UserException;
 use backend\models\accounting\Payment;
 use common\classes\Helper;
+use backend\models\accounting\GlHeader;
 use yii\db\Query;
 
 /**
@@ -80,7 +81,7 @@ class SalesController extends Controller
         $model->vendor_id = Sales::DEFAULT_VENDOR;
         $model->vendor_name = $model->vendor->name;
         $error = false;
-        
+
         $payments = [];
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
@@ -93,7 +94,17 @@ class SalesController extends Controller
                         $movement = $model->createMovement([
                             'warehouse_id' => $profile->warehouse_id,
                         ]);
-                        if ($movement && $movement->save() && $movement->stateChanged) {
+                        $glHeader = new GlHeader([
+                            'status' => GlHeader::STATUS_RELEASED,
+                            'reff_type' => GlHeader::REFF_SALES,
+                            'reff_id' => $model->id,
+                            'date' => date('Y-m-d'),
+                            'vendor_id' => $model->vendor_id,
+                            'periode_id' => $this->findPeriode(),
+                            'branch_id' => Yii::$app->profile->branch_id,
+                        ]);
+
+                        if ($movement && $movement->save()) {
                             $invoice = $movement->createInvoice();
                             if ($invoice && $invoice->save()) {
                                 /* @var $payment Payment */
@@ -113,7 +124,7 @@ class SalesController extends Controller
                                     $payItems[0]->invoice_id = $invoice->id;
                                     if ($invoiceTotal - $total >= $payItems[0]->value) {
                                         $total += $payItems[0]->value;
-                                    }else{
+                                    } else {
                                         $payItems[0]->value = $invoiceTotal - $total;
                                         $total = $invoiceTotal;
                                     }

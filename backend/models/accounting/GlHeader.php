@@ -253,6 +253,18 @@ class GlHeader extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * @return integer
+     */
+    public static function getActivePeriode()
+    {
+        if (($model = AccPeriode::find()->active()->one()) !== null) {
+            return $model->id;
+        } else {
+            throw new \yii\web\NotFoundHttpException('Active Periode not exist.');
+        }
+    }
+
     public function behaviors()
     {
         return [
