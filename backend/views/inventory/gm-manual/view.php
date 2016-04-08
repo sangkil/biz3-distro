@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]) : '' . '&nbsp;'
                 ?>
                 <?=
-                ($model->invoice == null) ?
+                ($model->invoice == null && $model->reff_type != $model::REFF_TRANSFER) ?
                     Html::a('Create Invoice', ['accounting/invoice/create', 'Invoice[type]' => 10, 'goodsMovement[id]' => $model->id], [
                         'class' => 'btn btn-success',
 //                    'data' => [
@@ -107,6 +107,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 //'description',
                 //'nmStatus',
+                [                      // the owner name of the model
+                    'label' => 'Type/Number',
+                    'format' => 'raw',
+                    'value' => $model->nmReffType . '/' . $model->reffNumber
+                ],
                 [// the owner name of the model
                     'label' => 'Invoice',
                     'format' => 'raw',

@@ -106,6 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#item" data-toggle="tab" aria-expanded="false">Items</a></li>
+            <li><a href="#moves" data-toggle="tab" aria-expanded="false">Goods Movement</a></li>
             <li><a href="#notes" data-toggle="tab" aria-expanded="false">Notes</a></li>
         </ul>
         <div class="tab-content" >
@@ -130,6 +131,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'header' => 'Product Name'
                         ],
                         'qty',
+//                        'total_release',
+//                        'total_receive',
                         [
                             'attribute' => 'uom.code',
                             'header' => 'Uom'
@@ -138,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ])
                 ?>
             </div>
-            <div class="tab-pane" id="notes">
+            <div class="tab-pane" id="moves">
                 <?=
                 GridView::widget([
                     'dataProvider' => new yii\data\ActiveDataProvider([
@@ -151,24 +154,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
                         [
-                            'header' => 'Number',
-                            'value' => function($model) {
-                                return Html::a($model->number, ['inventory/gm-from-reff/view', 'id' => $model->id]);
+                        'header' => 'Number',
+                        'value' => function($model) {
+                            return Html::a($model->number, ['inventory/gm-from-reff/view', 'id' => $model->id]);
                             },
-                                'format' => 'raw'
-                            ],
-                            [
-                                'header' => 'Status',
-                                'attribute' => 'nmStatus'
-                            ]
+                            'format' => 'raw'
+                        ],
+                        'date:datetime',
+                        [
+                            'header' => 'Status',
+                            'attribute' => 'nmStatus'
                         ]
+                    ]
                     ])
                     ?>
             </div>
+            <div class="tab-pane" id="notes"></div>
         </div>
-    </div>
-
-    <div class="col-lg-12">
-
     </div>
 </div>

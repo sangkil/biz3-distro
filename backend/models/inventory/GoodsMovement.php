@@ -12,6 +12,7 @@ use backend\models\accounting\GlHeader;
 use backend\models\accounting\EntriSheet;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "goods_movement".
@@ -178,6 +179,14 @@ class GoodsMovement extends \yii\db\ActiveRecord
                 'status', GlHeader::STATUS_CANCELED]);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTransfer()
+    {
+        return $this->hasOne(Transfer::className(), ['id' => 'reff_id']);
+    }
+
     public function getNmType()
     {
         return $this->getLogical('type', 'TYPE_');
@@ -186,6 +195,25 @@ class GoodsMovement extends \yii\db\ActiveRecord
     public function getNmStatus()
     {
         return $this->getLogical('status', 'STATUS_');
+    }
+
+    public function getNmReffType()
+    {
+        return $this->getLogical('reff_type', 'REFF_');
+    }
+
+    public function getReffNumber()
+    {
+        $link = null;
+        switch ((int) $this->reff_type) {
+            case (int) self::REFF_TRANSFER :
+                $link = ($this->transfer != null) ? Html::a($this->transfer->number, ['/inventory/transfer/view', 'id' => $this->reff_id])
+                        : '';
+                break;
+            default:
+                break;
+        }
+        return $link;
     }
 
     /**
