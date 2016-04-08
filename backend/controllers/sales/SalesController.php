@@ -101,8 +101,30 @@ class SalesController extends Controller
                             'date' => date('Y-m-d'),
                             'vendor_id' => $model->vendor_id,
                             'periode_id' => $this->findPeriode(),
-                            'branch_id' => Yii::$app->profile->branch_id,
+                            'branch_id' => $this->branch_id,
                         ]);
+                        //Create Jurnal
+                        $coa_sales = [
+                            'penjualan' => 16,
+                            'persediaan' => 32,
+                            'hpp' => 19
+                        ];
+
+                        $tcogs = 0;
+                        foreach ($model->items as $item) {
+                            $tcogs += $item->cogs * $item->qty * $item->productUom->isi;
+                        }
+                        $glDetails = [];
+
+                        // Hpp(D) Vs Persediaan(K)
+                        $glDetails[] = [
+                            'coa_id' => $coa_sales['hpp'],
+                            'amount' => $tcogs,
+                        ];
+                        $glDetails[] = [
+                            'coa_id' => $coa_sales['persediaan'],
+                            'amount' => -$tcogs,
+                        ];
 
                         if ($movement && $movement->save()) {
                             $invoice = $movement->createInvoice();
@@ -111,11 +133,19 @@ class SalesController extends Controller
                                 $success = true;
                                 $total = 0;
                                 $invoiceTotal = $invoice->value;
+
                                 $paymentData = [
                                     'vendor_id' => $invoice->vendor_id,
                                     'date' => date('Y-m-d'),
                                     'type' => $invoice->type,
                                 ];
+
+                                // Penjualan(K) Vs Payment(D)
+                                $glDetails[] = [
+                                    'coa_id' => $coa_sales['penjualan'],
+                                    'amount' => -1 * $invoiceTotal,
+                                ];
+
                                 foreach ($payments as $payment) {
                                     $payment->attributes = $paymentData;
                                     $payment->status = Payment::STATUS_RELEASED;
@@ -128,6 +158,19 @@ class SalesController extends Controller
                                         $payItems[0]->value = $invoiceTotal - $total;
                                         $total = $invoiceTotal;
                                     }
+                                    // payment
+                                    $glDetails[] = [
+                                        'coa_id' => $payment->paymentMethod->coa_id,
+                                        'amount' => $payItems[0]->value * (1 - $payment->paymentMethod->potongan)
+                                    ];
+                                    // potongan payment method
+                                    if ($payment->paymentMethod->potongan > 0) {
+                                        $glDetails[] = [
+                                            'coa_id' => $payment->paymentMethod->coa_id_potongan,
+                                            'amount' => $payItems[0]->value * $payment->paymentMethod->potongan
+                                        ];
+                                    }
+
                                     $payment->items = $payItems;
                                 }
                                 if ($invoice->value >= $total) {
@@ -139,92 +182,19 @@ class SalesController extends Controller
                                             break;
                                         }
                                     }
+                                    if ($success) {
+                                        $glHeader->glDetails = $glDetails;
+                                        if(!$glHeader->save()){
+                                            $success = false;
+                                            $firstErrors = $glHeader->firstErrors;
+                                            $error = "Journal: " . reset($firstErrors);
+                                        }
+                                    }
                                 } else {
                                     $success = false;
                                     //seharusnya muncul cash back jika berlebih, bukan error
                                     $error = 'Kurang bayar';
                                 }
-
-                                //Create Jurnal
-                                $coa_sales = [
-                                    'penjualan' => 16,
-                                    'persediaan' => 32,
-                                    'hpp' => 19
-                                ];
-
-                                if ($success) {
-                                    //GL Header
-                                    $gl = new \backend\models\accounting\GlHeader;
-                                    $gl->periode_id = $this->findPeriode();
-                                    $gl->date = date('Y-m-d');
-                                    $gl->status = \backend\models\accounting\GlHeader::STATUS_RELEASED;
-                                    $gl->reff_type = \backend\models\accounting\GlHeader::REFF_SALES;
-                                    $gl->reff_id = $model->id;
-                                    $gl->description = 'Sales POS';
-                                    $gl->branch_id = (isset(Yii::$app->profile->branch_id)) ? Yii::$app->profile->branch_id
-                                            : -1;
-
-                                    //GL Detail
-                                    //Debit Payment
-                                    $glDtls = [];
-                                    $toPayment = 0;
-                                    foreach ($payments as $payment) {
-                                        $payItems = $payment->items;
-                                        $ndtl = new \backend\models\accounting\GlDetail();
-                                        $ndtl->coa_id = $payment->paymentMethod->coa_id;
-                                        $ndtl->header_id = null;
-                                        $ndtl->amount = $payItems[0]->value - ($payment->paymentMethod->potongan * $payItems[0]->value);
-                                        $toPayment += $ndtl->amount;
-                                        $glDtls[] = $ndtl;
-
-                                        if ($payment->paymentMethod->potongan > 0) {
-                                            $ndtl2 = new \backend\models\accounting\GlDetail();
-                                            $ndtl2->coa_id = $payment->paymentMethod->coa_id_potongan;
-                                            $ndtl2->header_id = null;
-                                            $ndtl2->amount = $payment->paymentMethod->potongan * $payItems[0]->value;
-                                            $toPayment += $ndtl2->amount;
-                                            $glDtls[] = $ndtl2;
-                                        }
-                                    }
-
-                                    //Kredit Penjualan
-                                    $ndtl = new \backend\models\accounting\GlDetail();
-                                    $ndtl->coa_id = $coa_sales['penjualan']; //hardcode id_coa for penjualan
-                                    $ndtl->header_id = null;
-                                    $ndtl->amount = $toPayment * -1;
-                                    $glDtls[] = $ndtl;
-
-                                    /*
-                                     * Sum total detail
-                                     * Belum dikalikan dengan qty uom isi
-                                     */
-                                    $tcogs = 0;
-                                    foreach ($model->items as $item) {
-                                        $tcogs += $item->cogs * $item->qty * $item->productUom->isi;
-                                    }
-
-                                    //Debit HPP
-                                    $ndtl = new \backend\models\accounting\GlDetail();
-                                    $ndtl->coa_id = $coa_sales['hpp']; //hardcode id_coa for hpp
-                                    $ndtl->header_id = null;
-                                    $ndtl->amount = $tcogs; //isi dengan total cogs
-                                    $glDtls[] = $ndtl;
-
-                                    //Kredit Persediaan
-                                    $ndtl = new \backend\models\accounting\GlDetail();
-                                    $ndtl->coa_id = $coa_sales['persediaan']; //hardcode id_coa for persediaan
-                                    $ndtl->header_id = null;
-                                    $ndtl->amount = $tcogs * -1; //isi dengan total cogs
-                                    $glDtls[] = $ndtl;
-
-                                    $gl->glDetails = $glDtls;
-                                    if (!$gl->save()) {
-                                        print_r($gl->getErrors());
-                                        print_r($gl->getRelatedErrors());
-                                        $success = false;
-                                    }
-                                }
-
                                 if ($success) {
                                     $transaction->commit();
                                     return $this->redirect(['create']);

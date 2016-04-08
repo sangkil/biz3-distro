@@ -155,16 +155,14 @@ class Sales extends \yii\db\ActiveRecord
             ]);
         }
 
-        $tcogs = 0;
+        $value = 0;
         foreach ($this->items as $item) {
-            $tcogs += $item->cogs * $item->qty * $item->productUom->isi;
+            $value += $item->cogs * $item->qty * $item->productUom->isi;
         }
+        
         $model->addFromTemplate([
-            
+            'ES006' => $value,
         ]);
-        $items = $model->glDetails;
-
-        $model->glDetails = $items;
         return $model;
     }
 
