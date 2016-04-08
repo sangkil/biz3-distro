@@ -9,6 +9,7 @@ use backend\models\master\ProductUom;
 use backend\models\master\ProductStock;
 use backend\models\accounting\Invoice;
 use backend\models\accounting\GlHeader;
+use backend\models\accounting\EntriSheet;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
@@ -239,8 +240,17 @@ class GoodsMovement extends \yii\db\ActiveRecord
         $model_journal->reff_id = $this->id;
         $model_journal->branch_id = (isset(Yii::$app->profile->branch_id)) ? Yii::$app->profile->branch_id : -1;
 
-        $esheet = ($factor == 1) ? \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES001'])->one()
-                : \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES003'])->one();
+        $esheet = null;
+        switch ($this->reff_type):
+            case self::REFF_TRANSFER:
+                $esheet = ($this->type == self::TYPE_ISSUE) ?
+                    EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES004'])->one() :
+                    EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES005'])->one();
+                break;
+            default :
+                $esheet = ($factor == 1) ? EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES001'])->one() : EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES003'])->one();
+        endswitch;
+
         $model_journal->description = $esheet->name;
 
         /*
@@ -406,7 +416,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
         }
         return $items;
     }
-    
+
     /**
      * Execute before child save. If return false, child not saved
      * @param GoodsMovementDtl $child
@@ -452,7 +462,6 @@ class GoodsMovement extends \yii\db\ActiveRecord
                     [self::STATUS_RELEASED, self::STATUS_CANCELED, 'updateStock', -1],
                     [self::STATUS_RELEASED, self::STATUS_CANCELED, 'postGL', -1],
                     [self::STATUS_RELEASED, null, 'updateStock', -1],
-                    [self::STATUS_RELEASED, null, 'postGL', -1],
                 ]
             ]
         ];
