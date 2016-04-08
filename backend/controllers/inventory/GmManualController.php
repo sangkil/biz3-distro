@@ -215,17 +215,6 @@ class GmManualController extends Controller
         }
     }
 
-//    public function actionProductList($term = '')
-//    {
-//        $response = Yii::$app->response;
-//        $response->format = 'json';
-//        return Product::find()
-//                ->with(['cogs'])
-//                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-//                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-//                ->asArray()->limit(10)->all();
-//    }
-
     public function actionMaster($type = null)
     {
         $result = [];
@@ -279,21 +268,11 @@ class GmManualController extends Controller
         $query_vendor = (new Query())
             ->select(['id', 'code', 'name'])
             ->from('{{%vendor}}');
-
+        
         ($type !== null) ? $query_vendor->where(['type' => [$type, Vendor::TYPE_INTERN]]) : '';
         $result['vendors'] = $query_vendor->all();
-
         return 'var masters = ' . json_encode($result) . ';';
     }
-//    public function actionVendorList($term = '')
-//    {
-//        $response = Yii::$app->response;
-//        $response->format = 'json';
-//        return Vendor::find()
-//                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-//                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-//                ->limit(10)->asArray()->all();
-//    }
 
     /**
      * Finds the GoodsMovement model based on its primary key value.

@@ -33,19 +33,19 @@ use yii\helpers\Html;
         <tr>
             <td colspan="3">
                 <div class="input-group" style="width:100%;">
-<!--                    <span class="input-group-addon">
+                    <span class="input-group-addon">
                         <i class="fa fa-search"></i>
-                    </span>-->
-                    <input id="input-product" class="form-control" placeholder='Search Product..'>
-                    <span class="input-group-btn">
-                        <?=
-                        Html::button('<i class="fa fa-download"></i>&nbsp;From PO-Items', ['class' => 'btn btn-warning',
-                            'data-toggle' => "modal",
-                            'data-target' => "#listPO",
-                            'data-title' => "PO List"
-                            ]);
-                        ?> 
                     </span>
+                    <input id="input-product" class="form-control" placeholder='Search Product..'>
+<!--                    <span class="input-group-btn">
+                        <?= ''
+//                        Html::button('<i class="fa fa-download"></i>&nbsp;From PO-Items', ['class' => 'btn btn-warning',
+//                            'data-toggle' => "modal",
+//                            'data-target' => "#listPO",
+//                            'data-title' => "PO List"
+//                            ]);
+                        ?> 
+                    </span>-->
                 </div>
             </td>
             <td>&nbsp;</td>

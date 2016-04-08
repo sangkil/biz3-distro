@@ -38,32 +38,4 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </tbody>
     </table>
-    <?php
-    /*
-      GridView::widget([
-      'dataProvider' => $dataProvider,
-      'tableOptions' => ['class' => 'table table-hover'],
-      'filterModel' => $searchModel,
-      'columns' => [
-      ['class' => 'yii\grid\SerialColumn'],
-      //                    'id',
-      'number',
-      'description',
-      'GlDate',
-      // 'reff_type',
-      // 'reff_id',
-      'nmStatus',
-      //'periode_id',
-      //'branch_id',
-      // 'created_at',
-      // 'created_by',
-      // 'updated_at',
-      // 'updated_by',
-      ['class' => 'yii\grid\ActionColumn'],
-      ],
-      ]);
-     * 
-     */
-    ?>
-
 </div>

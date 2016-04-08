@@ -32,7 +32,7 @@ class Transfer extends \yii\db\ActiveRecord
     // status transfer
     const STATUS_DRAFT = 10;
     const STATUS_RELEASED = 20;
-    const STATUS_CLOSE = 90;
+    const STATUS_CLOSED = 90;
     // scenario
     const SCENARIO_CHANGE_STATUS = 'change_status';
     //document reff type

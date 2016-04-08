@@ -115,6 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <th>#</th>
                             <th>Paymnt Number</th>
                             <th>Date</th>
+                            <th>Status</th>
                             <th>Method</th>
                             <th>Value</th>
                         </tr>
@@ -126,8 +127,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         foreach ($model->payments as $payment) {
                             echo Html::beginTag('tr');
                             echo '<td>' . $i . '</td>';
-                            echo '<td>' . $payment->number . '</td>';
+                            echo '<td>' . yii\bootstrap\Html::a($payment->number, ['/accounting/payment/view','id'=>$payment->id])  . '</td>';
                             echo '<td>' . $payment->date . '</td>';
+                            echo '<td>' . $payment->nmStatus . '</td>';
                             echo '<td>' . $payment->paymentMethod->method . '</td>';
                             echo Html::beginTag('td');
                             $pyval = 0;
@@ -141,10 +143,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             $i++;
                         }
                         echo Html::beginTag('tr');
-                        echo '<td></td>';
-                        echo '<td></td>';
-                        echo '<td></td>';
-                        echo '<td></td>';
+                        echo '<td colspan="5"></td>';
                         echo Html::beginTag('td',['style'=>'font-weight:bold;']);
                         echo number_format($tpyval, 0);
                         echo Html::endTag('td');

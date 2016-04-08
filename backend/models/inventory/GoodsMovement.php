@@ -9,8 +9,10 @@ use backend\models\master\ProductUom;
 use backend\models\master\ProductStock;
 use backend\models\accounting\Invoice;
 use backend\models\accounting\GlHeader;
+use backend\models\accounting\EntriSheet;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "goods_movement".
@@ -177,6 +179,14 @@ class GoodsMovement extends \yii\db\ActiveRecord
                 'status', GlHeader::STATUS_CANCELED]);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTransfer()
+    {
+        return $this->hasOne(Transfer::className(), ['id' => 'reff_id']);
+    }
+
     public function getNmType()
     {
         return $this->getLogical('type', 'TYPE_');
@@ -185,6 +195,25 @@ class GoodsMovement extends \yii\db\ActiveRecord
     public function getNmStatus()
     {
         return $this->getLogical('status', 'STATUS_');
+    }
+
+    public function getNmReffType()
+    {
+        return $this->getLogical('reff_type', 'REFF_');
+    }
+
+    public function getReffNumber()
+    {
+        $link = null;
+        switch ((int) $this->reff_type) {
+            case (int) self::REFF_TRANSFER :
+                $link = ($this->transfer != null) ? Html::a($this->transfer->number, ['/inventory/transfer/view', 'id' => $this->reff_id])
+                        : '';
+                break;
+            default:
+                break;
+        }
+        return $link;
     }
 
     /**
@@ -239,8 +268,17 @@ class GoodsMovement extends \yii\db\ActiveRecord
         $model_journal->reff_id = $this->id;
         $model_journal->branch_id = (isset(Yii::$app->profile->branch_id)) ? Yii::$app->profile->branch_id : -1;
 
-        $esheet = ($factor == 1) ? \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES001'])->one()
-                : \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES003'])->one();
+        $esheet = null;
+        switch ($this->reff_type):
+            case self::REFF_TRANSFER:
+                $esheet = ($this->type == self::TYPE_ISSUE) ?
+                    EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES004'])->one() :
+                    EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES005'])->one();
+                break;
+            default :
+                $esheet = ($factor == 1) ? EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES001'])->one() : EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES003'])->one();
+        endswitch;
+
         $model_journal->description = $esheet->name;
 
         /*
@@ -406,7 +444,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
         }
         return $items;
     }
-    
+
     /**
      * Execute before child save. If return false, child not saved
      * @param GoodsMovementDtl $child
@@ -444,7 +482,6 @@ class GoodsMovement extends \yii\db\ActiveRecord
                     [self::STATUS_RELEASED, self::STATUS_CANCELED, 'updateStock', -1],
                     [self::STATUS_RELEASED, self::STATUS_CANCELED, 'postGL', -1],
                     [self::STATUS_RELEASED, null, 'updateStock', -1],
-                    [self::STATUS_RELEASED, null, 'postGL', -1],
                 ]
             ]
         ];
