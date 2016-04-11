@@ -37,9 +37,11 @@ class InvoiceController extends Controller
      * Lists all Invoice models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($type = null)
     {
         $searchModel = new InvoiceSearch();
+        $searchModel->type = $type;
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -202,7 +204,7 @@ class InvoiceController extends Controller
                 $gl->reff_id = $model->id;
                 $gl->status = $gl::STATUS_RELEASED;
                 $gl->date = date('Y-m-d');
-                
+
                 $esheet = \backend\models\accounting\EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES002'])->one();
                 $gl->description = $esheet->name;
 

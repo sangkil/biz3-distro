@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model backend\models\accounting\Invoice */
 
-$this->title = $model->nmType . ' Invoice #' . $model->number;
+$this->title = ucfirst(strtolower($model->nmType)) . ' Invoice #' . $model->number;
 $this->params['breadcrumbs'][] = ['label' => 'Invoices', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -36,7 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) : ''
             ?>
             <?=
-            ($model->status == $model::STATUS_RELEASED && $model->journals == null && $model->payments == null) ? Html::a('Revert', ['revert', 'id' => $model->id], [
+            ($model->status == $model::STATUS_RELEASED && $model->journals == null && $model->payments == null) ? Html::a('Revert', ['revert',
+                    'id' => $model->id], [
                     'class' => 'btn btn-warning',
                     'data' => [
                         'confirm' => 'Are you sure you want to revert this Invoice?',
@@ -64,8 +65,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'attributes' => [
                 'number',
                 'vendor.name',
-                'date',
-                'due_date'
+                'Date',
+                'DueDate'
             ],
         ])
         ?>
@@ -83,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'description',
                 [                      // the owner name of the model
-                    'label' => 'Type/Number',
+                    'label' => 'Reff Type/Num',
                     'format' => 'raw',
                     'value' => $model->nmReffType . '/' . $model->reffNumber
                 ],
@@ -106,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </ul>
         <div class="tab-content" >
             <div class="tab-pane active" id="item">
-                <?= $this->render('_detail_view', ['model' => $model]) ?>
+<?= $this->render('_detail_view', ['model' => $model]) ?>
             </div>
             <div class="tab-pane" id="payments">
                 <table border="0" class="table table-hover">
@@ -127,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         foreach ($model->payments as $payment) {
                             echo Html::beginTag('tr');
                             echo '<td>' . $i . '</td>';
-                            echo '<td>' . yii\bootstrap\Html::a($payment->number, ['/accounting/payment/view','id'=>$payment->id])  . '</td>';
+                            echo '<td>' . yii\bootstrap\Html::a($payment->number, ['/accounting/payment/view', 'id' => $payment->id]) . '</td>';
                             echo '<td>' . $payment->date . '</td>';
                             echo '<td>' . $payment->nmStatus . '</td>';
                             echo '<td>' . $payment->paymentMethod->method . '</td>';
@@ -144,7 +145,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                         echo Html::beginTag('tr');
                         echo '<td colspan="5"></td>';
-                        echo Html::beginTag('td',['style'=>'font-weight:bold;']);
+                        echo Html::beginTag('td', ['style' => 'font-weight:bold;']);
                         echo number_format($tpyval, 0);
                         echo Html::endTag('td');
                         echo Html::endTag('tr');
@@ -171,5 +172,5 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
 </div>

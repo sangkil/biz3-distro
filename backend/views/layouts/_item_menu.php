@@ -60,12 +60,8 @@ return[
                     ['label' => 'Journal Template', 'icon' => 'check', 'url' => ['/accounting/journal-template']],
                 ],
             ],
-            ['label' => 'Invoices', 'icon' => 'check',
-                'items' => [
-                    ['label' => 'Incoming', 'icon' => 'check', 'url' => ['/accounting/invoice', 'invoice[type]' => 10]],
-                    ['label' => 'Outgoing', 'icon' => 'check', 'url' => ['/accounting/invoice', 'invoice[type]' => 20]],
-                ],
-            ],
+            ['label' => 'Account Payable', 'icon' => 'check', 'url' => ['/accounting/invoice', 'type' => 10]],
+            ['label' => 'Account Receivable', 'icon' => 'check', 'url' => ['/accounting/invoice', 'type' => 20]],
             ['label' => 'Payment', 'icon' => 'check',
                 'items' => [
                     ['label' => 'Biaya-biaya', 'icon' => 'check', 'url' => ''],

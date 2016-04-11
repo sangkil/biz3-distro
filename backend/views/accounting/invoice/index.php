@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\accounting\search\Invoice */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Invoices';
+$this->title = ucfirst(strtolower($searchModel->nmType)) . ' Invoices';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="col-lg-12">
@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model) {
                     $d1 = new \DateTime($model->due_date);
                     $d2 = new \DateTime(date('Y-m-d'));
-                    return $d1->diff($d2)->days . ' Days';
+                    return ($model->sisa > 0) ? $d1->diff($d2)->days . ' Days' : '-';
                 },
                 'filter' => $searchModel::enums('STATUS_')
             ],
@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => ['decimal', 0],
                 'filter' => false,
                 'contentOptions' => ['style' => 'text-align:right;'],
-            ],    
+            ],
             [
                 'attribute' => 'type',
                 'value' => 'nmType',
@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $temp;
                 },
                     'filter' => $searchModel::enums('STATUS_')
-            ],
+                ],
                 // 'reff_type',
                 // 'reff_id',
                 // 'description',
