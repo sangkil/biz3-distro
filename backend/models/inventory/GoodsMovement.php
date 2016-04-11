@@ -458,14 +458,6 @@ class GoodsMovement extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function save($runValidation = true, $attributeNames = null)
-    {
-        return parent::save($runValidation, $attributeNames) && $this->stateChanged;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return[

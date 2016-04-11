@@ -103,13 +103,13 @@ class GlHeader extends \yii\db\ActiveRecord
      *
      * @param array $templates
      */
-    public function addFromTemplate($templates = [], $desc = false)
+    public function addFromTemplate($templates = [], $description = false)
     {
         $items = $this->glDetails;
         foreach ($templates as $code => $amount) {
             /* @var $es EntriSheet */
             $es = EntriSheet::findOne(['code' => $code]);
-            if ($desc) {
+            if ($description === true) {
                 $this->description .= "\n" . $es->name;
             }
             $items[] = [
@@ -121,9 +121,18 @@ class GlHeader extends \yii\db\ActiveRecord
                 'amount' => -1 * $amount,
             ];
         }
+        if (is_string($description)) {
+            $this->description .= "\n{$description}";
+        }
         $this->glDetails = $items;
     }
 
+    public function addItem($detail)
+    {
+        $items = $this->glDetails;
+        $items[] = $detail;
+        $this->glDetails = $items;
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -250,6 +259,18 @@ class GlHeader extends \yii\db\ActiveRecord
     {
         if ($this->$attribute->status != AccPeriode::STATUS_OPEN) {
             $this->addError($attribute, "Accounting Periode has been closed");
+        }
+    }
+
+    /**
+     * @return integer
+     */
+    public static function getActivePeriode()
+    {
+        if (($model = AccPeriode::find()->active()->one()) !== null) {
+            return $model->id;
+        } else {
+            throw new \yii\web\NotFoundHttpException('Active Periode not exist.');
         }
     }
 
