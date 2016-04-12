@@ -99,9 +99,9 @@ class SalesController extends Controller
                             'reff_type' => GlHeader::REFF_SALES,
                             'reff_id' => $model->id,
                             'date' => date('Y-m-d'),
-                            'vendor_id' => $model->vendor_id,
+                            'branch_id' => $model->branch_id,
                             'periode_id' => $this->findPeriode(),
-                            'branch_id' => $this->branch_id,
+                            'description' => 'Sales POS',
                         ]);
                         //Create Jurnal
                         $coa_sales = [

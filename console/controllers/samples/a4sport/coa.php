@@ -18,7 +18,7 @@ return[
     [16, 4, "410001", "Penjualan", 2, "K"],
     [17, 4, "410002", "Retur Penjualan", 2, "D"],
     [18, 4, "410003", "Diskon Penjualan", 2, "D"],
-    [19, 5, "510001", "HPP/Pembelian", 2, "D"],
+    [19, 5, "510001", "HPP", 2, "D"],
     [20, 5, "510002", "Ongkos Angkut Barang", 2, "K"],
     [21, 5, "510003", "Diskon Pembelian", 2, "K"],
     [22, 6, "610001", "Beban Gaji/ Upah", 2, "D"],
