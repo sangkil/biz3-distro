@@ -101,6 +101,44 @@ class GmFromReffController extends Controller
         }
 
         $model->date = date('Y-m-d');
+        $model->type = GoodsMovement::TYPE_ISSUE;
+        if ($model->load(Yii::$app->request->post())) {
+            $model->status = GoodsMovement::STATUS_DRAFT;
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->items = Yii::$app->request->post('GoodsMovementDtl', []);
+                if ($model->save()) {
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } catch (\Exception $exc) {
+                $transaction->rollBack();
+                throw $exc;
+            }
+            $transaction->rollBack();
+        }
+        return $this->render('create', [
+                'model' => $model,
+                'reffModel' => $reffModel,
+                'reff' => $reff,
+        ]);
+    }
+
+    public function actionCreateReceipt($type, $id)
+    {
+        $model = new GoodsMovement([
+            'reff_type' => $type,
+            'reff_id' => $id,
+        ]);
+
+        if (($reff = $model->updateFromReceipt()) !== false) {
+            list($reffModel, $reff) = $reff;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $model->date = date('Y-m-d');
+        $model->type = GoodsMovement::TYPE_RECEIVE;
         if ($model->load(Yii::$app->request->post())) {
             $model->status = GoodsMovement::STATUS_DRAFT;
             $transaction = Yii::$app->db->beginTransaction();

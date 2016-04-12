@@ -44,14 +44,21 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ?>
             <?php
-            if ($model->status == Transfer::STATUS_RELEASED) {
+            if ($model->status == Transfer::STATUS_RELEASED && $model->branch_id == Yii::$app->profile->branch_id) {
                 echo Html::a('Create Issue', ['inventory/gm-from-reff/create', 'type' => Transfer::REFF_SELF, 'id' => $model->id], [
                     'class' => 'btn btn-success',
                 ]);
             }
             ?>
             <?php
-            if ($model->status == Transfer::STATUS_RELEASED) {
+            if ($model->status == Transfer::STATUS_RELEASED && $model->branch_dest_id == Yii::$app->profile->branch_id) {
+                echo Html::a('Create Receipt', ['inventory/gm-from-reff/create-receipt', 'type' => Transfer::REFF_SELF, 'id' => $model->id], [
+                    'class' => 'btn btn-success',
+                ]);
+            }
+            ?>
+            <?php
+            if ($model->status == Transfer::STATUS_RELEASED && $model->branch_id == Yii::$app->profile->branch_id) {
                 echo Html::a('Cancel', ['reject', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [
@@ -71,13 +78,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => '<tr><th style="width:30%;">{label}</th><td>{value}</td></tr>',
             'attributes' => [
                 'number',
-                [
-                    'attribute' => 'branch.name',
-                    'label' => 'Source'
-                ],
-                [
-                    'attribute' => 'branchDest.name',
-                    'label' => 'Destination'
+                [                      // the owner name of the model
+                    'label' => 'Source/Destination',
+                    'format' => 'raw',
+                    'value' => $model->branch->name . '/' . $model->branchDest->name
                 ],
             ],
         ])
@@ -160,6 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'format' => 'raw'
                         ],
+                        'nmType',
                         'date:datetime',
                         [
                             'header' => 'Status',

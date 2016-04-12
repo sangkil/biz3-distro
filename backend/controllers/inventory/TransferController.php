@@ -69,6 +69,7 @@ class TransferController extends Controller
 
         $model->status = Transfer::STATUS_DRAFT;
         $model->date = date('Y-m-d');
+        $model->branch_id = \Yii::$app->profile->branch_id;
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {

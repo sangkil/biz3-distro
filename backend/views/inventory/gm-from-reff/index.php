@@ -32,11 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'number',
-            [
-                'attribute' => 'type',
-                'value' => 'nmType',
-                'filter' => GoodsMovement::enums('TYPE_')
-            ],
+            'nmReffType',
             [
                 'attribute' => 'warehouse_id',
                 'value' => 'warehouse.name',
@@ -46,7 +42,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'vendor_id',
                 'value' => 'vendor.name',
             ],
-            'date',
+            'Date',
+            [
+                'attribute' => 'type',
+                'value' => 'nmType',
+                'filter' => GoodsMovement::enums('TYPE_')
+            ],
             [
                 'attribute' => 'status',
                 'value' => 'nmStatus',

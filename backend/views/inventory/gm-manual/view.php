@@ -100,7 +100,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['class' => 'table'],
             'template' => '<tr><th style="width:30%;">{label}</th><td>{value}</td></tr>',
             'attributes' => [
-                'totalValue',
+                [
+                    'attribute'=>'totalValue',
+                    'label' => 'Total Value',
+                    'format' => 'raw',
+                    'value' => number_format($model->totalValue,0)
+                ],
                 [
                     'attribute' => 'warehouse.name',
                     'label' => 'Warehouse'

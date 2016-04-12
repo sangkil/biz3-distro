@@ -15,10 +15,11 @@ $form = ActiveForm::begin([
         ]);
 ?>
 <td style="width: 10%;"><?= $form->field($model, 'number')->label(false); //Html::textInput('no', '', ['class' => 'form-control'])   ?></td>
-<td colspan="2"><?= $form->field($model, 'description')->label(false); //Html::textInput('desc', '', ['class' => 'form-control'])  ?></td>
+<td >
+    <?= $form->field($model, 'branch_id')->dropDownList(backend\models\master\Branch::selectOptions())->label(false) ?>
+</td>
 <td >
     <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-    <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
 </td>
 
 <?php ActiveForm::end(); ?>

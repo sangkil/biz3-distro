@@ -424,6 +424,49 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return[$reffModel, $reff, $items];
     }
 
+        /**
+     * Update information from reference
+     * @return boolean
+     */
+    public function updateFromReceipt()
+    {
+        if (($reff = $this->getReference()) === false) {
+            return false;
+        }
+        list($reffModel, $reff, $items) = $reff;
+
+        $this->type = $reff['type'];
+        // vendor
+        if (isset($reff['vendor'])) {
+            $this->vendor_id = $reffModel->{$reff['vendor']};
+        }
+        // warehouse
+        if (isset($reff['warehouse'])) {
+            $this->warehouse_id = $reffModel->{$reff['warehouse']};
+        }
+
+        // items
+        if ($items !== false) {
+            $oldItems = ArrayHelper::index($this->items, 'product_id');
+            $isNew = empty($oldItems);
+            foreach ($items as $i => $item) {
+                $pid = $item['product_id'];
+                if (isset($oldItems[$pid])) {
+                    $items[$i] = $oldItems[$pid];
+                } else {
+                    $items[$i] = new GoodsMovementDtl();
+                    $items[$i]->attributes = $item;
+                    if (!$isNew) {
+                        $items[$i]->qty = '';
+                    }
+                }
+                $items[$i]->sisa = $item['qty'];
+            }
+            $this->populateRelation('items', $items);
+        }
+        return[$reffModel, $reff, $items];
+    }
+
     public function generateReceiveFromIssueTransfer()
     {
         $queryGM = (new Query())

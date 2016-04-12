@@ -24,23 +24,24 @@ $this->registerJsFile(Url::to(['master']));
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= Html::errorSummary($model); ?>
     <div class="row">
-        <div class="col-md-4">
-            <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:40%;']) ?>
-            <?= $form->field($model, 'branch_id')->dropDownList(Branch::selectOptions()) ?>
-        </div>
-        <div class="col-md-4">
-            <?= $form->field($model, 'branch_dest_id')->dropDownList(Branch::selectOptions()) ?>
+        <?= Html::errorSummary($model, ['class' => 'alert alert-danger']); ?>
+        <div class="col-md-2">
+            <?= $form->field($model, 'number')->textInput(['readonly' => true]) ?>
             <?=
             $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
                 'dateFormat' => 'dd-MM-yyyy',
-                'options' => ['class' => 'form-control', 'style' => 'width:40%;']
+                'options' => ['class' => 'form-control']
             ])
-            ?>
+            ?>            
         </div>
         <div class="col-md-4">
+            <?= $form->field($model->branch, 'name')->textInput(['readOnly'=>true]) ?>
+            <?= $form->field($model, 'branch_dest_id')->dropDownList(Branch::selectOptions(), ['prompt' => '--destination--','readonly'=>true]) ?>
+        </div>
+        <div class="col-md-6">
             <?= $form->field($model, 'value')->textInput(['style' => 'width:40%;']) ?>
+            <?= $form->field($model, 'branch_id')->hiddenInput()->label(false) ?>
         </div>
         <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
             <ul class="nav nav-tabs">

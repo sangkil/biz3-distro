@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php endif; ?>
             <?=
             (!$model->isNewRecord) ? Html::a('<i class="fa fa-print"></i>', ['print', 'id' => $model->id], [
-                    'class' => 'btn btn-default',//'target' => '_blank',
+                    'class' => 'btn btn-default', //'target' => '_blank',
                     'data' => [
                         'method' => 'post',
                     ],
@@ -70,6 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'template' => '<tr><th style="width:30%;">{label}</th><td>{value}</td></tr>',
             'attributes' => [
                 'number',
+                'Date',
                 [
                     'attribute' => 'nmType',
                     'label' => 'Movement Type'
@@ -89,13 +90,38 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['class' => 'table'],
             'template' => '<tr><th style="width:30%;">{label}</th><td>{value}</td></tr>',
             'attributes' => [
-                'Date',
+                [
+                    'attribute' => 'totalValue',
+                    'label' => 'Total Value',
+                    'format' => 'raw',
+                    'value' => number_format($model->totalValue, 0)
+                ],
                 [
                     'attribute' => 'warehouse.name',
                     'label' => 'Warehouse'
                 ],
                 //'description',
-                'nmStatus',
+                //'nmStatus',
+                [                      // the owner name of the model
+                    'label' => 'Reff Type/Number',
+                    'format' => 'raw',
+                    'value' => $model->nmReffType . '/' . $model->reffNumber
+                ],
+                [// the owner name of the model
+                    'label' => 'Invoice',
+                    'format' => 'raw',
+                    'value' => ($model->invoice != null) ? Html::a($model->invoice->number, ['/accounting/invoice/view',
+                            'id' => $model->invoice->id]) : '',
+                    'visible' => ($model->invoice != null)
+                ],
+                [// the owner name of the model
+                    'label' => 'Status',
+                    'attribute' => 'nmStatus',
+                    'format' => 'raw',
+                    'value' => ($model->status == $model::STATUS_DRAFT) ? '<span class="badge bg-yellow">' . $model->nmStatus . '</span>'
+                            : (($model->status == $model::STATUS_CANCELED) ? '<span class="badge bg-red">' . $model->nmStatus . '</span>'
+                                : '<span class="badge bg-green">' . $model->nmStatus . '</span>')
+                ],
             ],
         ])
         ?>
@@ -128,7 +154,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'cogs',
-                            'header' => 'Cost'
+                            'header' => 'Cost',
+                            'format' => ['decimal',0],
                         ],
                         'qty',
                         [

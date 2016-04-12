@@ -29,7 +29,7 @@ use backend\models\inventory\TransferDtl;
                     <span class="input-group-addon">
                         <i class="fa fa-search"></i>
                     </span>
-                    <input id="input-product" class="form-control" placeholder="Search Product..">
+                    <input id="input-product" class="form-control" placeholder="Search Product.." style="z-index: 0;">
                 </div>
             </td>
         </tr>

@@ -39,6 +39,7 @@ class TransferDtl extends \yii\db\ActiveRecord
             [['product_id', 'uom_id'], 'required'],
             [['transfer_id', 'product_id', 'uom_id'], 'integer'],
             [['qty', 'total_release', 'total_receive'], 'number'],
+            [['qty'], 'number','min'=>1],
         ];
     }
 

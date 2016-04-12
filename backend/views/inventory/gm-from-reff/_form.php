@@ -33,14 +33,9 @@ $branch_id = Yii::$app->profile->branch_id;
             'options' => ['class' => 'form-control', 'style' => 'width:60%;']
         ])
         ?>
-        <?= $form->field($model, 'vendor[name]')->textInput(['readonly' => true]) ?>
-        <?= Html::activeHiddenInput($model, 'vendor_id') ?>
-
-    </div>
-    <div class="col-lg-5">
-
+        <?= ''//$form->field($model, 'vendor[name]')->textInput(['readonly' => true]) ?>
         <?= $form->field($model, 'description')->textArea(['maxlength' => true]) ?>
-
+        <?= Html::activeHiddenInput($model, 'vendor_id') ?>
     </div>
     <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
         <ul class="nav nav-tabs">

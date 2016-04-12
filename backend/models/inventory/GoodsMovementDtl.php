@@ -23,6 +23,7 @@ use backend\models\master\ProductUom;
 class GoodsMovementDtl extends \yii\db\ActiveRecord
 {
     public $sisa;
+    public $issued;
 
     /**
      * @inheritdoc
@@ -40,7 +41,8 @@ class GoodsMovementDtl extends \yii\db\ActiveRecord
         return [
             [['product_id', 'uom_id',], 'required'],
             [['movement_id', 'product_id', 'uom_id'], 'integer'],
-            [['qty', 'value', 'cogs', 'sisa'], 'number'],
+            [['qty', 'value', 'cogs', 'sisa','issued'], 'number'],
+            [['qty'], 'number','min'=>1],
         ];
     }
 

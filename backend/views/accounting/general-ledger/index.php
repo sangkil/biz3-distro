@@ -20,9 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <thead>
             <tr>
                 <th style="width: 10%;">Date/GLNumber</th>
-                <th>Account & Description</th>
-                <th style="width: 15%;">Debit</th>
-                <th style="width: 15%;">Credit</th>
+                <th>Branch</th>
             </tr>
             <tr>
                 <?php echo $this->render('_search', ['model' => $searchModel]); ?>

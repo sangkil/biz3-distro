@@ -64,6 +64,7 @@ class Transfer extends \yii\db\ActiveRecord
             [['branch_id', 'branch_dest_id', 'Date', 'status'], 'required'],
             [['number'], 'autonumber', 'format' => 'IT' . date('Y') . '.?', 'digit' => 4],
             [['branch_id', 'branch_dest_id', 'status'], 'integer'],
+            [['branch_dest_id'], 'compare', 'compareAttribute' => 'branch_id', 'operator' => '!=', 'message' => 'You cannot transfer to yourself.'],
             [['date'], 'safe'],
             [['items'], 'required', 'except' => self::SCENARIO_CHANGE_STATUS],
             [['items'], 'relationUnique', 'targetAttributes' => 'product_id', 'except' => self::SCENARIO_CHANGE_STATUS],
@@ -143,17 +144,19 @@ class Transfer extends \yii\db\ActiveRecord
             ->select(['gmd.product_id', 'total' => 'sum(gmd.qty)'])
             ->from(['gm' => '{{%goods_movement}}'])
             ->innerJoin(['gmd' => '{{%goods_movement_dtl}}'], '[[gmd.movement_id]]=[[gm.id]]')
-            ->where(['gm.status' => 20, 'gm.reff_type' => self::REFF_SELF, 'gm.reff_id' => $this->id])
+            ->where(['gm.status' => 20, 'gm.reff_type' => self::REFF_SELF, 'gm.reff_id' => $this->id, 'gm.type' => GoodsMovement::TYPE_ISSUE])
             ->groupBy(['gmd.product_id']);
         $queryItem = (new Query())
             ->select(['td.product_id', 'c.cogs', 'td.qty', 'td.uom_id', 'g.total'])
             ->from(['td' => '{{%transfer_dtl}}'])
-            ->leftJoin(['c'=>'{{%cogs}}'], '[[c.product_id]]=[[td.product_id]]')
+            ->leftJoin(['c' => '{{%cogs}}'], '[[c.product_id]]=[[td.product_id]]')
             ->leftJoin(['g' => $queryGM], '[[g.product_id]]=[[td.product_id]]')
             ->where(['td.transfer_id' => $this->id]);
         $items = [];
         foreach ($queryItem->all() as $item) {
+            $item['trans_qty'] = $item['qty'];
             $item['qty'] -= $item['total'];
+            $item['issued'] = $item['total'];
             $items[] = $item;
         }
         return $items;

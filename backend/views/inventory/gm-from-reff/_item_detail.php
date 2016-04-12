@@ -14,15 +14,16 @@ use yii\helpers\Html;
     <span data-field="product"><?= Html::getAttributeValue($model, "[$key]product[name]") ?></span>
 </td>
 <td>
-    <span data-field="price"><?= Html::getAttributeValue($model, "[$key]cogs"); ?></span>
+    <span data-field="price"><?= number_format(Html::getAttributeValue($model, "[$key]cogs"), 0); ?></span>
 </td>
 <td>
-    <?= Html::getAttributeValue($model, "[$key]sisa"); ?>
+    <?= ($is_issue) ? Html::getAttributeValue($model, "[$key]sisa") : Html::getAttributeValue($model, "[$key]issued") ?>
 </td>
 <td>
     <?=
-    Html::activeTextInput($model, "[$key]qty", ['class' => 'form-control',
-        'data-field' => 'qty', 'size' => 5, 'id' => false])
+    Html::activeTextInput($model, "[$key]qty", ['class' => 'form-control', 'data-field' => 'qty', 'size' => 5, 'id' => false,
+        'value' => ($is_issue) ? Html::getAttributeValue($model, "[$key]qty") : Html::getAttributeValue($model, "[$key]issued"),
+        'readOnly' => ($is_issue && Html::getAttributeValue($model, "[$key]sisa") < 1) ? true : false])
     ?>
 </td>
 <td>

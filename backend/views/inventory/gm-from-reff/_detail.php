@@ -20,11 +20,11 @@ use yii\helpers\Html;
             <th class="items" style="width: 10%">
                 LastCost/pcs
             </th>
-            <th class="items" style="width: 7%">
-                Sisa
+            <th class="items" style="width: 15%">
+                <?= ($model->type == $model::TYPE_ISSUE) ? 'Qty Remain' : 'Qty Issued' ?>
             </th>
             <th class="items" style="width: 10%">
-                Qty
+                Qty Trans
             </th>
             <th style="width: 10%">
                 Uom
@@ -39,6 +39,7 @@ use yii\helpers\Html;
         TabularInput::widget([
             'id' => 'detail-grid',
             'allModels' => $model->items,
+            'viewParams' => ['is_issue' => ($model->type == $model::TYPE_ISSUE)],
             'model' => GoodsMovementDtl::className(),
             'tag' => 'tbody',
             'itemOptions' => ['tag' => 'tr'],
@@ -52,18 +53,18 @@ use yii\helpers\Html;
 
 <!-- Modal -->
 <div class="modal fade" id="listPO" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;&nbsp;Close</button>
-      </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;&nbsp;Close</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
