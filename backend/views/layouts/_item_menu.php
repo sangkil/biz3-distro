@@ -82,7 +82,6 @@ return[
             ['label' => 'Prive Owner', 'icon' => 'check', 'url' => ''],
         ]
     ],
-
     ['label' => 'Setting', 'icon' => 'gears', 'iconOptions' => ['class' => 'text-orange'],
         'items' => [
             ['label' => 'Users', 'icon' => 'check', 'url' => ''],
