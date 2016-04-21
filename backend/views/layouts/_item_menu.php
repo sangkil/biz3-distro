@@ -1,8 +1,8 @@
 <?php
 return[
     '<li class="header">MAIN NAVIGATION</li>',
-    ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/site/index']],
-    ['label' => 'Data Master', 'icon' => 'th',
+    ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
+    ['label' => 'Data Master', 'icon' => 'th', 'visible' => !Yii::$app->user->isGuest,
         'items' => [
             ['label' => 'Orgn', 'icon' => 'check', 'url' => ['/master/orgn']],
             ['label' => 'Branch', 'icon' => 'check', 'url' => ['/master/branch']],
@@ -18,7 +18,7 @@ return[
             ['label' => 'Vendors', 'icon' => 'check', 'url' => ['/master/vendor']],
         ],
     ],
-    ['label' => 'Sales', 'icon' => 'shopping-cart', 'iconOptions' => ['class' => 'text-orange'],
+    ['label' => 'Sales', 'icon' => 'shopping-cart', 'iconOptions' => ['class' => 'text-orange'], 'visible' => !Yii::$app->user->isGuest,
         'items' => [
             ['label' => 'Point of Sales', 'icon' => 'check', 'url' => ['/sales/sales/create']],
             ['label' => 'Sales Return', 'icon' => 'check',],
@@ -36,7 +36,7 @@ return[
             ],
         ],
     ],
-    ['label' => 'Material Mangmnt', 'icon' => 'truck', 'iconOptions' => ['class' => 'text-success'],
+    ['label' => 'Material Mangmnt', 'icon' => 'truck', 'iconOptions' => ['class' => 'text-success'], 'visible' => !Yii::$app->user->isGuest,
         'items' => [
             ['label' => 'Goods Receive', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 10]],
             ['label' => 'Goods Issue', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 20]],
@@ -51,7 +51,7 @@ return[
             ['label' => 'Opname', 'icon' => 'check', 'url' => ''],
         ],
     ],
-    ['label' => 'FI & Accounting', 'icon' => 'buysellads', 'iconOptions' => '',
+    ['label' => 'FI & Accounting', 'icon' => 'buysellads', 'visible' => !Yii::$app->user->isGuest,
         'items' => [
             ['label' => 'COA', 'icon' => 'check', 'url' => ['/accounting/coa']],
             ['label' => 'FI Periode', 'icon' => 'check',
@@ -79,7 +79,7 @@ return[
             ],
         ],
     ],
-    ['label' => 'Report', 'icon' => 'pie-chart', 'iconOptions' => ['class' => 'text-aqua'],
+    ['label' => 'Report', 'icon' => 'pie-chart', 'iconOptions' => ['class' => 'text-aqua'], 'visible' => !Yii::$app->user->isGuest,
         'items' => [
             ['label' => 'Biaya-biaya', 'icon' => 'check', 'url' => ''],
             ['label' => 'Pembelian Asset', 'icon' => 'check', 'url' => ''],
@@ -89,12 +89,14 @@ return[
         ]
     ],
     '<li class="header">ADMIN MENU</li>',
-    ['label' => 'Setting', 'icon' => 'gears', 'iconOptions' => ['class' => 'text-orange'],
+    ['label' => 'Setting', 'icon' => 'gears', 'iconOptions' => ['class' => 'text-orange'], 'visible' => !Yii::$app->user->isGuest,
         'items' => [
             ['label' => 'Users', 'icon' => 'check', 'url' => ''],
             ['label' => 'RBAC', 'icon' => 'check', 'url' => ''],
         ]
     ],
-    ['label' => 'Login', 'icon' => 'sign-in', 'iconOptions' => ['class' => 'text-green'], 'url' => ['/site/login', 'type' => 10],'visible' => Yii::$app->user->isGuest],
-    ['label' => 'Logout', 'icon' => 'sign-out', 'iconOptions' => ['class' => 'text-red'], 'url' => ['/site/logout', 'type' => 10],'visible' => !Yii::$app->user->isGuest],
+    ['label' => 'Login', 'icon' => 'sign-in', 'iconOptions' => ['class' => 'text-green'], 'url' => ['/site/login', 'type' => 10],
+        'visible' => Yii::$app->user->isGuest],
+    ['label' => 'Logout', 'icon' => 'sign-out', 'iconOptions' => ['class' => 'text-red'], 'url' => ['/site/logout', 'type' => 10],
+        'visible' => !Yii::$app->user->isGuest],
 ];
