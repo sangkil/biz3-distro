@@ -28,6 +28,12 @@ return[
                     ['label' => 'Sales Pricing', 'icon' => 'check', 'url' => ['/sales/price']],
                 ],
             ],
+            ['label' => 'Discount Mngnt', 'icon' => 'check',
+                'items' => [
+                    ['label' => 'Discount Type', 'icon' => 'check', 'url' => '#'],
+                    ['label' => 'Sales Discount', 'icon' => 'check', 'url' => '#'],
+                ],
+            ],
         ],
     ],
     ['label' => 'Material Mangmnt', 'icon' => 'truck', 'iconOptions' => ['class' => 'text-success'],
@@ -82,10 +88,13 @@ return[
             ['label' => 'Prive Owner', 'icon' => 'check', 'url' => ''],
         ]
     ],
+    '<li class="header">ADMIN MENU</li>',
     ['label' => 'Setting', 'icon' => 'gears', 'iconOptions' => ['class' => 'text-orange'],
         'items' => [
             ['label' => 'Users', 'icon' => 'check', 'url' => ''],
             ['label' => 'RBAC', 'icon' => 'check', 'url' => ''],
         ]
-    ]
+    ],
+    ['label' => 'Login', 'icon' => 'sign-in', 'iconOptions' => ['class' => 'text-green'], 'url' => ['/site/login', 'type' => 10],'visible' => Yii::$app->user->isGuest],
+    ['label' => 'Logout', 'icon' => 'sign-out', 'iconOptions' => ['class' => 'text-red'], 'url' => ['/site/logout', 'type' => 10],'visible' => !Yii::$app->user->isGuest],
 ];
