@@ -41,6 +41,13 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@mdm/admin/views' => '@backend/views/admin',
+                ]
+            ]
+        ],
     ],
     'params' => $params,
 ];
