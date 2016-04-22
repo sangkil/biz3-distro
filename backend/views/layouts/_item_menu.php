@@ -94,7 +94,6 @@ return[
             ['label' => 'Users', 'icon' => 'check'],
             ['label' => 'RBAC', 'icon' => 'check',
                 'items' => [
-                    ['label' => 'Users', 'icon' => 'check', 'url' => '#'],
                     ['label' => 'Routes', 'icon' => 'check', 'url' => 'admin/route'],
                     ['label' => 'Permissions', 'icon' => 'check', 'url' => 'admin/permission'],
                     ['label' => 'Roles', 'icon' => 'check', 'url' => 'admin/role'],
