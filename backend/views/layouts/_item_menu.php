@@ -91,12 +91,22 @@ return[
     '<li class="header">ADMIN MENU</li>',
     ['label' => 'Setting', 'icon' => 'gears', 'iconOptions' => ['class' => 'text-orange'], 'visible' => !Yii::$app->user->isGuest,
         'items' => [
-            ['label' => 'Users', 'icon' => 'check', 'url' => ''],
-            ['label' => 'RBAC', 'icon' => 'check', 'url' => ''],
+            ['label' => 'Users', 'icon' => 'check'],
+            ['label' => 'RBAC', 'icon' => 'check',
+                'items' => [
+                    ['label' => 'Users', 'icon' => 'check', 'url' => '#'],
+                    ['label' => 'Routes', 'icon' => 'check', 'url' => 'admin/route'],
+                    ['label' => 'Permissions', 'icon' => 'check', 'url' => 'admin/permission'],
+                    ['label' => 'Roles', 'icon' => 'check', 'url' => 'admin/role'],
+                    ['label' => 'Assignment', 'icon' => 'check', 'url' => 'admin'],
+                    ['label' => 'U2Branch', 'icon' => 'check'],
+                    ['label' => 'U2Warehouse', 'icon' => 'check'],
+                ],
+            ],
         ]
     ],
-    ['label' => 'Login', 'icon' => 'sign-in', 'iconOptions' => ['class' => 'text-green'], 'url' => ['/site/login', 'type' => 10],
+    ['label' => 'Login', 'icon' => 'sign-in', 'iconOptions' => ['class' => 'text-green'], 'url' => ['/site/login'],
         'visible' => Yii::$app->user->isGuest],
-    ['label' => 'Logout', 'icon' => 'sign-out', 'iconOptions' => ['class' => 'text-red'], 'url' => ['/site/logout', 'type' => 10],
+    ['label' => 'Logout', 'icon' => 'sign-out', 'iconOptions' => ['class' => 'text-red'], 'url' => ['/site/logout'],
         'visible' => !Yii::$app->user->isGuest],
 ];
