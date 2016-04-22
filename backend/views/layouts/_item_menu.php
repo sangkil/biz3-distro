@@ -1,4 +1,10 @@
 <?php
+$temp_roles = [];
+$user_roles = Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId());
+foreach ($user_roles as $key => $value) {
+    $temp_roles[] = $key;
+}
+
 return[
     '<li class="header">MAIN NAVIGATION</li>',
     ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
@@ -89,7 +95,7 @@ return[
         ]
     ],
     '<li class="header">ADMIN MENU</li>',
-    ['label' => 'Setting', 'icon' => 'gears', 'iconOptions' => ['class' => 'text-orange'], 'visible' => !Yii::$app->user->isGuest,
+    ['label' => 'Setting', 'icon' => 'gears', 'iconOptions' => ['class' => 'text-orange'], 'visible' => !Yii::$app->user->isGuest && (in_array('admin.app', $temp_roles)),
         'items' => [
             ['label' => 'Users', 'icon' => 'check'],
             ['label' => 'RBAC', 'icon' => 'check',
