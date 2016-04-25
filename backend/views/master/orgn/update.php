@@ -10,10 +10,13 @@ $this->params['breadcrumbs'][] = ['label' => 'Orgns', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="orgn-update">
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+<div class="row orgn-update">
+    <div class="col-lg-5">
+        <?=
+        $this->render('_form', [
+            'model' => $model,
+        ])
+        ?>
+    </div>
 
 </div>

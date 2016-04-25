@@ -11,18 +11,22 @@ use mdm\admin\components\Helper;
 $this->title = Yii::t('rbac-admin', 'Users');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<p class='pull-right'>
+    <?= Html::a('Signup', ['signup'], ['class' => 'btn btn-default']) ?>
+</p>
+<br>
 <div class="user-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
+        'tableOptions' => ['class' => 'table table-hover'],
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'username',
             'email:email',
+            'password_reset_token',
             'created_at:date',
             [
                 'attribute' => 'status',

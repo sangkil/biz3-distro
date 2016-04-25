@@ -85,22 +85,20 @@ return[
             ],
         ],
     ],
-    ['label' => 'Report', 'icon' => 'pie-chart', 'iconOptions' => ['class' => 'text-aqua'], 'visible' => !Yii::$app->user->isGuest,
-        'items' => [
-            ['label' => 'Biaya-biaya', 'icon' => 'check', 'url' => ''],
-            ['label' => 'Pembelian Asset', 'icon' => 'check', 'url' => ''],
-            ['label' => 'Setoran Bank', 'icon' => 'check', 'url' => ''],
-            ['label' => 'Piutang Karyawan', 'icon' => 'check', 'url' => ''],
-            ['label' => 'Prive Owner', 'icon' => 'check', 'url' => ''],
-        ]
-    ],
+    ['label' => 'Reports', 'icon' => 'pie-chart', 'iconOptions' => ['class' => 'text-aqua'], 'visible' => !Yii::$app->user->isGuest, 'url' => ['/report/report/index']],
     '<li class="header">ADMIN MENU</li>',
     ['label' => 'Setting', 'icon' => 'gears', 'iconOptions' => ['class' => 'text-orange'], 'visible' => !Yii::$app->user->isGuest && (in_array('admin.app', $temp_roles)),
         'items' => [
-            ['label' => 'Users', 'icon' => 'check'],
+            ['label' => 'Users', 'icon' => 'check',
+                'items' => [
+                    ['label' => 'User List', 'icon' => 'check', 'url' => ['/admin/user']],
+                    ['label' => 'U2Branch', 'icon' => 'check', 'url' => ['/master/u2-branch']],
+                ],
+            ],
             ['label' => 'RBAC', 'icon' => 'check',
                 'items' => [
                     ['label' => 'Routes', 'icon' => 'check', 'url' => ['/admin/route']],
+                    ['label' => 'Rules', 'icon' => 'check', 'url' => ['/admin/rule']],
                     ['label' => 'Permissions', 'icon' => 'check', 'url' => ['/admin/permission']],
                     ['label' => 'Roles', 'icon' => 'check', 'url' => ['/admin/role']],
                     ['label' => 'Assignment', 'icon' => 'check', 'url' => ['/admin']],

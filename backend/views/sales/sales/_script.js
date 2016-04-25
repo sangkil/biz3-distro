@@ -106,7 +106,7 @@ $('#input-product').change(function () {
 });
 
 $('#input-product').autocomplete({
-    minLength: 0,
+    minLength: 2,
     source: function (request, response) {
         var result = [];
         var limit = 10;

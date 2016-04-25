@@ -18,7 +18,7 @@ JuiAsset::register($this);
 $opts = json_encode([
     'price_category' => '1',
     'reloadOnBranchChange' => true
-]);
+    ]);
 
 $this->registerJs("yii.biz.prop($opts);");
 $this->registerJs($this->render('_script.js'));
@@ -56,7 +56,7 @@ $branch_id = Yii::$app->profile->branch_id;
                 <i class="fa fa-shopping-cart"></i>
             </div>
             <!--<a href="#" class="small-box-footer">-->
-<!--                <?= ''//'Sales Date: ' . Html::getAttributeValue($model, 'Date') ?> <i class="fa fa-calendar"></i>-->
+<!--                <?= ''//'Sales Date: ' . Html::getAttributeValue($model, 'Date')  ?> <i class="fa fa-calendar"></i>-->
             <!--</a>-->
         </div>
         <div class="box box-info box-comments with-border">
@@ -80,7 +80,7 @@ $branch_id = Yii::$app->profile->branch_id;
                             <thead>
                                 <tr class="bg-green">
                                     <th>#</th>
-                                    <th>Payment Type</th>
+                                    <th style="width:60%;">Payment Type</th>
                                     <th>Value</th>
                                 </tr>
                             </thead>
