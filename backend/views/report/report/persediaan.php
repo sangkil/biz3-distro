@@ -7,11 +7,11 @@
 ?>
 <div class="col-lg-6">
     <h2>Stock</h2>
-    <p></p>
+    <p>Menampilkan stok barang per gudang.</p>
     <p><a class="btn btn-default" href="#">Get Started &raquo;</a></p>
 </div>
 <div class="col-lg-6">
     <h2>Stock History</h2>
-    <p></p>
+    <p>Menampilkan history stok barang per gudang.</p>
     <p><a class="btn btn-default" href="#">Get Started &raquo;</a></p>
 </div>
