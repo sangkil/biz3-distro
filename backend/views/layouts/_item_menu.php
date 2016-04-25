@@ -8,6 +8,7 @@ foreach ($user_roles as $key => $value) {
 return[
     '<li class="header">MAIN NAVIGATION</li>',
     ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
+    ['label' => 'Reports', 'icon' => 'pie-chart', 'iconOptions' => ['class' => 'text-aqua'], 'visible' => !Yii::$app->user->isGuest, 'url' => ['/report/report/index']],
     ['label' => 'Data Master', 'icon' => 'th', 'visible' => !Yii::$app->user->isGuest,
         'items' => [
             ['label' => 'Orgn', 'icon' => 'check', 'url' => ['/master/orgn']],
@@ -85,7 +86,6 @@ return[
             ],
         ],
     ],
-    ['label' => 'Reports', 'icon' => 'pie-chart', 'iconOptions' => ['class' => 'text-aqua'], 'visible' => !Yii::$app->user->isGuest, 'url' => ['/report/report/index']],
     '<li class="header">ADMIN MENU</li>',
     ['label' => 'Setting', 'icon' => 'gears', 'iconOptions' => ['class' => 'text-orange'], 'visible' => !Yii::$app->user->isGuest && (in_array('admin.app', $temp_roles)),
         'items' => [
