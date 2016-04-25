@@ -93,6 +93,7 @@ return[
                 'items' => [
                     ['label' => 'User List', 'icon' => 'check', 'url' => ['/admin/user']],
                     ['label' => 'U2Branch', 'icon' => 'check', 'url' => ['/master/u2-branch']],
+                    ['label' => 'U2Warehouse', 'icon' => 'check', 'url' => ['/master/u2-warehouse']],
                 ],
             ],
             ['label' => 'RBAC', 'icon' => 'check',

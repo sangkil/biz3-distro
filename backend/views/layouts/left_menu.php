@@ -35,7 +35,7 @@ use common\widgets\SideNav;
                         <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
                     </span>
                 </div>-->
-                    <?= Html::dropDownList('activeBrach', Yii::$app->profile->branch_id, Branch::selectOptions(), ['class' => 'form-control',
+                    <?= Html::dropDownList('activeBrach', Yii::$app->profile->branch_id, Branch::selectAssignedOptions(), ['class' => 'form-control',
                         'prompt' => '== Active Branch ==', 'id' => 'select-branch']) ?>
             <?= Html::endForm()?>
             <!-- /.search form -->

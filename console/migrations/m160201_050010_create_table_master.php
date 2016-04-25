@@ -248,10 +248,24 @@ class m160201_050010_create_table_master extends \yii\db\Migration
             'PRIMARY KEY ([[branch_id]], [[user_id]])',
             'FOREIGN KEY ([[branch_id]]) REFERENCES {{%branch}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
             ], $tableOptions);
+
+        $this->createTable('{{%user_to_warehouse}}', [
+            'warehouse_id' => Schema::TYPE_INTEGER,
+            'user_id' => Schema::TYPE_INTEGER,
+            // history column
+            'created_at' => Schema::TYPE_INTEGER,
+            'created_by' => Schema::TYPE_INTEGER,
+            'updated_at' => Schema::TYPE_INTEGER,
+            'updated_by' => Schema::TYPE_INTEGER,
+            // constrain
+            'PRIMARY KEY ([[warehouse_id]], [[user_id]])',
+            'FOREIGN KEY ([[warehouse_id]]) REFERENCES {{%warehouse}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
+            ], $tableOptions);
     }
 
     public function safeDown()
     {
+        $this->dropTable('{{%user_to_warehouse}}');
         $this->dropTable('{{%user_to_branch}}');
         $this->dropTable('{{%cogs}}');
         $this->dropTable('{{%price}}');
