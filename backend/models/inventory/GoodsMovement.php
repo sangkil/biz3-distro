@@ -10,6 +10,7 @@ use backend\models\master\ProductStock;
 use backend\models\accounting\Invoice;
 use backend\models\accounting\GlHeader;
 use backend\models\accounting\EntriSheet;
+use backend\models\master\Cogs;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -64,7 +65,6 @@ class GoodsMovement extends \yii\db\ActiveRecord
     const SCENARIO_CHANGE_STATUS = 'change_status';
 
     public $vendor_name;
-
     /**
      * @var array
      */
@@ -247,8 +247,40 @@ class GoodsMovement extends \yii\db\ActiveRecord
                 ])->execute()) {
                 return false;
             }
+            if ($item->cogs !== null && $item->cogs !== '') {
+                $paramCogs = [
+                    'id' => $product_id,
+                    'qty' => $qty,
+                    'cogs' => $item->cogs,
+                ];
+                if (!$this->updateCogs($paramCogs)) {
+                    return false;
+                }
+            }
         }
         return true;
+    }
+
+    protected function updateCogs($params)
+    {
+        $cogs = Cogs::findOne(['product_id' => $params['id']]);
+        if (!$cogs) {
+            $cogs = new Cogs([
+                'product_id' => $params['id'],
+                'cogs' => 0.0
+            ]);
+        }
+        $current_stock = ProductStock::find()
+            ->where(['product_id' => $params['id']])
+            ->sum('qty');
+
+        if ($current_stock != 0) {
+            $cogs->cogs += ($params['qty'] * ($params['cogs'] - $cogs->cogs)) / $current_stock;
+        } else {
+            $cogs->cogs = 0;
+        }
+
+        return $cogs->save(false);
     }
 
     /**
@@ -424,7 +456,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return[$reffModel, $reff, $items];
     }
 
-        /**
+    /**
      * Update information from reference
      * @return boolean
      */
