@@ -14,7 +14,7 @@ return[
         'items' => [
             ['label' => 'Organisasi', 'icon' => 'check', 'url' => ['/master/orgn']],
             ['label' => 'Cabang', 'icon' => 'check', 'url' => ['/master/branch']],
-            ['label' => 'Gudang & Showroom', 'icon' => 'check', 'url' => ['/master/warehouse']],
+            ['label' => 'Gudang/Showroom', 'icon' => 'check', 'url' => ['/master/warehouse']],
             ['label' => 'Master Barang', 'icon' => 'check',
                 'items' => [
                     ['label' => 'Detail Barang', 'icon' => 'check', 'url' => ['/master/product']],
