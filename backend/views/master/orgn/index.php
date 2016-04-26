@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\master\search\Orgn */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Orgns';
+$this->title = 'Organisasi';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>

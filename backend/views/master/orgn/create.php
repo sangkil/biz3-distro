@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\master\Orgn */
 
-$this->title = 'Create Orgn';
+$this->title = 'Buat Organisasi';
 $this->params['breadcrumbs'][] = ['label' => 'Orgns', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

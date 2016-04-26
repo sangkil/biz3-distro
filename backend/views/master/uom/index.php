@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\master\search\Uom */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Uoms';
+$this->title = 'Satuan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>

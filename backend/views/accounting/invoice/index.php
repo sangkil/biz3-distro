@@ -75,11 +75,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => false,
                 'contentOptions' => ['style' => 'text-align:right;'],
             ],
-            [
-                'attribute' => 'type',
-                'value' => 'nmType',
-                'filter' => $searchModel::enums('TYPE_')
-            ],
+//            [
+//                'attribute' => 'type',
+//                'value' => 'nmType',
+//                'filter' => $searchModel::enums('TYPE_')
+//            ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
