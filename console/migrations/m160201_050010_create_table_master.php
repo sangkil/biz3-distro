@@ -265,7 +265,7 @@ class m160201_050010_create_table_master extends \yii\db\Migration
 
     public function safeDown()
     {
-        //$this->dropTable('{{%user_to_warehouse}}');
+        $this->dropTable('{{%user_to_warehouse}}');
         $this->dropTable('{{%user_to_branch}}');
         $this->dropTable('{{%cogs}}');
         $this->dropTable('{{%price}}');
@@ -281,7 +281,7 @@ class m160201_050010_create_table_master extends \yii\db\Migration
         $this->dropTable('{{%vendor_detail}}');
         $this->dropTable('{{%vendor}}');
         $this->dropTable('{{%warehouse}}');
-        //$this->dropTable('{{%branch}}');
-        //$this->dropTable('{{%orgn}}');
+        $this->dropTable('{{%branch}}');
+        $this->dropTable('{{%orgn}}');
     }
 }
