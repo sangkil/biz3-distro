@@ -4,8 +4,6 @@ namespace backend\models\master;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use yii\behaviors\BlameableBehavior;
-use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "orgn".
@@ -69,9 +67,8 @@ class Orgn extends \yii\db\ActiveRecord {
     
     public function behaviors() {
         return [
-            ['class' => TimestampBehavior::className()],
-            ['class' => BlameableBehavior::className()]
+            'yii\behaviors\BlameableBehavior',
+            'yii\behaviors\TimestampBehavior',
         ];
     }
-
 }

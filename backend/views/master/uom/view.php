@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\master\Uom */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Uoms', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Satuan', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="uom-view">

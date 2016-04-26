@@ -12,23 +12,19 @@ use backend\models\master\Vendor;
 <div class="vendor-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'type')->dropDownList(Vendor::enums('TYPE_')) ?>
-
-    <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'contact_name')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'contact_number')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'status')->dropDownList(Vendor::enums('STATUS_')) ?>
-
+        <?= $form->field($model, 'type')->dropDownList(Vendor::enums('TYPE_'), ['style' => 'width:30%']) ?>
+        <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'style' => 'width:40%']) ?>
+        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'contact_name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'contact_number')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'status')->dropDownList(Vendor::enums('STATUS_'), ['style' => 'width:30%']) ?>
+    
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success'
+                    : 'btn btn-primary'])
+        ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
 
 </div>

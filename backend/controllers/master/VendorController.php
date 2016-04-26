@@ -30,9 +30,10 @@ class VendorController extends Controller
      * Lists all Vendor models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($type = 10)
     {
         $searchModel = new VendorSearch();
+        $searchModel->type = $type;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -58,10 +59,11 @@ class VendorController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($type = 10)
     {
         $model = new Vendor();
-
+        $model->type = $type;
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

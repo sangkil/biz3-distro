@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\master\Orgn */
 
-$this->title = $model->name;
+$this->title = 'Orgn: '.$model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Orgns', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
