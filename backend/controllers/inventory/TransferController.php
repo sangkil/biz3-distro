@@ -72,7 +72,7 @@ class TransferController extends Controller
         if(\Yii::$app->profile->branch_id !== ''){
            $model->branch_id = \Yii::$app->profile->branch_id;
         }  else {
-            throw new NotFoundHttpException('Cabang/Sales Point belum dipilih.');
+            throw new NotFoundHttpException('Cabang/SalesPoint belum dipilih.');
         }
         
         if ($model->load(Yii::$app->request->post())) {
