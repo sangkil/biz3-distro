@@ -5,7 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\inventory\GoodsMovement */
 
-$this->title = 'Update Goods ' . ($model->nmType ? ucfirst(strtolower($model->nmType)) : 'Movement').' '.$model->number;
+$this->title = ($model->type == GoodsMovement::TYPE_RECEIVE) ? 'Penerimaan' : 'Mutasi';
+$this->title = ($model->type == GoodsMovement::TYPE_ISSUE) ? 'Pengeluaran' : $this->title;
+$this->title = 'Update '. $this->title. ' Barang';
 $this->params['breadcrumbs'][] = ['label' => 'Goods Movements', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->number, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';

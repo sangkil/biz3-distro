@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\sales\Sales */
 
-$this->title = 'Create Sales';
+$this->title = $model->branch->name.' - Penjualan Retail';
 $this->params['breadcrumbs'][] = ['label' => 'Saless', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

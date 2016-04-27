@@ -38,6 +38,7 @@ class PaymentMethod extends \yii\db\ActiveRecord
             [['branch_id', 'method', 'coa_id'], 'required'],
             [['branch_id', 'coa_id', 'coa_id_potongan'], 'integer'],
             [['method'], 'string', 'max' => 32],
+            [['potongan'], 'number'],
         ];
     }
 

@@ -68,6 +68,11 @@ class Warehouse extends \yii\db\ActiveRecord
         return $this->hasMany(ProductStock::className(), ['warehouse_id' => 'id']);
     }
 
+    public static function find()
+    {
+        return new WarehouseQuery(get_called_class());
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -79,6 +84,11 @@ class Warehouse extends \yii\db\ActiveRecord
     public static function selectOptions()
     {
         return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
+    }
+
+    public static function selectAssignedOptions()
+    {
+        return ArrayHelper::map(static::find()->asArray()->assigned()->all(), 'id', 'name');
     }
 
     public function behaviors()

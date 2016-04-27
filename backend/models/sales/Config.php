@@ -15,7 +15,8 @@ class Config extends \yii\base\Model
 
     public function rules()
     {
-        return[
+        return[            
+            [['branch_id', 'warehouse_id'], 'required'],
             [['branch_id', 'warehouse_id'], 'integer'],
         ];
     }

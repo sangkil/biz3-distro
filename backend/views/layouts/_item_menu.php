@@ -29,7 +29,7 @@ return[
     ],
     ['label' => 'Penjualan', 'icon' => 'shopping-cart', 'iconOptions' => ['class' => 'text-orange'], 'visible' => !Yii::$app->user->isGuest,
         'items' => [
-            ['label' => 'Penjualan Ecer', 'icon' => 'check', 'url' => ['/sales/sales/create']],
+            ['label' => 'Penjualan Retail', 'icon' => 'check', 'url' => ['/sales/sales/create']],
             ['label' => 'Manj Harga', 'icon' => 'check',
                 'items' => [
                     ['label' => 'Kategori Harga', 'icon' => 'check', 'url' => ['/sales/price-category']],
@@ -42,15 +42,15 @@ return[
                     ['label' => 'Diskon Penjualan', 'icon' => 'check', 'url' => '#'],
                 ],
             ],
-            ['label' => 'Klosing Harian', 'icon' => 'check', 'url' => ['/sales/sales/create']],
+            //['label' => 'Klosing Harian', 'icon' => 'check', 'url' => ['/sales/sales/create']],
         ],
     ],
     ['label' => 'Pengelolaan Persedian', 'icon' => 'truck', 'iconOptions' => ['class' => 'text-success'], 'visible' => !Yii::$app->user->isGuest,
         'items' => [
             ['label' => 'Penerimaan Barang', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 10]],
             ['label' => 'Pengeluaran Barang', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 20]],
-            ['label' => 'Mutasi Persediaan', 'icon' => 'check', 'url' => ['/inventory/transfer']],
-            ['label' => 'Opname', 'icon' => 'check', 'url' => ''],
+            ['label' => 'Transfer antar Gudang', 'icon' => 'check', 'url' => ['/inventory/transfer']],
+            ['label' => 'Stok Opname', 'icon' => 'check', 'url' => ''],
             ['label' => 'Koreksi Persediaan', 'icon' => 'check', 'url' => ''],
         ],
     ],
@@ -103,8 +103,6 @@ return[
                     ['label' => 'Permissions', 'icon' => 'check', 'url' => ['/admin/permission']],
                     ['label' => 'Roles', 'icon' => 'check', 'url' => ['/admin/role']],
                     ['label' => 'Assignment', 'icon' => 'check', 'url' => ['/admin']],
-                    ['label' => 'U2Branch', 'icon' => 'check'],
-                    ['label' => 'U2Warehouse', 'icon' => 'check'],
                 ],
             ],
         ]

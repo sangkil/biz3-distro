@@ -9,12 +9,14 @@ use backend\models\master\Warehouse;
 /* @var $searchModel GoodsMovement */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Goods Movement';
+$this->title = ($searchModel->type == GoodsMovement::TYPE_RECEIVE) ? 'Penerimaan' : 'Mutasi';
+$this->title = ($searchModel->type == GoodsMovement::TYPE_ISSUE) ? 'Pengeluaran' : $this->title;
+$this->title .= ' Barang';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="col-lg-12">
     <div class='btn-group pull-right'>
-        <?= $searchModel->type ? Html::a(($searchModel->type == GoodsMovement::TYPE_RECEIVE)?'New Receive':'New Issue', ['inventory/gm-manual/create','type' => $searchModel->type], ['class' => 'btn btn-default']):'' ?>
+        <?= $searchModel->type ? Html::a(($searchModel->type == GoodsMovement::TYPE_RECEIVE)?'Penerimaan Baru':'Pengeluaran Baru', ['inventory/gm-manual/create','type' => $searchModel->type], ['class' => 'btn btn-default']):'' ?>
     </div>
 </div>
 <br><br>

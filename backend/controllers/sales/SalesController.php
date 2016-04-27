@@ -70,14 +70,16 @@ class SalesController extends Controller
     public function actionCreate()
     {
         $profile = Yii::$app->profile;
-        if (!isset($profile->branch_id, $profile->warehouse_id)) {
+        if (!isset($profile->branch_id, $profile->warehouse_id) || $profile->branch_id == '') {
             Yii::$app->getSession()->setFlash('_config_return_url', Yii::$app->getRequest()->getUrl());
             return $this->redirect(['config']);
         }
+
         $model = new Sales();
 
         $model->status = Sales::STATUS_RELEASED;
         $model->date = date('Y-m-d');
+        $model->branch_id = Yii::$app->profile->branch_id;
         $model->vendor_id = Sales::DEFAULT_VENDOR;
         $model->vendor_name = $model->vendor->name;
         $error = false;
@@ -184,7 +186,7 @@ class SalesController extends Controller
                                     }
                                     if ($success) {
                                         $glHeader->glDetails = $glDetails;
-                                        if(!$glHeader->save()){
+                                        if (!$glHeader->save()) {
                                             $success = false;
                                             $firstErrors = $glHeader->firstErrors;
                                             $error = "Journal: " . reset($firstErrors);

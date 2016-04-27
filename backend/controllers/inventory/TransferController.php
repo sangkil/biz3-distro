@@ -69,7 +69,12 @@ class TransferController extends Controller
 
         $model->status = Transfer::STATUS_DRAFT;
         $model->date = date('Y-m-d');
-        $model->branch_id = \Yii::$app->profile->branch_id;
+        if(\Yii::$app->profile->branch_id !== ''){
+           $model->branch_id = \Yii::$app->profile->branch_id;
+        }  else {
+            throw new NotFoundHttpException('Cabang/Sales Point belum dipilih.');
+        }
+        
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {

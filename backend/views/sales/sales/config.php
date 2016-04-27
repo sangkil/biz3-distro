@@ -8,14 +8,15 @@ use backend\models\master\Warehouse;
 /* @var $this yii\web\View */
 /* @var $model backend\models\sales\Config */
 /* @var $form ActiveForm */
+$this->title = 'SalesPoint Config';
 ?>
 <div class="sales-sales-x-config">
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-lg-4">
-            <?= $form->field($model, 'branch_id')->dropDownList(Branch::selectOptions()) ?>
-            <?= $form->field($model, 'warehouse_id')->dropDownList(Warehouse::selectOptions()) ?>
+            <?= $form->field($model, 'branch_id')->dropDownList(Branch::selectAssignedOptions(),['prompt'=>'== Unit Aktif ==']) ?>
+            <?= $form->field($model, 'warehouse_id')->dropDownList(Warehouse::selectAssignedOptions(),['prompt'=>'== Warehouse Aktif ==']) ?>
         </div>
         <div class="col-lg-12">
             <div class="form-group">

@@ -8,8 +8,9 @@ use backend\models\inventory\GoodsMovement;
 /* @var $this yii\web\View */
 /* @var $model GoodsMovement */
 
-$this->title = $model->nmType . ' #' . $model->number;
-$this->title = 'Goods ' . ($model->nmType ? ucfirst(strtolower($model->nmType)) : 'Movement') . ' #' . $model->number;
+$this->title = ($model->type == GoodsMovement::TYPE_RECEIVE) ? 'Penerimaan' : 'Mutasi';
+$this->title = ($model->type == GoodsMovement::TYPE_ISSUE) ? 'Pengeluaran' : $this->title;
+$this->title .= ' Barang #' . $model->number;
 $this->params['breadcrumbs'][] = ['label' => 'Goods Movements', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
