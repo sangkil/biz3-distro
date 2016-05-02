@@ -31,38 +31,49 @@ class DataController extends Controller
             'products3.txt',
             'products4.txt',
         ];
+        $file = '/home/mujib/Documents/products.txt';
 
         $categories = [
-            'FOOTWERE' => 1,
-            'APAREL' => 2,
-            'HEADWERE' => 3,
+            'FOOTWEAR' => 1,
+            'APPAREL' => 2,
+            'HARDWEAR' => 3,
+        ];
+        /*
+         * [1, "0001", "Adidas"],
+    [2, "0002", "Nike"],
+    [3, "0003", "Puma"],
+    [4, "0004", "Specs"],
+    [5, "0005", "Joma"],
+         */
+        $groups = [
+            'adidas' => 1,
+            'nike'=>2,
+            'puma'=>3,
+            'specs'=>4,
+            'joma'=>5
         ];
         $id = 1; // autoincrement product id
-        foreach ($files as $file) {
-            $file = file($dirname . $file);
-            unset($file[0]); // unset header
-            foreach ($file as $line) {
-                $line = explode("\t", $line);
-                if (empty(trim($line[3]))) {
-                    continue;
-                }
-                $row = [$id++]; // id
-                $row[] = $categories[trim($line[0])]; // categori
-                $row[] = "'" . str_replace(' ', '', $line[1]) . "'"; // barcode
-                $row[] = "'" . str_replace(['\\', '\''], ['\\\\', '\\\''], $line[5]) . "'"; // nama panjang
 
-                $h = str_replace(['Rp ', ','], ['', ''], trim($line[6]));
-                $row[] = $h && $h != '-' ? $h : 0; // harga jual
-                $h = str_replace(['Rp ', ','], ['', ''], trim($line[7]));
-                $row[] = $h && $h != '-' ? $h : 0; // harga modal
-                $h = str_replace(['Rp ', ','], ['', ''], trim($line[9]));
-                $row[] = $h && $h != '-' ? $h : 0; // harga net
+        $contents = file($file);
+        unset($contents[0]); // unset header
+        foreach ($contents as $line) {
+            echo "$id \n";
+            $line = explode("\t", $line);
+            $row = [$id++]; // id
+            $row[] = $categories[trim($line[1])]; // categori
+            $row[] = "'" . str_replace(' ', '', $line[2]) . "'"; // barcode
+            $row[] = "'" . str_replace(['\\', '\''], ['\\\\', '\\\''], $line[6]) . "'"; // nama panjang
 
-                $row[] = $line[8]; // qty
+            $row[] = $line[7]; // harga jual
+            $row[] = $line[8]; // harga modal
+            //$row[] = $line[10]; // harga net
 
-                $lines[] = '    [' . implode(', ', $row) . '],';
-            }
+            $row[] = $line[9]; // qty
+            $row[] = $groups[strtolower($line[0])]; //
+
+            $lines[] = '    [' . implode(', ', $row) . '],';
         }
+
         $lines[] = '];';
         file_put_contents($dirname . 'product.php', implode("\n", $lines));
     }
@@ -208,7 +219,7 @@ class DataController extends Controller
         foreach ($rows as $i => $line) {
             $row = [
                 'id' => $line[0],
-                'group_id' => 1,
+                'group_id' => $line[7],
                 'category_id' => $line[1],
                 'code' => $line[2],
                 'name' => $line[3],
