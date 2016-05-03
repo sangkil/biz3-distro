@@ -228,7 +228,7 @@ class InvoiceController extends Controller
                 $gl->glDetails = $newDtls;
 
                 if ($gl->save()) {
-                    echo 'not commit set';
+                    \Yii::$app->getSession()->setFlash('error', 'not commit set');
                     //$transaction->commit();
                 } else {
                     foreach ($gl->getErrors() as $dkey => $vald) {
