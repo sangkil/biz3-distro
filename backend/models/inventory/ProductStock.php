@@ -5,6 +5,7 @@ namespace backend\models\inventory;
 use Yii;
 use backend\models\master\Product;
 use backend\models\master\Warehouse;
+use backend\models\master\Cogs;
 /**
  * This is the model class for table "product_stock".
  *
@@ -76,4 +77,12 @@ class ProductStock extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Warehouse::className(), ['id' => 'warehouse_id']);
     }
-}
+
+        /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCogs()
+    {
+        return $this->hasOne(Cogs::className(), ['product_id' => 'product_id']);
+    }
+    }

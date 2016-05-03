@@ -49,6 +49,14 @@ $this->params['breadcrumbs'][] = $this->title;
 //                },
                 'filter' => false
             ],
+            [
+                'label' => 'Value',
+                'format' => ['decimal',0],
+                'value' => function ($model) {
+                    return ($model->cogs->cogs * $model->qty);
+                },
+                'filter' => false
+            ],
 //            [
 //                'attribute' => 'product.created_at',
 //                'format'=>'datetime',
