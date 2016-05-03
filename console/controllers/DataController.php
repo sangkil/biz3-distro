@@ -24,51 +24,46 @@ class DataController extends Controller
             'return ['
         ];
         $dirname = __DIR__ . '/data/';
-
-        $files = [
-            'products1.txt',
-            'products2.txt',
-            'products3.txt',
-            'products4.txt',
-        ];
-        $file = '/home/mujib/Documents/products.txt';
+        $file = '/home/dee/Downloads/products.txt';
 
         $categories = [
             'FOOTWEAR' => 1,
+            'FOOTWERE' => 1,
             'APPAREL' => 2,
+            'HARDWARE' => 3,
             'HARDWEAR' => 3,
+            'HEADWERE' => 3,
         ];
         /*
          * [1, "0001", "Adidas"],
-    [2, "0002", "Nike"],
-    [3, "0003", "Puma"],
-    [4, "0004", "Specs"],
-    [5, "0005", "Joma"],
+          [2, "0002", "Nike"],
+          [3, "0003", "Puma"],
+          [4, "0004", "Specs"],
+          [5, "0005", "Joma"],
          */
         $groups = [
             'adidas' => 1,
-            'nike'=>2,
-            'puma'=>3,
-            'specs'=>4,
-            'joma'=>5
+            'nike' => 2,
+            'puma' => 3,
+            'specs' => 4,
+            'joma' => 5
         ];
         $id = 1; // autoincrement product id
 
         $contents = file($file);
-        unset($contents[0]); // unset header
+        unset($contents[0], $contents[1]); // unset header
         foreach ($contents as $line) {
-            echo "$id \n";
-            $line = explode("\t", $line);
+            echo "$id \t";
+            $line = explode("\t", trim($line));
             $row = [$id++]; // id
             $row[] = $categories[trim($line[1])]; // categori
-            $row[] = "'" . str_replace(' ', '', $line[2]) . "'"; // barcode
+            $row[] = "'" . str_replace([' ','-'], ['',''], $line[3]) . "'"; // barcode
             $row[] = "'" . str_replace(['\\', '\''], ['\\\\', '\\\''], $line[6]) . "'"; // nama panjang
 
-            $row[] = $line[7]; // harga jual
-            $row[] = $line[8]; // harga modal
-            //$row[] = $line[10]; // harga net
+            $row[] = $line[8]; // harga jual
+            $row[] = $line[9]; // harga modal
 
-            $row[] = $line[9]; // qty
+            $row[] = $line[7]; // qty
             $row[] = $groups[strtolower($line[0])]; //
 
             $lines[] = '    [' . implode(', ', $row) . '],';
@@ -217,11 +212,12 @@ class DataController extends Controller
         Console::startProgress(0, $total);
         $errors = [];
         foreach ($rows as $i => $line) {
+            $code = strlen($line[2]) <= 13 ? $line[2] : substr($line[2], 0, -2);
             $row = [
                 'id' => $line[0],
                 'group_id' => $line[7],
                 'category_id' => $line[1],
-                'code' => $line[2],
+                'code' => $code,
                 'name' => $line[3],
                 'status' => 10,
             ];
