@@ -228,7 +228,8 @@ class InvoiceController extends Controller
                 $gl->glDetails = $newDtls;
 
                 if ($gl->save()) {
-                    $transaction->commit();
+                    echo 'not commit set';
+                    //$transaction->commit();
                 } else {
                     foreach ($gl->getErrors() as $dkey => $vald) {
                         if ($vald[0] == 'Related error') {
