@@ -17,6 +17,47 @@ class DataController extends Controller
     public $deleteOld = false;
     public $warehouse = 1;
 
+    public function actionConvertQty()
+    {
+        $lines = [
+            '<?php',
+            'return ['
+        ];
+        $dirname = __DIR__ . '/data/';
+        $file = '/home/dee/Documents/qty_awal.txt';
+
+        $products = [];
+        foreach (\backend\models\master\Product::find()->asArray()->all() as $row) {
+            $products[trim($row['name'])] = $row['id'];
+        }
+
+        $whs = [
+            'BKT' => 4,
+            'A4Sport' => 3,
+            'PERMINDO' => 2,
+        ];
+        $contents = file($file);
+        $i = 0;
+        $errors = [];
+        foreach ($contents as $line) {
+            echo $i++, "\t";
+            $line = explode("\t", trim($line));
+            if (!isset($products[trim($line[1])])) {
+                $errors[$i] = $line;
+                continue;
+            }
+            $row = [];
+            $row[] = $whs[$line[0]];
+            $row[] = $products[trim($line[1])];
+            $row[] = isset($line[2]) ? $line[2] : 0;
+
+            $lines[] = '    [' . implode(', ', $row) . '],';
+        }
+        file_put_contents(Yii::getAlias('@runtime/qty-convert-err-' . date('His') . '.json'), json_encode($errors));
+        $lines[] = '];';
+        file_put_contents($dirname . 'qty_awal.php', implode("\n", $lines));
+    }
+
     public function actionConvert()
     {
         $lines = [
@@ -57,7 +98,7 @@ class DataController extends Controller
             $line = explode("\t", trim($line));
             $row = [$id++]; // id
             $row[] = $categories[trim($line[1])]; // categori
-            $row[] = "'" . str_replace([' ','-'], ['',''], $line[3]) . "'"; // barcode
+            $row[] = "'" . str_replace([' ', '-'], ['', ''], $line[3]) . "'"; // barcode
             $row[] = "'" . str_replace(['\\', '\''], ['\\\\', '\\\''], $line[6]) . "'"; // nama panjang
 
             $row[] = $line[8]; // harga jual
@@ -321,6 +362,33 @@ class DataController extends Controller
                 ], $result);
         }
         return $result;
+    }
+
+    public function actionMigrateQty()
+    {
+        $command = Yii::$app->db->createCommand();
+        $sampleDir = __DIR__ . '/data';
+
+        $queryCheck = (new \yii\db\Query())
+            ->select(['qty'])
+            ->from('{{%product_stock}}')
+            ->where('warehouse_id=:wid and product_id=:pid');
+        $rows = require $sampleDir . '/qty_awal.php';
+        $total = count($rows);
+        echo "\ninsert table {{%product_stock}}\n";
+        Console::startProgress(0, $total);
+        foreach ($rows as $i => $row) {
+            if ($queryCheck->params([':wid' => $row[0], ':pid' => $row[1]])->one()) {
+                $command->update('{{%product_stock}}', ['qty' => $row[2]], [
+                    'warehouse_id' => $row[0],
+                    'product_id' => $row[1],
+                ])->execute();
+            } else {
+                $command->insert('{{%product_stock}}', $this->toAssoc($row, ['warehouse_id', 'product_id', 'qty',]))->execute();
+            }
+            Console::updateProgress($i + 1, $total);
+        }
+        Console::endProgress();
     }
 
     public function options($actionID)
