@@ -46,11 +46,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'value',
                 'format'=>['decimal',0]
             ],
-            [
-                'attribute'=>'status',
-                'value'=>'nmStatus',
-                'filter'=>  Sales::enums('STATUS_')
-            ],
+//            [
+//                'attribute'=>'status',
+//                'value'=>'nmStatus',
+//                'filter'=>  Sales::enums('STATUS_')
+//            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]);

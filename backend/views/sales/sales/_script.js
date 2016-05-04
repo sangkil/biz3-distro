@@ -72,18 +72,32 @@ $('#input-product').on('keydown', function (e) {
     }
 });
 
-$('#detail-grid').on('blur', ':input[data-field="qty"]', function () {
-    var $row = $(this).closest('#detail-grid > tr');
-    var itemPrice = $row.find(':input[data-field="price"]').val();
-    var isi = $row.find('[data-field="uom_id"] > :selected').data('isi');
-    $row.find('span[data-field="totalLine"]').text(itemPrice * $row.find(':input[data-field="qty"]').val() * isi);
-});
+/*
+ $('#detail-grid').on('blur', ':input[data-field="qty"]', function () {
+ var $row = $(this).closest('#detail-grid > tr');
+ var itemPrice = $row.find(':input[data-field="price"]').val();
+ var isi = $row.find('[data-field="uom_id"] > :selected').data('isi');
+ $row.find('span[data-field="totalLine"]').text(itemPrice * $row.find(':input[data-field="qty"]').val() * isi);
+ });
+ 
+ $('#detail-grid').on('change', ':input[data-field="uom_id"]', function () {
+ var $row = $(this).closest('#detail-grid > tr');
+ var itemPrice = $row.find(':input[data-field="price"]').val();
+ var isi = $row.find('[data-field="uom_id"] > :selected').data('isi');
+ $row.find('span[data-field="totalLine"]').text(itemPrice * $row.find(':input[data-field="qty"]').val() * isi);
+ });
+ */
 
-$('#detail-grid').on('change', ':input[data-field="uom_id"]', function () {
+$('#detail-grid').on('blur', ':input[data-field="discount"],:input[data-field="uom_id"],:input[data-field="qty"]', function () {
     var $row = $(this).closest('#detail-grid > tr');
     var itemPrice = $row.find(':input[data-field="price"]').val();
     var isi = $row.find('[data-field="uom_id"] > :selected').data('isi');
-    $row.find('span[data-field="totalLine"]').text(itemPrice * $row.find(':input[data-field="qty"]').val() * isi);
+    var diskon = $row.find(':input[data-field="discount"]').val();
+
+    var bfor_dis = itemPrice * $row.find(':input[data-field="qty"]').val() * isi;
+    var aftr_dis = bfor_dis - (bfor_dis * diskon * 0.01);
+
+    $row.find('span[data-field="totalLine"]').text(aftr_dis);
 });
 
 $('#detail-grid').on('initRow', function (e, $row) {
@@ -189,7 +203,7 @@ $('#detail-grid').on('change', ':input', function () {
     calculate();
 });
 
-function addPaymentRow(){
+function addPaymentRow() {
     $('#payment-grid').removeClass('hidden');
 
     var $row = $('#payment-grid-dtl').mdmTabularInput('addRow');
@@ -201,8 +215,8 @@ $('#btn-payment-add').on('click', function () {
     addPaymentRow();
 });
 
-$('#inp-payment-value').keydown(function (e){
-    if(e.which == 13){
+$('#inp-payment-value').keydown(function (e) {
+    if (e.which == 13) {
         addPaymentRow();
     }
 });
@@ -213,7 +227,7 @@ $('#payment-grid-dtl').on('change', function () {
     }, 100);
 });
 
-function hideShowPanel(total_sales, total_paid){
+function hideShowPanel(total_sales, total_paid) {
     if (total_sales > total_paid || total_paid == 0) {
         $('#inp-payment-value').val(total_sales - total_paid);
         $('#payment-completion').addClass('hidden');
@@ -252,7 +266,11 @@ function calculate() {
         if (!isi) {
             isi = 1;
         }
-        total_sales += $th.find('[data-field="price"]').val() * $th.find('[data-field="qty"]').val() * isi;
+        var diskon = $th.find(':input[data-field="discount"]').val();
+        var bfor_dis = $th.find('[data-field="price"]').val() * $th.find('[data-field="qty"]').val() * isi;
+        var aftr_dis = bfor_dis - (bfor_dis * diskon * 0.01);
+
+        total_sales += aftr_dis;
         total_qty += $th.find('[data-field="qty"]').val() * isi;
     });
     $('#sales-value').val(total_sales);

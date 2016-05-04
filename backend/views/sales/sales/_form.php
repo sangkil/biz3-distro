@@ -56,7 +56,7 @@ $branch_id = Yii::$app->profile->branch_id;
                 <i class="fa fa-shopping-cart"></i>
             </div>
             <!--<a href="#" class="small-box-footer">-->
-<!--                <?= ''//'Sales Date: ' . Html::getAttributeValue($model, 'Date')  ?> <i class="fa fa-calendar"></i>-->
+<!--                <?= ''//'Sales Date: ' . Html::getAttributeValue($model, 'Date')   ?> <i class="fa fa-calendar"></i>-->
             <!--</a>-->
         </div>
         <div class="box box-info box-comments with-border">
@@ -69,9 +69,16 @@ $branch_id = Yii::$app->profile->branch_id;
                 <?= $form->field($model, 'number')->textInput(['readonly' => true]) ?>
                 <?= ''//$form->field($model, 'branch_id')->dropDownList(Branch::selectOptions())  ?>
                                 </div>-->
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                     <?= $form->field($model, 'vendor_name')->textInput([])->label('Customer') ?>
-                    <?= $form->field($model, 'vendor_id')->hiddenInput()->label(false) ?>
+                </div>
+                <div class="col-lg-6">
+                    <?=
+                    $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
+                        'dateFormat' => 'dd-MM-yyyy',
+                        'options' => ['class' => 'form-control', 'style' => 'width:60%;']
+                    ])
+                    ?>
                 </div>
                 <div id="payment-form" class="hidden">
                     <?= Html::hiddenInput('payment-value', 0, ['id' => 'payment-value']) ?>

@@ -93,6 +93,11 @@ class SalesController extends Controller
                 if (!empty($payments)) {
                     $model->items = Yii::$app->request->post('SalesDtl', []);
                     if ($model->save()) {
+                        $withDiscount = 0;
+                        foreach ($model->items as $dtlRow) {
+                            $withDiscount += $dtlRow->discount;
+                        }
+
                         $movement = $model->createMovement([
                             'warehouse_id' => $profile->warehouse_id,
                         ]);
@@ -109,7 +114,8 @@ class SalesController extends Controller
                         $coa_sales = [
                             'penjualan' => 16,
                             'persediaan' => 32,
-                            'hpp' => 19
+                            'hpp' => 19,
+                            'diskon' => 18
                         ];
 
                         $tcogs = 0;
@@ -148,6 +154,7 @@ class SalesController extends Controller
                                     'amount' => -1 * $invoiceTotal,
                                 ];
 
+                                $totalPaid = 0;
                                 foreach ($payments as $payment) {
                                     $payment->attributes = $paymentData;
                                     $payment->status = Payment::STATUS_RELEASED;
@@ -160,21 +167,36 @@ class SalesController extends Controller
                                         $payItems[0]->value = $invoiceTotal - $total;
                                         $total = $invoiceTotal;
                                     }
+
                                     // payment
+                                    $bayar = $payItems[0]->value * (1 - $payment->paymentMethod->potongan);
                                     $glDetails[] = [
                                         'coa_id' => $payment->paymentMethod->coa_id,
-                                        'amount' => $payItems[0]->value * (1 - $payment->paymentMethod->potongan)
+                                        'amount' => $bayar
                                     ];
+
                                     // potongan payment method
+                                    $potongan_cc = 0;
                                     if ($payment->paymentMethod->potongan > 0) {
+                                        $potongan_cc = $payItems[0]->value * $payment->paymentMethod->potongan;
                                         $glDetails[] = [
                                             'coa_id' => $payment->paymentMethod->coa_id_potongan,
-                                            'amount' => $payItems[0]->value * $payment->paymentMethod->potongan
+                                            'amount' => $potongan_cc
                                         ];
                                     }
 
+                                    $totalPaid += $bayar + $potongan_cc;
                                     $payment->items = $payItems;
                                 }
+
+                                //diskon
+                                if ($withDiscount > 0) {
+                                    $glDetails[] = [
+                                        'coa_id' => $coa_sales['diskon'],
+                                        'amount' => $invoiceTotal - $totalPaid,
+                                    ];
+                                }
+
                                 if ($invoice->value >= $total) {
                                     foreach ($payments as $i => $payment) {
                                         if (!$payment->save()) {
@@ -197,10 +219,11 @@ class SalesController extends Controller
                                     //seharusnya muncul cash back jika berlebih, bukan error
                                     $error = 'Kurang bayar';
                                 }
+                                
                                 if ($success) {
                                     $transaction->commit();
-                                    return $this->redirect(['create']);
-                                    //return $this->redirect(['view', 'id' => $model->id]);
+                                    //return $this->redirect(['create']);
+                                    return $this->redirect(['view', 'id' => $model->id]);
                                 }
                             } else {
                                 if ($invoice) {
@@ -231,6 +254,7 @@ class SalesController extends Controller
             }
             $transaction->rollBack();
         }
+        
         return $this->render('create', [
                 'model' => $model,
                 'payments' => $payments

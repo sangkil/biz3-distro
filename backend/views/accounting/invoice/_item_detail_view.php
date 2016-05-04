@@ -14,7 +14,7 @@ use yii\helpers\Html;
     <span data-field="qty"><?= Html::getAttributeValue($model, "[$key]qty") ?></span>
 </td>
 <td style="text-align:right;">
-    <span data-field="item_value"><?= Html::getAttributeValue($model, "[$key]item_value") ?></span>
+    <span data-field="item_value"><?= number_format(Html::getAttributeValue($model, "[$key]item_value") ,0) ?></span>
 </td>
-<td style="text-align:right;"><span data-field="line_total"><?= Html::getAttributeValue($model, "[$key]qty") * Html::getAttributeValue($model, "[$key]item_value") ?></span></td>
+<td style="text-align:right;"><span data-field="line_total"><?= number_format(Html::getAttributeValue($model, "[$key]qty") * Html::getAttributeValue($model, "[$key]item_value"),0) ?></span></td>
 

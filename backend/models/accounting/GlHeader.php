@@ -248,6 +248,7 @@ class GlHeader extends \yii\db\ActiveRecord
             $totAmount = 0;
             foreach ($this->$attribute as $valc) {
                 $totAmount += $valc->amount;
+                //echo $valc->coa_id.': '.$valc->amount.' of '.$totAmount.'<br>';
             }
             if ($totAmount != 0) {
                 $this->addError($attribute, "Total Debit must equal to Total Credit");
