@@ -132,9 +132,10 @@ class ProductStockController extends Controller
         $searchModel = new ProductStockSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams['params']);
         $dataProvider->pagination = false;
+         = 'Product Stock - '.date('d/m/Y');
 
         header('Content-Type: application/excel');
-        header('Content-Disposition: attachment; filename="product.csv"');
+        header('Content-Disposition: attachment; filename="$filename.csv"');
 
         $fp = fopen('php://output', 'w');
         $i =1;
