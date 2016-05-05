@@ -135,7 +135,7 @@ class ProductStockController extends Controller
         $filename = 'Product Stock - '.date('d/m/Y');
 
         header('Content-Type: application/excel');
-        header('Content-Disposition: attachment; filename="$filename.csv"');
+        header('Content-Disposition: attachment; filename="'.$filename.'.csv"');
 
         $fp = fopen('php://output', 'w');
         $i =1;
