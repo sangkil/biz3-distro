@@ -10,11 +10,17 @@ use yii\grid\GridView;
 $this->title = 'Product Stocks';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<p class='pull-right'>
-    <?= ''//Html::a('Create Product Stock', ['create'], ['class' => 'btn btn-default']) ?>
-</p>
-<br>
-
+<p class="pull-right">
+    <?= ''//Html::a('Create', ['create'], ['class' => 'btn btn-default']) ?>
+    <?=
+    Html::a('<i class="fa fa-download"></i>', ['csv-download', 'id' => $searchModel->id, 'params' => $_GET], [
+        'class' => 'btn btn-default', 'title' => 'CSV Download', //'target'=>'new',
+        'data' => [
+            'method' => 'post',
+        ],
+    ])
+    ?>
+</p><br>
 <div class="product-stock-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -51,10 +57,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'label' => 'Value',
-                'format' => ['decimal',0],
+                'format' => ['decimal', 0],
                 'value' => function ($model) {
-                    return ($model->cogs->cogs * $model->qty);
-                },
+                return ($model->cogs->cogs * $model->qty);
+            },
                 'filter' => false
             ],
 //            [

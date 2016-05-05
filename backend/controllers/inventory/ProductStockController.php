@@ -122,4 +122,28 @@ class ProductStockController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+        /**
+     * Lists all Product models.
+     * @return mixed
+     */
+    public function actionCsvDownload()
+    {
+        $searchModel = new ProductStockSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams['params']);
+        $dataProvider->pagination = false;
+
+        header('Content-Type: application/excel');
+        header('Content-Disposition: attachment; filename="product.csv"');
+
+        $fp = fopen('php://output', 'w');
+        $i =1;
+        foreach ($dataProvider->models as $row) {
+            fputcsv($fp, [$row->warehouse->name, $row->product->code,$row->product->name,$row->qty, ($row->cogs->cogs * $row->qty)],chr(9));
+            //fputcsv($fp, [$i, $row->code, str_replace(';', '-', $row->name),$row->group->name, $row->category->name],';');
+            $i++;
+        }
+        fclose($fp);
+        return false;
+    }
 }
