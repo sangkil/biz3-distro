@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
  */
 class ProductStockController extends Controller
 {
+
     public function behaviors()
     {
         return [
@@ -36,8 +37,8 @@ class ProductStockController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -50,7 +51,7 @@ class ProductStockController extends Controller
     public function actionView($warehouse_id, $product_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($warehouse_id, $product_id),
+                'model' => $this->findModel($warehouse_id, $product_id),
         ]);
     }
 
@@ -67,7 +68,7 @@ class ProductStockController extends Controller
             return $this->redirect(['view', 'warehouse_id' => $model->warehouse_id, 'product_id' => $model->product_id]);
         } else {
             return $this->render('create', [
-                'model' => $model,
+                    'model' => $model,
             ]);
         }
     }
@@ -87,7 +88,7 @@ class ProductStockController extends Controller
             return $this->redirect(['view', 'warehouse_id' => $model->warehouse_id, 'product_id' => $model->product_id]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                    'model' => $model,
             ]);
         }
     }
@@ -123,7 +124,7 @@ class ProductStockController extends Controller
         }
     }
 
-        /**
+    /**
      * Lists all Product models.
      * @return mixed
      */
@@ -132,15 +133,19 @@ class ProductStockController extends Controller
         $searchModel = new ProductStockSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams['params']);
         $dataProvider->pagination = false;
-        $filename = 'Product Stock - '.date('d/m/Y');
+        $filename = 'Product Stock - ' . date('d/m/Y');
+        $headerTitle = ['WAREHOUSE', 'KODE', 'NAMA PRODUCT', 'QTY', 'NILAI PRODUK'];
 
         header('Content-Type: application/excel');
-        header('Content-Disposition: attachment; filename="'.$filename.'.csv"');
+        header('Content-Disposition: attachment; filename="' . $filename . '.csv"');
 
         $fp = fopen('php://output', 'w');
-        $i =1;
+        $i = 0;
         foreach ($dataProvider->models as $row) {
-            fputcsv($fp, [$row->warehouse->name, $row->product->code,$row->product->name,$row->qty, ($row->cogs->cogs * $row->qty)],chr(9));
+            if ($i == 0) {
+                fputcsv($fp, $headerTitle, chr(9));
+            }
+            fputcsv($fp, [$row->warehouse->name, $row->product->code, $row->product->name, $row->qty, ($row->cogs->cogs * $row->qty)], chr(9));
             //fputcsv($fp, [$i, $row->code, str_replace(';', '-', $row->name),$row->group->name, $row->category->name],';');
             $i++;
         }
