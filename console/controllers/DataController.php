@@ -102,7 +102,7 @@ class DataController extends Controller
             $row[] = "'" . str_replace(['\\', '\''], ['\\\\', '\\\''], $line[6]) . "'"; // nama panjang
 
             $row[] = str_replace(['Rp','.',','],['','','.'],$line[8]); // harga jual
-            $row[] = str_replace(['Rp','.',','],['','','.'],$line[8]); // harga modal
+            $row[] = str_replace(['Rp','.',','],['','','.'],$line[9]); // harga modal
 
             $row[] = $line[7]; // qty
             $row[] = $groups[strtolower($line[0])]; //
