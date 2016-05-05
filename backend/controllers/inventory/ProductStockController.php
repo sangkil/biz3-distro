@@ -134,7 +134,7 @@ class ProductStockController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams['params']);
         $dataProvider->pagination = false;
         $filename = 'Product Stock - ' . date('d/m/Y');
-        $headerTitle = ['WAREHOUSE', 'KODE', 'NAMA PRODUCT', 'QTY', 'NILAI PRODUK'];
+        $headerTitle = ['WAREHOUSE', 'KODE', 'NAMA_PRODUCT', 'QTY', 'NILAI_PRODUK'];
 
         header('Content-Type: application/excel');
         header('Content-Disposition: attachment; filename="' . $filename . '.csv"');
