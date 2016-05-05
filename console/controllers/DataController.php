@@ -24,38 +24,48 @@ class DataController extends Controller
             'return ['
         ];
         $dirname = __DIR__ . '/data/';
-        $file = '/home/dee/Documents/qty_awal.txt';
+        $file = '/home/dee/Documents/uniqeu stock by location and article.txt';
 
         $products = [];
-        foreach (\backend\models\master\Product::find()->asArray()->all() as $row) {
-            $products[trim($row['name'])] = $row['id'];
-        }
 
+        $query = (new \yii\db\Query())
+            ->select(['id'])
+            ->from('{{%product}}')
+            ->where('[[name]] like :nm');
         $whs = [
             'BKT' => 4,
-            'A4Sport' => 3,
+            'A4SPORT' => 3,
             'PERMINDO' => 2,
         ];
         $contents = file($file);
         $i = 0;
         $errors = [];
+        unset($contents[0]);
         foreach ($contents as $line) {
             echo $i++, "\t";
             $line = explode("\t", trim($line));
-            if (!isset($products[trim($line[1])])) {
+
+            $nm = $line[1];
+            if (!isset($products[$nm])) {
+                $products[$nm] = $query->params([':nm' => '%' . $nm])->scalar();
+            }
+            if ($products[$nm] === false){
                 $errors[$i] = $line;
                 continue;
             }
+            
             $row = [];
-            $row[] = $whs[$line[0]];
-            $row[] = $products[trim($line[1])];
-            $row[] = isset($line[2]) ? $line[2] : 0;
+            $row[] = $whs[strtoupper($line[0])];
+            $row[] = $products[$nm];
+            $row[] = isset($line[3]) ? $line[3] : 0;
 
             $lines[] = '    [' . implode(', ', $row) . '],';
         }
+        file_put_contents($dirname.'product_map.json', json_encode($products, JSON_PRETTY_PRINT));
         file_put_contents(Yii::getAlias('@runtime/qty-convert-err-' . date('His') . '.json'), json_encode($errors));
         $lines[] = '];';
         file_put_contents($dirname . 'qty_awal.php', implode("\n", $lines));
+        echo "\n";
     }
 
     public function actionConvert()
@@ -101,8 +111,8 @@ class DataController extends Controller
             $row[] = "'" . str_replace([' ', '-'], ['', ''], $line[3]) . "'"; // barcode
             $row[] = "'" . str_replace(['\\', '\''], ['\\\\', '\\\''], $line[6]) . "'"; // nama panjang
 
-            $row[] = str_replace(['Rp','.',','],['','','.'],$line[8]); // harga jual
-            $row[] = str_replace(['Rp','.',','],['','','.'],$line[9]); // harga modal
+            $row[] = str_replace(['Rp', '.', ','], ['', '', '.'], $line[8]); // harga jual
+            $row[] = str_replace(['Rp', '.', ','], ['', '', '.'], $line[9]); // harga modal
 
             $row[] = $line[7]; // qty
             $row[] = $groups[strtolower($line[0])]; //
