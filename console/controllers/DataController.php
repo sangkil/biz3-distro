@@ -65,7 +65,7 @@ class DataController extends Controller
             'return ['
         ];
         $dirname = __DIR__ . '/data/';
-        $file = '/home/dee/Downloads/products.txt';
+        $file = '/home/dee/Documents/uniqeu products by article.txt';
 
         $categories = [
             'FOOTWEAR' => 1,
@@ -92,17 +92,17 @@ class DataController extends Controller
         $id = 1; // autoincrement product id
 
         $contents = file($file);
-        unset($contents[0], $contents[1]); // unset header
+        unset($contents[0]); // unset header
         foreach ($contents as $line) {
             echo "$id \t";
             $line = explode("\t", trim($line));
             $row = [$id++]; // id
-            $row[] = $categories[trim($line[1])]; // categori
+            $row[] = $categories[strtoupper(trim($line[1]))]; // categori
             $row[] = "'" . str_replace([' ', '-'], ['', ''], $line[3]) . "'"; // barcode
             $row[] = "'" . str_replace(['\\', '\''], ['\\\\', '\\\''], $line[6]) . "'"; // nama panjang
 
-            $row[] = $line[8]; // harga jual
-            $row[] = $line[9]; // harga modal
+            $row[] = str_replace(['Rp','.',','],['','','.'],$line[8]); // harga jual
+            $row[] = str_replace(['Rp','.',','],['','','.'],$line[8]); // harga modal
 
             $row[] = $line[7]; // qty
             $row[] = $groups[strtolower($line[0])]; //
