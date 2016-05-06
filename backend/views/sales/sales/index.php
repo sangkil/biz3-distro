@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'branch_id',
                 'value'=>'branch.name',
-                'filter'=>  backend\models\master\Branch::selectOptions()
+                'filter'=>  backend\models\master\Branch::selectAssignedOptions()
             ],
             [
                 'attribute'=>'vendor_id',
