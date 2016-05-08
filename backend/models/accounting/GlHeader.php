@@ -133,6 +133,35 @@ class GlHeader extends \yii\db\ActiveRecord
         $items[] = $detail;
         $this->glDetails = $items;
     }
+
+    public function reserve()
+    {
+        $model = new static([
+            'branch_id' => $this->branch_id,
+            'reff_type' => self::REFF_SELF,
+            'reff_id' => $this->id,
+            'status' => self::STATUS_CANCELED,
+            'description' => "Reverse of [{$this->number}]",
+        ]);
+        $model->date = date('Y-m-d');
+        $model->periode_id = static::getActivePeriode();
+
+        $items = [];
+        foreach ($this->glDetails as $item) {
+            $items[] = [
+                'coa_id' => $item->coa_id,
+                'amount' => -1 * $item->amount
+            ];
+        }
+        $model->glDetails = $items;
+        if ($model->save()) {
+            $this->status = self::STATUS_CANCELED;
+            $this->description = "{$this->description} canceled by [{$model->number}]";
+            return $this->save();
+        }
+        return false;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

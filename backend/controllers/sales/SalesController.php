@@ -14,6 +14,8 @@ use yii\base\UserException;
 use backend\models\accounting\Payment;
 use common\classes\Helper;
 use backend\models\accounting\GlHeader;
+use backend\models\inventory\GoodsMovement;
+use backend\models\accounting\Invoice;
 use yii\db\Query;
 
 /**
@@ -41,7 +43,7 @@ class SalesController extends Controller
     public function actionIndex()
     {
         $searchModel = new SalesSearch();
-        $searchModel->branch_id = \Yii::$app->profile->branch_id;
+        $searchModel->branch_id = Yii::$app->profile->branch_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -58,6 +60,13 @@ class SalesController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
+                'model' => $this->findModel($id),
+        ]);
+    }
+
+    public function actionCetak($id)
+    {
+        return $this->render('cetak', [
                 'model' => $this->findModel($id),
         ]);
     }
@@ -108,7 +117,7 @@ class SalesController extends Controller
                             'date' => date('Y-m-d'),
                             'branch_id' => $model->branch_id,
                             'periode_id' => $this->findPeriode(),
-                            'description' => 'Sales POS',
+                            'description' => "Sales POS [{$model->number}]",
                         ]);
                         //Create Jurnal
                         $coa_sales = [
@@ -219,7 +228,7 @@ class SalesController extends Controller
                                     //seharusnya muncul cash back jika berlebih, bukan error
                                     $error = 'Kurang bayar';
                                 }
-                                
+
                                 if ($success) {
                                     $transaction->commit();
                                     //return $this->redirect(['create']);
@@ -254,7 +263,7 @@ class SalesController extends Controller
             }
             $transaction->rollBack();
         }
-        
+
         return $this->render('create', [
                 'model' => $model,
                 'payments' => $payments
@@ -377,12 +386,37 @@ class SalesController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        if ($model->status != Sales::STATUS_DRAFT) {
-            throw new UserException('Tidak bisa didelete');
+        if ($model->status == Sales::STATUS_DRAFT) {
+            $model->delete();
+            return $this->redirect(['index']);
         }
-        $model->delete();
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            // gl
+            $gl = GlHeader::findOne(['reff_type' => GlHeader::REFF_SALES, 'reff_id' => $id]);
 
-        return $this->redirect(['index']);
+            // movement
+            $movement = GoodsMovement::findOne(['reff_type' => GoodsMovement::REFF_SALES, 'reff_id' => $id]);
+
+            // invoice from movement
+            $invoice = Invoice::findOne(['reff_type' => Invoice::REFF_GOODS_MOVEMENT, 'reff_id' => $movement->id]);
+
+            // payment invoive
+            $payments = $invoice->payments;
+            foreach ($payments as $payment) {
+                if(!$payment->delete()){
+                    throw new UserException('Cannot delete payment');
+                }
+            }
+            if($invoice->delete() && $movement->delete() && $gl->reserve()){
+                $transaction->commit();
+                return $this->redirect(['index']);
+            }
+            throw new UserException('Something error');
+        } catch (\Exception $exc) {
+            $transaction->rollBack();
+            throw $exc;
+        }
     }
 
     public function actionProductList($term = '')

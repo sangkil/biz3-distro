@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                    'format' => 'raw',
 //                    'value' => $model->reffNumber
 //                ],
-                'description',
+                'description:reference',
                 [                      // the owner name of the model
                     'label' => 'Status',
                     'format' => 'raw',

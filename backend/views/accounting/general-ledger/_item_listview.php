@@ -43,7 +43,7 @@ use yii\helpers\Html;
                 <td >&nbsp;</td>
                 <td >&nbsp;</td>
                 <td colspan="3">
-                    <?= strtoupper($model->description) ?>
+                    <?= Yii::$app->formatter->asReference($model->description) ?>
                 </td>
             </tr>
         </table>

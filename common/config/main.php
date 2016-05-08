@@ -10,6 +10,9 @@ return [
         ],
         'profile' => [
             'class' => 'dee\tools\State'
+        ],
+        'formatter'=>[
+            'class'=>'common\classes\Formatter'
         ]
     ],
 ];
