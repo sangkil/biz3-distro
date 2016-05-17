@@ -35,9 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Branch',
                 'attribute' => 'branch.name'
             ],
-            'created_at',
-            'created_by',
-            'updated_at',
+//            'created_at',
+//            'created_by',
+//            'updated_at',
             // 'updated_by',
             ['class' => 'yii\grid\ActionColumn'],
         ],

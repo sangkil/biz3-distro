@@ -22,6 +22,8 @@ use common\models\User;
 
 class U2Warehouse extends \yii\db\ActiveRecord
 {
+    
+    public $whse_name;
     /**
      * @inheritdoc
      */
