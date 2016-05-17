@@ -29,8 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
         'model' => $model,
         'attributes' => [
-            'branch_id',
-            'user_id',
+            'branch.name',
+            'user.username',
             'created_at',
             'created_by',
             'updated_at',
