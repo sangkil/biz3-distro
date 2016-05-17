@@ -26,6 +26,7 @@ use yii\jui\AutoComplete;
     echo AutoComplete::widget([
         'name' => 'nm_user',
         'id' => 'dnm_user',
+        'options'=>['class'=>'form-control'],
         'clientOptions' => [
             'source' => $data,
             'autoFill' => true,
