@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use backend\models\master\Warehouse;
+use mdm\admin\models\User;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 
@@ -17,14 +17,14 @@ use yii\web\JsExpression;
 
     <?= $form->field($model, 'warehouse_id')->dropDownList(backend\models\master\Warehouse::selectOptions(), ['style' => 'width:40%;']) ?>
     <?php
-    $data = Warehouse::find()
-            ->select(['name as value', 'name as  label', 'id as id'])
+    $data = User::find()
+            ->select(['username as value', 'username as  label', 'id as id'])
             ->asArray()
             ->all();
 
     echo AutoComplete::widget([
         'model' => $model,
-        'attribute' => 'whse_name',
+        'attribute' => 'user_name',
         'options' => ['class' => 'form-control'],
         'clientOptions' => [
             'source' => $data,
@@ -34,11 +34,11 @@ use yii\web\JsExpression;
                 $('#u2warehouse-user_id').val(ui.item.id);
              }"),
             'search' => new JsExpression("function( event, ui ) {
-                $('#u2branch-user_id').val('');
+                $('#u2warehouse-user_id').val('');
              }")],
     ]);
     ?>
-    
+
     <?= $form->field($model, 'user_id')->hiddenInput()->label(false) ?>
 
     <div class="form-group">

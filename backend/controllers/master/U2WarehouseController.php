@@ -76,8 +76,8 @@ class U2WarehouseController extends Controller {
      * @return mixed
      */
     public function actionUpdate($warehouse_id, $user_id) {
-        $model = $this->findModel($warehouse_id, $user_id);
-        $model->whse_name = $model->warehouse->name;
+        $model = $this->findModel($warehouse_id, $user_id);        
+        $model->user_name = $model->user->username;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'warehouse_id' => $model->warehouse_id, 'user_id' => $model->user_id]);
         } else {
