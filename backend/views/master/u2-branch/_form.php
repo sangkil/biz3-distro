@@ -32,7 +32,10 @@ use yii\jui\AutoComplete;
             'autoFill' => true,
             'minLength' => '1',
             'select' => new JsExpression("function( event, ui ) {
-                alert(ui.item.id);
+                $('#u2branch-user_id').val(ui.item.id);
+             }"),
+            'search' => new JsExpression("function( event, ui ) {
+                $('#u2branch-user_id').val('');
              }")],
     ]);
     ?>
