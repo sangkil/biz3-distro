@@ -44,6 +44,7 @@ class ProductStock extends ProductStockModel
     {
         $query = ProductStockModel::find();
         $query->select(['product_stock.*', 'product.*', 'warehouse.*']);
+        $query->with(['product.group']);
         $query->joinWith(['product', 'warehouse']);
 
         $dataProvider = new ActiveDataProvider([

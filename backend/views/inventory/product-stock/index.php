@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::textInput('ProductStock[product_name]', $searchModel->product_name, array('class' => 'form-control'))
             ],
             [
-                'label' => 'Product',
+                'label' => 'Group',
                 'format' => 'html',
                 'value' => 'product.group.name',
                 'filter' => false
