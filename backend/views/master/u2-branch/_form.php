@@ -24,8 +24,8 @@ use yii\jui\AutoComplete;
             ->all();
 
     echo AutoComplete::widget([
-        'name' => 'nm_user',
-        'id' => 'dnm_user',
+        'model'=>$model,
+        'attribute' => 'user_name', 
         'options'=>['class'=>'form-control'],
         'clientOptions' => [
             'source' => $data,

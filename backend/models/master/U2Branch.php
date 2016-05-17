@@ -21,6 +21,7 @@ use mdm\admin\models\User;
 
 class U2Branch extends \yii\db\ActiveRecord
 {
+    private $user_name;
     /**
      * @inheritdoc
      */
