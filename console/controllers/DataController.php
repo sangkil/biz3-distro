@@ -24,17 +24,14 @@ class DataController extends Controller
             'return ['
         ];
         $dirname = __DIR__ . '/data/';
-        $file = '/home/dee/Documents/uniqeu stock by location and article.txt';
+        $file = Yii::getAlias('@runtime/qty_awal.txt');
+        $artikel_map = json_decode(file_get_contents($dirname . 'artikel_map.json'), true);
 
-        $products = [];
-
-        $query = (new \yii\db\Query())
-            ->select(['id'])
-            ->from('{{%product}}')
-            ->where('[[name]] like :nm');
         $whs = [
             'BKT' => 4,
+            'BUKITTINGGI' => 4,
             'A4SPORT' => 3,
+            'LAKUAK' => 3,
             'PERMINDO' => 2,
         ];
         $contents = file($file);
@@ -45,24 +42,22 @@ class DataController extends Controller
             echo $i++, "\t";
             $line = explode("\t", trim($line));
 
-            $nm = $line[1];
-            if (!isset($products[$nm])) {
-                $products[$nm] = $query->params([':nm' => '%' . $nm])->scalar();
-            }
-            if ($products[$nm] === false){
+            $artikel = $line[1];
+            if (isset($artikel_map[$artikel])) {
+                $id = $artikel_map[$artikel];
+            } else {
                 $errors[$i] = $line;
                 continue;
             }
-            
+
             $row = [];
             $row[] = $whs[strtoupper($line[0])];
-            $row[] = $products[$nm];
-            $row[] = isset($line[3]) ? $line[3] : 0;
+            $row[] = $id;
+            $row[] = isset($line[2]) ? $line[2] : 0;
 
             $lines[] = '    [' . implode(', ', $row) . '],';
         }
-        file_put_contents($dirname.'product_map.json', json_encode($products, JSON_PRETTY_PRINT));
-        file_put_contents(Yii::getAlias('@runtime/qty-convert-err-' . date('His') . '.json'), json_encode($errors));
+        file_put_contents(Yii::getAlias('@runtime/qty-convert-err-' . date('Ymd-His') . '.json'), json_encode($errors, JSON_PRETTY_PRINT));
         $lines[] = '];';
         file_put_contents($dirname . 'qty_awal.php', implode("\n", $lines));
         echo "\n";
@@ -75,7 +70,7 @@ class DataController extends Controller
             'return ['
         ];
         $dirname = __DIR__ . '/data/';
-        $file = '/home/dee/Documents/uniqeu products by article.txt';
+        $file = Yii::getAlias('@runtime/master_barang_with_artikelsize.txt');
 
         $categories = [
             'FOOTWEAR' => 1,
@@ -103,25 +98,28 @@ class DataController extends Controller
 
         $contents = file($file);
         unset($contents[0]); // unset header
+        $artikel = [];
         foreach ($contents as $line) {
             echo "$id \t";
             $line = explode("\t", trim($line));
-            $row = [$id++]; // id
-            $row[] = $categories[strtoupper(trim($line[1]))]; // categori
-            $row[] = "'" . str_replace([' ', '-'], ['', ''], $line[3]) . "'"; // barcode
-            $row[] = "'" . str_replace(['\\', '\''], ['\\\\', '\\\''], $line[6]) . "'"; // nama panjang
+            $row = [$id]; // id
+            $row[] = $categories[strtoupper(trim($line[2]))]; // categori
+            $row[] = "'" . str_replace([' ', '-'], ['', ''], $line[4]) . "'"; // barcode
+            $row[] = json_encode($line[5] . ';' . $line[11]); // nama panjang
 
-            $row[] = str_replace(['Rp', '.', ','], ['', '', '.'], $line[8]); // harga jual
-            $row[] = str_replace(['Rp', '.', ','], ['', '', '.'], $line[9]); // harga modal
-
-            $row[] = $line[7]; // qty
-            $row[] = $groups[strtolower($line[0])]; //
+            $row[] = $line[8]; // harga jual
+            $row[] = $line[9]; // harga modal
+            //$row[] = $line[7]; // qty
+            $row[] = $groups[strtolower($line[1])]; //
 
             $lines[] = '    [' . implode(', ', $row) . '],';
+            $artikel[$line[11]] = $id;
+            $id++;
         }
 
         $lines[] = '];';
         file_put_contents($dirname . 'product.php', implode("\n", $lines));
+        file_put_contents($dirname . 'artikel_map.json', json_encode($artikel, JSON_PRETTY_PRINT));
     }
 
     public function actionMigrate()
@@ -266,7 +264,7 @@ class DataController extends Controller
             $code = strlen($line[2]) <= 13 ? $line[2] : substr($line[2], 0, -2);
             $row = [
                 'id' => $line[0],
-                'group_id' => $line[7],
+                'group_id' => $line[6],
                 'category_id' => $line[1],
                 'code' => $code,
                 'name' => $line[3],
@@ -378,7 +376,7 @@ class DataController extends Controller
     {
         $command = Yii::$app->db->createCommand();
         $sampleDir = __DIR__ . '/data';
-
+        $command->delete('{{%product_stock}}')->execute();
         $queryCheck = (new \yii\db\Query())
             ->select(['qty'])
             ->from('{{%product_stock}}')
