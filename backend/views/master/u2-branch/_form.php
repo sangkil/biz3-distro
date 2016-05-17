@@ -30,7 +30,7 @@ use yii\jui\AutoComplete;
         'clientOptions' => [
             'source' => $data,
             'autoFill' => true,
-            //'minLength' => '1',
+            'minLength' => '1',
             'select' => new JsExpression("function( event, ui ) {
                 alert(ui.item.id);
              }")],
