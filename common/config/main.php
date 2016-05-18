@@ -2,9 +2,9 @@
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
-//        'cache' => [
-//            'class' => 'dee\tools\DbCache',
-//        ],
+        'cache' => [
+            'class' => 'dee\tools\DbCache',
+        ],
         'session' => [
             'class' => 'yii\web\DbSession',
         ],
