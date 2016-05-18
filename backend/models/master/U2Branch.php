@@ -3,7 +3,6 @@
 namespace app\models\master;
 
 use Yii;
-
 /**
  * This is the model class for table "user_to_branch".
  *
@@ -19,21 +18,21 @@ use Yii;
 use backend\models\master\Branch;
 use mdm\admin\models\User;
 
-class U2Branch extends \yii\db\ActiveRecord
-{
+class U2Branch extends \yii\db\ActiveRecord {
+
+    public $user_name;
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'user_to_branch';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['branch_id', 'user_id'], 'required'],
             [['branch_id', 'user_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
@@ -44,8 +43,7 @@ class U2Branch extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'branch_id' => 'Branch ID',
             'user_id' => 'User ID',
@@ -59,16 +57,15 @@ class U2Branch extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBranch()
-    {
+    public function getBranch() {
         return $this->hasOne(Branch::className(), ['id' => 'branch_id']);
     }
 
-        /**
+    /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
 }

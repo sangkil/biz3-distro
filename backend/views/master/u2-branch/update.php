@@ -10,10 +10,12 @@ $this->params['breadcrumbs'][] = ['label' => 'U2 Branches', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->branch_id, 'url' => ['view', 'branch_id' => $model->branch_id, 'user_id' => $model->user_id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="u2-branch-update">
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+<div class="row u2-branch-update">
+    <div class="col-lg-5">
+        <?=
+        $this->render('_form', [
+            'model' => $model,
+        ])
+        ?>
+    </div>
 </div>

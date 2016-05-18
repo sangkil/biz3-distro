@@ -49,6 +49,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => Html::textInput('ProductStock[product_name]', $searchModel->product_name, array('class' => 'form-control'))
             ],
             [
+                'label' => 'Group',
+                'format' => 'html',
+                'value' => 'product.group.name',
+                'filter' => false
+            ],
+            [
                 'attribute' => 'qty',
 //                'value' => function ($model) {
 //                    return ($model->movement->type == 10) ? $model->qty : (-1 * $model->qty);
