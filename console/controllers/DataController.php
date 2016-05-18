@@ -24,7 +24,7 @@ class DataController extends Controller
             'return ['
         ];
         $dirname = __DIR__ . '/data/';
-        $file = Yii::getAlias('@runtime/qty_awal.txt');
+        $file = '/home/mdmunir/Unduhan/qty-awal.txt';
         $artikel_map = json_decode(file_get_contents($dirname . 'artikel_map.json'), true);
 
         $whs = [
@@ -70,7 +70,7 @@ class DataController extends Controller
             'return ['
         ];
         $dirname = __DIR__ . '/data/';
-        $file = Yii::getAlias('@runtime/master_barang_with_artikelsize.txt');
+        $file = '/home/mdmunir/Unduhan/master-barang-with-artikelsize.txt';
 
         $categories = [
             'FOOTWEAR' => 1,
@@ -105,7 +105,7 @@ class DataController extends Controller
             $row = [$id]; // id
             $row[] = $categories[strtoupper(trim($line[2]))]; // categori
             $row[] = "'" . str_replace([' ', '-'], ['', ''], $line[4]) . "'"; // barcode
-            $row[] = json_encode($line[5] . ';' . $line[11]); // nama panjang
+            $row[] = json_encode($line[5] . ';' . $line[10]); // nama panjang
 
             $row[] = $line[8]; // harga jual
             $row[] = $line[9]; // harga modal
@@ -113,7 +113,7 @@ class DataController extends Controller
             $row[] = $groups[strtolower($line[1])]; //
 
             $lines[] = '    [' . implode(', ', $row) . '],';
-            $artikel[$line[11]] = $id;
+            $artikel[$line[10]] = $id;
             $id++;
         }
 
@@ -377,23 +377,23 @@ class DataController extends Controller
         $command = Yii::$app->db->createCommand();
         $sampleDir = __DIR__ . '/data';
         $command->delete('{{%product_stock}}')->execute();
-        $queryCheck = (new \yii\db\Query())
-            ->select(['qty'])
-            ->from('{{%product_stock}}')
-            ->where('warehouse_id=:wid and product_id=:pid');
+//        $queryCheck = (new \yii\db\Query())
+//            ->select(['qty'])
+//            ->from('{{%product_stock}}')
+//            ->where('warehouse_id=:wid and product_id=:pid');
         $rows = require $sampleDir . '/qty_awal.php';
         $total = count($rows);
         echo "\ninsert table {{%product_stock}}\n";
         Console::startProgress(0, $total);
         foreach ($rows as $i => $row) {
-            if ($queryCheck->params([':wid' => $row[0], ':pid' => $row[1]])->one()) {
-                $command->update('{{%product_stock}}', ['qty' => $row[2]], [
-                    'warehouse_id' => $row[0],
-                    'product_id' => $row[1],
-                ])->execute();
-            } else {
+//            if ($queryCheck->params([':wid' => $row[0], ':pid' => $row[1]])->one()) {
+//                $command->update('{{%product_stock}}', ['qty' => $row[2]], [
+//                    'warehouse_id' => $row[0],
+//                    'product_id' => $row[1],
+//                ])->execute();
+//            } else {
                 $command->insert('{{%product_stock}}', $this->toAssoc($row, ['warehouse_id', 'product_id', 'qty',]))->execute();
-            }
+//            }
             Console::updateProgress($i + 1, $total);
         }
         Console::endProgress();
