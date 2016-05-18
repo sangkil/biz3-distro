@@ -2,11 +2,11 @@
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
-        'cache' => [
-            'class' => 'dee\tools\DbCache',
-        ],
+//        'cache' => [
+//            'class' => 'dee\tools\DbCache',
+//        ],
         'session' => [
-            'class' => 'dee\tools\DbSession',
+            'class' => 'yii\web\DbSession',
         ],
         'profile' => [
             'class' => 'dee\tools\State'
