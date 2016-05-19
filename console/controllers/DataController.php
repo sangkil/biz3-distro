@@ -122,6 +122,38 @@ class DataController extends Controller
         file_put_contents($dirname . 'artikel_map.json', json_encode($artikel, JSON_PRETTY_PRINT));
     }
 
+    public function actionBarcodeMap()
+    {
+        $dirname = __DIR__ . '/data/';
+        $file = '/home/mdmunir/Unduhan/master-barang-with-artikelsize.txt';
+        $artikel_map = json_decode(file_get_contents($dirname . 'artikel_map.json'), true);
+        $contents = file($file);
+        unset($contents[0]); // unset header
+        $barcode_map = [];
+        $i = 1;
+        foreach ($contents as $line) {
+            echo $i++, "\t";
+            $line = explode("\t", trim($line));
+            $id = $artikel_map[$line[10]];
+            $barcode_map[$id] = $line[3];
+        }
+        file_put_contents($dirname . 'barcode_map.json', json_encode($barcode_map, JSON_PRETTY_PRINT));
+    }
+
+    public function actionUpdateBarcode()
+    {
+        $dirname = __DIR__ . '/data/';
+        $barcode_map = json_decode(file_get_contents($dirname . 'barcode_map.json'), true);
+        $cmd = Yii::$app->db->createCommand();
+        foreach ($barcode_map as $id => $barcode) {
+            if(strlen($barcode) > 13){
+                $barcode = substr($barcode, 0, -2);
+            }
+            $cmd->update('{{%product}}', ['code' => $barcode], ['id' => $id])->execute();
+            echo $id, "\t";
+        }
+    }
+
     public function actionMigrate()
     {
         if (!Console::confirm('Are you sure you want to create sample data. Old data will be lose')) {
@@ -392,7 +424,7 @@ class DataController extends Controller
 //                    'product_id' => $row[1],
 //                ])->execute();
 //            } else {
-                $command->insert('{{%product_stock}}', $this->toAssoc($row, ['warehouse_id', 'product_id', 'qty',]))->execute();
+            $command->insert('{{%product_stock}}', $this->toAssoc($row, ['warehouse_id', 'product_id', 'qty',]))->execute();
 //            }
             Console::updateProgress($i + 1, $total);
         }
