@@ -27,7 +27,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'number',
+            [
+                'label' => 'Sales Num',
+                'format' => 'html',
+                'attribute' => 'number',
+                'value' => function ($model) {
+                        return Html::a($model->number, ['view', 'id' => $model->id]);
+                    },
+                //'filter' => Html::textInput('Price[product_code]', $searchModel->product_code, array('class' => 'form-control')),
+                //'contentOptions' => ['style' => 'width:10%;'],
+            ],
             [
                 'attribute'=>'branch_id',
                 'value'=>'branch.name',
@@ -50,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'value'=>'nmStatus',
 //                'filter'=>  Sales::enums('STATUS_')
 //            ],
-            ['class' => 'yii\grid\ActionColumn'],
+//            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]);
     ?>

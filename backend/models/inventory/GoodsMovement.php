@@ -64,7 +64,8 @@ class GoodsMovement extends \yii\db\ActiveRecord
     // scenario
     const SCENARIO_CHANGE_STATUS = 'change_status';
 
-    public $vendor_name;
+    public $vendor_name, $whse_name, $jml;
+    
     /**
      * @var array
      */

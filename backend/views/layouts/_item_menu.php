@@ -7,7 +7,7 @@ foreach ($user_roles as $key => $value) {
 
 return[
     '<li class="header">MAIN NAVIGATION</li>',
-    ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
+    ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/site/dashboard'], 'visible' => !Yii::$app->user->isGuest],
     ['label' => 'Laporan', 'icon' => 'pie-chart', 'iconOptions' => ['class' => 'text-aqua'], 'visible' => !Yii::$app->user->isGuest,
         'url' => ['/report/report/index']],
     ['label' => 'Master Data', 'icon' => 'th', 'visible' => !Yii::$app->user->isGuest,

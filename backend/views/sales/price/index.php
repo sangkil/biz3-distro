@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use Yii;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\sales\search\Price */
@@ -27,8 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="price-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
@@ -38,7 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'label' => 'Code',
+                'format' => 'html',
                 'attribute' => 'product.code',
+                'value' => function ($model) {
+                        return Html::a($model->product->code, ['/sales/price/view', 'product_id' => $model->product_id, 'price_category_id' => $model->price_category_id]);
+                    },
                 'filter' => Html::textInput('Price[product_code]', $searchModel->product_code, array('class' => 'form-control')),
                 'contentOptions' => ['style' => 'width:10%;'],
             ],
@@ -62,18 +63,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'created_at',
-                'format'=>'datetime',
+                'format' => 'datetime',
                 'contentOptions' => ['style' => 'text-align:center; width:20%;'],
                 'enableSorting' => false,
-                'filter'=>false
+                'filter' => false
             ],
-            
-        //'created_by',
-        // 'updated_at',
-        // 'updated_by',
-        //['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]);
-    ?>
+                //'created_by',
+                // 'updated_at',
+                // 'updated_by',
+                //['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]);
+        ?>
 
 </div>

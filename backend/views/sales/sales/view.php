@@ -16,6 +16,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-lg-12">
         <p class="pull-right">
             <?= Html::a('Create New', ['create'], ['class' => 'btn btn-default']) ?>
+            <?=
+                Html::a('Delete', ['delete', 'id' => $model->id], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => 'Are you sure you want to delete this item?',
+                        'method' => 'post',
+                    ],
+                ])
+            ?>
             <?php echo ($model->status <= Sales::STATUS_DRAFT) ? Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default'])
                 : Html::a('<i class="fa fa-print"></i>', ['cetak', 'id' => $model->id], ['class' => 'btn btn-default','target'=>'_blank']) ?>
             <?php
