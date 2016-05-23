@@ -123,6 +123,14 @@ class Sales extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Branch::className(), ['id' => 'branch_id']);
     }
+    
+        /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getKasir()
+    {
+        return $this->hasOne(\mdm\admin\models\User::className(), ['id' => 'created_by']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery

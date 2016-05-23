@@ -11,9 +11,12 @@ $this->params['breadcrumbs'][] = ['label' => $model->product_id, 'url' => ['view
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="price-update">
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <div class="col-lg-5">
+        <?=
+        $this->render('_form', [
+            'model' => $model,
+        ])
+        ?>
+    </div>
 
 </div>

@@ -61,6 +61,7 @@ class SalesController extends Controller {
     }
 
     public function actionCetak($id) {
+        $this->layout = 'print';
         return $this->render('cetak', [
                     'model' => $this->findModel($id),
         ]);

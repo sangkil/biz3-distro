@@ -11,8 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Prices', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="price-view">
-
-    <p>
+    <p class="pull-right">
         <?= Html::a('Update', ['update', 'product_id' => $model->product_id, 'price_category_id' => $model->price_category_id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'product_id' => $model->product_id, 'price_category_id' => $model->price_category_id], [
             'class' => 'btn btn-danger',
@@ -25,9 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= DetailView::widget([
         'model' => $model,
+        'template' => '<tr><th style="width:30%;">{label}</th><td>{value}</td></tr>',
         'attributes' => [
-            'product_id',
-            'price_category_id',
+            'product.name',
+            'priceCategory.name',
             'price',
             'created_at',
             'created_by',
