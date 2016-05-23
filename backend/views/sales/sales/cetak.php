@@ -16,7 +16,7 @@ $this->title = $model->number;
 $this->params['breadcrumbs'][] = ['label' => 'Saless', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sales-view col-lg-2">
+<div class="sales-view col-lg-3">
     <?=
     DetailView::widget([
         'model' => $model,
