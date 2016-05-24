@@ -56,7 +56,7 @@ $this->title = 'Cetak Faktur: '.$model->number;
             echo Html::endTag('tr');
             echo Html::endTag('table');
             echo 'Kasir: '.$model->kasir->username;
-            echo '/' . date('dmy-H:i:s', $model->created_at);
+            echo ' ' . date('d-m-y H:i:s', $model->created_at);
             echo '<br>Terima Kasih';
         }
         ?>

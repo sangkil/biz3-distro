@@ -216,7 +216,7 @@ class Sales extends \yii\db\ActiveRecord
                     $items[] = array_merge([
                         'qty' => $detail['qty'] - $detail['total'],
                         'uom_id' => $detail['uom_id'],
-                        'value' => $detail['price'] - $detail['discount'],
+                        'value' => $detail['price'] * (1 - 0.01*$detail['discount']),
                         'cogs' => $detail['cogs'],
                         ], $row);
                 }
@@ -226,7 +226,7 @@ class Sales extends \yii\db\ActiveRecord
                         'product_id' => $detail['product_id'],
                         'qty' => $detail['qty'] - $detail['total'],
                         'uom_id' => $detail['uom_id'],
-                        'value' => $detail['price'] - $detail['discount'],
+                        'value' => $detail['price'] * (1 - 0.01*$detail['discount']),
                         'cogs' => $detail['cogs'],
                     ];
                 }
