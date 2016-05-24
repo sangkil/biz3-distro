@@ -16,15 +16,20 @@ $this->title = $model->number;
 $this->params['breadcrumbs'][] = ['label' => 'Saless', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sales-view col-lg-3">
+<div class="sales-view col-lg-3" style="background-color: white;">
+    <br>
+    <p class="text-center text-bold">FAKTUR PENJUALAN</p>
     <?=
     DetailView::widget([
         'model' => $model,
-        'options' => ['class' => 'table no-border'],
-        'template' => '<tr><th>{label}</th><td>{value}</td></tr>',
+        'options' => ['class' => 'table table-condensed no-border'],
+        'template' => '<tr><td>{label}</td><td>{value}</td></tr>',
         'attributes' => [
-            'number',
-            'created_at:datetime',
+            //'created_at:datetime',
+            [
+                'label' => 'Nomer Faktur',
+                'attribute' => 'number'
+            ],
             [
                 'label' => 'Kasir',
                 'attribute' => 'kasir.username'
@@ -34,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <?php
     $totaLine = 0;
+    $totalDiskon = 0;
     $dtPro = new yii\data\ActiveDataProvider([
         'query' => $model->getItems()->with(['product', 'uom']),
         'pagination' => false,
@@ -43,16 +49,19 @@ $this->params['breadcrumbs'][] = $this->title;
         foreach ($dtPro->getModels() as $key => $val) {
             $b4diskon = $val->price * $val->qty * $val->productUom->isi;
             $afdiskon = $b4diskon * (1 - $val->discount / 100);
+
             $totaLine += $afdiskon;
+            $totalDiskon += $b4diskon - $afdiskon;
         }
     }
     echo GridView::widget([
         'dataProvider' => $dtPro,
-        'tableOptions' => ['class' => 'table table-hover'],
+        'tableOptions' => ['class' => 'table table-hover table-condensed'],
         'layout' => '{items}',
         'showFooter' => true,
+        'footerRowOptions' => ['style' => 'font-weight:bold;text-align:right;'],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+//            ['class' => 'yii\grid\SerialColumn'],
 //                [
 //                    'attribute' => 'product.code',
 //                    'header' => 'Code'
@@ -66,7 +75,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'product.name',
-                'header' => 'Product Name'
+                'header' => 'Product Name',
+                'value' => function ($model) {
+                    $split = explode(';', $model->product->name);
+                    $newname = $split[1] . ';' . $split[2] . ';' . $split[0];
+                    return (strlen($newname) > 26) ? substr($newname, 0, 26) . ' ..' : $newname;
+                    // $model->qty . ' ' . $model->uom->code;
+                },
+                'footer' => ($totalDiskon > 0) ? 'Total <br>Diskon' : 'Total'
             ],
 //            [
 //                'attribute' => 'price',
@@ -79,18 +95,20 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'footer' => 'Total'
 //            ],
             [
-                'header' => 'Total Line',
-                'value' => function ($model) {
+                'header' => 'TotalLine',
+                'value' => function ($model)use ($totaLine) {
                     $b4diskon = $model->price * $model->qty * $model->productUom->isi;
                     $afdiskon = $b4diskon; //$b4diskon * (1 - $model->discount / 100);
                     return $afdiskon;
                 },
                 'format' => ['decimal', 0],
-                'footer' => number_format($totaLine, 0)
+                'contentOptions' => ['style' => 'text-align:right;'],
+                'footer' => ($totalDiskon > 0) ? number_format(($totaLine + $totalDiskon), 0) . '<br>' . number_format(($totalDiskon), 0) : number_format(($totaLine + $totalDiskon), 0)
             ],
         ]
     ])
     ?>
+
 </div>
 
 

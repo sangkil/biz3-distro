@@ -16,12 +16,20 @@ AppAsset::register($this);
         <?= Html::csrfMetaTags() ?>
         <title></title>
         <?php $this->head() ?>
+        <style type="text/css">
+            @media print
+            {
+                body * { visibility: hidden; }
+                #printcontent * { visibility: visible; }
+                #printcontent { position: absolute; top: 0px; left: 0px; }
+            }
+        </style>
     </head>
     <body class="sidebar-collapse">
         <?php $this->beginBody() ?>
         <div class="wrapper">
-            <div class="content-wrapper" style="padding-top: 0px; background-color: white">
-                <section class="content">
+            <div class="content-wrapper" style="padding-top: 0px; background-color: whitesmoke;">
+                <section id="printcontent" class="content">
                     <?= $content ?>
                 </section>
             </div>

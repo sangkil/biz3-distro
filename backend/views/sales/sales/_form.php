@@ -62,7 +62,11 @@ $branch_id = Yii::$app->profile->branch_id;
         <div class="box box-info box-comments with-border">
             <div class="box-header with-border">
                 <i class="fa fa-shopping-cart text-orange"></i>
-                <h3 class="box-title">Casier : <?= (Yii::$app->user->isGuest) ? 'Guest' : Yii::$app->user->identity->username ?></h3>
+                <h3 class="box-title"><p class="text-bold">
+                    Casier : <?= (Yii::$app->user->isGuest) ? 'Guest' : Yii::$app->user->identity->username ?>
+                </p></h3>
+                <div class="pull-right text-bold"><i class="fa fa-map-marker text-green"></i>&nbsp;<?= $warehouse ?></div>
+                
             </div>
             <div class="box-body with-border">
                 <!--                <div class="col-lg-5">

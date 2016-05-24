@@ -87,6 +87,7 @@ class SalesController extends Controller {
         $model->vendor_id = Sales::DEFAULT_VENDOR;
         $model->vendor_name = $model->vendor->name;
         $error = false;
+        $whse = $this->findWarehouse(Yii::$app->profile->warehouse_id);
 
         $payments = [];
         if ($model->load(Yii::$app->request->post())) {
@@ -261,7 +262,8 @@ class SalesController extends Controller {
 
         return $this->render('create', [
                     'model' => $model,
-                    'payments' => $payments
+                    'payments' => $payments,
+                    'warehouse' => $whse->name
         ]);
     }
 
@@ -441,6 +443,14 @@ class SalesController extends Controller {
      */
     protected function findModel($id) {
         if (($model = Sales::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    protected function findWarehouse($id) {
+        if (($model = \backend\models\master\Warehouse::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

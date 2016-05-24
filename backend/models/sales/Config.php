@@ -20,4 +20,12 @@ class Config extends \yii\base\Model
             [['branch_id', 'warehouse_id'], 'integer'],
         ];
     }
+    
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouse()
+    {
+        return $this->hasOne(\backend\models\master\Warehouse::className(), ['id' => 'warehouse_id']);
+    }
 }
