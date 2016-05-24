@@ -65,8 +65,10 @@ $branch_id = Yii::$app->profile->branch_id;
                 <h3 class="box-title"><p class="text-bold">
                     Casier : <?= (Yii::$app->user->isGuest) ? 'Guest' : Yii::$app->user->identity->username ?>
                 </p></h3>
-                <div class="pull-right text-bold"><i class="fa fa-map-marker text-green"></i>&nbsp;<?= $warehouse ?></div>
-                
+                <div class="pull-right text-bold">
+                    <?= Html::a('<i class="fa fa-map-marker text-green"></i>&nbsp;'.$warehouse, ['config'])?>                    
+                </div>
+              
             </div>
             <div class="box-body with-border">
                 <!--                <div class="col-lg-5">
