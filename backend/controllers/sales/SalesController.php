@@ -21,9 +21,11 @@ use yii\db\Query;
 /**
  * SalesController implements the CRUD actions for Sales model.
  */
-class SalesController extends Controller {
+class SalesController extends Controller
+{
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -38,14 +40,15 @@ class SalesController extends Controller {
      * Lists all Sales models.
      * @return mixed
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $searchModel = new SalesSearch();
         $searchModel->branch_id = Yii::$app->profile->branch_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -54,16 +57,18 @@ class SalesController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return $this->render('view', [
-                    'model' => $this->findModel($id),
+                'model' => $this->findModel($id),
         ]);
     }
 
-    public function actionCetak($id) {
+    public function actionCetak($id)
+    {
         $this->layout = 'print';
         return $this->render('cetak', [
-                    'model' => $this->findModel($id),
+                'model' => $this->findModel($id),
         ]);
     }
 
@@ -72,7 +77,8 @@ class SalesController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $profile = Yii::$app->profile;
         if (!isset($profile->branch_id, $profile->warehouse_id) || $profile->branch_id == '') {
             Yii::$app->getSession()->setFlash('_config_return_url', Yii::$app->getRequest()->getUrl());
@@ -98,12 +104,6 @@ class SalesController extends Controller {
                 if (!empty($payments)) {
                     $model->items = Yii::$app->request->post('SalesDtl', []);
                     if ($model->save()) {
-                        $withDiscount = 0;
-                        foreach ($model->items as $dtlRow) {
-                            //$withDiscount += $dtlRow->discount;
-                            $withDiscount += ($dtlRow->qty * $dtlRow->productUom->isi * $dtlRow->price * $dtlRow->discount * 0.01);
-                        }
-
                         $movement = $model->createMovement([
                             'warehouse_id' => $profile->warehouse_id,
                         ]);
@@ -125,8 +125,12 @@ class SalesController extends Controller {
                         ];
 
                         $tcogs = 0;
+                        $penjualan = 0;
+                        $diskon = 0;
                         foreach ($model->items as $item) {
                             $tcogs += $item->cogs * $item->qty * $item->productUom->isi;
+                            $penjualan += $item->price * $item->qty * $item->productUom->isi;
+                            $diskon += 0.01 * $item->discount * $item->qty * $item->productUom->isi;
                         }
                         $glDetails = [];
 
@@ -139,8 +143,6 @@ class SalesController extends Controller {
                             'coa_id' => $coa_sales['persediaan'],
                             'amount' => -$tcogs,
                         ];
-
-
 
                         if ($movement && $movement->save()) {
                             $invoice = $movement->createInvoice();
@@ -156,8 +158,17 @@ class SalesController extends Controller {
                                     'type' => $invoice->type,
                                 ];
 
-                                // Penjualan(K) Vs Payment(D)
-                                $penjualan = -1 * ($invoiceTotal + $withDiscount);
+                                // Penjualan(K) Vs [Payment(D) + Diskon(D)]
+                                $glDetails[] = [
+                                    'coa_id' => $coa_sales['penjualan'],
+                                    'amount' => -1 * $penjualan,
+                                ];
+                                if ($diskon != 0) {
+                                    $glDetails[] = [
+                                        'coa_id' => $coa_sales['diskon'],
+                                        'amount' => $diskon,
+                                    ];
+                                }
 
                                 $totalPaid = 0;
                                 foreach ($payments as $payment) {
@@ -193,19 +204,6 @@ class SalesController extends Controller {
                                     $totalPaid += $bayar + $potongan_cc;
                                     $payment->items = $payItems;
                                 }
-
-                                //diskon
-                                if ($withDiscount > 0) {
-                                    $glDetails[] = [
-                                        'coa_id' => $coa_sales['diskon'],
-                                        'amount' => $withDiscount // $invoiceTotal - $totalPaid,
-                                    ];
-                                }
-
-                                $glDetails[] = [
-                                    'coa_id' => $coa_sales['penjualan'],
-                                    'amount' => -1 * ($invoiceTotal + $withDiscount),
-                                ];
 
                                 if ($invoice->value >= $total) {
                                     foreach ($payments as $i => $payment) {
@@ -266,13 +264,14 @@ class SalesController extends Controller {
         }
 
         return $this->render('create', [
-                    'model' => $model,
-                    'payments' => $payments,
-                    'warehouse' => $whse->name
+                'model' => $model,
+                'payments' => $payments,
+                'warehouse' => $whse->name
         ]);
     }
 
-    public function actionConfig() {
+    public function actionConfig()
+    {
         $model = new \backend\models\sales\Config();
         $model->attributes = Yii::$app->profile->states();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -281,28 +280,29 @@ class SalesController extends Controller {
             return $this->redirect($url);
         }
         return $this->render('config', [
-                    'model' => $model
+                'model' => $model
         ]);
     }
 
-    public function actionMaster() {
+    public function actionMaster()
+    {
         $result = [];
         Yii::$app->response->format = 'js';
 
         $products = [];
         $query_product = (new Query())
-                ->select(['id', 'code', 'name'])
-                ->from(['{{%product}}']);
+            ->select(['id', 'code', 'name'])
+            ->from(['{{%product}}']);
         foreach ($query_product->all() as $row) {
             $products[$row['id']] = $row;
         }
 
         // product uoms
         $query_uom = (new Query())
-                ->select(['p_id' => 'pu.product_id', 'pu.uom_id', 'u.name', 'pu.isi'])
-                ->from(['pu' => '{{%product_uom}}'])
-                ->innerJoin(['u' => 'uom'], '[[u.id]]=[[pu.uom_id]]')
-                ->orderBy(['pu.product_id' => SORT_ASC, 'pu.isi' => SORT_ASC]);
+            ->select(['p_id' => 'pu.product_id', 'pu.uom_id', 'u.name', 'pu.isi'])
+            ->from(['pu' => '{{%product_uom}}'])
+            ->innerJoin(['u' => 'uom'], '[[u.id]]=[[pu.uom_id]]')
+            ->orderBy(['pu.product_id' => SORT_ASC, 'pu.isi' => SORT_ASC]);
         foreach ($query_uom->all() as $row) {
             $products[$row['p_id']]['uoms'][$row['uom_id']] = [
                 'id' => $row['uom_id'],
@@ -313,9 +313,9 @@ class SalesController extends Controller {
 
         // product prices
         $query_price = (new Query())
-                ->select(['product_id', 'price_category_id', 'price'])
-                ->from(['{{%price}}'])
-                ->orderBy(['product_id' => SORT_ASC, 'price_category_id' => SORT_ASC]);
+            ->select(['product_id', 'price_category_id', 'price'])
+            ->from(['{{%price}}'])
+            ->orderBy(['product_id' => SORT_ASC, 'price_category_id' => SORT_ASC]);
         foreach ($query_price->all() as $row) {
             $products[$row['product_id']]['prices'][$row['price_category_id']] = $row['price'];
         }
@@ -324,11 +324,11 @@ class SalesController extends Controller {
 
         $barcodes = [];
         $query_barcode = (new Query())
-                ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
-                ->from('{{%product_child}}')
-                ->union((new Query())
-                ->select(['lower(code)', 'id'])
-                ->from('{{%product}}'));
+            ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
+            ->from('{{%product_child}}')
+            ->union((new Query())
+            ->select(['lower(code)', 'id'])
+            ->from('{{%product}}'));
         foreach ($query_barcode->all() as $row) {
             $barcodes[$row['barcode']] = $row['id'];
         }
@@ -336,9 +336,9 @@ class SalesController extends Controller {
 
         // customer
         $query_vendor = (new Query())
-                ->select(['id', 'code', 'name'])
-                ->from('{{%vendor}}')
-                ->where(['type' => Vendor::TYPE_CUSTOMER]);
+            ->select(['id', 'code', 'name'])
+            ->from('{{%vendor}}')
+            ->where(['type' => Vendor::TYPE_CUSTOMER]);
 
         $result['vendors'] = $query_vendor->all();
 
@@ -351,7 +351,8 @@ class SalesController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = $this->findModel($id);
         if ($model->status != Sales::STATUS_DRAFT) {
             throw new UserException('Tidak bisa diupdate');
@@ -372,7 +373,7 @@ class SalesController extends Controller {
             $transaction->rollBack();
         }
         return $this->render('update', [
-                    'model' => $model,
+                'model' => $model,
         ]);
     }
 
@@ -382,7 +383,8 @@ class SalesController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $model = $this->findModel($id);
         if ($model->status == Sales::STATUS_DRAFT) {
             $model->delete();
@@ -394,10 +396,12 @@ class SalesController extends Controller {
             $gl = GlHeader::findOne(['reff_type' => GlHeader::REFF_SALES, 'reff_id' => $id]);
 
             // movement
-            $movement = ($gl != null) ? GoodsMovement::findOne(['reff_type' => GoodsMovement::REFF_SALES, 'reff_id' => $id]) : null;
+            $movement = ($gl != null) ? GoodsMovement::findOne(['reff_type' => GoodsMovement::REFF_SALES, 'reff_id' => $id])
+                    : null;
 
             // invoice from movement
-            $invoice = ($movement != null) ? Invoice::findOne(['reff_type' => Invoice::REFF_GOODS_MOVEMENT, 'reff_id' => $movement->id]) : null;
+            $invoice = ($movement != null) ? Invoice::findOne(['reff_type' => Invoice::REFF_GOODS_MOVEMENT, 'reff_id' => $movement->id])
+                    : null;
 
             // payment invoive
             $payments = ($invoice != null) ? $invoice->payments : [];
@@ -420,23 +424,25 @@ class SalesController extends Controller {
         }
     }
 
-    public function actionProductList($term = '') {
+    public function actionProductList($term = '')
+    {
         $response = Yii::$app->response;
         $response->format = 'json';
         return Product::find()
-                        ->with(['prices'])
-                        ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                        ->orFilterWhere(['like', 'lower([[name]])', strtolower($term)])
-                        ->limit(10)->asArray()->all();
+                ->with(['prices'])
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->limit(10)->asArray()->all();
     }
 
-    public function actionVendorList($term = '') {
+    public function actionVendorList($term = '')
+    {
         $response = Yii::$app->response;
         $response->format = 'json';
         return Vendor::find()
-                        ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                        ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-                        ->limit(10)->asArray()->all();
+                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+                ->limit(10)->asArray()->all();
     }
 
     /**
@@ -446,7 +452,8 @@ class SalesController extends Controller {
      * @return Sales the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
         if (($model = Sales::findOne($id)) !== null) {
             return $model;
         } else {
@@ -454,7 +461,8 @@ class SalesController extends Controller {
         }
     }
 
-    protected function findWarehouse($id) {
+    protected function findWarehouse($id)
+    {
         if (($model = \backend\models\master\Warehouse::findOne($id)) !== null) {
             return $model;
         } else {
@@ -462,12 +470,12 @@ class SalesController extends Controller {
         }
     }
 
-    protected function findPeriode() {
+    protected function findPeriode()
+    {
         if (($model = \backend\models\accounting\AccPeriode::find()->active()->one()) !== null) {
             return $model->id;
         } else {
             throw new NotFoundHttpException('Active Periode not exist.');
         }
     }
-
 }
