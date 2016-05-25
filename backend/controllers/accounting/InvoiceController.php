@@ -16,11 +16,9 @@ use yii\db\Query;
 /**
  * InvoiceFromGmController implements the CRUD actions for Invoice model.
  */
-class InvoiceController extends Controller
-{
+class InvoiceController extends Controller {
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -37,16 +35,15 @@ class InvoiceController extends Controller
      * Lists all Invoice models.
      * @return mixed
      */
-    public function actionIndex($type = null)
-    {
+    public function actionIndex($type = null) {
         $searchModel = new InvoiceSearch();
         $searchModel->type = $type;
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -55,14 +52,13 @@ class InvoiceController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         //$model_journal = new \backend\models\accounting\GlHeader;
         $model = $this->findModel($id);
         $newDtls = [];
 
         return $this->render('view', [
-                'model' => $model
+                    'model' => $model
         ]);
     }
 
@@ -71,8 +67,7 @@ class InvoiceController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new Invoice();
         $dgets = Yii::$app->request->get();
         $model->load($dgets);
@@ -86,9 +81,9 @@ class InvoiceController extends Controller
 
         if (isset($dgets['goodsMovement']['id'])) {
             $gmv = \backend\models\inventory\GoodsMovement::find()
-                ->where(['=', 'id', $dgets['goodsMovement']['id']])
-                ->with(['vendor'])
-                ->one();
+                    ->where(['=', 'id', $dgets['goodsMovement']['id']])
+                    ->with(['vendor'])
+                    ->one();
             $model->reff_type = $model::REFF_GOODS_MOVEMENT;
             $model->reff_id = $gmv->id;
             $model->vendor_id = $gmv->vendor_id;
@@ -124,7 +119,7 @@ class InvoiceController extends Controller
         }
 
         return $this->render('create', [
-                'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -134,8 +129,7 @@ class InvoiceController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
         if ($model->status != Invoice::STATUS_DRAFT) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -156,7 +150,7 @@ class InvoiceController extends Controller
             $transaction->rollBack();
         }
         return $this->render('update', [
-                'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -166,8 +160,7 @@ class InvoiceController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $model = $this->findModel($id);
         if ($model->status != Invoice::STATUS_DRAFT) {
             throw new UserException('Tidak bisa didelete');
@@ -183,11 +176,8 @@ class InvoiceController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionPost($id)
-    {
+    public function actionPost($id) {
         $model = $this->findModel($id);
-        $glDtl = Yii::$app->request->post('GlDetail', []);
-
         $model->status = Invoice::STATUS_RELEASED;
         $transaction = Yii::$app->db->beginTransaction();
         try {
@@ -199,6 +189,7 @@ class InvoiceController extends Controller
                 if ($aPeriode == null) {
                     throw new NotFoundHttpException('No active periode exist for now.');
                 }
+
                 $gl->periode_id = $aPeriode->id;
                 $gl->reff_type = $gl::REFF_INVOICE;
                 $gl->reff_id = $model->id;
@@ -246,11 +237,17 @@ class InvoiceController extends Controller
                     $transaction->rollback();
                 }
                 return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                print_r($model->getErrors());
             }
         } catch (\Exception $exc) {
             $transaction->rollBack();
-            throw $exc;
+            echo $exc->getMessage();
         }
+        
+        return $this->render('view', [
+                    'model' => $model
+        ]);
     }
 
     /**
@@ -259,8 +256,7 @@ class InvoiceController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionRevert($id)
-    {
+    public function actionRevert($id) {
         $model = $this->findModel($id);
 
         $model->status = Invoice::STATUS_DRAFT;
@@ -280,24 +276,22 @@ class InvoiceController extends Controller
         }
     }
 
-    public function actionProductList($term = '')
-    {
+    public function actionProductList($term = '') {
         $response = Yii::$app->response;
         $response->format = 'json';
         return Product::find()
-                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-                ->asArray()->limit(100)->all();
+                        ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                        ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+                        ->asArray()->limit(100)->all();
     }
 
-    public function actionVendorList($term = '')
-    {
+    public function actionVendorList($term = '') {
         $response = Yii::$app->response;
         $response->format = 'json';
         return Vendor::find()
-                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-                ->limit(10)->asArray()->all();
+                        ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                        ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+                        ->limit(10)->asArray()->all();
     }
 
     /**
@@ -307,8 +301,7 @@ class InvoiceController extends Controller
      * @return Invoice the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = Invoice::findOne($id)) !== null) {
             return $model;
         } else {
@@ -316,37 +309,35 @@ class InvoiceController extends Controller
         }
     }
 
-    public function actionListCoa($term = '')
-    {
+    public function actionListCoa($term = '') {
         $response = Yii::$app->response;
         $response->format = 'json';
         $coaList = \backend\models\accounting\Coa::find()
-                ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
-                ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
-                ->codeOrdered()->asArray()->limit(10);
+                        ->filterWhere(['like', 'lower([[name]])', strtolower($term)])
+                        ->orFilterWhere(['like', 'lower([[code]])', strtolower($term)])
+                        ->codeOrdered()->asArray()->limit(10);
 
         return $coaList->all();
     }
 
-    public function actionMaster($type = null)
-    {
+    public function actionMaster($type = null) {
         $result = [];
         Yii::$app->response->format = 'js';
 
         $products = [];
         $query_product = (new Query())
-            ->select(['id', 'code', 'name'])
-            ->from(['{{%product}}']);
+                ->select(['id', 'code', 'name'])
+                ->from(['{{%product}}']);
         foreach ($query_product->all() as $row) {
             $products[$row['id']] = $row;
         }
 
         // product uoms
         $query_uom = (new Query())
-            ->select(['p_id' => 'pu.product_id', 'pu.uom_id', 'u.name', 'pu.isi'])
-            ->from(['pu' => '{{%product_uom}}'])
-            ->innerJoin(['u' => 'uom'], '[[u.id]]=[[pu.uom_id]]')
-            ->orderBy(['pu.product_id' => SORT_ASC, 'pu.isi' => SORT_ASC]);
+                ->select(['p_id' => 'pu.product_id', 'pu.uom_id', 'u.name', 'pu.isi'])
+                ->from(['pu' => '{{%product_uom}}'])
+                ->innerJoin(['u' => 'uom'], '[[u.id]]=[[pu.uom_id]]')
+                ->orderBy(['pu.product_id' => SORT_ASC, 'pu.isi' => SORT_ASC]);
         foreach ($query_uom->all() as $row) {
             $products[$row['p_id']]['uoms'][$row['uom_id']] = [
                 'id' => $row['uom_id'],
@@ -357,8 +348,8 @@ class InvoiceController extends Controller
 
         // product prices
         $query_cost = (new Query())
-            ->select(['product_id', 'last_purchase_price', 'cogs'])
-            ->from(['{{%cogs}}']);
+                ->select(['product_id', 'last_purchase_price', 'cogs'])
+                ->from(['{{%cogs}}']);
         foreach ($query_cost->all() as $row) {
             $products[$row['product_id']]['cost'] = $row['last_purchase_price'];
         }
@@ -367,11 +358,11 @@ class InvoiceController extends Controller
 
         $barcodes = [];
         $query_barcode = (new Query())
-            ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
-            ->from('{{%product_child}}')
-            ->union((new Query())
-            ->select(['lower(code)', 'id'])
-            ->from('{{%product}}'));
+                ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
+                ->from('{{%product_child}}')
+                ->union((new Query())
+                ->select(['lower(code)', 'id'])
+                ->from('{{%product}}'));
         foreach ($query_barcode->all() as $row) {
             $barcodes[$row['barcode']] = $row['id'];
         }
@@ -379,12 +370,13 @@ class InvoiceController extends Controller
 
         // vendors
         $query_vendor = (new Query())
-            ->select(['id', 'code', 'name'])
-            ->from('{{%vendor}}');
+                ->select(['id', 'code', 'name'])
+                ->from('{{%vendor}}');
 
         ($type !== null) ? $query_vendor->where(['type' => [$type, Vendor::TYPE_INTERN]]) : '';
         $result['vendors'] = $query_vendor->all();
 
         return 'var masters = ' . json_encode($result) . ';';
     }
+
 }

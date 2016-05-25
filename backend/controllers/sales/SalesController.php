@@ -100,7 +100,8 @@ class SalesController extends Controller {
                     if ($model->save()) {
                         $withDiscount = 0;
                         foreach ($model->items as $dtlRow) {
-                            $withDiscount += $dtlRow->discount;
+                            //$withDiscount += $dtlRow->discount;
+                            $withDiscount += ($dtlRow->qty * $dtlRow->productUom->isi * $dtlRow->price * $dtlRow->discount * 0.01);
                         }
 
                         $movement = $model->createMovement([
@@ -139,6 +140,8 @@ class SalesController extends Controller {
                             'amount' => -$tcogs,
                         ];
 
+
+
                         if ($movement && $movement->save()) {
                             $invoice = $movement->createInvoice();
                             if ($invoice && $invoice->save()) {
@@ -154,10 +157,7 @@ class SalesController extends Controller {
                                 ];
 
                                 // Penjualan(K) Vs Payment(D)
-                                $glDetails[] = [
-                                    'coa_id' => $coa_sales['penjualan'],
-                                    'amount' => -1 * $invoiceTotal,
-                                ];
+                                $penjualan = -1 * ($invoiceTotal + $withDiscount);
 
                                 $totalPaid = 0;
                                 foreach ($payments as $payment) {
@@ -198,9 +198,14 @@ class SalesController extends Controller {
                                 if ($withDiscount > 0) {
                                     $glDetails[] = [
                                         'coa_id' => $coa_sales['diskon'],
-                                        'amount' => $invoiceTotal - $totalPaid,
+                                        'amount' => $withDiscount // $invoiceTotal - $totalPaid,
                                     ];
                                 }
+
+                                $glDetails[] = [
+                                    'coa_id' => $coa_sales['penjualan'],
+                                    'amount' => -1 * ($invoiceTotal + $withDiscount),
+                                ];
 
                                 if ($invoice->value >= $total) {
                                     foreach ($payments as $i => $payment) {
