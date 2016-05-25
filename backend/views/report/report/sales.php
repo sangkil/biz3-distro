@@ -8,7 +8,7 @@
 <div class="col-lg-6">
     <h2>Daftar Penjualan</h2>
     <p>Menunjukkan daftar kronologis dari semua faktur dan pembayaran untuk rentang tanggal yang dipilih..</p>
-    <p><a class="btn btn-default" href="#">Get Started &raquo;</a></p>
+    <p><?= \yii\bootstrap\Html::a('Daftar Penjualan &raquo;', ['/sales/sales/index'], ['class' => 'btn btn-default']) ?></p>
 </div>
 <div class="col-lg-6">
     <h2>Penjualan per Pelanggan</h2>

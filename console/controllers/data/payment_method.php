@@ -9,5 +9,8 @@ return[
     [9, 3, 'Kartu Kredit Mandiri', 41, 0.06, 47],
     [10, 4, 'Tunai', 45, null, null],
     [11, 4, 'Kartu Kredit BRI', 40, 0.05, 46],
-    [12, 4, 'Kartu Kredit Mandiri', 41, 0.06, 47]
+    [12, 4, 'Kartu Kredit Mandiri', 41, 0.06, 47],
+    [13, 2, 'Diskon Cash', 49, null, null],
+    [14, 3, 'Diskon Cash', 49, null, null],
+    [15, 4, 'Diskon Cash', 49, null, null]
 ];

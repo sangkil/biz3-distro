@@ -174,7 +174,6 @@ class m160201_050050_create_table_accounting extends \yii\db\Migration
         $this->dropTable('{{%invoice}}');
         $this->dropTable('{{%gl_detail}}');
         $this->dropTable('{{%gl_header}}');
-        $this->dropTable('{{%entri_sheet_dtl}}');
         $this->dropTable('{{%entri_sheet}}');
         $this->dropTable('{{%acc_periode}}');
         $this->dropTable('{{%coa}}');

@@ -7,6 +7,7 @@ use yii\web\Controller;
 use common\models\LoginForm;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
+use yii\web\NotFoundHttpException;
 
 /**
  * Site controller
@@ -75,11 +76,15 @@ class SiteController extends Controller {
 
     public function actionDashboard() {
         $mperiode = \backend\models\accounting\AccPeriode::find()->active()->one();
+        if($mperiode == null){
+            throw new NotFoundHttpException('There is no active accounting periode.');
+        }
+        
         $sal = \backend\models\accounting\GlDetail::find();
         $sal->select(['sum(amount)']);
         $sal->joinWith(['header']);
         $sal->groupBy(['gl_header.branch_id']);
-        $sal->where('gl_header.branch_id=:dbranch AND coa_id = 16', [':dbranch' => \Yii::$app->profile->branch_id]);
+        $sal->where('gl_header.branch_id=:dbranch AND coa_id = 16 AND periode_id = :dperiode', [':dbranch' => \Yii::$app->profile->branch_id, ':dperiode' => $mperiode->id]);
 
         $whse = \backend\models\master\Warehouse::find()->select('id')->assigned()->column();
 

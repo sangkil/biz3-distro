@@ -35,12 +35,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Warehouse',
                 'attribute' => 'warehouse_id',
                 'value' => 'warehouse.name',
-                'filter' => backend\models\master\Warehouse::selectOptions()
+                'filter' => backend\models\master\Warehouse::selectOptions(),
+                'headerOptions' => ['style' => 'width:10%;'],
             ],
             [
                 'label' => 'Code',
                 'attribute' => 'product.code',
-                'filter' => Html::textInput('ProductStock[product_code]', $searchModel->product_code, array('class' => 'form-control'))
+                'filter' => Html::textInput('ProductStock[product_code]', $searchModel->product_code, array('class' => 'form-control')),
+                'headerOptions' => ['style' => 'width:10%;'],
             ],
             [
                 'label' => 'Product',
@@ -52,22 +54,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Group',
                 'format' => 'html',
                 'value' => 'product.group.name',
-                'filter' => false
+                'filter' => false,
+                'headerOptions' => ['style' => 'width:15%;'],
             ],
             [
                 'attribute' => 'qty',
 //                'value' => function ($model) {
 //                    return ($model->movement->type == 10) ? $model->qty : (-1 * $model->qty);
 //                },
-                'filter' => false
+                'filter' => false,
+                'headerOptions' => ['style' => 'width:5%;'],
             ],
             [
                 'label' => 'Value',
                 'format' => ['decimal', 0],
                 'value' => function ($model) {
-                return ($model->cogs->cogs * $model->qty);
-            },
-                'filter' => false
+                    return ($model->cogs->cogs * $model->qty);
+                },
+                'filter' => false,
+                'format' => ['decimal', 0],
+                'headerOptions' => ['style' => 'text-align:right; width:15%;'],
+                'contentOptions' => ['style' => 'text-align:right;'],
+                'footerOptions' => ['style' => 'text-align:right;'],
             ],
 //            [
 //                'attribute' => 'product.created_at',

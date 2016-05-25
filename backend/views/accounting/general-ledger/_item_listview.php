@@ -9,11 +9,12 @@ use yii\helpers\Html;
 <tr><td colspan="4">
         <table class="table no-border" style="width: 100%;">
             <tr>
-                <td colspan="2" style="width: 10%;"><?= $model->GlDate . '/' . Html::a($model->number, \yii\helpers\Url::to(['/accounting/general-ledger/view',
-        'id' => $model->id])) ?></td>
+                <td colspan="2" style="width: 10%;"><?=
+                    $model->GlDate . '/' . Html::a($model->number, \yii\helpers\Url::to(['/accounting/general-ledger/view',
+                                'id' => $model->id]))
+                    ?></td>
                 <td colspan="3"></td>
             </tr>
-
             <?php
             ?>
             <?php
@@ -43,7 +44,7 @@ use yii\helpers\Html;
                 <td >&nbsp;</td>
                 <td >&nbsp;</td>
                 <td colspan="3">
-                    <?= Yii::$app->formatter->asReference($model->description) ?>
+<?= Yii::$app->formatter->asReference($model->description) ?>
                 </td>
             </tr>
         </table>

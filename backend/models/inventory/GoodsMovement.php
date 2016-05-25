@@ -14,6 +14,7 @@ use backend\models\master\Cogs;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "goods_movement".
@@ -294,7 +295,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
          * Header Journal
          */
         $model_journal = new \backend\models\accounting\GlHeader;
-        $model_journal->periode_id = \backend\models\accounting\AccPeriode::find()->active()->one()->id;
+        $model_journal->periode_id = $this->findActivePeriode();
         $model_journal->date = date('Y-m-d');
         $model_journal->status = \backend\models\accounting\GlHeader::STATUS_RELEASED;
         $model_journal->reff_type = \backend\models\accounting\GlHeader::REFF_GOODS_MOVEMENT;
@@ -519,6 +520,15 @@ class GoodsMovement extends \yii\db\ActiveRecord
             $items[] = $item;
         }
         return $items;
+    }
+    
+    protected function findActivePeriode(){
+        $dPeriode = \backend\models\accounting\AccPeriode::find()->active()->one();
+        if($dPeriode!=null){
+            return $dPeriode->id;
+        }
+        
+        throw new NotFoundHttpException('There is no active periode..');
     }
 
     /**

@@ -47,5 +47,6 @@ return[
     [45, 9, "111004", "Kas Unit Bukittinggi", 1, "D"],
     [46, 6, "610008", "Potongan CC BRI", 2, "D"],
     [47, 6, "610009", "Potongan CC Mandiri", 2, "D"],
-    [48, 30, "610009", "Mutasi Persediaan antar Cabang", 2, "D"],
+    [48, 3, "610010", "Mutasi Persediaan antar Cabang", 2, "D"],
+    [49, 3, "610011", "Diskon Cash", 2, "D"],
 ];

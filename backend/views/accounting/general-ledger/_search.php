@@ -14,9 +14,9 @@ $form = ActiveForm::begin([
             'method' => 'get',
         ]);
 ?>
-<td style="width: 10%;"><?= $form->field($model, 'number')->label(false); //Html::textInput('no', '', ['class' => 'form-control'])   ?></td>
+<td style="width: 10%;"><?= $form->field($model, 'number')->label(false); //Html::textInput('no', '', ['class' => 'form-control'])     ?></td>
 <td >
-    <?= $form->field($model, 'branch_id')->dropDownList(backend\models\master\Branch::selectOptions())->label(false) ?>
+    <?= $form->field($model, 'branch_id')->dropDownList(backend\models\master\Branch::selectAssignedOptions())->label(false) ?>
 </td>
 <td >
     <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
