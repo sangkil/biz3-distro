@@ -88,11 +88,12 @@ class GmFromReffController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($type, $id)
+    public function actionCreate($type, $id, $desc = null)
     {
         $model = new GoodsMovement([
             'reff_type' => $type,
             'reff_id' => $id,
+            'description' => $desc
         ]);
         if (($reff = $model->updateFromReference()) !== false) {
             list($reffModel, $reff) = $reff;
@@ -124,11 +125,12 @@ class GmFromReffController extends Controller
         ]);
     }
 
-    public function actionCreateReceipt($type, $id)
+    public function actionCreateReceipt($type, $id, $desc = null)
     {
         $model = new GoodsMovement([
             'reff_type' => $type,
             'reff_id' => $id,
+            'description' => $desc
         ]);
 
         if (($reff = $model->updateFromReceipt()) !== false) {

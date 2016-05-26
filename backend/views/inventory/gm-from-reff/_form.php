@@ -25,7 +25,7 @@ $branch_id = Yii::$app->profile->branch_id;
     <?php $form = ActiveForm::begin(); ?>
     <div class="col-md-3">
         <?= $form->field($model, 'number')->textInput(['readonly' => true, 'style' => 'width:60%;']) ?>
-        <?= $form->field($model, 'warehouse_id')->dropDownList(Warehouse::selectOptions()) ?>
+        <?= $form->field($model, 'warehouse_id')->dropDownList(Warehouse::selectAssignedOptions()) ?>
     </div>
     <div class="col-md-4">
         <?=
