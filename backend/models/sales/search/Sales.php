@@ -79,6 +79,7 @@ class Sales extends SalesModel
         $query->select(['branch_id','branch.name', 'sum(value) as value']);
         $query->joinWith(['branch']);
         $query->groupBy(['branch_id','branch.name']);
+        $query->assigned();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

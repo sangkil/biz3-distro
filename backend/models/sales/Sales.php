@@ -28,11 +28,11 @@ use backend\models\accounting\GlHeader;
  * @property Branch $branch 
  * @property Vendor $vendor
  */
-class Sales extends \yii\db\ActiveRecord
-{
+class Sales extends \yii\db\ActiveRecord {
 
     use \mdm\converter\EnumTrait,
         \mdm\behaviors\ar\RelationTrait;
+
     // status movement
     const STATUS_DRAFT = 10;
     const STATUS_RELEASED = 20;
@@ -56,16 +56,14 @@ class Sales extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%sales}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['branch_id', 'Date', 'value', 'status'], 'required'],
             [['vendor_id', 'branch_id', 'status'], 'integer'],
@@ -81,8 +79,7 @@ class Sales extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'number' => 'Number',
@@ -102,8 +99,7 @@ class Sales extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getItems()
-    {
+    public function getItems() {
         return $this->hasMany(SalesDtl::className(), ['sales_id' => 'id']);
     }
 
@@ -111,37 +107,32 @@ class Sales extends \yii\db\ActiveRecord
      *
      * @param array $value
      */
-    public function setItems($value)
-    {
+    public function setItems($value) {
         $this->loadRelated('items', $value);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBranch()
-    {
+    public function getBranch() {
         return $this->hasOne(Branch::className(), ['id' => 'branch_id']);
     }
-    
-        /**
+
+    /**
      * @return \yii\db\ActiveQuery
      */
-    public function getKasir()
-    {
+    public function getKasir() {
         return $this->hasOne(\mdm\admin\models\User::className(), ['id' => 'created_by']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getVendor()
-    {
+    public function getVendor() {
         return $this->hasOne(Vendor::className(), ['id' => 'vendor_id']);
     }
 
-    public function getNmStatus()
-    {
+    public function getNmStatus() {
         return $this->getLogical('status', 'STATUS_');
     }
 
@@ -149,8 +140,7 @@ class Sales extends \yii\db\ActiveRecord
      * 
      * @param GlHeader $model
      */
-    public function createUpdateJournal($model = null)
-    {
+    public function createUpdateJournal($model = null) {
         if ($model === null) {
             $model = new GlHeader([
                 'status' => GlHeader::STATUS_RELEASED,
@@ -167,7 +157,7 @@ class Sales extends \yii\db\ActiveRecord
         foreach ($this->items as $item) {
             $value += $item->cogs * $item->qty * $item->productUom->isi;
         }
-        
+
         $model->addFromTemplate([
             'ES006' => $value,
         ]);
@@ -180,13 +170,12 @@ class Sales extends \yii\db\ActiveRecord
      * @param array $data
      * @return GoodsMovement|boolean
      */
-    public function createMovement($options = [], $data = null)
-    {
+    public function createMovement($options = [], $data = null) {
         if ($this->status == self::STATUS_RELEASED) {
             $movement = new GoodsMovement();
             $movement->attributes = array_merge([
                 'date' => date('Y-m-d'),
-                ], $options);
+                    ], $options);
             $movement->reff_type = GoodsMovement::REFF_SALES;
             $movement->reff_id = $this->id;
             $movement->type = GoodsMovement::TYPE_ISSUE;
@@ -194,18 +183,18 @@ class Sales extends \yii\db\ActiveRecord
             $movement->vendor_id = $this->vendor_id;
 
             $sqlMv = (new \yii\db\Query())
-                ->select(['d.product_id', 'total' => 'sum(d.qty)'])
-                ->from('{{%goods_movement_dtl}} d')
-                ->innerJoin('{{%goods_movement}} m', '[[m.id]]=[[d.movement_id]]')
-                ->where(['m.status' => GoodsMovement::STATUS_RELEASED,
-                    'm.reff_type' => GoodsMovement::REFF_SALES, 'm.reff_id' => $this->id])
-                ->groupBy(['d.product_id']);
+                    ->select(['d.product_id', 'total' => 'sum(d.qty)'])
+                    ->from('{{%goods_movement_dtl}} d')
+                    ->innerJoin('{{%goods_movement}} m', '[[m.id]]=[[d.movement_id]]')
+                    ->where(['m.status' => GoodsMovement::STATUS_RELEASED,
+                        'm.reff_type' => GoodsMovement::REFF_SALES, 'm.reff_id' => $this->id])
+                    ->groupBy(['d.product_id']);
 
             $sql = (new \yii\db\Query())
-                ->select(['sd.*', 'mv.total'])
-                ->from('{{%sales_dtl}} sd')
-                ->leftJoin(['mv' => $sqlMv], '[[sd.product_id]]=[[mv.product_id]]')
-                ->where(['sd.sales_id' => $this->id]);
+                    ->select(['sd.*', 'mv.total'])
+                    ->from('{{%sales_dtl}} sd')
+                    ->leftJoin(['mv' => $sqlMv], '[[sd.product_id]]=[[mv.product_id]]')
+                    ->where(['sd.sales_id' => $this->id]);
 
             $items = [];
             $details = $sql->indexBy('product_id')->all();
@@ -216,9 +205,9 @@ class Sales extends \yii\db\ActiveRecord
                     $items[] = array_merge([
                         'qty' => $detail['qty'] - $detail['total'],
                         'uom_id' => $detail['uom_id'],
-                        'value' => $detail['price'] * (1 - 0.01*$detail['discount']),
+                        'value' => $detail['price'] * (1 - 0.01 * $detail['discount']),
                         'cogs' => $detail['cogs'],
-                        ], $row);
+                            ], $row);
                 }
             } else {
                 foreach ($details as $detail) {
@@ -226,7 +215,7 @@ class Sales extends \yii\db\ActiveRecord
                         'product_id' => $detail['product_id'],
                         'qty' => $detail['qty'] - $detail['total'],
                         'uom_id' => $detail['uom_id'],
-                        'value' => $detail['price'] * (1 - 0.01*$detail['discount']),
+                        'value' => $detail['price'] * (1 - 0.01 * $detail['discount']),
                         'cogs' => $detail['cogs'],
                     ];
                 }
@@ -237,8 +226,7 @@ class Sales extends \yii\db\ActiveRecord
         return false;
     }
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return[
             [
                 'class' => 'mdm\converter\DateConverter',
@@ -252,4 +240,9 @@ class Sales extends \yii\db\ActiveRecord
             'yii\behaviors\TimestampBehavior',
         ];
     }
+
+    public static function find() {
+        return new SalesQuery(get_called_class());
+    }
+
 }
