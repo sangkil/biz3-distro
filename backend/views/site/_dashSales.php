@@ -3,9 +3,11 @@
  * Create By Mujib Masyhudi <mujib.masyhudi@gmail.com>
  * Create at {date('now')}
  */
+$warna = ['bg-aqua','bg-yellow','bg-red','bg-green'];
+$dcolor = $warna[rand(0, count($warna) - 1)];
 ?>
 <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="info-box bg-aqua">
+    <div class="info-box <?= $dcolor ?>">
         <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
 
         <div class="info-box-content">
