@@ -100,6 +100,7 @@ class SalesController extends Controller {
                     if ($model->save()) {
                         $movement = $model->createMovement([
                             'warehouse_id' => $profile->warehouse_id,
+                            'description' => 'Sales Retail'
                         ]);
                         $glHeader = new GlHeader([
                             'status' => GlHeader::STATUS_RELEASED,

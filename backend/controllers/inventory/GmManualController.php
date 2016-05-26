@@ -15,11 +15,9 @@ use yii\db\Query;
 /**
  * GmManualController implements the CRUD actions for GoodsMovement model.
  */
-class GmManualController extends Controller
-{
+class GmManualController extends Controller {
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -36,8 +34,7 @@ class GmManualController extends Controller
      * Lists all GoodsMovement models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $searchModel = new GoodsMovementSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -46,8 +43,8 @@ class GmManualController extends Controller
         $query->with('warehouse');
 
         return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -56,11 +53,10 @@ class GmManualController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         $model = $this->findModel($id);
         return $this->render('view', [
-                'model' => $model
+                    'model' => $model
         ]);
     }
 
@@ -69,11 +65,10 @@ class GmManualController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionPrint($id)
-    {
+    public function actionPrint($id) {
         $this->layout = 'print';
         return $this->render('cetak', [
-                'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -82,10 +77,10 @@ class GmManualController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($type = null)
-    {
+    public function actionCreate($type = null) {
         $model = new GoodsMovement();
         $model->type = $type;
+        $model->description = ($type == GoodsMovement::TYPE_RECEIVE) ? 'Penerimaan Manual' : 'Pengeluaran Manual';
 
         $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {
@@ -104,7 +99,7 @@ class GmManualController extends Controller
             $transaction->rollBack();
         }
         return $this->render('create', [
-                'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -114,8 +109,7 @@ class GmManualController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
         if ($model->status != GoodsMovement::STATUS_DRAFT) {
             throw new UserException('Tidak bisa diupdate');
@@ -138,7 +132,7 @@ class GmManualController extends Controller
             $transaction->rollBack();
         }
         return $this->render('update', [
-                'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -148,8 +142,7 @@ class GmManualController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $model = $this->findModel($id);
         if ($model->status != GoodsMovement::STATUS_DRAFT) {
             throw new UserException('Tidak bisa didelete');
@@ -165,8 +158,7 @@ class GmManualController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionConfirm($id)
-    {
+    public function actionConfirm($id) {
         $model = $this->findModel($id);
         if ($model->status != GoodsMovement::STATUS_DRAFT) {
             throw new UserException('Tidak bisa diconfirm');
@@ -193,8 +185,7 @@ class GmManualController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionRollback($id)
-    {
+    public function actionRollback($id) {
         $model = $this->findModel($id);
         if ($model->status != GoodsMovement::STATUS_RELEASED) {
             throw new UserException('Tidak bisa dirollback');
@@ -215,25 +206,24 @@ class GmManualController extends Controller
         }
     }
 
-    public function actionMaster($type = null)
-    {
+    public function actionMaster($type = null) {
         $result = [];
         Yii::$app->response->format = 'js';
 
         $products = [];
         $query_product = (new Query())
-            ->select(['id', 'code', 'name'])
-            ->from(['{{%product}}']);
+                ->select(['id', 'code', 'name'])
+                ->from(['{{%product}}']);
         foreach ($query_product->all() as $row) {
             $products[$row['id']] = $row;
         }
 
         // product uoms
         $query_uom = (new Query())
-            ->select(['p_id' => 'pu.product_id', 'pu.uom_id', 'u.name', 'pu.isi'])
-            ->from(['pu' => '{{%product_uom}}'])
-            ->innerJoin(['u' => 'uom'], '[[u.id]]=[[pu.uom_id]]')
-            ->orderBy(['pu.product_id' => SORT_ASC, 'pu.isi' => SORT_ASC]);
+                ->select(['p_id' => 'pu.product_id', 'pu.uom_id', 'u.name', 'pu.isi'])
+                ->from(['pu' => '{{%product_uom}}'])
+                ->innerJoin(['u' => 'uom'], '[[u.id]]=[[pu.uom_id]]')
+                ->orderBy(['pu.product_id' => SORT_ASC, 'pu.isi' => SORT_ASC]);
         foreach ($query_uom->all() as $row) {
             $products[$row['p_id']]['uoms'][$row['uom_id']] = [
                 'id' => $row['uom_id'],
@@ -244,8 +234,8 @@ class GmManualController extends Controller
 
         // product prices
         $query_cost = (new Query())
-            ->select(['product_id', 'last_purchase_price', 'cogs'])
-            ->from(['{{%cogs}}']);
+                ->select(['product_id', 'last_purchase_price', 'cogs'])
+                ->from(['{{%cogs}}']);
         foreach ($query_cost->all() as $row) {
             $products[$row['product_id']]['cost'] = $row['last_purchase_price'];
         }
@@ -254,11 +244,11 @@ class GmManualController extends Controller
 
         $barcodes = [];
         $query_barcode = (new Query())
-            ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
-            ->from('{{%product_child}}')
-            ->union((new Query())
-            ->select(['lower(code)', 'id'])
-            ->from('{{%product}}'));
+                ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
+                ->from('{{%product_child}}')
+                ->union((new Query())
+                ->select(['lower(code)', 'id'])
+                ->from('{{%product}}'));
         foreach ($query_barcode->all() as $row) {
             $barcodes[$row['barcode']] = $row['id'];
         }
@@ -266,9 +256,9 @@ class GmManualController extends Controller
 
         // vendors
         $query_vendor = (new Query())
-            ->select(['id', 'code', 'name'])
-            ->from('{{%vendor}}');
-        
+                ->select(['id', 'code', 'name'])
+                ->from('{{%vendor}}');
+
         ($type !== null) ? $query_vendor->where(['type' => [$type, Vendor::TYPE_INTERN]]) : '';
         $result['vendors'] = $query_vendor->all();
         return 'var masters = ' . json_encode($result) . ';';
@@ -281,12 +271,12 @@ class GmManualController extends Controller
      * @return GoodsMovement the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = GoodsMovement::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }
