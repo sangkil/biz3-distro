@@ -4,7 +4,7 @@
  * Create at {date('now')}
  */
 $warna = ['bg-aqua','bg-yellow','bg-red','bg-green'];
-$dcolor = $warna[rand(0, count($warna))];
+$dcolor = $warna[array_rand($warna)]; 
 ?>
 <div class="col-md-3 col-sm-6 col-xs-12">
     <div class="info-box <?= $dcolor ?>">
