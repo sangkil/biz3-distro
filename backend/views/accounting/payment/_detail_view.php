@@ -12,23 +12,26 @@ use backend\models\accounting\PaymentDtl;
 <table class="table table-striped">
     <thead>
         <tr>
-            <th style="width: 10%">#</th>
-            <th>
+            <th style="width: 5%">#</th>
+            <th style="width: 10%">
                 Number
             </th>
-            <th class="items" style="width: 20%">
+            <th>
+                Vendor
+            </th>
+            <th class="items" style="width: 10%">
                 Date
             </th>
-            <th class="items" style="width: 20%">
+            <th class="items" style="width: 10%">
                 Time to Due
             </th>
-            <th style="width: 20%;">
+            <th style="width: 10%;">
                 Invoice Value
             </th>
-            <th style="width: 20%;">
+            <th style="width: 10%;">
                 Payment Value
             </th>
-            <th class="items">
+            <th class="items" style="width: 20%">
                 Sisa
             </th>
         </tr>

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use backend\models\inventory\GoodsMovement;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\inventory\GoodsMovement */

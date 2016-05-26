@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'nmType',
                 'filter' => GoodsMovement::enums('TYPE_')
             ],
+            'description',
             [
                 'attribute' => 'warehouse_id',
                 'value' => 'warehouse.name',
