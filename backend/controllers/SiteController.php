@@ -111,7 +111,8 @@ class SiteController extends Controller {
         $dataProvider = $searchModel->searchByBranch(Yii::$app->request->queryParams);
         
         $datavar = ['dataProvider'=>$dataProvider, 
-//            'mperiode' => $mperiode->name, 'msales' => $msales, 'mreceipt' => $mreceipt, 'mtransfer' => $mtransfer
+            'mperiode' => $mperiode->name, 
+//            'msales' => $msales, 'mreceipt' => $mreceipt, 'mtransfer' => $mtransfer
                 ];
         return $this->render('dashboard', $datavar);
     }

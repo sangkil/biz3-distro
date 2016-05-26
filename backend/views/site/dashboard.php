@@ -3,7 +3,7 @@
 
 use yii\widgets\ListView;
 
-$this->title = 'SangkilBiz3-Distro';
+$this->title = 'Dashboard '. $mperiode;
 ?>
 <div class="row site-index">
 <?=

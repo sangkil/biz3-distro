@@ -11,7 +11,7 @@ $dcolor = $warna[array_rand($warna)];
         <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
 
         <div class="info-box-content">
-            <span class="info-box-text"><?= $model->branch->name ?></span>
+            <span class="info-box-text">SALES: <?= $model->branch->name ?></span>
             <span class="info-box-number"><?= number_format($model->value,0) ?></span>
 
             <div class="progress">
