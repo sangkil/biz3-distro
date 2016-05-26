@@ -72,4 +72,40 @@ class Sales extends SalesModel
 
         return $dataProvider;
     }
+    
+    public function searchByBranch($params)
+    {
+        $query = SalesModel::find();
+        $query->select(['branch_id','branch.name', 'sum(value) as value']);
+        $query->joinWith(['branch']);
+        $query->groupBy(['branch_id','branch.name']);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            $query->where('1=0');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'vendor_id' => $this->vendor_id,
+            'branch_id' => $this->branch_id,
+            'date' => $this->date,
+            'value' => $this->value,
+            'discount' => $this->discount,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            'created_by' => $this->created_by,
+            'updated_at' => $this->updated_at,
+            'updated_by' => $this->updated_by,
+        ]);
+
+        $query->andFilterWhere(['like', 'number', $this->number]);
+
+        return $dataProvider;
+    }
 }
