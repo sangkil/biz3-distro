@@ -80,7 +80,7 @@ class GmManualController extends Controller {
     public function actionCreate($type = null) {
         $model = new GoodsMovement();
         $model->type = $type;
-        $model->description = ($type == GoodsMovement::TYPE_RECEIVE) ? 'Penerimaan Manual' : 'Pengeluaran Manual';
+        $model->description = ($type == GoodsMovement::TYPE_RECEIVE) ? 'Penerimaan Pembelian' : 'Pengeluaran Manual';
 
         $model->date = date('Y-m-d');
         if ($model->load(Yii::$app->request->post())) {

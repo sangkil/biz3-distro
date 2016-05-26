@@ -25,7 +25,7 @@ AppAsset::register($this);
         <div class="wrapper">
             <header class="main-header">
                 <!-- Logo -->
-                <a href="<?= Url::to(['/site/index']); ?>" class="logo">
+                <a href="<?= Url::to(['/site/index']); ?>" class="logo"  style="border-bottom: whitesmoke solid 1px;">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
                     <span class="logo-mini"><b>A</b>4</span>
                     <!-- logo for regular state and mobile devices -->
@@ -36,7 +36,7 @@ AppAsset::register($this);
             require 'left_menu.php';
             ?>
             <div class="content-wrapper" style="padding-top: 0px; background-color: white;">
-                <section class="content-header" style="background-color: whitesmoke;">
+                <section class="content-header" style="background-color: whitesmoke; height: 50px; border-bottom: red solid 1px;">
                     <h1> 
                         <a href="#" data-toggle="offcanvas" role="button">
                             <i class="fa fa-angle-left"></i>
