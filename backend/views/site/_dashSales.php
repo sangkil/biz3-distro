@@ -18,7 +18,7 @@ $dcolor = $warna[array_rand($warna)];
                 <div class="progress-bar" style="width: 100%"></div>
             </div>
             <span class="progress-description">
-                <a href="#">Detail Sales</a>
+                <a href="#"><?= \yii\helpers\Html::a('Detail Sales', ['/sales/sales','Sales[branch_id]'=>$model->branch_id],['target'=>'_blank']) ?></a>
             </span>
         </div>
         <!-- /.info-box-content -->
