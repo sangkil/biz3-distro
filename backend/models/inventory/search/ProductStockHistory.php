@@ -67,8 +67,9 @@ class ProductStockHistory extends ProductStockHistoryModel {
 
         $query->andWhere(['like', 'lower(product.name)', strtolower($this->product_name)]);
         $query->andWhere(['like', 'lower(product.code)', strtolower($this->product_code)]);
-        //$query->andWhere(['like', 'lower(goods_movement.number)', strtolower($this->goods_movement_number)]);
-
+        if (isset($params['goods_movement_number']) && $params['goods_movement_number'] != '') {
+            $query->andWhere(['like', 'lower(goods_movement.number)', strtolower($this->goods_movement_number)]);
+        }
         return $dataProvider;
     }
 

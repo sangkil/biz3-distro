@@ -39,6 +39,7 @@ class ProductStockHistory extends \yii\db\ActiveRecord
             [['time', 'warehouse_id', 'product_id', 'qty_movement', 'qty_current'], 'required'],
             [['time', 'qty_movement', 'qty_current'], 'number'],
             [['warehouse_id', 'product_id', 'movement_id'], 'integer'],
+            ['goods_movement_number','safe']
         ];
     }
 
