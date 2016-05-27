@@ -58,19 +58,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => false,
                 'contentOptions' => ['style' => 'width:10%;'],
             ],
-//            [
-//                'label' => 'Reff.Number',
-//                'attribute' => 'movement_id',
-//                'format'=>'raw',
-//                'value' => function($model) {
-//                    return \yii\bootstrap\Html::a($model->goodsmovements->number, ['/inventory/gm-manual/view', 'id' => $model->movement_id]);
-//                },
-                //'filter' => Html::textInput('ProductStockHistory[goods_movement_number]', $searchModel->goods_movement_number, array('class' => 'form-control'))
-//            ],
+            [
+                'label' => 'Reff.Number',
+                'attribute' => 'movement_id',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return (isset($model->goodsmovements->number)) ? \yii\bootstrap\Html::a($model->goodsmovements->number, ['/inventory/gm-manual/view', 'id' => $model->movement_id]) : '';
+                },
+                    //'filter' => Html::textInput('ProductStockHistory[goods_movement_number]', $searchModel->goods_movement_number, array('class' => 'form-control'))
+            ],
             'goodsmovements.description',
             //['class' => 'yii\grid\ActionColumn'],
-            ],
-        ]);
-        ?>
+        ],
+    ]);
+?>
 
 </div>
