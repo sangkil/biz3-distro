@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model) {
                     return \yii\bootstrap\Html::a($model->goodsmovements->number, ['/inventory/gm-manual/view', 'id' => $model->movement_id]);
                 },
-                'filter' => Html::textInput('ProductStockHistory[goods_movement_number]', $searchModel->goods_movement_number, array('class' => 'form-control'))
+                //'filter' => Html::textInput('ProductStockHistory[goods_movement_number]', $searchModel->goods_movement_number, array('class' => 'form-control'))
             ],
             'goodsmovements.description',
             //['class' => 'yii\grid\ActionColumn'],
