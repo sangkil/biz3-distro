@@ -163,7 +163,7 @@ class StockOpnameController extends Controller {
     public function actionDelete($id) {
         $model = $this->findModel($id);
         if ($model->status != StockOpname::STATUS_DRAFT) {
-            throw new UserException('Tidak bisa didelete');
+            throw new NotFoundHttpException('Tidak bisa didelete');
         }
         $model->delete();
         return $this->redirect(['index']);
@@ -184,8 +184,28 @@ class StockOpnameController extends Controller {
         $model->status = StockOpname::STATUS_RELEASED;
         $transaction = Yii::$app->db->beginTransaction();
         try {
+            //Insert or update opname history
+            $opname_sql = 'INSERT INTO stock_opname_check(opname_id, date, product_id, uom_id, qty, created_at, created_by)
+    SELECT :opname_id, :ddate, "p"."id", 1 "id_uom", COALESCE(s.qty,0) AS "s_qty" , :created_at, :created_by
+    FROM "product" "p" 
+    INNER JOIN "product_stock" "s" ON "s"."product_id"="p"."id" and "s"."warehouse_id"=:whse 
+    LEFT JOIN "stock_opname_dtl" "o" ON "o"."product_id"="p"."id" and "o"."opname_id"=:opname_id';
+
+            $qexist = (new \yii\db\Query())
+                    ->from('stock_opname_check')
+                    ->where('opname_id=:opname_id and date=:ddate', [':opname_id' => $model->id, ':ddate' => date('Y-m-d')]);
+
+            if ($qexist->exists()) {
+                $del_opname = 'delete from stock_opname_check where opname_id=:opname_id and date=:ddate';
+                $del_record = \Yii::$app->db->createCommand($del_opname, [':opname_id' => $model->id, ':ddate' => date('Y-m-d')]);
+                $del_record->execute();
+            }
+            $skrg = new \DateTime();
+            $opname_record = \Yii::$app->db->createCommand($opname_sql, [':opname_id' => $model->id, ':ddate' => date('Y-m-d'), ':whse' => $model->warehouse_id, ':created_at' => $skrg->getTimestamp(), ':created_by' => \Yii::$app->user->id]);
+            $opname_record->execute();
+
+            // update stock internaly via beforeUpdate
             if ($model->save()) {
-//                // update stock internaly via beforeUpdate
                 $transaction->commit();
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {

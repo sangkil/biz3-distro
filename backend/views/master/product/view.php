@@ -139,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             $row .= '<tr>';
                             $row .= '<td>' . $i . '</td>';
                             $row .= '<td>' . $dprc->priceCategory->name . '</td>';
-                            $row .= '<td>' . $dprc->price . '</td>';
+                            $row .= '<td>' . number_format($dprc->price,0) . '</td>';
                             $row .= '</tr>';
                             $i++;
                         }
