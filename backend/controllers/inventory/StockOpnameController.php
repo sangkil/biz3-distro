@@ -9,15 +9,14 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
 
 /**
  * StockOpnameController implements the CRUD actions for StockOpname model.
  */
-class StockOpnameController extends Controller
-{
+class StockOpnameController extends Controller {
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -32,14 +31,13 @@ class StockOpnameController extends Controller
      * Lists all StockOpname models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $searchModel = new StockOpnameSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -48,10 +46,24 @@ class StockOpnameController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
+        $model = $this->findModel($id);
+        $query = (new \yii\db\Query())
+                ->select(['p.id', 'p.code', 'p.name', 'o_qty' => 'COALESCE(o.qty,0)', 's_qty' => 'COALESCE(s.qty,0)',
+                    'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
+                ->from(['p' => '{{%product}}'])
+                ->leftJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $model->warehouse_id])
+                ->leftJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.product_id]]=[[p.id]] and [[o.opname_id]]=:opid', [':opid' => $model->id])
+                ->orderBy(['abs(COALESCE(o.qty,0)-COALESCE(s.qty,0))' => SORT_DESC, 'COALESCE(o.qty,0)' => SORT_DESC]);
+                //->orderBy(['p.code' => SORT_ASC]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination'=>['pagesize'=>50]
+        ]);
+
         return $this->render('view', [
-                'model' => $this->findModel($id),
+                    'model' => $model, 'dataProvider' => $dataProvider
         ]);
     }
 
@@ -60,8 +72,7 @@ class StockOpnameController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new StockOpname();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -75,14 +86,24 @@ class StockOpnameController extends Controller
                         $stock = [];
 
                         $content = file_get_contents($model->file->tempName);
-                        foreach (explode("\n", $content) as $code) {
-                            $product_id = $barcodes[strtolower($code)];
-                            if (!isset($stock[$product_id])) {
-                                $stock[$product_id] = 1;
-                            } else {
-                                $stock[$product_id] ++;
+                        $isfirst = true;
+                        foreach (explode("\n", $content) as $row) {
+                            if ($isfirst) {
+                                $isfirst = false;
+                                continue;
+                            }
+                            $sparated_row = explode(chr(9), $row);
+                            if (isset($barcodes[strtolower($sparated_row[0])])) {
+                                $product_id = $barcodes[strtolower($sparated_row[0])];
+                                $stock[$product_id] = $sparated_row[1];
+//                                if (!isset($stock[$product_id])) {
+//                                    $stock[$product_id] = 0;
+//                                } else {
+//                                    $stock[$product_id] = $line_stock;
+//                                }
                             }
                         }
+
                         $command = \Yii::$app->db->createCommand();
                         $id = $model->id;
                         foreach ($stock as $product_id => $count) {
@@ -103,19 +124,18 @@ class StockOpnameController extends Controller
             }
         }
         return $this->render('create', [
-                'model' => $model,
+                    'model' => $model,
         ]);
     }
 
-    protected function getBarcodes()
-    {
+    protected function getBarcodes() {
         $barcodes = [];
         $query_barcode = (new \yii\db\Query())
-            ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
-            ->from('{{%product_child}}')
-            ->union((new \yii\db\Query())
-            ->select(['lower(code)', 'id'])
-            ->from('{{%product}}'));
+                ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
+                ->from('{{%product_child}}')
+                ->union((new \yii\db\Query())
+                ->select(['lower(code)', 'id'])
+                ->from('{{%product}}'));
         foreach ($query_barcode->all() as $row) {
             $barcodes[$row['barcode']] = $row['id'];
         }
@@ -128,15 +148,14 @@ class StockOpnameController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
-                    'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -147,8 +166,7 @@ class StockOpnameController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -160,8 +178,7 @@ class StockOpnameController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionConfirm($id)
-    {
+    public function actionConfirm($id) {
         $model = $this->findModel($id);
         if ($model->status != StockOpname::STATUS_DRAFT) {
             throw new UserException('Tidak bisa diconfirm');
@@ -170,12 +187,14 @@ class StockOpnameController extends Controller
         $model->status = StockOpname::STATUS_RELEASED;
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            if ($model->save()) {
-                // update stock internaly via beforeUpdate
-                $transaction->commit();
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-            $transaction->rollBack();
+            $model->validate();
+            print_r($model->getRelatedErrors());
+//            if ($model->save()) {
+//                // update stock internaly via beforeUpdate
+//                $transaction->commit();
+//                return $this->redirect(['view', 'id' => $model->id]);
+//            }
+//            $transaction->rollBack();
         } catch (\Exception $exc) {
             $transaction->rollBack();
             throw $exc;
@@ -188,8 +207,7 @@ class StockOpnameController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionCancel($id)
-    {
+    public function actionCancel($id) {
         $model = $this->findModel($id);
         if ($model->status != StockOpname::STATUS_RELEASED) {
             throw new UserException('Tidak bisa dicancel');
@@ -210,6 +228,15 @@ class StockOpnameController extends Controller
         }
     }
 
+    public function actionCsvTemplate() {
+        $rows = [];
+        $rows[] = implode(chr(9), ['Barcode', 'Qty']); // header
+
+        return Yii::$app->getResponse()->sendContentAsFile(implode("\n", $rows), 'opname template.csv', [
+                    'mimeType' => 'application/excel'
+        ]);
+    }
+
     /**
      * Finds the StockOpname model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -217,12 +244,12 @@ class StockOpnameController extends Controller
      * @return StockOpname the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = StockOpname::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

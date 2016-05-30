@@ -12,22 +12,29 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>
     <?= Html::a('Create Stock Opname', ['create'], ['class' => 'btn btn-default']) ?>
+    <?php
+    $url = array_filter(Yii::$app->getRequest()->get());
+    $url[0] = 'csv-template';
+    unset($url['page']);
+    echo Html::a('<i class="fa fa-download"></i>', $url, [
+        'class' => 'btn btn-default', 'title' => 'Download Template', 'target' => '_blank'])
+    ?>
 </p>
 <br>
 
 <div class="stock-opname-index">
 
-                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-            <?= GridView::widget([
+
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => ['class' => 'table table-hover'],
         'filterModel' => $searchModel,
         'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-
-                    'id',
+            ['class' => 'yii\grid\SerialColumn'],
+            'id',
             'number',
             'warehouse_id',
             'date',
@@ -38,9 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'created_by',
             // 'updated_at',
             // 'updated_by',
-
-        ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn'],
         ],
-        ]); ?>
-    
+    ]);
+    ?>
+
 </div>

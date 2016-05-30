@@ -130,7 +130,7 @@ class StockOpname extends \yii\db\ActiveRecord
             ->from(['p' => '{{%product}}'])
             ->leftJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
             ->leftJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.product_id]]=[[p.id]] and [[o.opname_id]]=:opid', [':opid' => $this->id])
-            ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0))');
+            ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0)');
 
         $items = [];
         foreach ($query->all() as $row) {

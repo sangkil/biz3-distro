@@ -55,18 +55,9 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
     <?php
-    $query = (new \yii\db\Query())
-        ->select(['p.id', 'p.code', 'p.name', 'o_qty' => 'COALESCE(o.qty,0)', 's_qty' => 'COALESCE(s.qty,0)',
-            'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
-        ->from(['p' => '{{%product}}'])
-        ->leftJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $model->warehouse_id])
-        ->leftJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.product_id]]=[[p.id]] and [[o.opname_id]]=:opid', [':opid' => $model->id])
-        ->orderBy(['abs(COALESCE(o.qty,0)-COALESCE(s.qty,0))' => SORT_DESC, 'COALESCE(o.qty,0)' => SORT_DESC]);
-
+   
     echo GridView::widget([
-        'dataProvider' => new yii\data\ActiveDataProvider([
-            'query' => $query,
-            ]),
+        'dataProvider' => $dataProvider,
         'tableOptions' => ['class' => 'table table-hover'],
         'layout' => "{items}\n{pager}",
         'columns' => [
