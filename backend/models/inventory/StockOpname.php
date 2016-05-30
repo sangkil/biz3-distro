@@ -124,11 +124,12 @@ class StockOpname extends \yii\db\ActiveRecord
             'reff_id' => $this->id,
             'status' => GoodsMovement::STATUS_RELEASED,
         ]);
-
+        //$gm->items->scenario = GoodsMovementDtl::SCENARIO_ADJUSTMENT;
+        
         $query = (new \yii\db\Query())
             ->select(['p.id', 'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
             ->from(['p' => '{{%product}}'])
-            ->leftJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
+            ->innerJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
             ->leftJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.product_id]]=[[p.id]] and [[o.opname_id]]=:opid', [':opid' => $this->id])
             ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0)');
 
@@ -141,7 +142,11 @@ class StockOpname extends \yii\db\ActiveRecord
             ];
         }
         $gm->items = $items;
-        return $gm->save();
+        if($gm->save()){
+            return true;
+        }
+        print_r($gm->firstErrors);
+        return false;
     }
 
     public function revertAdjust()

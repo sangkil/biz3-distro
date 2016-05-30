@@ -22,6 +22,8 @@ use backend\models\master\ProductUom;
  */
 class GoodsMovementDtl extends \yii\db\ActiveRecord
 {
+    const SCENARIO_ADJUSTMENT = 'stock_adjusment';
+    
     public $sisa;
     public $issued;
 
@@ -42,7 +44,8 @@ class GoodsMovementDtl extends \yii\db\ActiveRecord
             [['product_id', 'uom_id',], 'required'],
             [['movement_id', 'product_id', 'uom_id'], 'integer'],
             [['qty', 'value', 'cogs', 'sisa','issued'], 'number'],
-            [['qty'], 'number','min'=>1],
+            
+            //[['qty'], 'number','min'=>1, 'except' => self::SCENARIO_ADJUSTMENT], pending for a moment
         ];
     }
 

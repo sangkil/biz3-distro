@@ -52,10 +52,9 @@ class StockOpnameController extends Controller {
                 ->select(['p.id', 'p.code', 'p.name', 'o_qty' => 'COALESCE(o.qty,0)', 's_qty' => 'COALESCE(s.qty,0)',
                     'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
                 ->from(['p' => '{{%product}}'])
-                ->leftJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $model->warehouse_id])
+                ->innerJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $model->warehouse_id])
                 ->leftJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.product_id]]=[[p.id]] and [[o.opname_id]]=:opid', [':opid' => $model->id])
                 ->orderBy(['abs(COALESCE(o.qty,0)-COALESCE(s.qty,0))' => SORT_DESC, 'COALESCE(o.qty,0)' => SORT_DESC]);
-                //->orderBy(['p.code' => SORT_ASC]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -187,14 +186,14 @@ class StockOpnameController extends Controller {
         $model->status = StockOpname::STATUS_RELEASED;
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            $model->validate();
-            print_r($model->getRelatedErrors());
-//            if ($model->save()) {
+            if ($model->save()) {
 //                // update stock internaly via beforeUpdate
-//                $transaction->commit();
-//                return $this->redirect(['view', 'id' => $model->id]);
-//            }
-//            $transaction->rollBack();
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }  else {
+                print_r($model->firstErrors);
+            }
+            $transaction->rollBack();
         } catch (\Exception $exc) {
             $transaction->rollBack();
             throw $exc;
