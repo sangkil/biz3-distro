@@ -58,7 +58,7 @@ class StockOpnameController extends Controller {
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination'=>['pagesize'=>50]
+            'pagination' => ['pagesize' => 50]
         ]);
 
         return $this->render('view', [
@@ -95,11 +95,6 @@ class StockOpnameController extends Controller {
                             if (isset($barcodes[strtolower($sparated_row[0])])) {
                                 $product_id = $barcodes[strtolower($sparated_row[0])];
                                 $stock[$product_id] = $sparated_row[1];
-//                                if (!isset($stock[$product_id])) {
-//                                    $stock[$product_id] = 0;
-//                                } else {
-//                                    $stock[$product_id] = $line_stock;
-//                                }
                             }
                         }
 
@@ -166,8 +161,11 @@ class StockOpnameController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        if ($model->status != StockOpname::STATUS_DRAFT) {
+            throw new UserException('Tidak bisa didelete');
+        }
+        $model->delete();
         return $this->redirect(['index']);
     }
 
@@ -190,7 +188,7 @@ class StockOpnameController extends Controller {
 //                // update stock internaly via beforeUpdate
                 $transaction->commit();
                 return $this->redirect(['view', 'id' => $model->id]);
-            }  else {
+            } else {
                 print_r($model->firstErrors);
             }
             $transaction->rollBack();

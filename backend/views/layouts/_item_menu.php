@@ -50,7 +50,7 @@ return[
             ['label' => 'Penerimaan Barang', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 10]],
             ['label' => 'Pengeluaran Barang', 'icon' => 'check', 'url' => ['/inventory/gm-manual', 'GoodsMovement[type]' => 20]],
             ['label' => 'Transfer antar Gudang', 'icon' => 'check', 'url' => ['/inventory/transfer']],
-            ['label' => 'Stok Opname', 'icon' => 'check', 'url' => ''],
+            ['label' => 'Stok Opname', 'icon' => 'check', 'url' => ['/inventory/stock-opname']],
             ['label' => 'Koreksi Persediaan', 'icon' => 'check', 'url' => ''],
         ],
     ],

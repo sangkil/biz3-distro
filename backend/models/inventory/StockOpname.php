@@ -122,6 +122,7 @@ class StockOpname extends \yii\db\ActiveRecord
             'date' => date('Y-m-d'),
             'reff_type' => self::REFF_SELF,
             'reff_id' => $this->id,
+            'description'=>'stock opname adjustment',
             'status' => GoodsMovement::STATUS_RELEASED,
         ]);
         //$gm->items->scenario = GoodsMovementDtl::SCENARIO_ADJUSTMENT;

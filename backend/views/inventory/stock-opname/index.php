@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use backend\models\inventory\StockOpname;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\inventory\search\StockOpname */
@@ -34,13 +35,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'id',
+            //'id',
             'number',
-            'date',
+            'Date',
             'warehouse.name',
             'description',
             'operator',
-            'status',
+            [
+                'attribute' => 'status',
+                'value' => 'nmStatus',
+                'filter' => StockOpname::enums('STATUS_')
+            ],
             // 'created_at',
             // 'created_by',
             // 'updated_at',

@@ -12,9 +12,9 @@ $this->title = $model->number;
 $this->params['breadcrumbs'][] = ['label' => 'Stock Opnames', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="stock-opname-view">
-
-    <p class="pull-right">
+<div class="row stock-opname-view">
+    <div class="col-lg-12">
+        <p class="pull-right">
         <?= Html::a('Create New', ['create'], ['class' => 'btn btn-default']) ?>
         <?php if ($model->status == StockOpname::STATUS_DRAFT): ?>
             <?=
@@ -37,25 +37,36 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         <?php endif; ?>
     </p>
-
+    </div>    
+    <div class="col-lg-6">
     <?=
     DetailView::widget([
-        'options' => ['class' => 'table table-hover'],
+        'options' => ['class' => 'table'],
         'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
         'model' => $model,
         'attributes' => [
             'number',
             'warehouse.name',
             'date',
+        ],
+    ])
+    ?></div>
+    <div class="col-lg-6">
+    <?=
+    DetailView::widget([
+        'options' => ['class' => 'table'],
+        'template' => '<tr><th style="width:20%;">{label}</th><td>{value}</td></tr>',
+        'model' => $model,
+        'attributes' => [
             'nmStatus',
             'description',
             'operator',
         ],
     ])
     ?>
-
-    <?php
-   
+    </div>
+    <div class="col-lg-12">
+    <?php   
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => ['class' => 'table table-hover'],
@@ -85,4 +96,5 @@ $this->params['breadcrumbs'][] = $this->title;
         ]
     ])
     ?>
+    </div>
 </div>
