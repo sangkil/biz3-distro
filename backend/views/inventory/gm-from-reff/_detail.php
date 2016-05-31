@@ -18,7 +18,7 @@ use yii\helpers\Html;
                 Product Name
             </th>
             <th class="items" style="width: 10%">
-                LastCost/pcs
+                Cost/pcs
             </th>
             <th class="items" style="width: 15%">
                 <?= ($model->type == $model::TYPE_ISSUE) ? 'Qty Remain' : 'Qty Issued' ?>

@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
             <?php
             if ($model->status == Transfer::STATUS_RELEASED && $model->branch_dest_id == Yii::$app->profile->branch_id) {
-                echo Html::a('Create Receipt', ['inventory/gm-from-reff/create-receipt', 'type' => Transfer::REFF_SELF, 'id' => $model->id,'desc'=>'Stock Transfer Issue'], [
+                echo Html::a('Create Receipt', ['inventory/gm-from-reff/create-receipt', 'type' => Transfer::REFF_SELF, 'id' => $model->id,'desc'=>'Stock Transfer Receipt'], [
                     'class' => 'btn btn-success',
                 ]);
             }

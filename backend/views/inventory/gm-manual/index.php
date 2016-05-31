@@ -43,6 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'vendor_id',
                 'value' => 'vendor.name',
+                'filter'=> \backend\models\master\Vendor::selectOptions()
             ],
             'date',
             [

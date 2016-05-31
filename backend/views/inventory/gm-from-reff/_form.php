@@ -17,6 +17,7 @@ $opts = json_encode([]);
 
 $this->registerJs("var biz = $opts;", View::POS_HEAD);
 $this->registerJs($this->render('_script.js'));
+$this->registerJsFile(Url::to(['master']));
 $branch_id = Yii::$app->profile->branch_id;
 ?>
 
@@ -34,8 +35,11 @@ $branch_id = Yii::$app->profile->branch_id;
         ])
         ?>
         <?= ''//$form->field($model, 'vendor[name]')->textInput(['readonly' => true]) ?>
-        <?= $form->field($model, 'description')->textArea(['maxlength' => true]) ?>
+        <?= $form->field($model, 'vendor_name')->textInput(['required' => true,'readOnly'=>true]) ?>
         <?= Html::activeHiddenInput($model, 'vendor_id') ?>
+    </div>
+    <div class="col-md-4">        
+        <?= $form->field($model, 'description')->textArea(['maxlength' => true]) ?>
     </div>
     <div class="nav-tabs-justified col-lg-12"  style="margin-top: 20px;">
         <ul class="nav nav-tabs">

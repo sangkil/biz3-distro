@@ -3,6 +3,7 @@
 namespace backend\models\master;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "vendor".
@@ -23,31 +24,27 @@ use Yii;
  * @property Product[] $products
  * @property VendorDetail $vendorDetail
  */
-class Vendor extends \yii\db\ActiveRecord
-{
+class Vendor extends \yii\db\ActiveRecord {
+
     use \mdm\converter\EnumTrait;
 
     const TYPE_SUPPLIER = 10;
     const TYPE_CUSTOMER = 20;
     const TYPE_INTERN = 30;
-
     const STATUS_ACTIVE = 10;
     const STATUS_INACTIVE = 0;
-
 
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%vendor}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['type', 'code', 'name', 'status'], 'required'],
             [['type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
@@ -59,8 +56,7 @@ class Vendor extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'type' => 'Type',
@@ -76,36 +72,37 @@ class Vendor extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getNmType()
-    {
+    public function getNmType() {
         return $this->getLogical('type', 'TYPE_');
     }
 
-    public function getNmStatus()
-    {
+    public function getNmStatus() {
         return $this->getLogical('status', 'STATUS_');
     }
+
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProductVendors()
-    {
+    public function getProductVendors() {
         return $this->hasMany(ProductVendor::className(), ['vendor_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProducts()
-    {
+    public function getProducts() {
         return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('product_vendor', ['vendor_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getVendorDetail()
-    {
+    public function getVendorDetail() {
         return $this->hasOne(VendorDetail::className(), ['id' => 'id']);
     }
+
+    public static function selectOptions() {
+        return ArrayHelper::map(static::find()->asArray()->all(), 'id', 'name');
+    }
+
 }
