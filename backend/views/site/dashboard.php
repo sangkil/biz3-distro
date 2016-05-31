@@ -6,15 +6,15 @@ use yii\widgets\ListView;
 $this->title = 'Dashboard ' . $mperiode;
 ?>
 <div class="row site-index">
-    <?=
-    ListView::widget([
-        'dataProvider' => $dataProvider,
-        'layout' => "{items}",
-        'itemView' => '_dashSales',
-    ]);
-    ?>
+        <?=
+        ListView::widget([
+            'dataProvider' => $dataProvider,
+            'layout' => "{items}",
+            'itemView' => '_dashSales',
+        ]);
+        ?> 
     <div class="col-lg-12"></div>
-<!--    Hutang Dagang-->
+    <!--    Hutang Dagang-->
     <div class="col-lg-6">
         <div class="box box-primary">
             <div class="box-header with-border">
@@ -44,8 +44,8 @@ $this->title = 'Dashboard ' . $mperiode;
             /.box-footer -->
         </div>
     </div>
-    
-<!--Transfer Stock-->
+
+    <!--Transfer Stock-->
     <div class="col-lg-6">
         <div class="box box-primary">
             <div class="box-header with-border">
