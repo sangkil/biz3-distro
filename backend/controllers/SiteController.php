@@ -76,44 +76,25 @@ class SiteController extends Controller {
 
     public function actionDashboard() {
         $mperiode = \backend\models\accounting\AccPeriode::find()->active()->one();
-        if($mperiode == null){
+        if ($mperiode == null) {
             throw new NotFoundHttpException('There is no active accounting periode.');
         }
-        
-//        $sal = \backend\models\accounting\GlDetail::find();
-//        $sal->select(['sum(amount)']);
-//        $sal->joinWith(['header']);
-//        $sal->groupBy(['gl_header.branch_id']);
-//        $sal->where('gl_header.branch_id=:dbranch AND coa_id = 16 AND periode_id = :dperiode', [':dbranch' => \Yii::$app->profile->branch_id, ':dperiode' => $mperiode->id]);
-//
-//        $whse = \backend\models\master\Warehouse::find()->select('id')->assigned()->column();
-//
-//        $gr = \backend\models\inventory\GoodsMovement::find();
-//        $gr->select(['warehouse.name as whse_name', 'count(goods_movement.id) as jml']);
-//        $gr->with(['warehouse']);
-//        $gr->joinWith(['warehouse']);
-//        $gr->where('status < :release', [':release' => \backend\models\inventory\GoodsMovement::STATUS_RELEASED]);
-//        $gr->andFilterWhere(['in', 'goods_movement.warehouse_id', $whse]);
-//        $gr->groupBy(['warehouse.name']);
-//        $oreceipt = $gr->all();
-//        $mreceipt = '';
-//        foreach ($oreceipt as $key => $value) {
-//            $split = explode(' ', $value->whse_name);
-//            $mreceipt .= $split[1] . ': ' . $value->jml . '; ';
-//        }
-//
-//        $msales = abs($sal->scalar());
-//        $mreceipt = $mreceipt;
-//        $mtransfer = 0;
-        
-        
+
         $searchModel = new SalesSearch();
         $dataProvider = $searchModel->searchByBranch(Yii::$app->request->queryParams);
+
+        $searchHutang = new \backend\models\accounting\search\Invoice();
+        $searchHutang->type = \backend\models\accounting\Invoice::TYPE_INCOMING;
+        $hutangPro = $searchHutang->search(Yii::$app->request->queryParams);
         
-        $datavar = ['dataProvider'=>$dataProvider, 
-            'mperiode' => $mperiode->name, 
-//            'msales' => $msales, 'mreceipt' => $mreceipt, 'mtransfer' => $mtransfer
-                ];
+        $searchTransfer = new \backend\models\inventory\search\Transfer();
+        $transfPro = $searchTransfer->search(Yii::$app->request->queryParams);
+
+        $datavar = ['dataProvider' => $dataProvider,
+            'mperiode' => $mperiode->name, 'hutangPro' => $hutangPro,
+            'transfPro' => $transfPro
+        ];
+
         return $this->render('dashboard', $datavar);
     }
 

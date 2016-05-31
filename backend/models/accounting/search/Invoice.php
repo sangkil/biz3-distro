@@ -10,13 +10,12 @@ use backend\models\accounting\Invoice as InvoiceModel;
 /**
  * Invoice represents the model behind the search form about `backend\models\accounting\Invoice`.
  */
-class Invoice extends InvoiceModel
-{
+class Invoice extends InvoiceModel {
+
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id', 'type', 'vendor_id', 'reff_type', 'reff_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['number', 'date', 'due_date', 'description', 'tax_type'], 'safe'],
@@ -27,8 +26,7 @@ class Invoice extends InvoiceModel
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -40,12 +38,12 @@ class Invoice extends InvoiceModel
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = InvoiceModel::find();
-
+        $query->open();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder' => ['due_date' => SORT_ASC]]
         ]);
 
         $this->load($params);
@@ -72,9 +70,10 @@ class Invoice extends InvoiceModel
         ]);
 
         $query->andFilterWhere(['like', 'number', $this->number])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'tax_type', $this->tax_type]);
+                ->andFilterWhere(['like', 'description', $this->description])
+                ->andFilterWhere(['like', 'tax_type', $this->tax_type]);
 
         return $dataProvider;
     }
+
 }
