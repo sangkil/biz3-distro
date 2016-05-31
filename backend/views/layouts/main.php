@@ -36,7 +36,7 @@ AppAsset::register($this);
             require 'left_menu.php';
             ?>
             <div class="content-wrapper" style="padding-top: 0px; background-color: white;">
-                <section class="content-header" style="background-color: gainsboro; height: 50px; border-bottom: red solid 1px;">
+                <section class="content-header" style="background-color: gainsboro; min-height: 50px; border-bottom: red solid 1px;">
                     <h1> 
                         <a href="#" data-toggle="offcanvas" role="button">
                             <i class="fa fa-angle-left"></i>
