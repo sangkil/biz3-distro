@@ -35,14 +35,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
+                'attribute' => 'date',
+                'format' => 'date',
+                'headerOptions' => ['style' => 'text-align:right; width:10%;'],
+            ],
+            [
                 'label' => 'Sales Num',
                 'format' => 'html',
                 'attribute' => 'number',
                 'value' => function ($model) {
                     return Html::a($model->number, ['view', 'id' => $model->id]);
                 },
-                    //'filter' => Html::textInput('Price[product_code]', $searchModel->product_code, array('class' => 'form-control')),
-                    //'contentOptions' => ['style' => 'width:10%;'],
+                        'headerOptions' => ['style' => 'text-align:right; width:10%;'],
                     ],
                     [
                         'attribute' => 'branch_id',
@@ -52,9 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'attribute' => 'vendor_id',
                         'value' => 'vendor.name',
-                    ],
-                    [
-                        'attribute' => 'Date',
+                        'filter' => false
                     ],
                     [
                         'attribute' => 'value',
@@ -62,7 +64,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'headerOptions' => ['style' => 'text-align:right; width:20%;'],
                         'contentOptions' => ['style' => 'text-align:right;'],
                         'footerOptions' => ['style' => 'text-align:right;'],
-                        'footer' => number_format($totaLine, 0)
+                        'footer' => number_format($totaLine, 0),
+                        'filter' => false
                     ],
 //            [
 //                'attribute'=>'status',
