@@ -123,6 +123,7 @@ class Sales extends SalesModel {
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination'=>['pagesize'=>31]
         ]);
 
         $this->load($params);
