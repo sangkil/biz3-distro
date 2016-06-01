@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 $data = array_merge($data, array(['Day', 'Value', 'Trend']));
                 $is_first = false;
             }
-            $data = array_merge($data, array(['\'' . $row->Date . '\'', $row->value, $row->value]));
+            $data = array_merge($data, array([$row->Date, $row->value, $row->value]));
         }
 
         if (count($data) > 0) {
