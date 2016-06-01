@@ -52,11 +52,11 @@ class SalesController extends Controller {
 
     public function actionDaily() {
         $searchModel = new SalesSearch();
-        $searchModel->branch_id = Yii::$app->profile->branch_id;
+        $searchModel->branch_id = Yii::$app->profile->branch_id;        
+        $parms = Yii::$app->request->queryParams;
         $dmonth = (isset($parms['Sales']['Date']))?$parms['Sales']['Date']:date('m');
 
-        $dataProvider = $searchModel->searchDaily(Yii::$app->request->queryParams);
-        $parms = Yii::$app->request->queryParams;
+        $dataProvider = $searchModel->searchDaily($parms);
         $bln = [];
         for ($i = 1; $i < 13; $i++) {
             $time = mktime(0, 0, 0, $i);
