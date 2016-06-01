@@ -53,6 +53,7 @@ class SalesController extends Controller {
     public function actionDaily() {
         $searchModel = new SalesSearch();
         $searchModel->branch_id = Yii::$app->profile->branch_id;
+        $searchModel->Date = date('m');
 
         $dataProvider = $searchModel->searchDaily(Yii::$app->request->queryParams);
         $parms = Yii::$app->request->queryParams;
