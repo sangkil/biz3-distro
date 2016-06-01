@@ -8,7 +8,7 @@ use scotthuangzl\googlechart\GoogleChart;
 /* @var $searchModel backend\models\sales\search\Sales */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Daily Sales '.nm_branch;
+$this->title = 'Daily Sales '.$nm_branch;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>
