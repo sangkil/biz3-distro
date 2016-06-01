@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 $data = array_merge($data, array(['Day', 'Sales Valuse']));
                 $is_first = false;
             }
-            $data = array_merge($data, array(['\'' . $row->date . '\'', $row->value]));
+            $data = array_merge($data, array(['\'' . $row->Date . '\'', $row->value]));
         }
 
         if (count($data) > 0) {            
