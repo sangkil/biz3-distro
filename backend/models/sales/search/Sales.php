@@ -109,6 +109,7 @@ class Sales extends SalesModel {
         $query = SalesModel::find();
         $query->select(['date', 'sum(value) as value']);
         $query->groupBy(['date']);
+        $query->orderBy(['date'=>SORT_ASC]);
  
         if(isset($params['Sales']['Date'])){
             $query->andWhere("date_part('month',date)=:dmonth",[':dmonth'=>$params['Sales']['Date']] );
