@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $is_first = true;
         foreach ($dataProvider->models as $row) {
             if ($is_first) {
-                $data = array_merge($data, array(['Day', 'Sales Valuse']));
+                $data = array_merge($data, array(['Day', 'Sales Value']));
                 $is_first = false;
             }
             $data = array_merge($data, array(['\'' . $row->Date . '\'', $row->value]));
