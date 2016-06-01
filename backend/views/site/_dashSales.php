@@ -16,7 +16,7 @@ $warna = ['bg-aqua','bg-yellow','bg-green','bg-red'];
                 <div class="progress-bar" style="width: 100%"></div>
             </div>
             <span class="progress-description">
-                <a href="#"><?= \yii\helpers\Html::a('Detail Sales', ['/sales/sales/daily','Sales[branch_id]'=>$model->branch_id, 'Sales[Date]'=>date('m')],['target'=>'_blank']) ?></a>
+                <a href="#"><?= \yii\helpers\Html::a('Detail Sales', ['/sales/sales/daily','Sales[branch_id]'=>$model->branch_id, 'Sales[Date]'=>(int)date('m')],['target'=>'_blank']) ?></a>
             </span>
         </div>
         <!-- /.info-box-content -->
