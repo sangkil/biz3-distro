@@ -55,6 +55,8 @@ class SalesController extends Controller {
         $searchModel->branch_id = Yii::$app->profile->branch_id;        
         $parms = Yii::$app->request->queryParams;
         $dmonth = (isset($parms['Sales']['Date']))?$parms['Sales']['Date']:date('m');
+        
+        $dbranch = (isset($parms['Sales']['Date']))?$parms['Sales']['Date']:date('m');
 
         $dataProvider = $searchModel->searchDaily($parms);
         $bln = [];
