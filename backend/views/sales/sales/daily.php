@@ -68,8 +68,10 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'data' => $data,
 //                'options' => array('title' => 'My Daily Sales')));
 
-            echo GoogleChart::widget(array('visualization' => 'ComboChart',
+            echo GoogleChart::widget([
+                'visualization' => 'ComboChart',
                 'data' => $data,
+                'htmlOptions'=>['style'=>'height:300px;'],
                 'options' => [
                     'title' => 'My Daily Sales',
                     'vAxis' => ['title' => 'Sales'],
@@ -77,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'seriesType' => 'bars',
                     'series' => [1 => ['type' => 'line']]
                 ]
-            ));
+            ]);
         }
         ?>
     </div>
