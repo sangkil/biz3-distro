@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);
         ?>
     </div>
-    <div class="col-lg-6">
+    <div class="col-lg-8">
         <?php
         $data = [];
         $is_first = true;
