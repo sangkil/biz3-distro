@@ -6,9 +6,14 @@
  */
 ?>
 <div class="col-lg-6">
-    <h2>Daftar Penjualan</h2>
+    <h2>Penjualan Detail</h2>
     <p>Menunjukkan daftar kronologis dari semua faktur dan pembayaran untuk rentang tanggal yang dipilih..</p>
-    <p><?= \yii\bootstrap\Html::a('Daftar Penjualan &raquo;', ['/sales/sales/index'], ['class' => 'btn btn-default']) ?></p>
+    <p><?= \yii\bootstrap\Html::a('Penjualan Detail &raquo;', ['/sales/sales/index'], ['class' => 'btn btn-default']) ?></p>
+</div>
+<div class="col-lg-6">
+    <h2>Penjualan Harian</h2>
+    <p>Menunjukkan daftar kronologis dari semua faktur dan pembayaran untuk rentang tanggal yang dipilih..</p>
+    <p><?= \yii\bootstrap\Html::a('Penjualan Harian &raquo;', ['/sales/sales/daily'], ['class' => 'btn btn-default']) ?></p>
 </div>
 <div class="col-lg-6">
     <h2>Penjualan per Pelanggan</h2>

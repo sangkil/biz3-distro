@@ -41,11 +41,32 @@ class SalesController extends Controller {
     public function actionIndex() {
         $searchModel = new SalesSearch();
         $searchModel->branch_id = Yii::$app->profile->branch_id;
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionDaily() {
+        $searchModel = new SalesSearch();
+        $searchModel->branch_id = Yii::$app->profile->branch_id;
+
+        $dataProvider = $searchModel->searchDaily(Yii::$app->request->queryParams);
+        $parms = Yii::$app->request->queryParams;
+        $bln = [];
+        for ($i = 1; $i < 13; $i++) {
+            $time = mktime(0, 0, 0, $i);
+            $bln[date('n', $time)] = date('M Y', $time);
+        }
+
+        return $this->render('daily', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'dmonth'=>$parms['Sales']['Date'],
+                    'bln'=>$bln
         ]);
     }
 

@@ -14,10 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJs('print();');
 ?>
-<div class="goods-movement-view">
-    <div class="col-lg-12">
-        <p class="pull-right label"><?= $this->title ?></p>
-        <br>
+<div class="goods-movement-view col-lg-9" style="background-color: white; page-break-after: true; min-height: 600px;">
+        <div class="col-lg-12">
         <table border="0" style="width: 100%;">
             <tbody>
                 <tr>

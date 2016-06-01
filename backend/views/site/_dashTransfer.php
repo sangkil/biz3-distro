@@ -12,7 +12,10 @@
         <span class="label label-success pull-right"><?= ''//number_format($model->sisa,0) ?> </span>
         <span class="product-description">
             <?= 'Source: '.$model->branch->name ?>
-            <?= 'Destination: '.$model->branchDest->name ?>
+            <?= 'Destination: '.$model->branchDest->name .'<br>'?>
+            <?php foreach ($model->movements as $dmove){
+                echo '&nbsp;'.\yii\helpers\Html::a($dmove->number,['/inventory/gm-manual/view','id'=>$dmove->id]);
+            } ?>
         </span>
     </div>
 </li>

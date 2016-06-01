@@ -62,6 +62,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
     const REFF_SALES = 60;
     const REFF_SALES_RETURN = 61;
     const REFF_JOURNAL = 70;
+    const REFF_OPNAME = 80;
     // scenario
     const SCENARIO_CHANGE_STATUS = 'change_status';
 

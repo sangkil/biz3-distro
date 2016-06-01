@@ -10,16 +10,15 @@ use backend\models\sales\Sales as SalesModel;
 /**
  * Sales represents the model behind the search form about `backend\models\sales\Sales`.
  */
-class Sales extends SalesModel
-{
+class Sales extends SalesModel {
+
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id', 'vendor_id', 'branch_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['number', 'date'], 'safe'],
+            [['number', 'date', 'Date'], 'safe'],
             [['value', 'discount'], 'number'],
         ];
     }
@@ -27,8 +26,7 @@ class Sales extends SalesModel
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -40,8 +38,7 @@ class Sales extends SalesModel
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = SalesModel::find();
 
         $dataProvider = new ActiveDataProvider([
@@ -72,14 +69,50 @@ class Sales extends SalesModel
 
         return $dataProvider;
     }
-    
-    public function searchByBranch($params)
-    {
+
+    public function searchByBranch($params) {
         $query = SalesModel::find();
-        $query->select(['branch_id','branch.name', 'sum(value) as value']);
+        $query->select(['branch_id', 'branch.name', 'sum(value) as value']);
         $query->joinWith(['branch']);
-        $query->groupBy(['branch_id','branch.name']);
+        $query->groupBy(['branch_id', 'branch.name']);
         $query->assigned();
+       
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            $query->where('1=0');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'vendor_id' => $this->vendor_id,
+            'branch_id' => $this->branch_id,
+            'date' => $this->date,
+            'value' => $this->value,
+            'discount' => $this->discount,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            'created_by' => $this->created_by,
+            'updated_at' => $this->updated_at,
+            'updated_by' => $this->updated_by,
+        ]);
+        $query->andFilterWhere(['like', 'number', $this->number]);
+
+        return $dataProvider;
+    }
+
+    public function searchDaily($params) {
+        $query = SalesModel::find();
+        $query->select(['date', 'sum(value) as value']);
+        $query->groupBy(['date']);
+ 
+        if(isset($params['Sales']['Date'])){
+            $query->andWhere("date_part('month',date)=:dmonth",[':dmonth'=>$params['Sales']['Date']] );
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -109,4 +142,5 @@ class Sales extends SalesModel
 
         return $dataProvider;
     }
+
 }
