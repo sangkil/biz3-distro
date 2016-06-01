@@ -64,14 +64,10 @@ $this->params['breadcrumbs'][] = $this->title;
         }
 
         if (count($data) > 0) {
-//            echo GoogleChart::widget(array('visualization' => 'PieChart',
-//                'data' => $data,
-//                'options' => array('title' => 'My Daily Sales')));
-
             echo GoogleChart::widget([
                 'visualization' => 'ComboChart',
                 'data' => $data,
-                'htmlOptions'=>['style'=>'height:300px;'],
+                'htmlOptions'=>['style'=>'height:350px;'],
                 'options' => [
                     'title' => 'My Daily Sales',
                     'vAxis' => ['title' => 'Sales'],
