@@ -41,8 +41,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'value',
                     'format' => ['decimal', 0],
+                    'headerOptions' => ['style' => 'text-align:right; width:20%;'],
+                    'contentOptions' => ['style' => 'text-align:right;'],
+                    'footerOptions' => ['style' => 'text-align:right;'],
+                    'footer' => number_format($totaLine, 0),
                     'filter' => false
-                ]
+                ],
             ]
         ]);
         ?>
@@ -59,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
             $data = array_merge($data, array(['\'' . $row->Date . '\'', $row->value]));
         }
 
-        if (count($data) > 0) {            
+        if (count($data) > 0) {
 //            echo GoogleChart::widget(array('visualization' => 'PieChart',
 //                'data' => $data,
 //                'options' => array('title' => 'My Daily Sales')));
