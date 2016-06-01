@@ -57,10 +57,10 @@ $this->params['breadcrumbs'][] = $this->title;
         $is_first = true;
         foreach ($dataProvider->models as $row) {
             if ($is_first) {
-                $data = array_merge($data, array(['Day', 'Sales Value']));
+                $data = array_merge($data, array(['Day', 'Sales Value', 'Trend']));
                 $is_first = false;
             }
-            $data = array_merge($data, array(['\'' . $row->Date . '\'', $row->value]));
+            $data = array_merge($data, array(['\'' . $row->Date . '\'', $row->value, $row->value]));
         }
 
         if (count($data) > 0) {
@@ -70,7 +70,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             echo GoogleChart::widget(array('visualization' => 'ComboChart',
                 'data' => $data,
-                'options' => array('title' => 'My Daily Sales')));
+                'options' =>[
+                    'title' => 'My Daily Sales',
+                    'seriesType' => 'bars',
+                    'series' =>[1=>['type'=>'line']]
+                    ]
+            ));
         }
         ?>
     </div>
