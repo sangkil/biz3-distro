@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'data' => $data,
 //                'options' => array('title' => 'My Daily Sales')));
 
-            echo GoogleChart::widget(array('visualization' => 'ColumnChart',
+            echo GoogleChart::widget(array('visualization' => 'LineChart',
                 'data' => $data,
                 'options' => array('title' => 'My Daily Sales')));
         }
