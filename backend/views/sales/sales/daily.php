@@ -57,10 +57,10 @@ $this->params['breadcrumbs'][] = $this->title;
         $is_first = true;
         foreach ($dataProvider->models as $row) {
             if ($is_first) {
-                $data = array_merge($data, array(['Day', 'Sales Value', 'Sales Value', 'Average']));
+                $data = array_merge($data, array(['Day', 'Sales Value']));
                 $is_first = false;
             }
-            $data = array_merge($data, array(['\'' . $row->Date . '\'', ($row->value/2), $row->value, $row->value]));
+            $data = array_merge($data, array(['\'' . $row->Date . '\'', $row->value]));
         }
 
         if (count($data) > 0) {
