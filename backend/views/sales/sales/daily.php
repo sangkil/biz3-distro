@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => ['decimal', 0],
                     'headerOptions' => ['style' => 'text-align:right; width:20%;'],
                     'contentOptions' => ['style' => 'text-align:right;'],
-                    'footerOptions' => ['style' => 'text-align:right;','class'=>'text-bold'],
+                    'footerOptions' => ['style' => 'text-align:right;', 'class' => 'text-bold'],
                     'footer' => number_format($totaLine, 0),
                     'filter' => false
                 ],
@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $is_first = true;
         foreach ($dataProvider->models as $row) {
             if ($is_first) {
-                $data = array_merge($data, array(['Day', 'Sales Value', 'Trend']));
+                $data = array_merge($data, array(['Day', 'Value', 'Trend']));
                 $is_first = false;
             }
             $data = array_merge($data, array(['\'' . $row->Date . '\'', $row->value, $row->value]));
@@ -70,11 +70,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
             echo GoogleChart::widget(array('visualization' => 'ComboChart',
                 'data' => $data,
-                'options' =>[
+                'options' => [
                     'title' => 'My Daily Sales',
+                    'vAxis' => ['title' => 'Sales'],
+                    'hAxis' => ['title' => 'Date'],
                     'seriesType' => 'bars',
-                    'series' =>[1=>['type'=>'line']]
-                    ]
+                    'series' => [1 => ['type' => 'line']]
+                ]
             ));
         }
         ?>
