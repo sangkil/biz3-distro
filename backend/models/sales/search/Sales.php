@@ -70,13 +70,19 @@ class Sales extends SalesModel {
         return $dataProvider;
     }
 
-    public function searchByBranch($params) {
+    public function searchByBranch($params) {        
         $query = SalesModel::find();
         $query->select(['branch_id', 'branch.name', 'sum(value) as value']);
         $query->joinWith(['branch']);
         $query->groupBy(['branch_id', 'branch.name']);
         $query->assigned();
-       
+
+        if (isset($params['Sales']['Date'])) {
+            $query->andWhere("date_part('month',date)=:dmonth", [':dmonth' => $params['Sales']['Date']]);
+        }else{    
+            $query->andWhere("date_part('month',date)=:dmonth", [':dmonth' => (int) date('m')]);
+        }
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -109,10 +115,10 @@ class Sales extends SalesModel {
         $query = SalesModel::find();
         $query->select(['date', 'sum(value) as value']);
         $query->groupBy(['date']);
-        $query->orderBy(['date'=>SORT_ASC]);
- 
-        if(isset($params['Sales']['Date'])){
-            $query->andWhere("date_part('month',date)=:dmonth",[':dmonth'=>$params['Sales']['Date']] );
+        $query->orderBy(['date' => SORT_ASC]);
+
+        if (isset($params['Sales']['Date'])) {
+            $query->andWhere("date_part('month',date)=:dmonth", [':dmonth' => $params['Sales']['Date']]);
         }
 
         $dataProvider = new ActiveDataProvider([

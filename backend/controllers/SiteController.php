@@ -76,13 +76,14 @@ class SiteController extends Controller {
     }
 
     public function actionDashboard() {
+        $parms = Yii::$app->request->queryParams;
         $mperiode = \backend\models\accounting\AccPeriode::find()->active()->one();
         if ($mperiode == null) {
             throw new NotFoundHttpException('There is no active accounting periode.');
         }
 
         $searchModel = new SalesSearch();
-        $dataProvider = $searchModel->searchByBranch(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchByBranch($parms);
 
         $searchHutang = new \backend\models\accounting\search\Invoice();
         $searchHutang->type = \backend\models\accounting\Invoice::TYPE_INCOMING;
