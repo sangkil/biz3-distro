@@ -68,7 +68,7 @@ class Sales extends \yii\db\ActiveRecord {
             [['branch_id', 'Date', 'value', 'status'], 'required'],
             [['vendor_id', 'branch_id', 'status'], 'integer'],
             [['vendor_name'], 'safe'],
-            [['number'], 'autonumber', 'format' => 'SA' . date('Ymd') . '.?', 'digit' => 4],
+            [['number'], 'autonumber', 'format' => 'SA' . date('Ym') . '.?', 'digit' => 4],
             [['items'], 'required'],
             [['items'], 'relationUnique', 'targetAttributes' => 'product_id'],
             [['value', 'discount'], 'number'],

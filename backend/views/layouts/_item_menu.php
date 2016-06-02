@@ -1,4 +1,5 @@
 <?php
+
 $temp_roles = [];
 $user_roles = Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId());
 foreach ($user_roles as $key => $value) {
@@ -42,7 +43,7 @@ return[
                     ['label' => 'Diskon Penjualan', 'icon' => 'check', 'url' => '#'],
                 ],
             ],
-            //['label' => 'Klosing Harian', 'icon' => 'check', 'url' => ['/sales/sales/create']],
+        //['label' => 'Klosing Harian', 'icon' => 'check', 'url' => ['/sales/sales/create']],
         ],
     ],
     ['label' => 'Pengelolaan Persedian', 'icon' => 'truck', 'iconOptions' => ['class' => 'text-success'], 'visible' => !Yii::$app->user->isGuest,
@@ -86,8 +87,7 @@ return[
         ],
     ],
     '<li class="header">ADMIN MENU</li>',
-    ['label' => 'Setting', 'icon' => 'gears', 'iconOptions' => ['class' => 'text-orange'], 'visible' => !Yii::$app->user->isGuest
-        && (in_array('admin.app', $temp_roles)),
+    ['label' => 'Setting', 'icon' => 'gears', 'iconOptions' => ['class' => 'text-orange'], 'visible' => !Yii::$app->user->isGuest && (in_array('admin.app', $temp_roles)),
         'items' => [
             ['label' => 'Users', 'icon' => 'check',
                 'items' => [
@@ -109,6 +109,11 @@ return[
     ],
     ['label' => 'Login', 'icon' => 'sign-in', 'iconOptions' => ['class' => 'text-green'], 'url' => ['/site/login'],
         'visible' => Yii::$app->user->isGuest],
-    ['label' => 'Logout', 'icon' => 'sign-out', 'iconOptions' => ['class' => 'text-red'], 'url' => ['/site/logout'],
-        'visible' => !Yii::$app->user->isGuest],
+    ['label' => 'Auth', 'icon' => 'user-secret', 'iconOptions' => ['class' => 'text-blue'],
+        'items' => [
+            ['label' => 'Logout', 'icon' => 'sign-out', 'iconOptions' => ['class' => 'text-red'], 'url' => ['/site/logout']],
+            ['label' => 'Change Password', 'icon' => 'key', 'iconOptions' => ['class' => 'text-yellow'], 'url' => ['/admin/user/change-password']],
+        ],
+        'visible' => !Yii::$app->user->isGuest
+    ],
 ];
