@@ -111,8 +111,8 @@ return[
         'visible' => Yii::$app->user->isGuest],
     ['label' => 'Auth', 'icon' => 'user-secret', 'iconOptions' => ['class' => 'text-blue'],
         'items' => [
-            ['label' => 'Logout', 'icon' => 'sign-out', 'iconOptions' => ['class' => 'text-red'], 'url' => ['/site/logout']],
             ['label' => 'Change Password', 'icon' => 'key', 'iconOptions' => ['class' => 'text-yellow'], 'url' => ['/admin/user/change-password']],
+            ['label' => 'Logout', 'icon' => 'sign-out', 'iconOptions' => ['class' => 'text-red'], 'url' => ['/site/logout']],
         ],
         'visible' => !Yii::$app->user->isGuest
     ],
