@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => ['decimal', 0],
                 'headerOptions' => ['style' => 'text-align:right; width:20%;'],
                 'contentOptions' => ['style' => 'text-align:right;'],
-                'footerOptions' => ['style' => 'text-align:right;'],
+                'footerOptions' => ['style' => 'text-align:right;', 'class' => 'text-bold'],
                 'footer' => number_format($totaLine, 0),
                 'filter' => false
             ],
