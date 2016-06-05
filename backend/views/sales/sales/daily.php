@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'date',
                     'format' => 'html',
                     'value'=>function($model){
-                        return Html::a($model->Date, ['/sales/sales/index','Sales[date]'=>$model->date]);
+                        return Html::a($model->Date, ['/sales/sales/index','Sales[date]'=>$model->date,'Sales[branch_id]'=>$model->branch_id]);
                     },
                     'filter' => Html::dropDownList('Sales[Date]', $dmonth, $bln, ['class' => 'form-control'])
                 ],
