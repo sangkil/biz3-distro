@@ -10,7 +10,7 @@
     <div class="product-info">
         <label>
             <?= yii\helpers\Html::a($model->number, ['/inventory/transfer/view','id'=>$model->id]) ?>
-            <?= $model->Date ?>
+            <?= '/'.$model->Date ?>
         </label>        
 <!--        <span class="label label-success pull-right"><?= ''//number_format($model->sisa,0) ?> </span>-->
         <span class="product-description">
