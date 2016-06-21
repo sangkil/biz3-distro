@@ -45,6 +45,7 @@ class Transfer extends TransferModel
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=>['default'=>['date'=>SORT_ASC]]
         ]);
 
         $this->load($params);
