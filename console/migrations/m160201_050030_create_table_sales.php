@@ -26,6 +26,8 @@ class m160201_050030_create_table_sales extends \yii\db\Migration
             'value' => Schema::TYPE_FLOAT . ' NOT NULL',
             'discount' => Schema::TYPE_FLOAT . ' NULL',
             'status' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'reff_type' => Schema::TYPE_INTEGER,
+            'reff_id' => Schema::TYPE_INTEGER,
             // history column
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,

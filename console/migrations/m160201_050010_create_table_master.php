@@ -33,6 +33,7 @@ class m160201_050010_create_table_master extends \yii\db\Migration
             'orgn_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'code' => Schema::TYPE_STRING . '(4) NOT NULL',
             'name' => Schema::TYPE_STRING . '(32) NOT NULL',
+            'addr' => Schema::TYPE_STRING . '(128) NOT NULL',
             // history column
             'created_at' => Schema::TYPE_INTEGER,
             'created_by' => Schema::TYPE_INTEGER,

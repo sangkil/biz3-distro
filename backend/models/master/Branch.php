@@ -14,6 +14,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $orgn_id
  * @property string $code
  * @property string $name
+ * @property string $addr
  * @property integer $created_at
  * @property integer $created_by
  * @property integer $updated_at
@@ -44,6 +45,7 @@ class Branch extends \yii\db\ActiveRecord
             [['orgn_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['code'], 'string', 'max' => 4],
             [['name'], 'string', 'max' => 32],
+            [['addr'], 'string', 'max' => 128],
             [['orgn_id'], 'exist', 'skipOnError' => true, 'targetClass' => Orgn::className(), 'targetAttribute' => ['orgn_id' => 'id']],
         ];
     }
@@ -58,6 +60,7 @@ class Branch extends \yii\db\ActiveRecord
             'orgn_id' => 'Orgn ID',
             'code' => 'Code',
             'name' => 'Name',
+            'addr' => 'Address',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

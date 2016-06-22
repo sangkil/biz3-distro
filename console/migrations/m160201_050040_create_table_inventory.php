@@ -67,6 +67,26 @@ class m160201_050040_create_table_inventory extends \yii\db\Migration
             'PRIMARY KEY ([[opname_id]] , [[product_id]])',
             'FOREIGN KEY ([[opname_id]]) REFERENCES {{%stock_opname}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
             ], $tableOptions);
+        
+        /*
+         * History to capture stock position
+         * while stock update by opname
+         */
+        $this->createTable('{{%stock_opname_check}}', [
+            'opname_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'date' => Schema::TYPE_DATE . ' NOT NULL',
+            'product_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'uom_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'qty' => Schema::TYPE_FLOAT . ' NOT NULL',
+            // history column
+            'created_at' => Schema::TYPE_INTEGER,
+            'created_by' => Schema::TYPE_INTEGER,
+            'updated_at' => Schema::TYPE_INTEGER,
+            'updated_by' => Schema::TYPE_INTEGER,
+            // constrain
+            'PRIMARY KEY ([[opname_id]] , [[product_id]], [[date]])',
+            'FOREIGN KEY ([[opname_id]]) REFERENCES {{%stock_opname}} ([[id]]) ON DELETE CASCADE ON UPDATE CASCADE',
+            ], $tableOptions);        
 
         $this->createTable('{{%stock_adjustment}}', [
             'id' => Schema::TYPE_PK,

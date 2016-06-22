@@ -171,6 +171,9 @@ class SalesController extends Controller {
                                 $success = true;
                                 $total = 0;
                                 $invoiceTotal = $invoice->value;
+                                $model->reff_type = Sales::REFF_INVOICE;
+                                $model->reff_id = $invoice->id;
+                                $model->save();
 
                                 $paymentData = [
                                     'vendor_id' => $invoice->vendor_id,
@@ -224,6 +227,7 @@ class SalesController extends Controller {
                                     'coa_id' => $coa_sales['penjualan'],
                                     'amount' => -1 * $penjualan,
                                 ];
+                                
                                 if ($invoice->value >= $total) {
                                     foreach ($payments as $i => $payment) {
                                         if (!$payment->save()) {

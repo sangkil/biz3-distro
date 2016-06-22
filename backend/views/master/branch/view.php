@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'orgn_id',
             'code',
             'name',
+            'addr',
             'created_at:datetime',
             'created_by',
             'updated_at:datetime',

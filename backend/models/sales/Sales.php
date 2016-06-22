@@ -7,6 +7,7 @@ use backend\models\master\Branch;
 use backend\models\master\Vendor;
 use backend\models\inventory\GoodsMovement;
 use backend\models\accounting\GlHeader;
+use backend\models\accounting\PaymentDtl;
 
 /**
  * This is the model class for table "sales".
@@ -15,6 +16,8 @@ use backend\models\accounting\GlHeader;
  * @property string $number
  * @property integer $vendor_id
  * @property integer $branch_id
+ * @property integer $reff_type
+ * @property integer $reff_id
  * @property string $date
  * @property double $value
  * @property double $discount
@@ -27,6 +30,7 @@ use backend\models\accounting\GlHeader;
  * @property SalesDtl[] $items
  * @property Branch $branch 
  * @property Vendor $vendor
+ * @property Payment $payments
  */
 class Sales extends \yii\db\ActiveRecord {
 
@@ -66,7 +70,7 @@ class Sales extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['branch_id', 'Date', 'value', 'status'], 'required'],
-            [['vendor_id', 'branch_id', 'status'], 'integer'],
+            [['vendor_id', 'branch_id', 'reff_type', 'reff_id', 'status'], 'integer'],
             [['vendor_name'], 'safe'],
             [['number'], 'autonumber', 'format' => 'SA' . date('Ym') . '.?', 'digit' => 4],
             [['items'], 'required'],
@@ -96,12 +100,18 @@ class Sales extends \yii\db\ActiveRecord {
         ];
     }
 
-    
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getItems() {
         return $this->hasMany(SalesDtl::className(), ['sales_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPayments() {
+        return $this->hasMany(PaymentDtl::className(), ['invoice_id' => 'reff_id'])->with(['payment']);
     }
 
     /**
