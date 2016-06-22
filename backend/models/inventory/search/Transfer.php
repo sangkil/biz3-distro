@@ -34,9 +34,7 @@ class Transfer extends TransferModel
 
     /**
      * Creates data provider instance with search query applied
-     *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)
