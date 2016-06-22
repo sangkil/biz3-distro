@@ -14,10 +14,10 @@ $this->title = 'Cetak Faktur: ' . $model->number;
 ?>
 <div class="sales-view col-lg-3" style="background-color: white; page-break-after: true;">
     <p class="text-center">
-        <label><?= $model->branch->name ?></label>
+        <label style="margin-bottom: 0px;"><?= $model->branch->name ?></label>
         <br><?= $model->branch->addr ?>
     </p>
-    <p class="text-left" style="margin-bottom: 0px;">
+    <p class="text-left" style="margin-bottom: 0px; border-bottom:1px dotted #000;">
         No.Faktur:<?= '&nbsp;'.$model->number ?><br>
         Tgl:<?= '&nbsp;'.date('d-m-Y H:i:s', $model->created_at) ?>&nbsp;
         Kasir:<?= '&nbsp;'.$model->kasir->username ?>
@@ -59,7 +59,7 @@ $this->title = 'Cetak Faktur: ' . $model->number;
         }
         echo Html::beginTag('tr', ['style' => 'border-top:1px dotted #000;']);
         echo Html::tag('td', '&nbsp;');
-        echo Html::tag('td', 'Total', ['style' => 'text-align:right;']);
+        echo Html::tag('td', 'Total', ['class' => 'text-bold', 'style' => 'text-align:right;']);
         echo Html::tag('td', number_format($totaLine, 0), ['class' => 'text-bold', 'style' => 'text-align:right;']);
         echo Html::endTag('tr');
 
