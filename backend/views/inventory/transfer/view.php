@@ -166,6 +166,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'nmType',
                         'date:datetime',
+                        'warehouse.name',
                         [
                             'header' => 'Status',
                             'attribute' => 'nmStatus'
