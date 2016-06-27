@@ -63,7 +63,7 @@ $this->title = 'Dashboard ' . $mperiode;
                     <?=
                     ListView::widget([
                         'dataProvider' => $hutangPro,
-                        'layout' => "{items}",
+                        'layout' => "{items}\n{pager}",
                         'itemView' => '_dashHutang',
                         'emptyText' => '&nbsp;'
                     ]);
