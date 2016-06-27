@@ -18,7 +18,8 @@
             <?= 'Destination: ' . $model->branchDest->name . '<br>' ?>
             <?php
             foreach ($model->movements as $dmove) {
-                echo ($dmove->status == backend\models\inventory\GoodsMovement::STATUS_CANCELED) ? '' : '&nbsp;' . \yii\helpers\Html::a($dmove->number, ['/inventory/gm-manual/view', 'id' => $dmove->id]);
+                echo ($dmove->status == backend\models\inventory\GoodsMovement::STATUS_CANCELED) ? '&nbsp;' . \yii\helpers\Html::a($dmove->number, ['/inventory/gm-manual/view', 'id' => $dmove->id],['class'=>'text-red']) 
+                : '&nbsp;' . \yii\helpers\Html::a($dmove->number, ['/inventory/gm-manual/view', 'id' => $dmove->id]);
             }
             ?>
         </span>
