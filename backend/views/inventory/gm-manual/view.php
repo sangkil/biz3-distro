@@ -180,8 +180,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return $model->cogs * $model->qty* $isi;
                             },
                             'format'=>['decimal',0]
-                        ],
-                       'productUom.isi'
+                        ]
                     ]
                 ])
                 ?>
