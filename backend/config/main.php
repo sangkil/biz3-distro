@@ -51,6 +51,7 @@ return [
         ],
     ],
     'on beforeAction' => function () {
+    /*
         $dmesg = \backend\models\master\UserNotification::find();
         $dmesg->where('user_id=:duser AND start_at<=:saiki AND finish_at>=:saiki', [':duser' => \Yii::$app->user->id, ':saiki' => time()]);
         $umesg = [];
@@ -62,6 +63,7 @@ return [
         if(!empty($umesg)){
             \Yii::$app->session->setFlash('warning', $umesg);
         }
+     */
     },
     'params' => $params,
 ];
