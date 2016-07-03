@@ -180,6 +180,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'format'=>['decimal',0]
                         ],
+                       'productUom.isi'
                     ]
                 ])
                 ?>
