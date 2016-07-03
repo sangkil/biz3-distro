@@ -176,7 +176,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'header' => 'Total Line',
                             'value' => function ($model) {
-                                return $model->cogs * $model->qty; // * $model->productUom->isi;
+                                $isi = (isset($model->productUom->isi))? $model->productUom->isi : 1;
+                                return $model->cogs * $model->qty* $isi;
                             },
                             'format'=>['decimal',0]
                         ],
