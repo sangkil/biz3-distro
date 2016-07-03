@@ -135,7 +135,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
     {
         $totValue = 0;
         foreach ($this->items as $itemDtl) {
-            $totValue += $itemDtl->qty * $itemDtl->cogs * $itemDtl->productUom->isi;
+            $totValue += $itemDtl->qty * $itemDtl->cogs;// * $itemDtl->productUom->isi;
         }
         return $totValue;
     }
