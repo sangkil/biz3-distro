@@ -39,11 +39,11 @@ use yii\web\NotFoundHttpException;
  * @property Warehouse $warehouse
  * @property Vendor $vendor
  */
-class GoodsMovement extends \yii\db\ActiveRecord
-{
+class GoodsMovement extends \yii\db\ActiveRecord {
 
     use \mdm\converter\EnumTrait,
         \mdm\behaviors\ar\RelationTrait;
+
     // status movement
     const STATUS_DRAFT = 10;
     const STATUS_RELEASED = 20;
@@ -67,7 +67,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
     const SCENARIO_CHANGE_STATUS = 'change_status';
 
     public $vendor_name, $whse_name, $jml;
-    
+
     /**
      * @var array
      */
@@ -76,16 +76,14 @@ class GoodsMovement extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%goods_movement}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['warehouse_id', 'Date', 'type', 'status'], 'required'],
             [['!number'], 'autonumber', 'format' => 'GM' . date('Y') . '.?', 'digit' => 4],
@@ -100,8 +98,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'number' => 'Number',
@@ -123,19 +120,18 @@ class GoodsMovement extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getItems()
-    {
+    public function getItems() {
         return $this->hasMany(GoodsMovementDtl::className(), ['movement_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTotalValue()
-    {
+    public function getTotalValue() {
         $totValue = 0;
         foreach ($this->items as $itemDtl) {
-            $totValue += $itemDtl->qty * $itemDtl->cogs;// * $itemDtl->productUom->isi;
+            $isi = (isset($model->productUom->isi)) ? $model->productUom->isi : 1;
+            $totValue += $itemDtl->qty * $itemDtl->cogs * $isi;
         }
         return $totValue;
     }
@@ -144,74 +140,63 @@ class GoodsMovement extends \yii\db\ActiveRecord
      *
      * @param array $value
      */
-    public function setItems($value)
-    {
+    public function setItems($value) {
         $this->loadRelated('items', $value);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getWarehouse()
-    {
+    public function getWarehouse() {
         return $this->hasOne(Warehouse::className(), ['id' => 'warehouse_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getVendor()
-    {
+    public function getVendor() {
         return $this->hasOne(Vendor::className(), ['id' => 'vendor_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getInvoice()
-    {
+    public function getInvoice() {
         return $this->hasOne(Invoice::className(), ['reff_id' => 'id'])->where(['reff_type' => self::REFF_GOODS_MOVEMENT]);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getJournals()
-    {
+    public function getJournals() {
         return $this->hasMany(GlHeader::className(), ['reff_id' => 'id'])->where(['reff_type' => GlHeader::REFF_GOODS_MOVEMENT])->andFilterWhere(['<>',
-                'status', GlHeader::STATUS_CANCELED]);
+                    'status', GlHeader::STATUS_CANCELED]);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTransfer()
-    {
+    public function getTransfer() {
         return $this->hasOne(Transfer::className(), ['id' => 'reff_id']);
     }
 
-    public function getNmType()
-    {
+    public function getNmType() {
         return $this->getLogical('type', 'TYPE_');
     }
 
-    public function getNmStatus()
-    {
+    public function getNmStatus() {
         return $this->getLogical('status', 'STATUS_');
     }
 
-    public function getNmReffType()
-    {
+    public function getNmReffType() {
         return $this->getLogical('reff_type', 'REFF_');
     }
 
-    public function getReffNumber()
-    {
+    public function getReffNumber() {
         $link = null;
         switch ((int) $this->reff_type) {
             case (int) self::REFF_TRANSFER :
-                $link = ($this->transfer != null) ? Html::a($this->transfer->number, ['/inventory/transfer/view', 'id' => $this->reff_id])
-                        : '';
+                $link = ($this->transfer != null) ? Html::a($this->transfer->number, ['/inventory/transfer/view', 'id' => $this->reff_id]) : '';
                 break;
             default:
                 break;
@@ -223,8 +208,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
      *
      * @return boolean
      */
-    public function updateStock($factor)
-    {
+    public function updateStock($factor) {
         // update stock
         $wh_id = $this->warehouse_id;
         $mv_id = $this->id;
@@ -241,13 +225,13 @@ class GoodsMovement extends \yii\db\ActiveRecord
                 $ps = new ProductStock(['product_id' => $product_id, 'warehouse_id' => $wh_id, 'qty' => $qty]);
             }
             if (!$ps->save(false) || !$ps->refresh() || !$command->insert('{{%product_stock_history}}', [
-                    'time' => microtime(true),
-                    'warehouse_id' => $wh_id,
-                    'product_id' => $product_id,
-                    'qty_movement' => $qty,
-                    'qty_current' => $ps->qty,
-                    'movement_id' => $mv_id,
-                ])->execute()) {
+                        'time' => microtime(true),
+                        'warehouse_id' => $wh_id,
+                        'product_id' => $product_id,
+                        'qty_movement' => $qty,
+                        'qty_current' => $ps->qty,
+                        'movement_id' => $mv_id,
+                    ])->execute()) {
                 return false;
             }
             if ($item->cogs !== null && $item->cogs !== '') {
@@ -264,8 +248,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return true;
     }
 
-    protected function updateCogs($params)
-    {
+    protected function updateCogs($params) {
         $cogs = Cogs::findOne(['product_id' => $params['id']]);
         if (!$cogs) {
             $cogs = new Cogs([
@@ -274,8 +257,8 @@ class GoodsMovement extends \yii\db\ActiveRecord
             ]);
         }
         $current_stock = ProductStock::find()
-            ->where(['product_id' => $params['id']])
-            ->sum('qty');
+                ->where(['product_id' => $params['id']])
+                ->sum('qty');
 
         if ($current_stock != 0) {
             $cogs->cogs += ($params['qty'] * ($params['cogs'] - $cogs->cogs)) / $current_stock;
@@ -290,8 +273,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
      *
      * @return boolean
      */
-    public function postGL($factor)
-    {
+    public function postGL($factor) {
         /*
          * Header Journal
          */
@@ -307,8 +289,8 @@ class GoodsMovement extends \yii\db\ActiveRecord
         switch ($this->reff_type):
             case self::REFF_TRANSFER:
                 $esheet = ($this->type == self::TYPE_ISSUE) ?
-                    EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES004'])->one() :
-                    EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES005'])->one();
+                        EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES004'])->one() :
+                        EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES005'])->one();
                 break;
             default :
                 $esheet = ($factor == 1) ? EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES001'])->one() : EntriSheet::find()->where('code=:dcode', [':dcode' => 'ES003'])->one();
@@ -348,11 +330,10 @@ class GoodsMovement extends \yii\db\ActiveRecord
      * @param array $options
      * @return Invoice|boolean
      */
-    public function createInvoice($options = [])
-    {
+    public function createInvoice($options = []) {
         if ($this->status == self::STATUS_RELEASED) {
             $oldInvoice = Invoice::findOne(['reff_type' => Invoice::REFF_GOODS_MOVEMENT,
-                    'reff_id' => $this->id, 'status' => Invoice::STATUS_RELEASED]);
+                        'reff_id' => $this->id, 'status' => Invoice::STATUS_RELEASED]);
 
             if ($oldInvoice !== null) {
                 return false;
@@ -361,7 +342,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
             $invoice->attributes = array_merge([
                 'date' => date('Y-m-d'),
                 'due_date' => date('Y-m-d', time() + 30 * 24 * 3600)
-                ], $options);
+                    ], $options);
             $invoice->reff_type = Invoice::REFF_GOODS_MOVEMENT;
             $invoice->reff_id = $this->id;
             $invoice->vendor_id = $this->vendor_id;
@@ -390,8 +371,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return false;
     }
 
-    public function getReference($withItems = true)
-    {
+    public function getReference($withItems = true) {
         $type = $this->reff_type;
         $id = $this->reff_id;
 
@@ -419,8 +399,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
      * Update information from reference
      * @return boolean
      */
-    public function updateFromReference()
-    {
+    public function updateFromReference() {
         if (($reff = $this->getReference()) === false) {
             return false;
         }
@@ -463,8 +442,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
      * Update information from reference
      * @return boolean
      */
-    public function updateFromReceipt()
-    {
+    public function updateFromReceipt() {
         if (($reff = $this->getReference()) === false) {
             return false;
         }
@@ -502,19 +480,18 @@ class GoodsMovement extends \yii\db\ActiveRecord
         return[$reffModel, $reff, $items];
     }
 
-    public function generateReceiveFromIssueTransfer()
-    {
+    public function generateReceiveFromIssueTransfer() {
         $queryGM = (new Query())
-            ->select(['gmd.product_id', 'total' => 'sum(gmd.qty)'])
-            ->from(['gm' => '{{%goods_movement}}'])
-            ->innerJoin(['gmd' => '{{%goods_movement_dtl}}'], '[[gmd.movement_id]]=[[gm.id]]')
-            ->where(['gm.status' => 20, 'gm.reff_type' => self::REFF_SELF, 'gm.reff_id' => $this->id])
-            ->groupBy(['gmd.product_id']);
+                ->select(['gmd.product_id', 'total' => 'sum(gmd.qty)'])
+                ->from(['gm' => '{{%goods_movement}}'])
+                ->innerJoin(['gmd' => '{{%goods_movement_dtl}}'], '[[gmd.movement_id]]=[[gm.id]]')
+                ->where(['gm.status' => 20, 'gm.reff_type' => self::REFF_SELF, 'gm.reff_id' => $this->id])
+                ->groupBy(['gmd.product_id']);
         $queryItem = (new Query())
-            ->select(['md.product_id', 'md.cogs', 'md.qty', 'md.uom_id', 'g.total'])
-            ->from(['md' => '{{%goods_movement_dtl}}'])
-            ->leftJoin(['g' => $queryGM], '[[g.product_id]]=[[md.product_id]]')
-            ->where(['md.movement_id' => $this->id]);
+                ->select(['md.product_id', 'md.cogs', 'md.qty', 'md.uom_id', 'g.total'])
+                ->from(['md' => '{{%goods_movement_dtl}}'])
+                ->leftJoin(['g' => $queryGM], '[[g.product_id]]=[[md.product_id]]')
+                ->where(['md.movement_id' => $this->id]);
         $items = [];
         foreach ($queryItem->all() as $item) {
             $item['qty'] -= $item['total'];
@@ -522,13 +499,13 @@ class GoodsMovement extends \yii\db\ActiveRecord
         }
         return $items;
     }
-    
-    protected function findActivePeriode(){
+
+    protected function findActivePeriode() {
         $dPeriode = \backend\models\accounting\AccPeriode::find()->active()->one();
-        if($dPeriode!=null){
+        if ($dPeriode != null) {
             return $dPeriode->id;
         }
-        
+
         throw new NotFoundHttpException('There is no active periode..');
     }
 
@@ -537,16 +514,14 @@ class GoodsMovement extends \yii\db\ActiveRecord
      * @param GoodsMovementDtl $child
      * @return boolean Description
      */
-    public function beforeRSave($child)
-    {
+    public function beforeRSave($child) {
         return $child->qty != 0;
     }
 
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return[
             [
                 'class' => 'mdm\converter\DateConverter',
@@ -573,6 +548,7 @@ class GoodsMovement extends \yii\db\ActiveRecord
             ]
         ];
     }
+
 }
 
 GoodsMovement::$references = require('mv_reference.php');
