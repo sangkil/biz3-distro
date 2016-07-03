@@ -1,6 +1,7 @@
 <?php
 
 use yii\db\Migration;
+use yii\db\Schema;
 
 class m130524_201442_init extends Migration
 {
@@ -24,8 +25,15 @@ class m130524_201442_init extends Migration
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
+        
+        $this->createTable('{{%user_notification}}', [
+            'id' => Schema::TYPE_PK,
+            'user_id' => Schema::TYPE_INTEGER. ' NOT NULL',
+            'start_at' => Schema::TYPE_INTEGER. ' NOT NULL',
+            'finish_at' => Schema::TYPE_INTEGER. ' NOT NULL',
+            'message' => Schema::TYPE_STRING . '(256) NOT NULL',
+        ], $tableOptions);
     }
-
     public function down()
     {
         $this->dropTable('{{%user}}');

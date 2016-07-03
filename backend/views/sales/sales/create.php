@@ -9,8 +9,7 @@ $this->title = $model->branch->name . ' - Penjualan Retail';
 $this->params['breadcrumbs'][] = ['label' => 'Saless', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sales-create">
-
+<div class="row sales-create">
     <?=
     $this->render('_form', [
         'model' => $model,
@@ -18,5 +17,4 @@ $this->params['breadcrumbs'][] = $this->title;
         'warehouse' => $warehouse
     ])
     ?>
-
 </div>

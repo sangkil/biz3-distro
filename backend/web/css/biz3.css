@@ -1,10 +1,6 @@
 /*
-Create By Mujib Masyhudi <mujib.masyhudi@gmail.com>
-Create at {date('now')}
-*/
-/* 
-    Created on : Feb 2, 2016, 6:45:18 AM
-    Author     : samsung-pc
+Create By Mujib Masyhudi <mujib.masyhudi@gmail.com>/* 
+on : Feb 2, 2016, 6:45:18 AM
 */
 
 body {
@@ -23,8 +19,8 @@ body {
 }*/
 
 .alert {
-    margin-left:15px;
-    margin-right: 15px;
+/*    margin-left:15px;
+    margin-right: 15px;*/
 }
 
 .box {

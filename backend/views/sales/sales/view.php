@@ -12,7 +12,7 @@ $this->title = $model->number;
 $this->params['breadcrumbs'][] = ['label' => 'Saless', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="sales-view">
+<div class="row sales-view">
     <div class="col-lg-12">
         <p class="pull-right">
             <?= Html::a('Create New', ['create'], ['class' => 'btn btn-default']) ?>

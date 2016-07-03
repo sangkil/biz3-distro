@@ -1,6 +1,7 @@
 <?php
+
 $params = array_merge(
-    require(__DIR__ . '/../../common/config/params.php'), require(__DIR__ . '/../../common/config/params-local.php'), require(__DIR__ . '/params.php'), require(__DIR__ . '/params-local.php')
+        require(__DIR__ . '/../../common/config/params.php'), require(__DIR__ . '/../../common/config/params-local.php'), require(__DIR__ . '/params.php'), require(__DIR__ . '/params-local.php')
 );
 
 return [
@@ -49,5 +50,18 @@ return [
             ]
         ],
     ],
+    'on beforeAction' => function () {
+        $dmesg = \backend\models\master\UserNotification::find();
+        $dmesg->where('user_id=:duser AND start_at<=:saiki AND finish_at>=:saiki', [':duser' => \Yii::$app->user->id, ':saiki' => time()]);
+        $umesg = [];
+        foreach ($dmesg->all() as $mesg) {
+            $umesg[] = $mesg->message;
+//            echo $mesg->start_at.'<='.time().'<='.$mesg->finish_at;
+//            echo '<br>';
+        }
+        if(!empty($umesg)){
+            \Yii::$app->session->setFlash('warning', $umesg);
+        }
+    },
     'params' => $params,
 ];
