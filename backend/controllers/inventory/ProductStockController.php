@@ -134,7 +134,7 @@ class ProductStockController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams['params']);
         $dataProvider->pagination = false;
         $filename = 'Product Stock - ' . date('d/m/Y');
-        $headerTitle = ['WAREHOUSE', 'KODE', 'NAMA_PRODUCT', 'QTY', 'NILAI_PRODUK'];
+        $headerTitle = ['WAREHOUSE', 'KODE', 'NAMA_PRODUCT', 'CATEGORY', 'QTY', 'NILAI_PRODUK'];
 
         header('Content-Type: application/excel');
         header('Content-Disposition: attachment; filename="' . $filename . '.csv"');
@@ -145,7 +145,7 @@ class ProductStockController extends Controller
             if ($i == 0) {
                 fputcsv($fp, $headerTitle, chr(9));
             }
-            fputcsv($fp, [$row->warehouse->name, $row->product->code, $row->product->name, $row->qty, ($row->cogs->cogs * $row->qty)], chr(9));
+            fputcsv($fp, [$row->warehouse->name, $row->product->code, $row->product->name,$row->product->category->name, $row->qty, ($row->cogs->cogs * $row->qty)], chr(9));
             //fputcsv($fp, [$i, $row->code, str_replace(';', '-', $row->name),$row->group->name, $row->category->name],';');
             $i++;
         }
