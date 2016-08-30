@@ -21,7 +21,7 @@ AppAsset::register($this);
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-    <body class="skin-blue sidebar-mini sidebar-collapse">
+    <body class="skin-red sidebar-mini sidebar-collapse">
         <?php $this->beginBody() ?>
         <div class="wrapper">
             <header class="main-header">
