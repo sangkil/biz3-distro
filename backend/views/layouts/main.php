@@ -21,16 +21,16 @@ AppAsset::register($this);
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-    <body class="skin-yellow sidebar-mini sidebar-collapse">
+    <body class="skin-blue sidebar-mini sidebar-collapse">
         <?php $this->beginBody() ?>
         <div class="wrapper">
             <header class="main-header">
                 <!-- Logo -->
                 <a href="<?= Url::to(['/site/index']); ?>" class="logo"  style="border-bottom: whitesmoke solid 1px;">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini"><b>A</b>4</span>
+                    <span class="logo-mini"><b><?= Yii::$app->params['small_name'] ?></b></span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><b>A4</b>Sport</span>
+                    <span class="logo-lg"><?= Yii::$app->params['first_name'] .'&nbsp;'. Yii::$app->params['last_name'] ?></span>
                 </a>
             </header>
             <?php
