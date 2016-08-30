@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 use yii\helpers\Url;
+use yii\web\View;
 
 AppAsset::register($this);
 ?>
@@ -68,4 +69,20 @@ AppAsset::register($this);
             <?php $this->endBody() ?>
     </body>
 </html>
-<?php $this->endPage() ?>
+<?php
+$this->endPage();
+$this->registerJsFile('https://js.pusher.com/3.1/pusher.min.js');
+$jsScript = "
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('8f07d3639b10c4b90f85', {
+      cluster: 'ap1',
+      encrypted: true
+    });
+
+    var channel = pusher.subscribe('test_channel');
+    channel.bind('my_event', function(data) {
+      alert(data.message);
+    });";
+$this->registerJs($jsScript, View::POS_END);
+?>
