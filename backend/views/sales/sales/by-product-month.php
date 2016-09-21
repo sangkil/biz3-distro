@@ -108,6 +108,8 @@ $this->params['breadcrumbs'][] = $this->title;
     $content .= Html::beginTag('tr');
     $content .= Html::tag('td', '&nbsp;', ['colspan' => count($hdr) - 3]);
     $content .= Html::tag('th', number_format($tot, 0), ['style' => 'text-align:right;']);
+    $content .= Html::tag('th', number_format($tot_disc, 0), ['style' => 'text-align:right;']);
+    $content .= Html::tag('th', number_format($tot_all, 0), ['style' => 'text-align:right;']);
     $content .= Html::endTag('tr');
     if ($tot_jend > $tot) {
         $content .= Html::beginTag('tr');
