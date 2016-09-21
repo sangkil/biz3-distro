@@ -17,6 +17,7 @@ use backend\models\accounting\GlHeader;
 use backend\models\inventory\GoodsMovement;
 use backend\models\accounting\Invoice;
 use yii\db\Query;
+use backend\models\sales\search\SalesDtl as SalesDtlSearch;
 
 /**
  * SalesController implements the CRUD actions for Sales model.
@@ -52,11 +53,11 @@ class SalesController extends Controller {
 
     public function actionDaily() {
         $searchModel = new SalesSearch();
-        $searchModel->branch_id = Yii::$app->profile->branch_id;        
+        $searchModel->branch_id = Yii::$app->profile->branch_id;
         $parms = Yii::$app->request->queryParams;
-        $dmonth = (isset($parms['Sales']['Date']))?$parms['Sales']['Date']:date('m');
-        
-        $dbranch = (isset($parms['nm_branch']))?$parms['nm_branch'].' :':'';
+        $dmonth = (isset($parms['Sales']['Date'])) ? $parms['Sales']['Date'] : date('m');
+
+        $dbranch = (isset($parms['nm_branch'])) ? $parms['nm_branch'] . ' :' : '';
 
         $dataProvider = $searchModel->searchDaily($parms);
         $bln = [];
@@ -68,10 +69,209 @@ class SalesController extends Controller {
         return $this->render('daily', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
-                    'dmonth'=>$dmonth,
-                    'bln'=>$bln,
-                    'dbranch'=>$dbranch
+                    'dmonth' => $dmonth,
+                    'bln' => $bln,
+                    'dbranch' => $dbranch
         ]);
+    }
+
+    public function actionByProductWeek() {
+        $searchModel = new SalesDtlSearch();
+        $searchModel->fr_date = date('Y-m-d');
+        $searchModel->to_date = date('Y-m-d');
+        $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
+        $dataProvider->pagination = false;
+
+        $dcats = \backend\models\master\Category::find();
+        $rcats = [];
+        foreach ($dcats->all() as $crows) {
+            $rcats[$crows->id] = [$crows->code, $crows->name];
+        }
+
+        return $this->render('by-product', [
+                    'days' => $this->getDay(),
+                    'cats' => $rcats,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionByProductCsv() {
+        header('Content-Type: application/excel');
+        header('Content-Disposition: attachment; filename="sales_week.csv"');
+
+        $searchModel = new SalesDtlSearch();
+        $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
+        $dataProvider->pagination = false;
+
+        $dcats = \backend\models\master\Category::find();
+        $rcats = [];
+        foreach ($dcats->all() as $crows) {
+            $rcats[$crows->id] = [$crows->code, $crows->name];
+        }
+        $days = $this->getDay();
+
+        $fp = fopen('php://output', 'w');
+        $dbfore = '';
+        $is_first = true;
+        $i = 0;
+        $tot = 0;
+        $tot_jend = 0;
+
+        $hdr = ['HARI/TANGGAL', 'NO.BON', 'ARTIKEL', 'NAMA BARANG', 'KATEGORI', 'SIZE', 'QTY', 'HARGA'];
+        fputcsv($fp, $hdr, chr(9));
+        foreach ($dataProvider->models as $row) {
+            if (!$is_first && $row->SDate != $dbfore) {
+                if ($tot_jend > $tot) {
+                    fputcsv($fp, [null, null, null, null, null, null, null, $tot], chr(9));
+                    fputcsv($fp, [null, null, null, null, null, null, null, $tot_jend, PHP_EOL], chr(9));
+                } else {
+                    fputcsv($fp, [null, null, null, null, null, null, null, $tot, PHP_EOL], chr(9));
+                }
+                fputcsv($fp, $hdr, chr(9));
+                $tot = ($row->price * $row->qty);
+            } else {
+                $tot += ($row->price * $row->qty);
+            }
+
+            $tot_jend += ($row->price * $row->qty);
+
+            $tanggal = $row->sdate;
+            $day = date('D', strtotime($tanggal));
+            $r = [];
+            $r[] = ($row->SDate == $dbfore) ? '' : $days[$day] . ', ' . $row->SDate; //tgl
+            $r[] = $row->faktur; //bon
+            $prod = explode(';', $row->pname);
+
+            $r[] = (isset($prod[1])) ? $prod[1] : ''; //artikel
+            $r[] = (isset($prod[0])) ? $prod[0] : ''; //product name
+            $r[] = (isset($row->ctgr)) ? $rcats[$row->ctgr][1] : ''; //category
+            $r[] = (isset($prod[2])) ? $prod[2] : ''; //size
+            $r[] = $row->qty;
+            $r[] = ($row->price * $row->qty);
+
+            fputcsv($fp, $r, chr(9));
+
+            $dbfore = $row->SDate;
+            $is_first = false;
+            $i++;
+        }
+        fputcsv($fp, [null, null, null, null, null, null, null, $tot], chr(9));
+        if ($tot_jend > $tot) {
+            fputcsv($fp, [null, null, null, null, null, null, null, $tot_jend], chr(9));
+        }
+        fclose($fp);
+        return false;
+    }
+
+    public function actionByProductMonth() {
+        $searchModel = new SalesDtlSearch();
+        $searchModel->fr_date = date('Y-m-d');
+        $searchModel->to_date = date('Y-m-d');
+        $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
+        $dataProvider->pagination = false;
+
+        $dcats = \backend\models\master\Category::find();
+        $rcats = [];
+        foreach ($dcats->all() as $crows) {
+            $rcats[$crows->id] = [$crows->code, $crows->name];
+        }
+
+        return $this->render('by-product-month', [
+                    'days' => $this->getDay(),
+                    'cats' => $rcats,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionByProductMonthCsv() {
+        header('Content-Type: application/excel');
+        header('Content-Disposition: attachment; filename="sales_monthly.csv"');
+
+        $searchModel = new SalesDtlSearch();
+        $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
+        $dataProvider->pagination = false;
+
+        $dcats = \backend\models\master\Category::find();
+        $rcats = [];
+        foreach ($dcats->all() as $crows) {
+            $rcats[$crows->id] = [$crows->code, $crows->name];
+        }
+        $days = $this->getDay();
+
+        $fp = fopen('php://output', 'w');
+        $dbfore = '';
+        $is_first = true;
+        $i = 0;
+        $tot = 0;
+        $tot_disc = 0;
+        $tot_all = 0;
+        $tot_jend = 0;
+        $tot_jend_disc = 0;
+        $tot_jend_all = 0;
+
+        $hdr = ['HARI/TANGGAL', 'NO.BON', 'ARTIKEL', 'NAMA BARANG', 'KATEGORI', 'SIZE', 'QTY', 'HARGA', 'DISKON', 'JUMLAH'];
+        fputcsv($fp, $hdr, chr(9));
+        foreach ($dataProvider->models as $row) {
+            if (!$is_first && $row->SDate != $dbfore) {
+                if ($tot_jend > $tot) {
+                    fputcsv($fp, [null, null, null, null, null, null, null, $tot, $tot_disc, $tot_all], chr(9));
+                    fputcsv($fp, [null, null, null, null, null, null, null, $tot_jend, $tot_jend_disc, $tot_jend_all, PHP_EOL], chr(9));
+                } else {
+                    fputcsv($fp, [null, null, null, null, null, null, null, $tot, $tot_disc, $tot_all, PHP_EOL], chr(9));
+                }
+                fputcsv($fp, $hdr, chr(9));
+                $tot = ($row->price * $row->qty);
+                $tot_disc = $row->disc;
+                $tot_all = $tot - $tot_disc;
+            } else {
+                $tot += ($row->price * $row->qty);
+                $tot_disc += $row->disc;
+                $tot_all += ($row->price * $row->qty) - $row->disc;
+            }
+            $tot_jend += ($row->price * $row->qty);
+            $tot_jend_disc += $row->disc;
+            $tot_jend_all += (($row->price * $row->qty) - $row->disc);
+
+            $tanggal = $row->sdate;
+            $day = date('D', strtotime($tanggal));
+            $r = [];
+            $r[] = ($row->SDate == $dbfore) ? '' : $days[$day] . ', ' . $row->SDate; //tgl
+            $r[] = $row->faktur; //bon
+            $prod = explode(';', $row->pname);
+
+            $r[] = (isset($prod[1])) ? $prod[1] : ''; //artikel
+            $r[] = (isset($prod[0])) ? $prod[0] : ''; //product name
+            $r[] = (isset($row->ctgr)) ? $rcats[$row->ctgr][1] : ''; //category
+            $r[] = (isset($prod[2])) ? $prod[2] : ''; //size
+            $r[] = $row->qty;
+            $r[] = ($row->price * $row->qty);
+            $r[] = $row->disc;
+            $r[] = ($row->price * $row->qty) - $row->disc;
+
+            fputcsv($fp, $r, chr(9));
+
+            $dbfore = $row->SDate;
+            $is_first = false;
+            $i++;
+        }
+        fputcsv($fp, [null, null, null, null, null, null, null, $tot, $tot_disc, $tot_all], chr(9));
+        if ($tot_jend > $tot) {
+            fputcsv($fp, [null, null, null, null, null, null, null, $tot_jend, $tot_jend_disc, $tot_jend_all], chr(9));
+        }
+        fclose($fp);
+        return false;
+    }
+
+    protected function getDay() {
+        return [ 'Sun' => 'Minggu',
+            'Mon' => 'Senin',
+            'Tue' => 'Selasa',
+            'Wed' => 'Rabu',
+            'Thu' => 'Kamis',
+            'Fri' => 'Jumat',
+            'Sat' => 'Sabtu'];
     }
 
     /**
@@ -227,7 +427,7 @@ class SalesController extends Controller {
                                     'coa_id' => $coa_sales['penjualan'],
                                     'amount' => -1 * $penjualan,
                                 ];
-                                
+
                                 if ($invoice->value >= $total) {
                                     foreach ($payments as $i => $payment) {
                                         if (!$payment->save()) {

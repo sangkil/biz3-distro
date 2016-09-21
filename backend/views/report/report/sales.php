@@ -6,14 +6,24 @@
  */
 ?>
 <div class="col-lg-6">
-    <h2>Penjualan Detail</h2>
-    <p>Menunjukkan daftar kronologis dari semua faktur dan pembayaran untuk rentang tanggal yang dipilih..</p>
+    <h2>Detail</h2>
+    <p>Menunjukkan detail penjualan untuk rentang tanggal yang dipilih..</p>
     <p><?= \yii\bootstrap\Html::a('Penjualan Detail &raquo;', ['/sales/sales/index'], ['class' => 'btn btn-default']) ?></p>
 </div>
 <div class="col-lg-6">
-    <h2>Penjualan Harian</h2>
-    <p>Menunjukkan daftar kronologis dari semua faktur dan pembayaran untuk rentang tanggal yang dipilih..</p>
+    <h2>Harian</h2>
+    <p>Menunjukkan rekam penjualan perfaktur untuk tanggal yg dipilih </p>
     <p><?= \yii\bootstrap\Html::a('Penjualan Harian &raquo;', ['/sales/sales/daily'], ['class' => 'btn btn-default']) ?></p>
+</div>
+<div class="col-lg-6">
+    <h2>Mingguan/Barang</h2>
+    <p>Rekam penjualan perbarang untuk laporan prinsipal untuk rentang mingguan</p>
+    <p><?= \yii\bootstrap\Html::a('Penjualan Mingguan &raquo;', ['/sales/sales/by-product-week'], ['class' => 'btn btn-default']) ?></p>
+</div>
+<div class="col-lg-6">
+    <h2>Bulanan/Barang</h2>
+    <p>Rekam penjualan perbarang untuk laporan prinsipal untuk rentang bulanan</p>
+    <p><?= \yii\bootstrap\Html::a('Penjualan Bulanan &raquo;', ['/sales/sales/by-product-month'], ['class' => 'btn btn-default']) ?></p>
 </div>
 <div class="col-lg-6">
     <h2>Penjualan per Pelanggan</h2>

@@ -7,6 +7,7 @@ use backend\models\master\Product;
 use backend\models\master\Uom;
 use backend\models\master\Cogs;
 use backend\models\master\ProductUom;
+use mdm\converter\DateConverter;
 
 /**
  * This is the model class for table "sales_dtl".
@@ -26,7 +27,16 @@ use backend\models\master\ProductUom;
 class SalesDtl extends \yii\db\ActiveRecord {
 
     public $total_release;
+    public $fr_date;
+    public $to_date;
     
+    public $pname;
+    public $sdate;
+    public $faktur;
+    public $ctgr;
+    public $hari;
+    public $disc;
+
     /**
      * @inheritdoc
      */
@@ -90,15 +100,30 @@ class SalesDtl extends \yii\db\ActiveRecord {
      * @return Double
      */
     public function getTotalLine() {
-        $post_discount = (1-($this->discount/100));
+        $post_discount = (1 - ($this->discount / 100));
         return ($this->qty * $this->price) * $post_discount;
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProductUom()
-    {
+    public function getProductUom() {
         return $this->hasOne(ProductUom::className(), ['product_id' => 'product_id', 'uom_id' => 'uom_id']);
     }
+
+    public function behaviors() {
+        return[
+            [
+                'class' => DateConverter::className(),
+                'type' => 'date', // 'date', 'time', 'datetime'
+                'logicalFormat' => 'php:d-m-Y',
+                'attributes' => [
+                    'FrDate' => 'fr_date', // date is original attribute
+                    'ToDate' => 'to_date', // date is original attribute
+                    'SDate' => 'sdate', // date is original attribute
+                ]
+            ]
+        ];
+    }
+
 }
