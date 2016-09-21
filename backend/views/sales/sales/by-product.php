@@ -8,7 +8,7 @@ use backend\models\sales\Sales;
 /* @var $searchModel backend\models\sales\search\Sales */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Sales Weekly/product';
+$this->title = 'Sales/product Weekly';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class="pull-right">
