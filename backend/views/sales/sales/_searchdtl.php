@@ -20,7 +20,7 @@ $form = ActiveForm::begin([
 ?> 
 <div class="sales-dtl-search">
     <div class="col-lg-12">
-        <?= $form->field($model, 'branch_id')->dropDownList(Branch::selectOptions(), ['style' => 'width:16%;','prompt'=>'-- All --']) ?>
+        <?= $form->field($model, 'branch_id')->dropDownList(Branch::selectOptions(), ['style' => 'width:16%;','prompt'=>'-- All --'])->label('Branch') ?>
     </div>
     <div class="col-lg-2">
         <?=
