@@ -19,7 +19,7 @@ class SalesDtl extends SalesDtlModel {
         return [
             [['sales_id', 'product_id', 'uom_id'], 'integer'],
             [['qty', 'price', 'total_release', 'cogs', 'discount', 'tax'], 'number'],
-            [['FrDate', 'ToDate', 'fr_date', 'to_date'], 'safe']
+            [['FrDate', 'ToDate', 'fr_date', 'to_date','branch_id'], 'safe']
         ];
     }
 
@@ -122,6 +122,7 @@ class SalesDtl extends SalesDtlModel {
             'cogs' => $this->cogs,
             'discount' => $this->discount,
             'tax' => $this->tax,
+            'sales.branch_id'=>  $this->branch_id
         ]);
         return $dataProvider;
     }
