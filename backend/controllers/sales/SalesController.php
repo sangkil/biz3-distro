@@ -79,6 +79,8 @@ class SalesController extends Controller {
         $searchModel = new SalesDtlSearch();
         $searchModel->fr_date = date("Y-m-d", strtotime('sunday last week'));
         $searchModel->to_date = date('Y-m-d');
+        $searchModel->branch_id = Yii::$app->profile->branch_id;
+        
         $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
         $dataProvider->pagination = false;
 
@@ -101,6 +103,8 @@ class SalesController extends Controller {
         header('Content-Disposition: attachment; filename="sales_week.csv"');
 
         $searchModel = new SalesDtlSearch();
+        $searchModel->fr_date = date('Y-m-01');
+        $searchModel->to_date = date('Y-m-d');
         $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
         $dataProvider->pagination = false;
 
@@ -168,6 +172,7 @@ class SalesController extends Controller {
         $searchModel = new SalesDtlSearch();
         $searchModel->fr_date = date('Y-m-01');
         $searchModel->to_date = date('Y-m-d');
+        $searchModel->branch_id = Yii::$app->profile->branch_id;
         $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
         $dataProvider->pagination = false;
 
@@ -190,6 +195,8 @@ class SalesController extends Controller {
         header('Content-Disposition: attachment; filename="sales_monthly.csv"');
 
         $searchModel = new SalesDtlSearch();
+        $searchModel->fr_date = date('Y-m-01');
+        $searchModel->to_date = date('Y-m-d');
         $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
         $dataProvider->pagination = false;
 
