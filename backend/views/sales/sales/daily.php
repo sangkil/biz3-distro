@@ -58,19 +58,21 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php
         $data = [];
         $is_first = true;
+        $kum = 0;
         foreach ($dataProvider->models as $row) {
             if ($is_first) {
-                $data = array_merge($data, array(['Day', 'Value', 'Trend']));
+                $data = array_merge($data, array(['Day', 'Value', 'Kumulatif']));
                 $is_first = false;
             }
-            $data = array_merge($data, array([$row->Date, $row->value, $row->value]));
+            $kum += $row->value;
+            $data = array_merge($data, array([$row->Date, $row->value, $kum]));
         }
 
         if (count($data) > 0) {
             echo GoogleChart::widget([
                 'visualization' => 'ComboChart',
                 'data' => $data,
-                'htmlOptions'=>['style'=>'height:350px;'],
+                'htmlOptions'=>['style'=>'height:650px;'],
                 'options' => [
                     'title' => 'My Daily Sales',
                     'vAxis' => ['title' => 'Sales'],
