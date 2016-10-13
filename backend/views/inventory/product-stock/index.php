@@ -69,7 +69,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Value',
                 'format' => ['decimal', 0],
                 'value' => function ($model) {
-                    return ($model->cogs->cogs * $model->qty);
+                    $dcogs = (!empty($model->cogs))? $model->cogs->cogs: 0;
+                    return ($dcogs * $model->qty);
                 },
                 'filter' => false,
                 'format' => ['decimal', 0],
