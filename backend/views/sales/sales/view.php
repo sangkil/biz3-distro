@@ -17,13 +17,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <p class="pull-right">
             <?= Html::a('Create New', ['create'], ['class' => 'btn btn-default']) ?>
             <?=
-                Html::a('Delete', ['delete', 'id' => $model->id], [
+                (Yii::$app->user->can('admin.app'))? Html::a('Delete', ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [
                         'confirm' => 'Are you sure you want to delete this item?',
                         'method' => 'post',
                     ],
-                ])
+                ]):''
             ?>
             <?php echo ($model->status <= Sales::STATUS_DRAFT) ? Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-default'])
                 : Html::a('<i class="fa fa-print"></i>', ['cetak', 'id' => $model->id], ['class' => 'btn btn-default','target'=>'_blank']) ?>
