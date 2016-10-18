@@ -161,7 +161,7 @@ class DataController extends Controller
         }
 
         $command = Yii::$app->db->createCommand();
-        $sampleDir = __DIR__ . '/data/blackid';
+        $sampleDir = __DIR__ . '/data';
 
         // TRUNCATE TABLE
         $command->delete('{{%product_stock}}')->execute();

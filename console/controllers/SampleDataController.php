@@ -29,7 +29,7 @@ class SampleDataController extends Controller
         }
 
         $command = Yii::$app->db->createCommand();
-        $sampleDir = __DIR__ . '/samples/a4sport';
+        $sampleDir = __DIR__ . '/samples/zomb';
 
         // TRUNCATE TABLE
         $command->delete('{{%product_stock}}')->execute();
