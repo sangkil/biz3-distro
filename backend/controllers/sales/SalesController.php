@@ -80,7 +80,7 @@ class SalesController extends Controller {
         $searchModel->fr_date = date("Y-m-d", strtotime('sunday last week'));
         $searchModel->to_date = date('Y-m-d');
         $searchModel->branch_id = Yii::$app->profile->branch_id;
-        
+
         $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
         $dataProvider->pagination = false;
 
@@ -316,7 +316,7 @@ class SalesController extends Controller {
         $model->status = Sales::STATUS_RELEASED;
         $model->date = date('Y-m-d');
         $model->branch_id = Yii::$app->profile->branch_id;
-        $model->vendor_id = Sales::DEFAULT_VENDOR;
+        $model->vendor_id = (!isset(Yii::$app->params['default_cust'])) ? Sales::DEFAULT_VENDOR : Yii::$app->params['default_cust'];
         $model->vendor_name = $model->vendor->name;
         $error = false;
         $whse = $this->findWarehouse(Yii::$app->profile->warehouse_id);
