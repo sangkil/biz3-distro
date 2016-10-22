@@ -12,11 +12,9 @@ use yii\filters\VerbFilter;
 /**
  * ProductStockController implements the CRUD actions for ProductStock model.
  */
-class ProductStockController extends Controller
-{
+class ProductStockController extends Controller {
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -31,14 +29,13 @@ class ProductStockController extends Controller
      * Lists all ProductStock models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $searchModel = new ProductStockSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -48,10 +45,9 @@ class ProductStockController extends Controller
      * @param integer $product_id
      * @return mixed
      */
-    public function actionView($warehouse_id, $product_id)
-    {
+    public function actionView($warehouse_id, $product_id) {
         return $this->render('view', [
-                'model' => $this->findModel($warehouse_id, $product_id),
+                    'model' => $this->findModel($warehouse_id, $product_id),
         ]);
     }
 
@@ -60,15 +56,14 @@ class ProductStockController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new ProductStock();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'warehouse_id' => $model->warehouse_id, 'product_id' => $model->product_id]);
         } else {
             return $this->render('create', [
-                    'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -80,15 +75,14 @@ class ProductStockController extends Controller
      * @param integer $product_id
      * @return mixed
      */
-    public function actionUpdate($warehouse_id, $product_id)
-    {
+    public function actionUpdate($warehouse_id, $product_id) {
         $model = $this->findModel($warehouse_id, $product_id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'warehouse_id' => $model->warehouse_id, 'product_id' => $model->product_id]);
         } else {
             return $this->render('update', [
-                    'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -100,8 +94,7 @@ class ProductStockController extends Controller
      * @param integer $product_id
      * @return mixed
      */
-    public function actionDelete($warehouse_id, $product_id)
-    {
+    public function actionDelete($warehouse_id, $product_id) {
         $this->findModel($warehouse_id, $product_id)->delete();
 
         return $this->redirect(['index']);
@@ -115,8 +108,7 @@ class ProductStockController extends Controller
      * @return ProductStock the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($warehouse_id, $product_id)
-    {
+    protected function findModel($warehouse_id, $product_id) {
         if (($model = ProductStock::findOne(['warehouse_id' => $warehouse_id, 'product_id' => $product_id])) !== null) {
             return $model;
         } else {
@@ -128,12 +120,11 @@ class ProductStockController extends Controller
      * Lists all Product models.
      * @return mixed
      */
-    public function actionCsvDownload()
-    {
+    public function actionCsvDownload() {
         $searchModel = new ProductStockSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams['params']);
         $dataProvider->pagination = false;
-        $filename = 'Product Stock - ' . date('d/m/Y');
+        $filename = 'Product Stock - ' . date('dmY');
         $headerTitle = ['WAREHOUSE', 'KODE', 'NAMA_PRODUCT', 'CATEGORY', 'QTY', 'NILAI_PRODUK'];
 
         header('Content-Type: application/excel');
@@ -141,15 +132,18 @@ class ProductStockController extends Controller
 
         $fp = fopen('php://output', 'w');
         $i = 0;
+        $is_first = true;
         foreach ($dataProvider->models as $row) {
-            if ($i == 0) {
+            if ($is_first) {
                 fputcsv($fp, $headerTitle, chr(9));
+                $is_first = false;
             }
-            fputcsv($fp, [$row->warehouse->name, $row->product->code, $row->product->name,$row->product->category->name, $row->qty, ($row->cogs->cogs * $row->qty)], chr(9));
-            //fputcsv($fp, [$i, $row->code, str_replace(';', '-', $row->name),$row->group->name, $row->category->name],';');
+            $cogs_na = ($row->cogs != null) ? $row->cogs->cogs : 0;
+            fputcsv($fp, [$row->warehouse->name, $row->product->code, $row->product->name, $row->product->category->name, $row->qty, ($cogs_na * $row->qty), $cogs_na], chr(9));
             $i++;
         }
-        fclose($fp);
+//        fclose($fp);
         return false;
     }
+
 }
