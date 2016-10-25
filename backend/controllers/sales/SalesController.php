@@ -317,7 +317,7 @@ class SalesController extends Controller {
         $model->date = date('Y-m-d');
         $model->branch_id = Yii::$app->profile->branch_id;
         $model->vendor_id = (!isset(Yii::$app->params['default_cust'])) ? Sales::DEFAULT_VENDOR : Yii::$app->params['default_cust'];
-        $model->vendor_name = $model->vendor->name;
+        $model->vendor_name = ($model->vendor != null) ? $model->vendor->name : '';
         $error = false;
         $whse = $this->findWarehouse(Yii::$app->profile->warehouse_id);
 

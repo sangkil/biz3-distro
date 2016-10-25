@@ -18,11 +18,11 @@ $this->registerJsFile(Url::to(['/inventory/gm-manual/master']));
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'product_name')->textInput()->label('Product Name') ?>
+    <?= ($model->isNewRecord)? $form->field($model, 'product_name')->textInput()->label('Product Name'):$form->field($model, 'product_name')->textInput(['ReadOnly'=>true])->label('Product Name')  ?>
     <?= $form->field($model, 'product_id')->hiddenInput()->label(false) ?>
     <?= $form->field($model, 'price_category_id')->dropDownList(\backend\models\sales\PriceCategory::selectOptions(),['style'=>'width:40%;']) ?>
 
-    <?= $form->field($model, 'price')->textInput(['style'=>'width:60%;']) ?>
+    <?= ($model->isNewRecord)? $form->field($model, 'price')->textInput(['style'=>'width:60%;']): $form->field($model, 'price')->textInput(['ReadOnly'=>true, 'style'=>'width:60%;']) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
