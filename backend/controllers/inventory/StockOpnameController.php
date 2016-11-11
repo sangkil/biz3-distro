@@ -91,8 +91,8 @@ class StockOpnameController extends Controller {
                                 $isfirst = false;
                                 continue;
                             }
-                            $sparated_row = explode(chr(9), $row);
-                            if (isset($barcodes[strtolower($sparated_row[0])])) {
+                            $sparated_row = (strpos($row, ',')) ? explode(',', $row) : explode(chr(9), $row);
+                            if (isset($barcodes[strtolower($sparated_row[0])]) && isset($sparated_row[1])) {
                                 $product_id = $barcodes[strtolower($sparated_row[0])];
                                 $stock[$product_id] = $sparated_row[1];
                             }
