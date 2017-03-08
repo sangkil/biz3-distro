@@ -116,16 +116,12 @@ class ProductStockController extends Controller {
         }
     }
 
-    /**
-     * Lists all Product models.
-     * @return mixed
-     */
     public function actionCsvDownload() {
         $searchModel = new ProductStockSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams['params']);
         $dataProvider->pagination = false;
         $filename = 'Product Stock - ' . date('dmY');
-        $headerTitle = ['WAREHOUSE', 'KODE', 'NAMA_PRODUCT', 'CATEGORY', 'QTY', 'NILAI_PRODUK'];
+        $headerTitle = ['WAREHOUSE', 'KODE', 'NAMA_PRODUCT', 'GROUP', 'CATEGORY', 'QTY', 'NILAI_PRODUK'];
 
         header('Content-Type: application/excel');
         header('Content-Disposition: attachment; filename="' . $filename . '.csv"');
@@ -139,7 +135,7 @@ class ProductStockController extends Controller {
                 $is_first = false;
             }
             $cogs_na = ($row->cogs != null) ? $row->cogs->cogs : 0;
-            fputcsv($fp, [$row->warehouse->name, $row->product->code, $row->product->name, $row->product->category->name, $row->qty, ($cogs_na * $row->qty), $cogs_na], chr(9));
+            fputcsv($fp, [$row->warehouse->name, $row->product->code, $row->product->name, $row->product->group->name, $row->product->category->name, $row->qty, ($cogs_na * $row->qty), $cogs_na], chr(9));
             $i++;
         }
 //        fclose($fp);
