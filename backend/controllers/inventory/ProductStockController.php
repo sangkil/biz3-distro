@@ -38,6 +38,20 @@ class ProductStockController extends Controller {
                     'dataProvider' => $dataProvider,
         ]);
     }
+    
+    /**
+     * Lists all ProductStock Group By Artikel models.
+     * @return mixed
+     */
+    public function actionByArtikel() {
+        $searchModel = new ProductStockSearch();
+        $dataProvider = $searchModel->artikel_grouped(Yii::$app->request->queryParams);
+
+        return $this->render('by-artikel', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
 
     /**
      * Displays a single ProductStock model.
