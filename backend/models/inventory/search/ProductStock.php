@@ -73,4 +73,39 @@ class ProductStock extends ProductStockModel
 
         return $dataProvider;
     }
+    
+        /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function artikel_grouped($params)
+    {
+        $query = ProductStockModel::find();
+        $query->select(['product_stock.warehouse_id', 'TRIM(split_part(product."name", \';\', 2)) artikel', 'warehouse.id whse_id', 'warehouse.name whse_name','sum(product_stock.qty) jml']);
+        $query->sum('product_stock.qty');
+        $query->joinWith(['product', 'warehouse']);
+        $query->groupBy(['product_stock.warehouse_id', 'TRIM(split_part(product."name", \';\', 2))', 'warehouse.id']);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            $query->where('1=0');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'warehouse_id' => $this->warehouse_id,
+            'qty' => $this->qty,
+        ]);
+        
+        //echo $query->createCommand()->sql;
+        return $dataProvider;
+    }
 }

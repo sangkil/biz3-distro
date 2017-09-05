@@ -25,6 +25,10 @@ class ProductStock extends \yii\db\ActiveRecord
     public $product_code;
     public $product_name;
     
+    public $whse_name;
+    public $artikel;
+    public $jml;
+
     /**
      * @inheritdoc
      */

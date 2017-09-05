@@ -24,7 +24,7 @@ class DataController extends Controller
             'return ['
         ];
         $dirname = __DIR__ . '/data/';
-        $file = '/home/mdmunir/Unduhan/qty-awal.txt';
+        $file = $sampleDir.'/qty-awal.txt';
         $artikel_map = json_decode(file_get_contents($dirname . 'artikel_map.json'), true);
 
         $whs = [
