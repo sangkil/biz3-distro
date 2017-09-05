@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\inventory\search\ProductStock */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Product Stocks';
+$this->title = 'Stocks by Artikel';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class="pull-right">
