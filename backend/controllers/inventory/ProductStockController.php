@@ -156,4 +156,30 @@ class ProductStockController extends Controller {
         return false;
     }
 
+    public function actionCsvByArtikel() {
+        $searchModel = new ProductStockSearch();
+        $dataProvider = $searchModel->artikel_grouped(Yii::$app->request->queryParams['params']);
+        
+        $dataProvider->pagination = false;
+        $filename = 'Product Stock - ' . date('dmY');
+        $headerTitle = ['WAREHOUSE', 'ARTIKEL', 'QTY'];
+
+        header('Content-Type: application/excel');
+        header('Content-Disposition: attachment; filename="' . $filename . '.csv"');
+
+        $fp = fopen('php://output', 'w');
+        $i = 0;
+        $is_first = true;
+        foreach ($dataProvider->models as $row) {
+            if ($is_first) {
+                fputcsv($fp, $headerTitle, chr(9));
+                $is_first = false;
+            }
+            $cogs_na = ($row->cogs != null) ? $row->cogs->cogs : 0;
+            fputcsv($fp, [$row->whse_name, $row->artikel, $row->jml], chr(9));
+            $i++;
+        }
+//        fclose($fp);
+        return false;
+    }
 }
