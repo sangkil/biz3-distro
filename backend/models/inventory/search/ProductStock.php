@@ -45,8 +45,9 @@ class ProductStock extends ProductStockModel {
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder' => ['product.edition' => SORT_ASC]]
         ]);
-
+        
         $dataProvider->sort->attributes['product.edition'] = [
             // The tables are the ones our relation are configured to
             // in my case they are prefixed with "tbl_"

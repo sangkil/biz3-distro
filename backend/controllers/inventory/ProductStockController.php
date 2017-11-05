@@ -32,7 +32,6 @@ class ProductStockController extends Controller {
     public function actionIndex() {
         $searchModel = new ProductStockSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->setSort(['defaultOrder' => ['product.edition' => SORT_DESC]]);
 
         return $this->render('index', [
                     'searchModel' => $searchModel,
