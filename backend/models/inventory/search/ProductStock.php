@@ -47,6 +47,13 @@ class ProductStock extends ProductStockModel {
             'query' => $query,
         ]);
 
+        $dataProvider->sort->attributes['product.edition'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['product.edition' => SORT_ASC],
+            'desc' => ['product.edition' => SORT_DESC],
+        ];
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -83,10 +90,10 @@ class ProductStock extends ProductStockModel {
         $query->sum('product_stock.qty');
         $query->joinWith(['product', 'warehouse']);
         $query->groupBy(['product_stock.warehouse_id', 'TRIM(split_part(product."name", \';\', 2))', 'warehouse.id']);
-        
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['warehouse_id'=>SORT_ASC]]
+            'sort' => ['defaultOrder' => ['warehouse_id' => SORT_ASC]]
         ]);
 
         $this->load($params);
