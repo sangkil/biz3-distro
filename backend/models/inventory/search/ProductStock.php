@@ -45,7 +45,7 @@ class ProductStock extends ProductStockModel {
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['product_stock.warehouse_id'=>SORT_ASC, 'product.edition' => SORT_ASC]]
+            'sort' => ['defaultOrder' => ['warehouse_id'=>SORT_ASC, 'product.edition' => SORT_ASC]]
         ]);
         
         $dataProvider->sort->attributes['product.edition'] = [
@@ -54,6 +54,13 @@ class ProductStock extends ProductStockModel {
             'asc' => ['product.edition' => SORT_ASC],
             'desc' => ['product.edition' => SORT_DESC],
         ];
+        
+//        $dataProvider->sort->attributes['product_stock.warehouse_id'] = [
+//            // The tables are the ones our relation are configured to
+//            // in my case they are prefixed with "tbl_"
+//            'asc' => ['product_stock.warehouse_id' => SORT_ASC],
+//            'desc' => ['product_stock.warehouse_id' => SORT_DESC],
+//        ];
 
         $this->load($params);
 
