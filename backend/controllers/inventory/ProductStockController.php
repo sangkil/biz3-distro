@@ -32,13 +32,15 @@ class ProductStockController extends Controller {
     public function actionIndex() {
         $searchModel = new ProductStockSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort([
+            'defaultOrder' => ['product.edition' => SORT_DESC]]);
 
         return $this->render('index', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
         ]);
     }
-    
+
     /**
      * Lists all ProductStock Group By Artikel models.
      * @return mixed
@@ -159,7 +161,7 @@ class ProductStockController extends Controller {
     public function actionCsvByArtikel() {
         $searchModel = new ProductStockSearch();
         $dataProvider = $searchModel->artikel_grouped(Yii::$app->request->queryParams['params']);
-        
+
         $dataProvider->pagination = false;
         $filename = 'Product Stock - ' . date('dmY');
         $headerTitle = ['WAREHOUSE', 'ARTIKEL', 'QTY'];
@@ -182,4 +184,5 @@ class ProductStockController extends Controller {
 //        fclose($fp);
         return false;
     }
+
 }
