@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => false,
                 'headerOptions' => ['style' => 'width:15%;'],
             ],
-            'edition',
+            'product.edition',
             [
                 'attribute' => 'qty',
 //                'value' => function ($model) {
