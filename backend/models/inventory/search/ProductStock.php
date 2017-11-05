@@ -45,7 +45,7 @@ class ProductStock extends ProductStockModel {
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['product_stock.id_warehouse'=>SORT_ASC, 'product.edition' => SORT_ASC]]
+            'sort' => ['defaultOrder' => ['product_stock.warehouse_id'=>SORT_ASC, 'product.edition' => SORT_ASC]]
         ]);
         
         $dataProvider->sort->attributes['product.edition'] = [
