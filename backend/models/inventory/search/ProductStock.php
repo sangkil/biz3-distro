@@ -82,6 +82,7 @@ class ProductStock extends ProductStockModel {
         $query->andWhere(['like', 'lower(product.name)', strtolower($this->product_name)]);
         $query->andWhere(['like', 'lower(product.code)', strtolower($this->product_code)]);
 
+//        echo $query->createCommand()->sql;
         return $dataProvider;
     }
 
