@@ -149,7 +149,7 @@ class ProductStockController extends Controller {
                 $is_first = false;
             }
             $cogs_na = ($row->cogs != null) ? $row->cogs->cogs : 0;
-            fputcsv($fp, [$row->warehouse->name, $row->product->code, (string) $row->product->name, $row->product->group->name, $row->product->category->name, $row->product->edition, $row->qty, ($cogs_na * $row->qty), $cogs_na], chr(9));
+            fputcsv($fp, [$row->warehouse->name, $row->product->code, (string) $row->product->name, $row->product->group->name, $row->product->category->name, $row->product->edition, $row->qty, ($cogs_na * $row->qty)], chr(9));
             $i++;
         }
 //        fclose($fp);
