@@ -66,7 +66,7 @@ class Product extends ProductModel
         ]);
 
         $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'name', $this->name]);
+            ->andFilterWhere(['like', 'lower(name)', strtolower($this->name)]);
 
         return $dataProvider;
     }

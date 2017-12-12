@@ -234,15 +234,14 @@ class GoodsMovement extends \yii\db\ActiveRecord {
                     ])->execute()) {
                 return false;
             }
-            if ($item->cogs !== null && $item->cogs !== '') {
-                $paramCogs = [
-                    'id' => $product_id,
-                    'qty' => $qty,
-                    'cogs' => $item->cogs,
-                ];
-                if (!$this->updateCogs($paramCogs)) {
-                    return false;
-                }
+
+            $paramCogs = [
+                'id' => $product_id,
+                'qty' => $qty,
+                'cogs' => $item->cogs,
+            ];
+            if (!$this->updateCogs($paramCogs)) {
+                return false;
             }
         }
         return true;
@@ -260,6 +259,7 @@ class GoodsMovement extends \yii\db\ActiveRecord {
                 ->where(['product_id' => $params['id']])
                 ->sum('qty');
 
+        $cogs->last_purchase_price = $params['cogs'];
         if ($current_stock != 0) {
             $cogs->cogs += ($params['qty'] * ($params['cogs'] - $cogs->cogs)) / $current_stock;
         } else {

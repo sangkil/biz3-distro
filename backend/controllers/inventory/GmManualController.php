@@ -272,7 +272,8 @@ class GmManualController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = GoodsMovement::findOne($id)) !== null) {
+        $model = GoodsMovement::find()->where(['id'=>$id])->with(['items'])->one();
+        if ($model !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
