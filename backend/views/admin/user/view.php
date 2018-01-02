@@ -18,7 +18,7 @@ $controllerId = $this->context->uniqueId . '/';
         <p>
             <?php
             if (trim($model->password_reset_token) == '' || $model->password_reset_token == null) {
-                echo Html::a(Yii::t('rbac-admin', 'Request Reset Pwd'), ['request-password-reset', 'id' => $model->id, 'email' => $model->email], [
+                echo Html::a(Yii::t('rbac-admin', 'Request Reset Pwd'), ['/ladmin/user/request-password-reset', 'id' => $model->id, 'email' => $model->email], [
                     'class' => 'btn btn-primary',
                     'data' => [
                         'method' => 'post'
