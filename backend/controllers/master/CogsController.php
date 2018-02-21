@@ -54,6 +54,33 @@ class CogsController extends Controller
     }
 
     /**
+     * Displays a single Cogs model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionGoDownload()
+    {
+        $searchModel = new CogsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $rows = []; $no=0;
+        $rows[] = implode("\t", ['No', 'code', 'Product', 'COGS', 'Last Purchase Price']); // header
+        foreach ($dataProvider->query->all() as $row) {
+            $r = [];
+            $r[] = $no;
+            $r[] = $row->product->code;
+            $r[] = $row->product->name;
+            $r[] = $row->cogs;
+            $r[] = $row->last_purchase_price;
+            $rows[] = implode("\t", $r);
+            $no++;
+        }
+        return Yii::$app->getResponse()->sendContentAsFile(implode("\n", $rows), 'cogs.csv', [
+                    'mimeType' => 'application/excel'
+        ]);
+    }
+    
+    /**
      * Creates a new Cogs model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed

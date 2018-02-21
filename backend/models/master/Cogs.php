@@ -17,23 +17,22 @@ use Yii;
  *
  * @property Product $product
  */
-class Cogs extends \yii\db\ActiveRecord
-{
+class Cogs extends \yii\db\ActiveRecord {
+
     public $product_code;
     public $product_name;
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'cogs';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['product_id', 'cogs'], 'required'],
             [['product_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
@@ -45,8 +44,7 @@ class Cogs extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'product_id' => 'Product ID',
             'cogs' => 'Cogs',
@@ -61,8 +59,8 @@ class Cogs extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProduct()
-    {
+    public function getProduct() {
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
+
 }

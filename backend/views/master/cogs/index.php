@@ -12,13 +12,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>
     <?= Html::a('Create Cogs', ['create'], ['class' => 'btn btn-default']) ?>
+    <?= Html::a('<i class="fa fa-download">&nbsp;</i>', ['go-download'], ['class' => 'btn btn-default','target'=>'_blank']) ?>
 </p>
 <br>
-
 <div class="cogs-index">
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
@@ -39,12 +37,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'product.name',
                 'filter' => Html::textInput('Cogs[product_name]', $searchModel->product_name, array('class' => 'form-control'))
             ],
-            'cogs',
-            'last_purchase_price',
+            [
+              'attribute'=>'cogs',
+              'format'=>['decimal',0],
+              'contentOptions' => ['style' => 'text-align:right'],
+            ],
+            [
+              'attribute'=>'last_purchase_price',
+              'format'=>['decimal',0],
+              'contentOptions' => ['style' => 'text-align:right'],
+            ],
             'created_at:datetime',
-            //'created_by',
-            // 'updated_at',
-            // 'updated_by',
+//            'created_by',
+            'updated_at:datetime',
+//             'updated_by',
 //            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]);
