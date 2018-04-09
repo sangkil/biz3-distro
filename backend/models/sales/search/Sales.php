@@ -81,6 +81,7 @@ class Sales extends SalesModel {
             $query->andWhere("date_part('month',date)=:dmonth", [':dmonth' => $params['Sales']['Date']]);
         }else{    
             $query->andWhere("date_part('month',date)=:dmonth", [':dmonth' => (int) date('m')]);
+            $query->andWhere("date_part('year',date)=:dyear", [':dyear' => (int) date('Y')]);
         }
 
         $dataProvider = new ActiveDataProvider([
