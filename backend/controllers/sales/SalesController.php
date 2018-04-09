@@ -272,7 +272,7 @@ class SalesController extends Controller {
     }
 
     protected function getDay() {
-        return [ 'Sun' => 'Minggu',
+        return ['Sun' => 'Minggu',
             'Mon' => 'Senin',
             'Tue' => 'Selasa',
             'Wed' => 'Rabu',
@@ -318,8 +318,9 @@ class SalesController extends Controller {
         $model->branch_id = Yii::$app->profile->branch_id;
         $model->vendor_id = (!isset(Yii::$app->params['default_cust'])) ? Sales::DEFAULT_VENDOR : Yii::$app->params['default_cust'];
         $model->vendor_name = ($model->vendor != null) ? $model->vendor->name : '';
-        $error = false;
+        $model->warehouse_id = Yii::$app->profile->warehouse_id;
         $whse = $this->findWarehouse(Yii::$app->profile->warehouse_id);
+        $error = false;
 
         $payments = [];
         if ($model->load(Yii::$app->request->post())) {
@@ -331,7 +332,7 @@ class SalesController extends Controller {
                     $model->items = Yii::$app->request->post('SalesDtl', []);
                     if ($model->save()) {
                         $movement = $model->createMovement([
-                            'warehouse_id' => $profile->warehouse_id,
+                            'warehouse_id' => $model->warehouse_id, //$profile->warehouse_id,
                             'description' => 'Sales Retail'
                         ]);
                         $glHeader = new GlHeader([

@@ -18,7 +18,7 @@ JuiAsset::register($this);
 $opts = json_encode([
     'price_category' => '1',
     'reloadOnBranchChange' => true
-    ]);
+        ]);
 
 $this->registerJs("yii.biz.prop($opts);");
 $this->registerJs($this->render('_script.js'));
@@ -56,38 +56,42 @@ $branch_id = Yii::$app->profile->branch_id;
                 <i class="fa fa-shopping-cart"></i>
             </div>
             <!--<a href="#" class="small-box-footer">-->
-<!--                <?= ''//'Sales Date: ' . Html::getAttributeValue($model, 'Date')   ?> <i class="fa fa-calendar"></i>-->
+<!--                <?= ''//'Sales Date: ' . Html::getAttributeValue($model, 'Date')    ?> <i class="fa fa-calendar"></i>-->
             <!--</a>-->
         </div>
         <div class="box box-info box-comments with-border">
             <div class="box-header with-border">
                 <i class="fa fa-shopping-cart text-orange"></i>
                 <h3 class="box-title"><p class="text-bold">
-                    Casier : <?= (Yii::$app->user->isGuest) ? 'Guest' : Yii::$app->user->identity->username ?>
-                </p></h3>
+                        Casier : <?= (Yii::$app->user->isGuest) ? 'Guest' : Yii::$app->user->identity->username ?>
+                    </p></h3>
                 <div class="pull-right text-bold">
-                    <?= Html::a('<i class="fa fa-map-marker text-green"></i>&nbsp;'.$warehouse, ['config'])?>                    
+                    <?php
+                        if($model->branch_id == backend\models\master\Branch::BRANCH_OLSHOP){
+                            echo $form->field($model, 'warehouse_id')->dropDownList(backend\models\master\Warehouse::selectAssignedOptions(),['class'=>'form-control input-sm'])->label(false);
+                        } else {
+                            echo Html::a('<i class="fa fa-map-marker text-green"></i>&nbsp;' . $warehouse, ['config']);
+                        }
+                    ?>                    
                 </div>
-              
             </div>
             <div class="box-body with-border">
-                <!--                <div class="col-lg-5">
+                <!--                <div class="col-lg-5"> 
                 <?= $form->field($model, 'number')->textInput(['readonly' => true]) ?>
-                <?= ''//$form->field($model, 'branch_id')->dropDownList(Branch::selectOptions())  ?>
-                                </div>-->
+                -->
                 <div class="col-lg-6">
-                    <?= $form->field($model, 'vendor_name')->textInput([])->label('Customer') ?>
-                </div>
+                <?= $form->field($model, 'vendor_name')->textInput([])->label('Customer') ?>
+                </div> 
                 <div class="col-lg-6">
-                    <?=
-                    $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
-                        'dateFormat' => 'dd-MM-yyyy',
-                        'options' => ['class' => 'form-control', 'style' => 'width:60%;']
-                    ])
-                    ?>
+                <?=
+                $form->field($model, 'Date')->widget('yii\jui\DatePicker', [
+                    'dateFormat' => 'dd-MM-yyyy',
+                    'options' => ['class' => 'form-control', 'style' => 'width:60%;']
+                ])
+                ?>
                 </div>
                 <div id="payment-form" class="hidden">
-                    <?= Html::hiddenInput('payment-value', 0, ['id' => 'payment-value']) ?>
+                <?= Html::hiddenInput('payment-value', 0, ['id' => 'payment-value']) ?>
                     <div class="grid-view col-lg-12<?= count($payments) ? '' : ' hidden' ?>" id="payment-grid">
                         <table class="table table-striped">
                             <thead>
@@ -97,18 +101,18 @@ $branch_id = Yii::$app->profile->branch_id;
                                     <th>Value</th>
                                 </tr>
                             </thead>
-                            <?=
-                            TabularInput::widget([
-                                'id' => 'payment-grid-dtl',
-                                'allModels' => $payments,
-                                'model' => Payment::className(),
-                                'tag' => 'tbody',
-                                'itemOptions' => ['tag' => 'tr'],
-                                'itemView' => '_payment_dtl',
-                                'clientOptions' => [
-                                ]
-                            ])
-                            ?>
+                <?=
+                TabularInput::widget([
+                    'id' => 'payment-grid-dtl',
+                    'allModels' => $payments,
+                    'model' => Payment::className(),
+                    'tag' => 'tbody',
+                    'itemOptions' => ['tag' => 'tr'],
+                    'itemView' => '_payment_dtl',
+                    'clientOptions' => [
+                    ]
+                ])
+                ?>
                             <tfoot id="payback-panel" class="hidden">
                                 <tr>
                                     <td>&nbsp;</td>
@@ -120,36 +124,36 @@ $branch_id = Yii::$app->profile->branch_id;
                     </div>
                     <div id="payment-input-panel">
                         <div class="col-lg-6">
-                            <?= Html::label('Method') ?>
-                            <?=
-                            Html::dropDownList('', '', PaymentMethod::selectOptions($branch_id), [
-                                'class' => 'form-control', 'id' => 'inp-payment-method'])
-                            ?>
+                <?= Html::label('Method') ?>
+                <?=
+                Html::dropDownList('', '', PaymentMethod::selectOptions($branch_id), [
+                    'class' => 'form-control', 'id' => 'inp-payment-method'])
+                ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= Html::label('Value') ?>
-                            <?=
-                            Html::textInput('', '', ['class' => 'form-control',
-                                'id' => 'inp-payment-value'])
-                            ?>
+                <?= Html::label('Value') ?>
+                <?=
+                Html::textInput('', '', ['class' => 'form-control',
+                    'id' => 'inp-payment-value'])
+                ?>
                         </div>
                         <div class="col-lg-2" style="padding-left: 0px;">
-                            <?=
-                            Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;',
-                                'id' => 'btn-payment-add'])
-                            ?>
+                <?=
+                Html::buttonInput('Add', ['class' => 'btn btn-primary', 'style' => 'margin-top:24px;',
+                    'id' => 'btn-payment-add'])
+                ?>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="box-footer box-comments hidden" id="payment-completion">
                 <div class="col-lg-12">
-                    <?=
-                    Html::a('Complete', null, ['class' => 'btn btn-success',
-                        'id' => 'submit-btn', 'data-method' => 'post'])
-                    ?></div>
+                <?=
+                Html::a('Complete', null, ['class' => 'btn btn-success',
+                    'id' => 'submit-btn', 'data-method' => 'post'])
+                ?></div>
             </div>
         </div>
     </div>
-    <?php ActiveForm::end(); ?>
+                <?php ActiveForm::end(); ?>
 </div>

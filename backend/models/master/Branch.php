@@ -27,6 +27,8 @@ use yii\behaviors\TimestampBehavior;
 class Branch extends \yii\db\ActiveRecord
 {
 
+    const BRANCH_OLSHOP = 6;
+    
     /**
      * @inheritdoc
      */
