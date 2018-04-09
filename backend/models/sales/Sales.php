@@ -56,6 +56,7 @@ class Sales extends \yii\db\ActiveRecord {
     const DEFAULT_VENDOR = 11;
 
     public $vendor_name;
+    public $warehouse_id;
 
     /**
      * @inheritdoc
@@ -71,7 +72,7 @@ class Sales extends \yii\db\ActiveRecord {
         return [
             [['branch_id', 'Date', 'value', 'status'], 'required'],
             [['vendor_id', 'branch_id', 'reff_type', 'reff_id', 'status'], 'integer'],
-            [['vendor_name'], 'safe'],
+            [['vendor_name','warehouse_id'], 'safe'],
             [['number'], 'autonumber', 'format' => 'SA' . date('Ym') . '.?', 'digit' => 4],
             [['items'], 'required'],
             [['items'], 'relationUnique', 'targetAttributes' => 'product_id'],
