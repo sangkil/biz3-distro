@@ -57,7 +57,7 @@ class Product extends \yii\db\ActiveRecord {
         return [
             [['group_id', 'category_id', 'code', 'name', 'status'], 'required'],
             [['group_id', 'category_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['code'], 'string', 'max' => 13],
+            [['code'], 'string', 'max' => 16],
             [['name'], 'string', 'max' => 64],
             [['stockable', 'edition', 'Edition'], 'safe'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
