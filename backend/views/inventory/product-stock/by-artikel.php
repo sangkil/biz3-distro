@@ -30,7 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'tableOptions' => ['class' => 'table table-hover'],
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'class' => 'yii\grid\SerialColumn',
+                'headerOptions' => ['style' => 'width:6%;']
+                ],
             [
                 'label' => 'Warehouse',
                 'attribute' => 'warehouse_id',
