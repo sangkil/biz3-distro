@@ -62,6 +62,8 @@ class Product extends \yii\db\ActiveRecord {
             [['stockable', 'edition', 'Edition'], 'safe'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductGroup::className(), 'targetAttribute' => ['group_id' => 'id']],
+            ['code', 'unique', 'targetAttribute' => ['code'], 'message' => 'Code must be unique.'],
+            ['name', 'unique', 'targetAttribute' => ['name'], 'message' => 'Name must be unique.']
         ];
     }
 
