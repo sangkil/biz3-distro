@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'label' => 'Warehouse',
-                'attribute' => 'whse_name',
+                'attribute' => 'warehouse_id',
                 'value' => 'warehouse.name',
                 'filter' => backend\models\master\Warehouse::selectOptions(),
                 'headerOptions' => ['style' => 'width:10%;'],
