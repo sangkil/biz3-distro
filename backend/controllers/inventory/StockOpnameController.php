@@ -95,31 +95,30 @@ class StockOpnameController extends Controller {
                             $sparated_row = (strpos($row, ',')) ? explode(',', $row) : explode(chr(9), $row);
                             if (isset($barcodes[strtolower(trim($sparated_row[0]))]) && null !== trim($sparated_row[1])) {
                                $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
-                                $sparated_row = explode(chr(9), $row);
+                                $nsparated_row = explode(chr(9), trim($sparated_row[0]));
 
-                                    print_r($sparated_row);
-                                    echo $ddd.'<br>';
-                                    
                                 //trimming barcode
-                                if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {                                
-                                    $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
-                                    if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {
-                                        $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
-                                        $stock[$product_id] = trim($sparated_row[1]);
+                                if (isset($barcodes[strtolower(trim($nsparated_row[0]))])) {                                
+                                    $product_id = $barcodes[strtolower(trim($nsparated_row[0]))];
+                                    
+                                    if (isset($barcodes[strtolower(trim($nsparated_row[0]))])) {
+                                        $product_id = $barcodes[strtolower(trim($nsparated_row[0]))];
+                                        echo $stock[$product_id] = (int) $nsparated_row[1];
                                     }
                                 }
                                 
-                                $command = \Yii::$app->db->createCommand();
-                                $id = $model->id;
-                                foreach ($stock as $product_id => $count) {
-                                    $command->insert('{{%stock_opname_dtl}}', [
-                                        'opname_id' => $id,
-                                        'product_id' => $product_id,
-                                        'uom_id' => 1,
-                                        'qty' => $count,
-                                    ])->execute();
-                                }
+//                                $command = \Yii::$app->db->createCommand();
+//                                $id = $model->id;
+//                                foreach ($stock as $product_id => $count) {
+//                                    $command->insert('{{%stock_opname_dtl}}', [
+//                                        'opname_id' => $id,
+//                                        'product_id' => $product_id,
+//                                        'uom_id' => 1,
+//                                        'qty' => $count,
+//                                    ])->execute();
+//                                }
                             }
+                            
                             if ($ddd > 101) {
                                 break;
                             }
