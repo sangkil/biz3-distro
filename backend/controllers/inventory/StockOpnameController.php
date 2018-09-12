@@ -94,10 +94,10 @@ class StockOpnameController extends Controller {
                             }
                             $sparated_row = (strpos($row, ',')) ? explode(',', $row) : explode(chr(9), $row);
                             if (isset($barcodes[strtolower(trim($sparated_row[0]))]) && null !== trim($sparated_row[1])) {
+                                echo 'hjhjh<br>';
                                 $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
                                 $sparated_row = explode(chr(9), $row);
 
-                                 echo $product_id;
                                 //trimming barcode
                                 if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {
                                     $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
@@ -106,7 +106,7 @@ class StockOpnameController extends Controller {
                                         $stock[$product_id] = trim($sparated_row[1]);
                                     }
                                 }
-                                /*
+                                
                                 $command = \Yii::$app->db->createCommand();
                                 $id = $model->id;
                                 foreach ($stock as $product_id => $count) {
@@ -117,8 +117,6 @@ class StockOpnameController extends Controller {
                                         'qty' => $count,
                                     ])->execute();
                                 }
-                                 * 
-                                 */
                             }
                             if ($ddd > 100) {
                                 break;
