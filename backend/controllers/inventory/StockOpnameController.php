@@ -86,13 +86,13 @@ class StockOpnameController extends Controller {
                         //no change
                         $content = file_get_contents($model->file->tempName);
                         $isfirst = true;
-                        $ddd=0;
+                        $ddd = 0;
                         foreach (explode("\n", $content) as $row) {
                             if ($isfirst) {
                                 $isfirst = false;
                                 continue;
                             }
-                            $sparated_row = (strpos($row, ',')) ? explode(',', $row) : explode(chr(9), $row);                            
+                            $sparated_row = (strpos($row, ',')) ? explode(',', $row) : explode(chr(9), $row);
                             if (isset($barcodes[strtolower(trim($sparated_row[0]))]) && null !== trim($sparated_row[1])) {
                                 $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
                                 $sparated_row = explode(chr(9), $row);
@@ -104,6 +104,8 @@ class StockOpnameController extends Controller {
                                         $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
                                         $stock[$product_id] = trim($sparated_row[1]);
                                     }
+                                    echo trim($sparated_row[0]) . ', ' . $product_id . ', ' . $stock[$product_id];
+                                    echo "<br>";
                                 }
 
                                 $command = \Yii::$app->db->createCommand();
@@ -115,16 +117,12 @@ class StockOpnameController extends Controller {
                                         'uom_id' => 1,
                                         'qty' => $count,
                                     ])->execute();
-                                                                        
-                                    echo $sparated_row[0].' .. '.$count;
-                                    echo "<br>";
-                                }                                
-                                
-                            if($ddd>100){
-                                break;
-                            }
-                            $ddd++;
-                            
+                                }
+
+                                if ($ddd > 100) {
+                                    break;
+                                }
+                                $ddd++;
                             }
                         }
                     }
