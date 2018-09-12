@@ -104,8 +104,6 @@ class StockOpnameController extends Controller {
                                         $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
                                         $stock[$product_id] = trim($sparated_row[1]);
                                     }
-                                    echo trim($sparated_row[0]) . ', ' . $product_id . ', ' . $stock[$product_id];
-                                    echo "<br>";
                                 }
 
                                 $command = \Yii::$app->db->createCommand();
@@ -125,9 +123,10 @@ class StockOpnameController extends Controller {
                                 $ddd++;
                             }
                         }
+                        print_r($stock);
                     }
-                    $transaction->commit();
-                    return $this->redirect(['view', 'id' => $model->id]);
+//                    $transaction->commit();
+//                    return $this->redirect(['view', 'id' => $model->id]);
                 }
             } catch (\Exception $exc) {
                 $transaction->rollBack();
