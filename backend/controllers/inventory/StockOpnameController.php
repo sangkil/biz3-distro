@@ -86,12 +86,22 @@ class StockOpnameController extends Controller {
                         //no change
                         $content = file_get_contents($model->file->tempName);
                         $isfirst = true;
+                        $ddd=0;
                         foreach (explode("\n", $content) as $row) {
                             if ($isfirst) {
                                 $isfirst = false;
                                 continue;
                             }
                             $sparated_row = (strpos($row, ',')) ? explode(',', $row) : explode(chr(9), $row);
+                            
+                            print_r($sparated_row);
+                            echo "<br>";
+                            if($ddd>10){
+                                break;
+                            }
+                            $ddd++;
+                            
+                            /*
                             if (isset($barcodes[strtolower(trim($sparated_row[0]))]) && null !== trim($sparated_row[1])) {
                                 $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
                                 $sparated_row = explode(chr(9), $row);
@@ -116,10 +126,12 @@ class StockOpnameController extends Controller {
                                     ])->execute();
                                 }
                             }
+                             * 
+                             */
                         }
                     }
-                    $transaction->commit();
-                    return $this->redirect(['view', 'id' => $model->id]);
+//                    $transaction->commit();
+//                    return $this->redirect(['view', 'id' => $model->id]);
                 }
             } catch (\Exception $exc) {
                 $transaction->rollBack();
