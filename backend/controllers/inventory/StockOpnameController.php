@@ -83,7 +83,7 @@ class StockOpnameController extends Controller {
                     if ($model->file) {
                         $barcodes = $this->getBarcodes();
                         $stock = [];
-
+                        //no change
                         $content = file_get_contents($model->file->tempName);
                         $isfirst = true;
                         foreach (explode("\n", $content) as $row) {
@@ -97,10 +97,15 @@ class StockOpnameController extends Controller {
                                 $product_id = $barcodes[strtolower($sparated_row[0])];
 =======
                             $sparated_row = explode(chr(9), $row);
+<<<<<<< HEAD
                             //trimming barcode
                             if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {
                                 $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
 >>>>>>> d2668a7ecac329f4a1f248136263e9e580d441a9
+=======
+                            if (isset($barcodes[strtolower($sparated_row[0])])) {
+                                $product_id = $barcodes[strtolower($sparated_row[0])];
+>>>>>>> f8bb22fbc230d702acad5cc79bf633e8412ab712
                                 $stock[$product_id] = $sparated_row[1];
                             }
                         }
