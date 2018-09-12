@@ -116,7 +116,7 @@ class StockOpnameController extends Controller {
                                         'qty' => $count,
                                     ])->execute();
                                                                         
-                                    echo $count;
+                                    echo $sparated_row[0].' .. '.$count;
                                     echo "<br>";
                                 }                                
                                 
