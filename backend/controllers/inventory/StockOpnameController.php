@@ -96,7 +96,7 @@ class StockOpnameController extends Controller {
                             
                             print_r($sparated_row);
                             echo "<br>";
-                            if($ddd>10){
+                            if($ddd>100){
                                 break;
                             }
                             $ddd++;
