@@ -86,7 +86,7 @@ class StockOpnameController extends Controller {
                         //no change
                         $content = file_get_contents($model->file->tempName);
                         $isfirst = true;
-                        $ddd = 0;
+//                        $ddd = 0;
                         foreach (explode("\n", $content) as $row) {
                             if ($isfirst) {
                                 $isfirst = false;
@@ -116,11 +116,11 @@ class StockOpnameController extends Controller {
                                     ])->execute();
                                 }
                             }
-                            
-                            if ($ddd > 101) {
-                                break;
-                            }
-                            $ddd++;
+//                            
+//                            if ($ddd > 101) {
+//                                break;
+//                            }
+//                            $ddd++;
                         }
                     }
 //                    $transaction->commit();
