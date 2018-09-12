@@ -101,21 +101,20 @@ class StockOpnameController extends Controller {
                                     //$product_id = $barcodes[strtolower(trim($nsparated_row[0]))];
                                     if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {      
                                         $product_id = $barcodes[strtolower(trim($sparated_row[0]))];                                        
-                                        echo $stock[$product_id] = (int) $sparated_row[1];
-                                        echo '<br>';
+                                        $stock[$product_id] = (int) $sparated_row[1];
                                     }
                                 }
                                 
-//                                $command = \Yii::$app->db->createCommand();
-//                                $id = $model->id;
-//                                foreach ($stock as $product_id => $count) {
-//                                    $command->insert('{{%stock_opname_dtl}}', [
-//                                        'opname_id' => $id,
-//                                        'product_id' => $product_id,
-//                                        'uom_id' => 1,
-//                                        'qty' => $count,
-//                                    ])->execute();
-//                                }
+                                $command = \Yii::$app->db->createCommand();
+                                $id = $model->id;
+                                foreach ($stock as $product_id => $count) {
+                                    $command->insert('{{%stock_opname_dtl}}', [
+                                        'opname_id' => $id,
+                                        'product_id' => $product_id,
+                                        'uom_id' => 1,
+                                        'qty' => $count,
+                                    ])->execute();
+                                }
                             }
                             
                             if ($ddd > 101) {
