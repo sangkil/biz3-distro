@@ -105,8 +105,6 @@ class StockOpnameController extends Controller {
                                         $stock[$product_id] = trim($sparated_row[1]);
                                     }
                                 }
-                                print_r($sparated_row);
-                                echo "<br>";
                                 /*
                                 $command = \Yii::$app->db->createCommand();
                                 $id = $model->id;
@@ -120,13 +118,13 @@ class StockOpnameController extends Controller {
                                 }
                                  * 
                                  */
-
-                                if ($ddd > 100) {
-                                    break;
-                                }
-                                $ddd++;
                             }
+                            if ($ddd > 100) {
+                                break;
+                            }
+                            $ddd++;
                         }
+                         print_r($stock);
                     }
 //                    $transaction->commit();
 //                    return $this->redirect(['view', 'id' => $model->id]);
