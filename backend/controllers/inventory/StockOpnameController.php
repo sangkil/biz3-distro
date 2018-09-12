@@ -92,15 +92,7 @@ class StockOpnameController extends Controller {
                                 $isfirst = false;
                                 continue;
                             }
-                            $sparated_row = (strpos($row, ',')) ? explode(',', $row) : explode(chr(9), $row);
-                            
-//                            print_r($sparated_row);
-//                            echo "<br>";
-//                            if($ddd>100){
-//                                break;
-//                            }
-//                            $ddd++;
-                            
+                            $sparated_row = (strpos($row, ',')) ? explode(',', $row) : explode(chr(9), $row);                            
                             if (isset($barcodes[strtolower(trim($sparated_row[0]))]) && null !== trim($sparated_row[1])) {
                                 $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
                                 $sparated_row = explode(chr(9), $row);
@@ -123,12 +115,21 @@ class StockOpnameController extends Controller {
                                         'uom_id' => 1,
                                         'qty' => $count,
                                     ])->execute();
-                                }
+                                                                        
+                                    echo $count;
+                                    echo "<br>";
+                                }                                
+                                
+                            if($ddd>100){
+                                break;
+                            }
+                            $ddd++;
+                            
                             }
                         }
                     }
-                    $transaction->commit();
-                    return $this->redirect(['view', 'id' => $model->id]);
+//                    $transaction->commit();
+//                    return $this->redirect(['view', 'id' => $model->id]);
                 }
             } catch (\Exception $exc) {
                 $transaction->rollBack();
