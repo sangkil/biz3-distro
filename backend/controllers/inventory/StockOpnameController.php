@@ -97,12 +97,11 @@ class StockOpnameController extends Controller {
                                $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
                                 //trimming barcode
                                 if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {       
-                                    $nsparated_row = explode(chr(9), trim($sparated_row[0]));
-                                    $product_id = $barcodes[strtolower(trim($nsparated_row[0]))];
-                                    if (isset($barcodes[strtolower(trim($nsparated_row[0]))])) {          
-                                        print_r($sparated_row);
-                                        //$product_id = $barcodes[strtolower(trim($sparated_row[0]))];                                        
-                                        //$stock[$product_id] = (int) $nsparated_row[1];
+                                    //$nsparated_row = explode(chr(9), trim($sparated_row[0]));
+                                    //$product_id = $barcodes[strtolower(trim($nsparated_row[0]))];
+                                    if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {      
+                                        $product_id = $barcodes[strtolower(trim($sparated_row[0]))];                                        
+                                        echo $stock[$product_id] = (int) $sparated_row[1];
                                         echo '<br>';
                                     }
                                 }
