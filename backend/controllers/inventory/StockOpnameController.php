@@ -91,39 +91,36 @@ class StockOpnameController extends Controller {
                                 $isfirst = false;
                                 continue;
                             }
-<<<<<<< HEAD
                             $sparated_row = (strpos($row, ',')) ? explode(',', $row) : explode(chr(9), $row);
-                            if (isset($barcodes[strtolower($sparated_row[0])]) && isset($sparated_row[1])) {
-                                $product_id = $barcodes[strtolower($sparated_row[0])];
-=======
-                            $sparated_row = explode(chr(9), $row);
-<<<<<<< HEAD
-                            //trimming barcode
-                            if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {
+                            if (isset($barcodes[strtolower(trim($sparated_row[0]))]) && isset(trim($sparated_row[1]))) {
                                 $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
->>>>>>> d2668a7ecac329f4a1f248136263e9e580d441a9
-=======
-                            if (isset($barcodes[strtolower($sparated_row[0])])) {
-                                $product_id = $barcodes[strtolower($sparated_row[0])];
->>>>>>> f8bb22fbc230d702acad5cc79bf633e8412ab712
-                                $stock[$product_id] = $sparated_row[1];
+                                $sparated_row = explode(chr(9), $row);
+
+                                //trimming barcode
+                                if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {
+                                    $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
+                                    if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {
+                                        $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
+                                        $stock[$product_id] = trim($sparated_row[1]);
+                                    }
+                                }
+
+                                $command = \Yii::$app->db->createCommand();
+                                $id = $model->id;
+                                foreach ($stock as $product_id => $count) {
+                                    $command->insert('{{%stock_opname_dtl}}', [
+                                        'opname_id' => $id,
+                                        'product_id' => $product_id,
+                                        'uom_id' => 1,
+                                        'qty' => $count,
+                                    ])->execute();
+                                }
                             }
                         }
-
-                        $command = \Yii::$app->db->createCommand();
-                        $id = $model->id;
-                        foreach ($stock as $product_id => $count) {
-                            $command->insert('{{%stock_opname_dtl}}', [
-                                'opname_id' => $id,
-                                'product_id' => $product_id,
-                                'uom_id' => 1,
-                                'qty' => $count,
-                            ])->execute();
-                        }
                     }
-                    $transaction->commit();
-                    return $this->redirect(['view', 'id' => $model->id]);
                 }
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
             } catch (\Exception $exc) {
                 $transaction->rollBack();
                 throw $exc;
