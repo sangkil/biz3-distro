@@ -138,14 +138,19 @@ class StockOpnameController extends Controller {
 
     protected function getBarcodes() {
         $barcodes = [];
+//        $query_barcode = (new \yii\db\Query())
+//                ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
+//                ->from('{{%product_child}}')
+//                ->union((new \yii\db\Query())
+//                ->select(['lower(code)', 'id'])
+//                ->from('{{%product}}'));
+        
         $query_barcode = (new \yii\db\Query())
-                ->select(['barcode' => 'lower(barcode)', 'id' => 'product_id'])
-                ->from('{{%product_child}}')
-                ->union((new \yii\db\Query())
                 ->select(['lower(code)', 'id'])
-                ->from('{{%product}}'));
+                ->from('{{%product}}');
+        
         foreach ($query_barcode->all() as $row) {
-            $barcodes[$row['barcode']] = $row['id'];
+            $barcodes[$row['code']] = $row['id'];
         }
         return $barcodes;
     }
