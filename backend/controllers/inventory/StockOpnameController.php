@@ -105,22 +105,18 @@ class StockOpnameController extends Controller {
                                     }
                                 }
                                 
-                                $command = \Yii::$app->db->createCommand();
-                                $id = $model->id;
-                                foreach ($stock as $product_id => $count) {
-                                    $command->insert('{{%stock_opname_dtl}}', [
-                                        'opname_id' => $id,
-                                        'product_id' => $product_id,
-                                        'uom_id' => 1,
-                                        'qty' => $count,
-                                    ])->execute();
-                                }
                             }
-//                            
-//                            if ($ddd > 101) {
-//                                break;
-//                            }
-//                            $ddd++;
+                        }
+                        
+                        $command = \Yii::$app->db->createCommand();
+                        $id = $model->id;
+                        foreach ($stock as $product_id => $count) {
+                            $command->insert('{{%stock_opname_dtl}}', [
+                                'opname_id' => $id,
+                                'product_id' => $product_id,
+                                'uom_id' => 1,
+                                'qty' => $count,
+                            ])->execute();
                         }
                     }
 //                    $transaction->commit();
