@@ -99,6 +99,7 @@ class StockOpnameController extends Controller {
 
                                 //trimming barcode
                                 if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {
+                                    echo $barcodes[strtolower(trim($sparated_row[0]))];
                                     $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
                                     if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {
                                         $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
@@ -124,7 +125,6 @@ class StockOpnameController extends Controller {
                             }
                             $ddd++;
                         }
-                         print_r($stock);
                     }
 //                    $transaction->commit();
 //                    return $this->redirect(['view', 'id' => $model->id]);
