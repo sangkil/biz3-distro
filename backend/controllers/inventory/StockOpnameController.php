@@ -98,7 +98,7 @@ class StockOpnameController extends Controller {
                                 $sparated_row = explode(chr(9), $row);
 
                                     print_r($sparated_row);
-                                    echo '<br>';
+                                    echo $ddd.'<br>';
                                     
                                 //trimming barcode
                                 if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {                                
@@ -120,7 +120,7 @@ class StockOpnameController extends Controller {
                                     ])->execute();
                                 }
                             }
-                            if ($ddd > 2) {
+                            if ($ddd > 101) {
                                 break;
                             }
                             $ddd++;
