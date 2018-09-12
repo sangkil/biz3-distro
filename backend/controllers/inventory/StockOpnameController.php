@@ -119,8 +119,8 @@ class StockOpnameController extends Controller {
                             ])->execute();
                         }
                     }
-//                    $transaction->commit();
-//                    return $this->redirect(['view', 'id' => $model->id]);
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
                 }
             } catch (\Exception $exc) {
                 $transaction->rollBack();
