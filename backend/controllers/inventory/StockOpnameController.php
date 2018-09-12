@@ -140,7 +140,7 @@ class StockOpnameController extends Controller {
         $barcodes = [];
         $query_barcode = (new \yii\db\Query())
                 ->select(['lower(code) barcode', 'id'])
-                ->from('{{%product}}'));
+                ->from('{{%product}}');
         
         foreach ($query_barcode->all() as $row) {
             $barcodes[$row['barcode']] = $row['id'];
