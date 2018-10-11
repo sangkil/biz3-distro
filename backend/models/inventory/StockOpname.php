@@ -138,17 +138,17 @@ class StockOpname extends \yii\db\ActiveRecord {
                     ->leftJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.product_id]]=[[p.id]] and [[o.opname_id]]=:opid', [':opid' => $this->id])
                     ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0)');
         } elseif ($this->type == self::TYPE_PARTIALOPNAME) {
-            $query->select(['p.id', 'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
-                    ->from(['p' => '{{%stock_opname}}'])
-                    ->innerJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.opname_id]]=[[p.id]]')
-                    ->innerJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[o.product_id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
-                    ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0)');
             
-            echo 'i am here <br>';
+            $query->select(['p.id', 'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
+                    ->from(['p' => '{{%product}}'])
+                    ->innerJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
+                    ->innerJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.product_id]]=[[p.id]] and [[o.opname_id]]=:opid', [':opid' => $this->id])
+                    ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0)');
         }
 
         $items = [];
-        foreach ($query->all() as $row) {
+        $ddata = $query->all();
+        foreach ($ddata as $row) {
             $items[] = [
                 'product_id' => $row['id'],
                 'qty' => $row['selisih'],
