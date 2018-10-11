@@ -57,6 +57,7 @@ class StockOpname extends StockOpnameModel
             'id' => $this->id,
             'warehouse_id' => $this->warehouse_id,
             'date' => $this->date,
+            'type' => $this->type,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,
