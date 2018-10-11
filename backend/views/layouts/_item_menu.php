@@ -54,7 +54,7 @@ return[
             ['label' => 'Stok Opname', 'icon' => 'check',
                 'items' => [
                     ['label' => 'Total Opname', 'icon' => 'check', 'url' => ['/inventory/stock-opname']],
-                    ['label' => 'Partial Opname', 'icon' => 'check', 'url' => ['/inventory/stock-opname-partial']],
+                    ['label' => 'Partial Opname', 'icon' => 'check', 'url' => ['/inventory/stock-opname/index-partial']],
                 ],
             ],
             ['label' => 'Koreksi Persediaan', 'icon' => 'check', 'url' => ''],

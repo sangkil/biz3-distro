@@ -32,7 +32,8 @@ class StockOpnameController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $searchModel = new StockOpnameSearch();
+        $searchModel = new StockOpnameSearch();        
+        $searchModel->type = StockOpname::TYPE_TOTALOPNAME;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -41,6 +42,21 @@ class StockOpnameController extends Controller {
         ]);
     }
 
+        /**
+     * Lists all StockOpname models.
+     * @return mixed
+     */
+    public function actionIndexPartial() {
+        $searchModel = new StockOpnameSearch();
+        $searchModel->type = StockOpname::TYPE_PARTIALOPNAME;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index-partial', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+    
     /**
      * Displays a single StockOpname model.
      * @param integer $id
