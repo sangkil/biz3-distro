@@ -12,7 +12,7 @@ $this->title = 'Stock Opnames';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class='pull-right'>
-    <?= Html::a('Create Stock Opname', ['create'], ['class' => 'btn btn-default']) ?>
+    <?= Html::a('Create New', ['create'], ['class' => 'btn btn-default']) ?>
     <?php
     $url = array_filter(Yii::$app->getRequest()->get());
     $url[0] = 'csv-template';
