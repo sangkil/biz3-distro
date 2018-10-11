@@ -140,8 +140,8 @@ class StockOpname extends \yii\db\ActiveRecord {
         } elseif ($this->type == self::TYPE_PARTIALOPNAME) {
             $query->select(['p.id', 'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
                     ->from(['p' => '{{%stock_opname}}'])
-                    ->leftJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.opname_id]]=[[p.id]]')
-                    ->leftJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[o.product_id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
+                    ->innerJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.opname_id]]=[[p.id]]')
+                    ->innerJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[o.product_id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
                     ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0)');
         }
 
