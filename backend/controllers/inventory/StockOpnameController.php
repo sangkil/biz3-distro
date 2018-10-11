@@ -42,7 +42,7 @@ class StockOpnameController extends Controller {
         ]);
     }
 
-        /**
+    /**
      * Lists all StockOpname models.
      * @return mixed
      */
