@@ -37,6 +37,7 @@ class StockOpname extends \yii\db\ActiveRecord {
     //opname type
     const TYPE_PARTIALOPNAME = 10;
     const TYPE_TOTALOPNAME = 20;
+    
     //document reff type
     const REFF_SELF = 80;
     const REFF_PURCH = 10;
@@ -68,9 +69,9 @@ class StockOpname extends \yii\db\ActiveRecord {
         return [
             [['warehouse_id', 'Date', 'status'], 'required'],
             [['!number'], 'autonumber', 'format' => 'SO' . date('Y') . '.?', 'digit' => 4],
-            [['warehouse_id', 'status',], 'integer'],
+            [['warehouse_id', 'status','type'], 'integer'],
             [['file'], 'file'],
-            [['date', 'type'], 'safe'],
+            [['date'], 'safe'],
             [['description', 'operator'], 'string', 'max' => 255],
         ];
     }
@@ -84,6 +85,7 @@ class StockOpname extends \yii\db\ActiveRecord {
             'number' => 'Number',
             'warehouse_id' => 'Warehouse ID',
             'date' => 'Date',
+            'type' => 'Type',
             'status' => 'Status',
             'description' => 'Description',
             'operator' => 'Operator',

@@ -18,7 +18,7 @@ class StockOpname extends StockOpnameModel
     public function rules()
     {
         return [
-            [['id', 'warehouse_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['id', 'warehouse_id', 'status', 'type','created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['number', 'date', 'description', 'operator'], 'safe'],
         ];
     }
