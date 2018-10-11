@@ -43,8 +43,8 @@ class SiteController extends Controller {
     }
 
     public function actionIndex() {
-        return $this->actionDashboard();
-        //return $this->render('index');
+        //return $this->actionDashboard();
+        return $this->render('index');
     }
 
     public function actionLogin() {
