@@ -137,8 +137,7 @@ class StockOpname extends \yii\db\ActiveRecord {
                     ->innerJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
                     ->leftJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.product_id]]=[[p.id]] and [[o.opname_id]]=:opid', [':opid' => $this->id])
                     ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0)');
-        } elseif ($this->type == self::TYPE_PARTIALOPNAME) {
-            
+        } elseif ($this->type == self::TYPE_PARTIALOPNAME) {            
             $query->select(['p.id', 'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
                     ->from(['p' => '{{%product}}'])
                     ->innerJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
@@ -154,6 +153,7 @@ class StockOpname extends \yii\db\ActiveRecord {
                 'qty' => $row['selisih'],
                 'uom_id' => 1
             ];
+            echo $row['id'].'<br>';
         }
         $gm->items = $items;
         if ($gm->save()) {
