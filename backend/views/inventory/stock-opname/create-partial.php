@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\inventory\StockOpname */
 
-$this->title = 'Total Opname';
+$this->title = 'Partial Opname';
 $this->params['breadcrumbs'][] = ['label' => 'Stock Opnames', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

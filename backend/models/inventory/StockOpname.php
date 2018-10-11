@@ -13,6 +13,7 @@ use backend\models\master\Warehouse;
  * @property integer $warehouse_id
  * @property string $date
  * @property integer $status
+ * @property integer $type
  * @property string $description
  * @property string $operator
  * @property integer $created_at
@@ -24,15 +25,18 @@ use backend\models\master\Warehouse;
  * @property StockOpnameDtl[] $items
  * @property Warehouse $warehouse
  */
-class StockOpname extends \yii\db\ActiveRecord
-{
+class StockOpname extends \yii\db\ActiveRecord {
 
     use \mdm\converter\EnumTrait,
         \mdm\behaviors\ar\RelationTrait;
+
     // status opname
     const STATUS_DRAFT = 10;
     const STATUS_RELEASED = 20;
     const STATUS_CANCELED = 90;
+    //opname type
+    const TYPE_PARTIALOPNAME = 10;
+    const TYPE_TOTALOPNAME = 20;
     //document reff type
     const REFF_SELF = 80;
     const REFF_PURCH = 10;
@@ -53,22 +57,20 @@ class StockOpname extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%stock_opname}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['warehouse_id', 'Date', 'status'], 'required'],
             [['!number'], 'autonumber', 'format' => 'SO' . date('Y') . '.?', 'digit' => 4],
             [['warehouse_id', 'status',], 'integer'],
             [['file'], 'file'],
-            [['date'], 'safe'],
+            [['date', 'type'], 'safe'],
             [['description', 'operator'], 'string', 'max' => 255],
         ];
     }
@@ -76,8 +78,7 @@ class StockOpname extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'number' => 'Number',
@@ -96,43 +97,47 @@ class StockOpname extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getItems()
-    {
+    public function getItems() {
         return $this->hasMany(StockOpnameDtl::className(), ['opname_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getWarehouse()
-    {
+    public function getWarehouse() {
         return $this->hasOne(Warehouse::className(), ['id' => 'warehouse_id']);
     }
 
-    public function getNmStatus()
-    {
+    public function getNmStatus() {
         return $this->getLogical('status', 'STATUS_');
     }
 
-    public function adjustStock()
-    {
+    public function adjustStock() {
         $gm = new GoodsMovement([
             'warehouse_id' => $this->warehouse_id,
             'type' => GoodsMovement::TYPE_RECEIVE,
             'date' => date('Y-m-d'),
             'reff_type' => self::REFF_SELF,
             'reff_id' => $this->id,
-            'description'=>'stock opname adjustment',
+            'description' => 'stock opname adjustment',
             'status' => GoodsMovement::STATUS_RELEASED,
         ]);
         //$gm->items->scenario = GoodsMovementDtl::SCENARIO_ADJUSTMENT;
-        
-        $query = (new \yii\db\Query())
-            ->select(['p.id', 'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
-            ->from(['p' => '{{%product}}'])
-            ->innerJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
-            ->leftJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.product_id]]=[[p.id]] and [[o.opname_id]]=:opid', [':opid' => $this->id])
-            ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0)');
+
+        $query = (new \yii\db\Query());
+        if ($this->type == self::TYPE_TOTALOPNAME) {
+            $query->select(['p.id', 'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
+                    ->from(['p' => '{{%product}}'])
+                    ->innerJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
+                    ->leftJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.product_id]]=[[p.id]] and [[o.opname_id]]=:opid', [':opid' => $this->id])
+                    ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0)');
+        } elseif ($this->type == self::TYPE_PARTIALOPNAME) {
+            $query->select(['p.id', 'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
+                    ->from(['p' => '{{%stock_opname}}'])
+                    ->leftJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.opname_id]]=[[p.id]]')
+                    ->leftJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[o.product_id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
+                    ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0)');
+        }
 
         $items = [];
         foreach ($query->all() as $row) {
@@ -141,27 +146,26 @@ class StockOpname extends \yii\db\ActiveRecord
                 'qty' => $row['selisih'],
                 'uom_id' => 1
             ];
+            echo $row['id'].'<br>';
         }
         $gm->items = $items;
-        if($gm->save()){
+        if ($gm->save()) {
             return true;
         }
         print_r($gm->firstErrors);
         return false;
     }
 
-    public function revertAdjust()
-    {
+    public function revertAdjust() {
         $gm = GoodsMovement::findOne([
-                'reff_type' => self::REFF_SELF,
-                'reff_id' => $this->id,
+                    'reff_type' => self::REFF_SELF,
+                    'reff_id' => $this->id,
         ]);
         $gm->status = GoodsMovement::STATUS_CANCELED;
         return $gm->save();
     }
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return[
             [
                 'class' => 'mdm\converter\DateConverter',
@@ -182,4 +186,5 @@ class StockOpname extends \yii\db\ActiveRecord
             ]
         ];
     }
+
 }

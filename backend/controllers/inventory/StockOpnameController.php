@@ -72,8 +72,9 @@ class StockOpnameController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
-        $model = new StockOpname();
-
+        $model = new StockOpname();        
+        $model->type = StockOpname::TYPE_TOTALOPNAME;
+        
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
@@ -128,6 +129,73 @@ class StockOpnameController extends Controller {
             }
         }
         return $this->render('create', [
+                    'model' => $model,
+        ]);
+    }
+    
+        /**
+     * Creates a new StockOpname model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreatePartial() {
+        $model = new StockOpname();        
+        $model->type = StockOpname::TYPE_PARTIALOPNAME;
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->status = StockOpname::STATUS_DRAFT;
+                $model->file = UploadedFile::getInstance($model, 'file');
+                if ($model->save()) {
+                    if ($model->file) {
+                        $barcodes = $this->getBarcodes();
+                        $stock = [];
+                        //no change
+                        $content = file_get_contents($model->file->tempName);
+                        $isfirst = true;
+//                        $ddd = 0;
+                        foreach (explode("\n", $content) as $row) {
+                            if ($isfirst) {
+                                $isfirst = false;
+                                continue;
+                            }
+                            $sparated_row = (strpos($row, ',')) ? explode(',', $row) : explode(chr(9), $row);
+                            if (isset($barcodes[strtolower(trim($sparated_row[0]))]) && null !== trim($sparated_row[1])) {
+                               $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
+                                //trimming barcode
+                                if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {       
+                                    //$nsparated_row = explode(chr(9), trim($sparated_row[0]));
+                                    //$product_id = $barcodes[strtolower(trim($nsparated_row[0]))];
+                                    if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {      
+                                        $product_id = $barcodes[strtolower(trim($sparated_row[0]))];                                        
+                                        $stock[$product_id] = (int) $sparated_row[1];
+                                    }
+                                }
+                                
+                            }
+                        }
+                        
+                        $command = \Yii::$app->db->createCommand();
+                        $id = $model->id;
+                        foreach ($stock as $product_id => $count) {
+                            $command->insert('{{%stock_opname_dtl}}', [
+                                'opname_id' => $id,
+                                'product_id' => $product_id,
+                                'uom_id' => 1,
+                                'qty' => $count,
+                            ])->execute();
+                        }
+                    }
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } catch (\Exception $exc) {
+                $transaction->rollBack();
+                throw $exc;
+            }
+        }
+        return $this->render('create-partial', [
                     'model' => $model,
         ]);
     }
@@ -209,7 +277,8 @@ class StockOpnameController extends Controller {
                 $del_record->execute();
             }
             $skrg = new \DateTime();
-            $opname_record = \Yii::$app->db->createCommand($opname_sql, [':opname_id' => $model->id, ':ddate' => date('Y-m-d'), ':whse' => $model->warehouse_id, ':created_at' => $skrg->getTimestamp(), ':created_by' => \Yii::$app->user->id]);
+            $opname_record = \Yii::$app->db->createCommand($opname_sql, 
+                    [':opname_id' => $model->id, ':ddate' => date('Y-m-d'), ':whse' => $model->warehouse_id, ':created_at' => $skrg->getTimestamp(), ':created_by' => \Yii::$app->user->id]);
             $opname_record->execute();
 
             // update stock internaly via beforeUpdate
