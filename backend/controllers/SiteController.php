@@ -43,7 +43,7 @@ class SiteController extends Controller {
     }
 
     public function actionIndex() {
-         return $this->redirect(['view', 'id' => $model->id]);
+        return $this->redirect(['sales/sales/create']);
         //return $this->actionDashboard();
         //return $this->render('index');
     }
@@ -77,7 +77,7 @@ class SiteController extends Controller {
     }
 
     public function actionDashboard() {
-        return $this->redirect(['view', 'id' => $model->id]);
+        return $this->redirect(['sales/sales/create']);
         
         $parms = Yii::$app->request->queryParams;
         $mperiode = \backend\models\accounting\AccPeriode::find()->active()->one();
