@@ -325,7 +325,7 @@ class StockOpnameController extends Controller {
             // update stock internaly via beforeUpdate
             if ($model->save()) {
                 //$transaction->commit();
-                return $this->redirect(['view', 'id' => $model->id]);
+                //return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 print_r($model->firstErrors);
             }
