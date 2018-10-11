@@ -83,6 +83,31 @@ class StockOpnameController extends Controller {
     }
 
     /**
+     * Displays a single StockOpname model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionViewPartial($id) {
+        $model = $this->findModel($id);
+        $query = (new \yii\db\Query())
+                ->select(['p.id', 'p.code', 'p.name', 'o_qty' => 'COALESCE(o.qty,0)', 's_qty' => 'COALESCE(s.qty,0)',
+                    'selisih' => 'COALESCE(o.qty,0)-COALESCE(s.qty,0)'])
+                ->from(['p' => '{{%product}}'])
+                ->innerJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[p.id]] and [[s.warehouse_id]]=:whse', [':whse' => $model->warehouse_id])
+                ->innerJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.product_id]]=[[p.id]] and [[o.opname_id]]=:opid', [':opid' => $model->id])
+                ->orderBy(['abs(COALESCE(o.qty,0)-COALESCE(s.qty,0))' => SORT_DESC, 'COALESCE(o.qty,0)' => SORT_DESC]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => ['pagesize' => 50]
+        ]);
+
+        return $this->render('view', [
+                    'model' => $model, 'dataProvider' => $dataProvider
+        ]);
+    }
+
+    /**
      * Creates a new StockOpname model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -299,7 +324,7 @@ class StockOpnameController extends Controller {
 
             // update stock internaly via beforeUpdate
             if ($model->save()) {
-                //$transaction->commit();
+                $transaction->commit();
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 print_r($model->firstErrors);
