@@ -41,6 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'warehouse.name',
             'description',
             'operator',
+            'type',
             [
                 'attribute' => 'status',
                 'value' => 'nmStatus',
