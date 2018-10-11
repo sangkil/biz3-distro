@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model backend\models\inventory\StockOpname */
 
 $this->title = 'Partial Opname';
-$this->params['breadcrumbs'][] = ['label' => 'Stock Opnames', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Partial Stock Opnames', 'url' => ['index-partial']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="stock-opname-create">
