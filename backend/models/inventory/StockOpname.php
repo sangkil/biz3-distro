@@ -153,7 +153,6 @@ class StockOpname extends \yii\db\ActiveRecord {
                 'qty' => $row['selisih'],
                 'uom_id' => 1
             ];
-            echo $row['id'].'<br>';
         }
         $gm->items = $items;
         if ($gm->save()) {
