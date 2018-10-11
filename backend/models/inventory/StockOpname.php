@@ -143,6 +143,8 @@ class StockOpname extends \yii\db\ActiveRecord {
                     ->innerJoin(['o' => '{{%stock_opname_dtl}}'], '[[o.opname_id]]=[[p.id]]')
                     ->innerJoin(['s' => '{{%product_stock}}'], '[[s.product_id]]=[[o.product_id]] and [[s.warehouse_id]]=:whse', [':whse' => $this->warehouse_id])
                     ->where('COALESCE(o.qty,0)<>COALESCE(s.qty,0)');
+            
+            echo 'i am here <br>';
         }
 
         $items = [];
@@ -152,7 +154,6 @@ class StockOpname extends \yii\db\ActiveRecord {
                 'qty' => $row['selisih'],
                 'uom_id' => 1
             ];
-            echo $row['id'].'<br>';
         }
         $gm->items = $items;
         if ($gm->save()) {
