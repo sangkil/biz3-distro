@@ -17,7 +17,7 @@ use backend\models\master\Warehouse;
     ]);
     ?>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <?= $form->field($model, 'number')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'warehouse_id')->dropDownList(Warehouse::selectOptions()) ?>
@@ -29,7 +29,7 @@ use backend\models\master\Warehouse;
             ])
             ?>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'operator')->textInput(['maxlength' => true]) ?>
