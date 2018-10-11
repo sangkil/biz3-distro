@@ -41,7 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'warehouse.name',
             'description',
             'operator',
-            'type',
+            [
+                'attribute' => 'type',
+                'value' => 'type',
+                'filter' => StockOpname::enums('TYPE_')
+            ],
             [
                 'attribute' => 'status',
                 'value' => 'nmStatus',

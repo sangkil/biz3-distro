@@ -112,6 +112,10 @@ class StockOpname extends \yii\db\ActiveRecord {
         return $this->getLogical('status', 'STATUS_');
     }
 
+    public function getNmType() {
+        return $this->getLogical('type', 'TYPE_');
+    }
+    
     public function adjustStock() {
         $gm = new GoodsMovement([
             'warehouse_id' => $this->warehouse_id,
