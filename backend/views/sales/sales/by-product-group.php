@@ -40,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $dbfore = '';
         $is_first = true;
         $i = 0;
+        $total = [];
         foreach ($dataProvider->models as $row) {
             $content .= Html::beginTag('tr');
             $content .= Html::tag('td', ($i+1)); //category
@@ -48,11 +49,23 @@ $this->params['breadcrumbs'][] = $this->title;
             $content .= Html::tag('td', number_format($row->disc, 0), ['style' => 'text-align:right;']);
             $content .= Html::tag('td', number_format($row->amount - $row->disc, 0), ['style' => 'text-align:right;']);
             $content .= Html::endTag('tr');
+            
+            $total['amount'] += $row->amount;
+            $total['disc'] += $row->disc;
 
             $dbfore = $row->SDate;
             $is_first = false;
             $i++;
         }
+        
+        $content .= Html::beginTag('tr');
+        $content .= Html::tag('td', ''); //category
+        $content .= Html::tag('td', 'Total'); //category
+        $content .= Html::tag('td', number_format($total['amount'], 0), ['style' => 'text-align:right;']);
+        $content .= Html::tag('td', number_format($total['disc'], 0), ['style' => 'text-align:right;']);
+        $content .= Html::tag('td', number_format($total['amount'] - $total['disc'], 0), ['style' => 'text-align:right;']);
+        $content .= Html::endTag('tr');
+            
         $content .= Html::endTag('table');
         echo $content;
         ?> 
