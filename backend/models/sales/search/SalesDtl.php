@@ -126,5 +126,56 @@ class SalesDtl extends SalesDtlModel {
         ]);
         return $dataProvider;
     }
+    
+        /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function searchByProductGroup($params) {
+        $query = SalesDtlModel::find();
+        $query->With(['product.group']);
+        $query->select([
+            'group.name group', 
+            'sum(sales_dtl.qty * sales_dtl.price) amount', 
+            'sum(sales_dtl.discount*sales_dtl.price*sales_dtl.qty/100) disc']);
+
+        //$query->with(['sales', 'product', 'uom']);
+        $query->leftJoin('sales', 'sales_dtl.sales_id=sales.id');
+        $query->leftJoin('product', 'sales_dtl.product_id=product.id');
+        $query->leftJoin('group', 'product.group_id=group.group_id');
+        $query->groupBy(['product.group_id']);
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        $this->load($params);
+
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+        $query->andFilterWhere(['between', 'sales.date', $this->fr_date, $this->to_date]);
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'sales_id' => $this->sales_id,
+            'product_id' => $this->product_id,
+            'uom_id' => $this->uom_id,
+            'qty' => $this->qty,
+            'price' => $this->price,
+            'total_release' => $this->total_release,
+            'cogs' => $this->cogs,
+            'discount' => $this->discount,
+            'tax' => $this->tax,
+            'sales.branch_id'=>  $this->branch_id
+        ]);
+        return $dataProvider;
+    }
 
 }
