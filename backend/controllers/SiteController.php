@@ -77,7 +77,7 @@ class SiteController extends Controller {
     }
 
     public function actionDashboard() {
-        return $this->redirect(['sales/sales/create']);
+        //return $this->redirect(['sales/sales/create']);
         
         $parms = Yii::$app->request->queryParams;
         $mperiode = \backend\models\accounting\AccPeriode::find()->active()->one();
