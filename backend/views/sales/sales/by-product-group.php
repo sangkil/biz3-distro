@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php
         $content = Html::beginTag('table', ['class' => 'table']);
         $hdr = ['No', 'Group Name', 'Sales Value', 'Diskon','Sub Total'];
-        $hdrw = [5, 20, 10, 10, 10, 10];
+        $hdrw = [10, 25, 20,20, 35];
         $content .= Html::beginTag('tr');
         $j = 0;
         foreach ($hdr as $value) {
