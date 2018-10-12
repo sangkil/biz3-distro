@@ -220,12 +220,6 @@ class SalesController extends Controller {
         $hdr = ['No', 'Group Name', 'Sales Value', 'Diskon','Sub Total'];
         fputcsv($fp, $hdr, chr(9));
         foreach ($dataProvider->models as $row) {
-             $content .= Html::tag('td', ($i+1)); //category
-            $content .= Html::tag('td', $row->group_name); //category
-            $content .= Html::tag('td', number_format($row->amount, 0), ['style' => 'text-align:right;']);
-            $content .= Html::tag('td', number_format($row->disc, 0), ['style' => 'text-align:right;']);
-            $content .= Html::tag('td', number_format($row->amount - $row->disc, 0), ['style' => 'text-align:right;']);
-            
             $r[] = ($i+1); //artikel
             $r[] = $row->group_name; //product name
             $r[] = number_format($row->amount, 0); //category
