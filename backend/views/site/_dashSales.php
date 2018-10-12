@@ -5,7 +5,7 @@
  */
 $warna = ['bg-aqua','bg-yellow','bg-green','bg-red','bg-blue'];
 ?>
-<div class="col-lg-3">
+<div class="col-lg-2">
     <div class="info-box <?= $warna[$index] ?>">
         <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
         <div class="info-box-content">
