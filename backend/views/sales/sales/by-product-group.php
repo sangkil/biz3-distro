@@ -26,8 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-lg-6">
         <?php
         $content = Html::beginTag('table', ['class' => 'table']);
-        $hdr = ['No', 'Group Name', 'Sales Value', 'Diskon'];
-        $hdrw = [5, 10, 10, 0, 10, 5, 5, 10, 10, 10];
+        $hdr = ['No', 'Group Name', 'Sales Value', 'Diskon','Sub Total'];
+        $hdrw = [5, 20, 10, 0, 10];
         $content .= Html::beginTag('tr');
         $j = 0;
         foreach ($hdr as $value) {
@@ -42,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $i = 0;
         foreach ($dataProvider->models as $row) {
             $content .= Html::beginTag('tr');
+            $content .= Html::tag('td', ($i+1)); //category
             $content .= Html::tag('td', $row->group_name); //category
             $content .= Html::tag('td', number_format($row->amount, 0), ['style' => 'text-align:right;']);
             $content .= Html::tag('td', number_format($row->disc, 0), ['style' => 'text-align:right;']);
