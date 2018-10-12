@@ -62,9 +62,9 @@ $this->params['breadcrumbs'][] = $this->title;
         $content .= Html::beginTag('tr');
         $content .= Html::tag('td', ''); //category
         $content .= Html::tag('td', 'Total'); //category
-        $content .= Html::tag('td', number_format($total['amount'], 0), ['style' => 'text-align:right;']);
-        $content .= Html::tag('td', number_format($total['disc'], 0), ['style' => 'text-align:right;']);
-        $content .= Html::tag('td', number_format($total['amount'] - $total['disc'], 0), ['style' => 'text-align:right;']);
+        $content .= Html::tag('td', '<b>'.number_format($total['amount'], 0).'</b>', ['style' => 'text-align:right;']);
+        $content .= Html::tag('td', '<b>'.number_format($total['disc'], 0).'</b>', ['style' => 'text-align:right;']);
+        $content .= Html::tag('td', '<b>'.number_format($total['amount'] - $total['disc'], 0).'</b>', ['style' => 'text-align:right;']);
         $content .= Html::endTag('tr');
             
         $content .= Html::endTag('table');
