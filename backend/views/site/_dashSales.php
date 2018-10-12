@@ -3,10 +3,10 @@
  * Create By Mujib Masyhudi <mujib.masyhudi@gmail.com>
  * Create at {date('now')}
  */
-$warna = ['bg-aqua','bg-yellow','bg-green','bg-red'];
+$warna = ['bg-aqua','bg-yellow','bg-green','bg-red','bg-blue'];
 ?>
 <div class="col-lg-3">
-    <div class="info-box <?= ''//$warna[$index] ?>">
+    <div class="info-box <?= $warna[$index] ?>">
         <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
         <div class="info-box-content">
             <span class="info-box-text">SALES: <?= $model->branch->name ?></span>
