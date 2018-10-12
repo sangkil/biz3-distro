@@ -168,7 +168,29 @@ class SalesController extends Controller {
         return false;
     }
 
-    public function actionByProductGroup() {
+    public function actionByProductMonth() {
+        $searchModel = new SalesDtlSearch();
+        $searchModel->fr_date = date('Y-m-01');
+        $searchModel->to_date = date('Y-m-d');
+        $searchModel->branch_id = Yii::$app->profile->branch_id;
+        $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
+        $dataProvider->pagination = false;
+
+        $dcats = \backend\models\master\Category::find();
+        $rcats = [];
+        foreach ($dcats->all() as $crows) {
+            $rcats[$crows->id] = [$crows->code, $crows->name];
+        }
+
+        return $this->render('by-product-month', [
+                    'days' => $this->getDay(),
+                    'cats' => $rcats,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+  public function actionByProductGroup() {
         $searchModel = new SalesDtlSearch();
         $searchModel->fr_date = date('Y-m-01');
         $searchModel->to_date = date('Y-m-d');
@@ -189,8 +211,6 @@ class SalesController extends Controller {
                     'dataProvider' => $dataProvider,
         ]);
     }
-    
-    
 
     public function actionByProductMonthCsv() {
         header('Content-Type: application/excel');
