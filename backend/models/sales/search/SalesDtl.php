@@ -144,7 +144,7 @@ class SalesDtl extends SalesDtlModel {
         //$query->with(['sales', 'product', 'uom']);
         $query->leftJoin('sales', 'sales_dtl.sales_id=sales.id');
         $query->leftJoin('product', 'sales_dtl.product_id=product.id');
-        $query->leftJoin('product_group', 'product.group_id=product_group.group_id');
+        $query->leftJoin('product_group', 'product.group_id=product_group.id');
         $query->groupBy(['product_group.name']);
         // add conditions that should always apply here
 
