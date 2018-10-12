@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $content .= Html::beginTag('tr');
         $j = 0;
         foreach ($hdr as $value) {
-            $algn = (in_array($j, [7, 8, 9])) ? 'right;' : 'left;';
+            $algn = (in_array($j, [1, 2, 3])) ? 'right;' : 'left;';
             $content .= ($j == 3) ? Html::tag('th', $value) : Html::tag('th', $value, ['style' => 'width:' . $hdrw[$j] . '%; text-align:' . $algn]); //['style'=>'text-align:right;']
             $j++;
         }
