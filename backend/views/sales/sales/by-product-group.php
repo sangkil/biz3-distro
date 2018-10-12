@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
     $i = 0;
     foreach ($dataProvider->models as $row) {
         $content .= Html::beginTag('tr');
-        $content .= Html::tag('td', $row->name); //category
+        $content .= Html::tag('td', $row->group_name); //category
         $content .= Html::tag('td', number_format($row->amount, 0), ['style' => 'text-align:right;']);
         $content .= Html::tag('td', number_format($row->disc, 0), ['style' => 'text-align:right;']);
         $content .= Html::tag('td', number_format($row->amount - $row->disc, 0), ['style' => 'text-align:right;']);

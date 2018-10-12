@@ -137,7 +137,7 @@ class SalesDtl extends SalesDtlModel {
     public function searchByProductGroup($params) {
         $query = SalesDtlModel::find();
         $query->select([
-            'product_group.name', 
+            'product_group.name group_name', 
             'sum(sales_dtl.qty * sales_dtl.price) amount', 
             'sum(sales_dtl.discount*sales_dtl.price*sales_dtl.qty/100) disc']);
 

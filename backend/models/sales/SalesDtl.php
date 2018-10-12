@@ -37,6 +37,7 @@ class SalesDtl extends \yii\db\ActiveRecord {
     public $hari;
     public $disc;
     public $branch_id;
+    public $group_name;
 
     /**
      * @inheritdoc
