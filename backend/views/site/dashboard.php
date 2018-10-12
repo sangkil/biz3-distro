@@ -33,7 +33,12 @@ ListView::widget([
                 ListView::widget([
                     'dataProvider' => $transfPro,
                     'layout' => "{items}",
-                    'itemView' => '_dashTransfer',
+                    'itemView' => function ($model, $key, $index, $widget) {
+                        return $this->render('_dashTransfer', [
+                                    'model' => $model,
+                                    'index' => $index
+                        ]);
+                    },
                     'emptyText' => '&nbsp;'
                 ]);
                 ?>                    
