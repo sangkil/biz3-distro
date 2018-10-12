@@ -196,22 +196,48 @@ class SalesController extends Controller {
         $searchModel->to_date = date('Y-m-d');
         $searchModel->branch_id = Yii::$app->profile->branch_id;
         $dataProvider = $searchModel->searchByProductGroup(Yii::$app->request->queryParams);
-        $dataProvider->pagination = false;
-
-        $dcats = \backend\models\master\Category::find();
-        $rcats = [];
-        foreach ($dcats->all() as $crows) {
-            $rcats[$crows->id] = [$crows->code, $crows->name];
-        }
+        $dataProvider->pagination = false;       
 
         return $this->render('by-product-group', [
-                    'days' => $this->getDay(),
-                    'cats' => $rcats,
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionByProductGroupCsv() {
+        header('Content-Type: application/excel');
+        header('Content-Disposition: attachment; filename="sales_grouped.csv"');
 
+        $searchModel = new SalesDtlSearch();
+        $searchModel->fr_date = date('Y-m-01');
+        $searchModel->to_date = date('Y-m-d');
+        $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
+        $dataProvider->pagination = false;
+
+         $fp = fopen('php://output', 'w');
+        $i = 0;
+
+        $hdr = ['No', 'Group Name', 'Sales Value', 'Diskon','Sub Total'];
+        fputcsv($fp, $hdr, chr(9));
+        foreach ($dataProvider->models as $row) {
+             $content .= Html::tag('td', ($i+1)); //category
+            $content .= Html::tag('td', $row->group_name); //category
+            $content .= Html::tag('td', number_format($row->amount, 0), ['style' => 'text-align:right;']);
+            $content .= Html::tag('td', number_format($row->disc, 0), ['style' => 'text-align:right;']);
+            $content .= Html::tag('td', number_format($row->amount - $row->disc, 0), ['style' => 'text-align:right;']);
+            
+            $r[] = ($i+1); //artikel
+            $r[] = $row->group_name; //product name
+            $r[] = number_format($row->amount, 0); //category
+            $r[] = number_format($row->disc, 0); //size
+            $r[] = number_format($row->amount - $row->disc, 0);
+            fputcsv($fp, $r, chr(9));
+            $i++;
+        }
+        fclose($fp);
+        return false;
+    }
+    
     public function actionByProductMonthCsv() {
         header('Content-Type: application/excel');
         header('Content-Disposition: attachment; filename="sales_monthly.csv"');

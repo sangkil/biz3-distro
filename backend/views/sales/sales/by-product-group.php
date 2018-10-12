@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <p class="pull-right">
     <?=
-    Html::a('<i class="fa fa-download"></i>', ['by-product-month-csv', 'SalesDtl[FrDate]' => $searchModel->FrDate, 'SalesDtl[ToDate]' => $searchModel->ToDate, 'SalesDtl[branch_id]' => $searchModel->branch_id], [
+    Html::a('<i class="fa fa-download"></i>', ['by-product-group-csv', 'SalesDtl[FrDate]' => $searchModel->FrDate, 'SalesDtl[ToDate]' => $searchModel->ToDate, 'SalesDtl[branch_id]' => $searchModel->branch_id], [
         'class' => 'btn btn-default', 'title' => 'CSV Download', 'target' => '_blank',
         'data' => [
             'method' => 'post',
