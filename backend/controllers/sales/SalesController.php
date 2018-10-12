@@ -214,12 +214,13 @@ class SalesController extends Controller {
         $dataProvider = $searchModel->searchByProductGroup(Yii::$app->request->queryParams);
         $dataProvider->pagination = false;
 
-         $fp = fopen('php://output', 'w');
+        $fp = fopen('php://output', 'w');
         $i = 0;
 
         $hdr = ['No', 'Group Name', 'Sales Value', 'Diskon','Sub Total'];
         fputcsv($fp, $hdr, chr(9));
         foreach ($dataProvider->models as $row) {
+            $r = [];
             $r[] = ($i+1); //artikel
             $r[] = $row->group_name; //product name
             $r[] = number_format($row->amount, 0); //category
