@@ -211,7 +211,7 @@ class SalesController extends Controller {
         $searchModel = new SalesDtlSearch();
         $searchModel->fr_date = date('Y-m-01');
         $searchModel->to_date = date('Y-m-d');
-        $dataProvider = $searchModel->searchByProduct(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchByProductGroup(Yii::$app->request->queryParams);
         $dataProvider->pagination = false;
 
          $fp = fopen('php://output', 'w');
