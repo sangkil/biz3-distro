@@ -10,7 +10,12 @@ $this->title = 'Dashboard ' . $mperiode;
 ListView::widget([
     'dataProvider' => $dataProvider,
     'layout' => "{items}",
-    'itemView' => '_dashSales',
+     'itemView' => function ($model, $key, $index, $widget) {
+                        return $this->render('_dashSales', [
+                                    'model' => $model,
+                                    'index' => $index
+                        ]);
+                    },
     'emptyText' => '&nbsp;'
 ]);
 ?> 
@@ -33,12 +38,7 @@ ListView::widget([
                 ListView::widget([
                     'dataProvider' => $transfPro,
                     'layout' => "{items}",
-                    'itemView' => function ($model, $key, $index, $widget) {
-                        return $this->render('_dashTransfer', [
-                                    'model' => $model,
-                                    'index' => $index
-                        ]);
-                    },
+                    'itemView' => '_dashTransfer',
                     'emptyText' => '&nbsp;'
                 ]);
                 ?>                    
