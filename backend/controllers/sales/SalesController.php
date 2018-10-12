@@ -223,9 +223,9 @@ class SalesController extends Controller {
             $r = [];
             $r[] = ($i+1); //artikel
             $r[] = $row->group_name; //product name
-            $r[] = number_format($row->amount, 0); //category
-            $r[] = number_format($row->disc, 0); //size
-            $r[] = number_format($row->amount - $row->disc, 0);
+            $r[] = $row->amount; //category
+            $r[] = $row->disc; //size
+            $r[] = $row->amount - $row->disc;
             fputcsv($fp, $r, chr(9));
             $i++;
         }
