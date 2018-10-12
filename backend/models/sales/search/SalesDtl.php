@@ -136,17 +136,16 @@ class SalesDtl extends SalesDtlModel {
      */
     public function searchByProductGroup($params) {
         $query = SalesDtlModel::find();
-        $query->With(['product.group']);
         $query->select([
-            'group.name group', 
+            'product_group.name group', 
             'sum(sales_dtl.qty * sales_dtl.price) amount', 
             'sum(sales_dtl.discount*sales_dtl.price*sales_dtl.qty/100) disc']);
 
         //$query->with(['sales', 'product', 'uom']);
         $query->leftJoin('sales', 'sales_dtl.sales_id=sales.id');
         $query->leftJoin('product', 'sales_dtl.product_id=product.id');
-        $query->leftJoin('group', 'product.group_id=group.group_id');
-        $query->groupBy(['product.group_id']);
+        $query->leftJoin('product_group', 'product.group_id=product_group.group_id');
+        $query->groupBy(['product_group.name']);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
