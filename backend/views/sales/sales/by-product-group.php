@@ -40,7 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
         $dbfore = '';
         $is_first = true;
         $i = 0;
-        $total = [];
+        $total['amount'] = 0;
+        $total['disc'] = 0;
         foreach ($dataProvider->models as $row) {
             $content .= Html::beginTag('tr');
             $content .= Html::tag('td', ($i+1)); //category
