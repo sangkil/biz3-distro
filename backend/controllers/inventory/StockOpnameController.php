@@ -212,7 +212,7 @@ class StockOpnameController extends Controller {
                                     //$product_id = $barcodes[strtolower(trim($nsparated_row[0]))];
                                     if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {      
                                         $product_id = $barcodes[strtolower(trim($sparated_row[0]))];                                        
-                                        echo $stock[$product_id] = (int) $sparated_row[1];
+                                        $stock[$product_id] = (int) $sparated_row[1];
                                     }
                                 }
                                 
@@ -231,8 +231,8 @@ class StockOpnameController extends Controller {
                             ])->execute();
                         }
                     }
-                    //$transaction->commit();
-                    //return $this->redirect(['view', 'id' => $model->id]);
+                    $transaction->commit();
+                    return $this->redirect(['view-partial', 'id' => $model->id]);
                 }
             } catch (\Exception $exc) {
                 $transaction->rollBack();
