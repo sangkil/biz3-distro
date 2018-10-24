@@ -197,13 +197,13 @@ class StockOpnameController extends Controller {
                         $isfirst = true;
 //                        $ddd = 0;
                         foreach (explode("\n", $content) as $row) {
-                            print_r($row);
-                            
                             if ($isfirst) {
                                 $isfirst = false;
                                 continue;
                             }
-                            $sparated_row = (strpos($row, ',')) ? explode(',', $row) : explode(chr(9), $row);
+                            $sparated_row = (strpos($row, ',')) ? explode(',', $row) : null;
+                            $sparated_row = ($sparated_row==null && strpos($row, ';')) ? explode(';', $row) : explode(chr(9), $row);                         
+                            
                             if (isset($barcodes[strtolower(trim($sparated_row[0]))]) && null !== trim($sparated_row[1])) {
                                $product_id = $barcodes[strtolower(trim($sparated_row[0]))];
                                 //trimming barcode
