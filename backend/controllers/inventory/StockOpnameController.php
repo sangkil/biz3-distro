@@ -210,11 +210,12 @@ class StockOpnameController extends Controller {
                                     //$product_id = $barcodes[strtolower(trim($nsparated_row[0]))];
                                     if (isset($barcodes[strtolower(trim($sparated_row[0]))])) {      
                                         $product_id = $barcodes[strtolower(trim($sparated_row[0]))];                                        
-                                        $stock[$product_id] = (int) $sparated_row[1];
+                                        echo $stock[$product_id] = (int) $sparated_row[1];
                                     }
                                 }
                                 
                             }
+                            
                         }
                         
                         $command = \Yii::$app->db->createCommand();
@@ -228,7 +229,7 @@ class StockOpnameController extends Controller {
                             ])->execute();
                         }
                     }
-                    $transaction->commit();
+                    //$transaction->commit();
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
             } catch (\Exception $exc) {
