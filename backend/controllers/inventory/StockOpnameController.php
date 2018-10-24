@@ -320,6 +320,7 @@ class StockOpnameController extends Controller {
                 $del_record = \Yii::$app->db->createCommand($del_opname, [':opname_id' => $model->id, ':ddate' => date('Y-m-d')]);
                 $del_record->execute();
             }
+
             $skrg = new \DateTime();
             $opname_record = \Yii::$app->db->createCommand($opname_sql, 
                     [':opname_id' => $model->id, ':ddate' => date('Y-m-d'), ':whse' => $model->warehouse_id, ':created_at' => $skrg->getTimestamp(), ':created_by' => \Yii::$app->user->id]);
