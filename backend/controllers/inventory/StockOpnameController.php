@@ -230,7 +230,7 @@ class StockOpnameController extends Controller {
                         }
                     }
                     //$transaction->commit();
-                    return $this->redirect(['view', 'id' => $model->id]);
+                    //return $this->redirect(['view', 'id' => $model->id]);
                 }
             } catch (\Exception $exc) {
                 $transaction->rollBack();
