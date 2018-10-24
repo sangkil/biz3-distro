@@ -197,6 +197,8 @@ class StockOpnameController extends Controller {
                         $isfirst = true;
 //                        $ddd = 0;
                         foreach (explode("\n", $content) as $row) {
+                            print_r($row);
+                            
                             if ($isfirst) {
                                 $isfirst = false;
                                 continue;
